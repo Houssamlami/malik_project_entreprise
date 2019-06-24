@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+
+
+
+		<!-- Add the total weight in sale form and net weight to the order line 
+			subform -->
+
+		<record model="ir.ui.view" id="client_limit_de_credit_form">
+			<field name="name">client.limit.de.credit.form</field>
+			<field name="model">res.partner</field>
+			<field name="inherit_id"
+				ref="account.view_partner_property_form" />
+			<field name="arch" type="xml">
+
+
+				<xpath expr="//field[@name='trust']" position="after">
+					<p attrs="{'invisible': [('Client_Volaille','=', False)]}">
+						<b>
+							<u>Blocage par Limite des credits :</u>
+						</b>
+					</p>
+					<field
+						attrs="{'invisible': [('Client_Volaille','=', False)]}"
+						name="blocagex_limite_credit" />
+					<field
+						attrs="{'invisible': [('Client_Volaille','=', False)]}"
+						name="limite_credit_volaille" />
+					<field
+						attrs="{'invisible': [('Client_Volaille','=', False)]}"
+						name="credit_volaille" />
+					<!-- </xpath> -->
+					<!-- <xpath expr="//field[@name='credit']" position="after"> -->
+
+					<p attrs="{'invisible': [('Client_Volaille','=', False)]}">
+						<b>
+							<u> Blocage par Nombre des facture:</u>
+						</b>
+					</p>
+					<field
+						attrs="{'invisible': [('Client_Volaille','=', False)]}"
+						name="blocagex_limite_nbr_fac" />
+					<field
+						attrs="{'invisible': [('Client_Volaille','=', False)]}"
+						name="limite_nbr_fac" />
+					<field
+						attrs="{'invisible': [('Client_Volaille','=', False)]}"
+						name="nbr_fac_ouverte" />
+
+					<p>
+						<b>
+							<u>Etat Client :</u>
+						</b>
+					</p>
+					<field name="credit" string='Total Crédit' />
+					<field name="bloque" />
+				</xpath>
+				<xpath
+					expr="//field[@name='property_supplier_payment_term_id']"
+					position="after">
+					<p attrs="{'invisible': [('Client_Charcuterie','=', False)]}">
+						<b>
+							<u>Blocage par Limite des credits charcuterie:</u>
+						</b>
+					</p>
+					<field
+						attrs="{'invisible': [('Client_Charcuterie','=', False)]}"
+						name="blocagex_limite_credit_charcuterie" />
+					<field
+						attrs="{'invisible': [('Client_Charcuterie','=', False)]}"
+						name="limite_credit_charcuterie" />
+					<field
+						attrs="{'invisible': [('Client_Charcuterie','=', False)]}"
+						name="credit_charcuterie" />
+					<p attrs="{'invisible': [('Client_Charcuterie','=', False)]}">
+						<b>
+							<u>Blocage par Nombre des facture charcuterie:</u>
+						</b>
+					</p>
+					<field
+						attrs="{'invisible': [('Client_Charcuterie','=', False)]}"
+						name="limite_nbr_fac_charcuterie" />
+					<field
+						attrs="{'invisible': [('Client_Charcuterie','=', False)]}"
+						name="nbr_fac_ouverte_charcuterie" />
+				</xpath>
+			</field>
+		</record>
+
+		<record model="ir.ui.view"
+			id="search_customer_by_phone_numbers">
+			<field name="name">search.customer.by.phone.numbers.search</field>
+			<field name="model">res.partner</field>
+			<field name="inherit_id" ref="base.view_res_partner_filter" />
+			<field name="arch" type="xml">
+				<xpath expr="//search" position="inside">
+					<field name="child_ids" domain="[('child_ids.mobile','ilike',self)]"/>
+					<field name="mobile" />
+					<field name="function" />
+				</xpath>
+			</field>
+		</record>
+
+		 <!-- <record model="ir.ui.view"
+			id="client_limit_de_credit_type_de_vente_form">
+			<field name="name">client.limit.de.credit.type.de.vente.form</field>
+			<field name="model">sale.order</field>
+			<field name="inherit_id" ref="sale.view_order_form" />
+			<field name="arch" type="xml">
+				<xpath expr="//field[@name='partner_shipping_id']"
+					position="after">
+					<p>
+						<b>
+							<u>Type de Vente :</u>
+						</b>
+					</p>
+					<field name="fac_charcuterie_volaille" widget="radio" />
+					<field name="client_gc_pc" widget="radio" />
+					
+				</xpath>
+			</field>
+		</record> -->
+
+		<record model="ir.ui.view"
+			id="client_limit_de_credit_type_de_fac_form">
+			<field name="name">client.limit.de.credit.type.de.fac.form</field>
+			<field name="model">account.invoice</field>
+			<field name="inherit_id" ref="account.invoice_form" />
+			<field name="arch" type="xml">
+				<xpath expr="//field[@name='team_id']" position="after">
+					<p>
+						<b>
+							<u>Type de Vente :</u>
+						</b>
+					</p>
+					<field name="fac_charcuterie_f" />
+					<field name="fac_volaille_f" />
+					<field name="cli_gc" />
+					<field name="cli_pc" />
+				</xpath>
+			</field>
+		</record>
+		<record model="ir.ui.view" id="add_fields_search_date_commd">
+			<field name="name">add.fields.search.date.commd.search</field>
+			<field name="model">account.invoice</field>
+			<field name="inherit_id"
+				ref="account.view_account_invoice_filter" />
+			<field name="arch" type="xml">
+				<data>
+					<xpath expr="//search" position="inside">
+						<field name="date_commande" />
+					</xpath>
+				</data>
+			</field>
+		</record>
+
+	</data>
+</odoo>
