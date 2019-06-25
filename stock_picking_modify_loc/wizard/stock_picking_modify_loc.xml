@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_picking_modify_loc_form" model="ir.ui.view">
+            <field name="name">picking_modify_loc_form</field>
+            <field name="model">wiz.picking_modify_loc</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Modify locations">
+                    <group colspan="4" col="2">
+                        <separator string="Modifier emplacements pour les mouvements de stock" colspan="4"/>
+                        <label string="Selectinner l'emplacement source et destination pour les mouvements stock de ce picking:" colspan="4"/>
+                        <field name="picking_type" invisible="1"/>
+                        <field name="location_orig_in_id" attrs="{'invisible': [('picking_type','!=','incoming')],'required': [('picking_type', '=', 'incoming')]}"/>
+                        <field name="location_dest_in_id" attrs="{'invisible': [('picking_type','!=','incoming')],'required': [('picking_type', '=', 'incoming')]}"/>
+                        <field name="location_orig_out_id" attrs="{'invisible': [('picking_type','!=','outgoing')],'required': [('picking_type', '=', 'outgoing')]}"/>
+                        <field name="location_dest_out_id" attrs="{'invisible': [('picking_type','!=','outgoing')],'required': [('picking_type', '=', 'outgoing')]}"/>
+                    </group>
+                    <footer>
+                        <button string="Valider" name="action_accept" type="object" class="oe_highlight"/>
+                        <button string="Annuler" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+        <act_window name="Modifier Emplacements"
+            res_model="wiz.picking_modify_loc"
+            src_model="stock.picking"
+            view_mode="form"
+            view_type="form"
+            view_id="view_picking_modify_loc_form"
+            target="new"
+            key2="client_action_multi"
+            id="action_picking_modify_loc"/>
+    </data>
+</odoo>
