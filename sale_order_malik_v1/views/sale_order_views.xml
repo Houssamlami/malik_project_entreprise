@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+
+		<record model="ir.ui.view"
+			id="add_transport_grand_compte_so_form">
+			<field name="name">add.transport.grand.compte.so.form</field>
+			<field name="model">sale.order</field>
+			<field name="inherit_id"
+				ref="etat_facture_commande.etat_facture_commande_form" />
+			<field name="arch" type="xml">
+				<xpath expr="//field[@name='etat_fac1_copy']" position="after">
+					<field name="grand_compte" />
+					<button name="compute_qty_transport"
+						string="Transport Grand Compte" class="btn-primary" type="object"
+						attrs="{'invisible': ['|',('grand_compte', '=', False),('state','not in',('draft','sent'))]}" />
+				</xpath>
+			</field>
+		</record>
+
+		<record model="ir.ui.view"
+			id="add_required_requested_date_form">
+			<field name="name">add.required.requested.date.form</field>
+			<field name="model">sale.order</field>
+			<field name="inherit_id"
+				ref="sale_stock.view_order_form_inherit_sale_stock" />
+			<field name="arch" type="xml">
+				<xpath expr="//field[@name='requested_date']"
+					position="attributes">
+					<attribute name="required">1</attribute>
+				</xpath>
+			</field>
+		</record>
+	</data>
+</odoo>
