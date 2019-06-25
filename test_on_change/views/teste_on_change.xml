@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+
+		<!-- Add the total weight in sale form and net weight to the order line 
+			subform -->
+
+		<record model="ir.ui.view" id="client_teste_on_change_form">
+			<field name="name">client.blockage.transport.par.commande.form</field>
+			<field name="model">sale.order.line</field>
+			<field name="inherit_id" ref="sale.view_order_form" />
+			<field name="arch" type="xml">
+
+
+				<xpath expr="//field[@name='partner_shipping_id']"
+					position="after">
+
+					<field name="Bolocagettm" invisible="1" />
+					<field name="Bolocagettm_id" string="Transport" />
+					<field name="Expediteur" />
+					<field name="observation" string="Observation pour TTM" />
+					<field name="total_weight_stock_char" invisible="1" />
+					<field name="total_weight_stock_srg" invisible="1" />
+					<field name="total_weight_stock_vv" invisible="1" />
+					<field name="produitalivrer" invisible="1" />
+				</xpath>
+			</field>
+		</record>
+
+
+		<record model="ir.ui.view"
+			id="client_blockage_transport_par_commande_tree2">
+			<field name="name">client.blockage.transport.par.commande.tree2
+			</field>
+			<field name="model">sale.order</field>
+			<field name="priority">20</field>
+			<!--field name="inherit_id" ref="sale.view_order_tree"/ -->
+			<field name="arch" type="xml">
+
+				<tree string="Tournee ttm"
+					decoration-bf="message_needaction==True"
+					decoration-muted="state=='cancel'">
+					<field name="message_needaction" invisible="1" />
+					<field name="state" invisible="1" />
+					<field name="Expediteur" />
+					<field name="partner_id" />
+					<field name="adresse_liv" />
+					<field name="zip_df" />
+					<field name="city" />
+					<field name="produitalivrer" />
+					<field name="observation" />
+					<field name="Bolocagettm" invisible="1" />
+					<field name="Bolocagettm_id" string="Transport" />
+					<field name="total_weight_stock_char" invisible="1" />
+					<field name="total_weight_stock_srg" invisible="1" />
+					<field name="total_weight_stock_vv" invisible="1" />
+
+				</tree>
+
+			</field>
+
+		</record>
+
+
+		<record id="action_tournee_transport_ttm_tree3"
+			model="ir.actions.act_window">
+			<field name="name">Tournee TTm</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">sale.order</field>
+			<field name="view_type">form</field>
+			<field name="view_id"
+				ref="client_blockage_transport_par_commande_tree2" />
+			<field name="view_mode">tree,form,graph,pivot</field>
+
+		</record>
+
+
+		<record id="action_tournee_transport_ttm_treeqll3"
+			model="ir.actions.act_window.view">
+			<field eval="3" name="sequence" />
+			<field name="view_mode">tree</field>
+			<field name="view_id"
+				ref="client_blockage_transport_par_commande_tree2" />
+			<field name="act_window_id"
+				ref="action_tournee_transport_ttm_tree3" />
+		</record>
+
+		<menuitem action="action_tournee_transport_ttm_tree3"
+			id="sale.action_tournee_transport_ttm_tree3"
+			parent="sale.sale_menu_root" />
+
+
+	</data>
+</openerp>
