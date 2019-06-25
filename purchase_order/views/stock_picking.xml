@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+
+		<record id="view_stock_picking_diff_pivot" model="ir.ui.view">
+			<field name="name">stock picking pivot</field>
+			<field name="model">stock.picking</field>
+			<field name="arch" type="xml">
+				<pivot string="Transferts">
+					<field name="location_dest_id" type="row" />
+					<field name="scheduled_date" type="col" />
+					<!-- <field name="partner_id" type="measure" /> -->
+				</pivot>
+			</field>
+		</record>
+
+	</data>
+</odoo>

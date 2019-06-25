@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<data>
+		<record id="product_supplierinfo_form_inher" model="ir.ui.view">
+			<field name="name">product.supplierinfo.form.inher</field>
+			<field name="model">product.supplierinfo</field>
+			<field name="inherit_id"
+				ref="product.product_supplierinfo_form_view" />
+			<field name="arch" type="xml">
+				<field name="product_tmpl_id" position="after">
+					<field name="nbr_km" string="KM"/>
+				</field>
+			</field>
+		</record>
+		<record id="product_supplierinfo_tree_inher" model="ir.ui.view">
+			<field name="name">product.supplierinfo.tree.inher</field>
+			<field name="model">product.supplierinfo</field>
+			<field name="inherit_id"
+				ref="product.product_supplierinfo_tree_view" />
+			<field name="arch" type="xml">
+				<field name="price" position="after">
+					<field name="nbr_km" />
+				</field>
+			</field>
+		</record>
+	</data>
+</odoo>
