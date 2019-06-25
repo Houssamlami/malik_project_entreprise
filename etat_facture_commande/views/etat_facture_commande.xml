@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+
+
+   <record model="ir.ui.view" id="etat_facture_commande_form">
+			<field name="name">etat.facture.commande.form</field>
+			<field name="model">sale.order</field>
+			<field name="inherit_id" ref="sale.view_order_form"/>
+			<field name="arch" type="xml">
+				
+            	
+             	<xpath expr="//field[@name='payment_term_id']" position="after">
+			
+                   <!-- <field name="total_qty_ordred1" /> -->
+					 <field name="total_qty_delivred" />
+					<field name="total_qty_invoiced" />
+					<!-- <field name="etat_fac1" /> -->
+					<field name="etat_fac1_copy" />
+             	</xpath>
+			</field>
+		 </record> 
+		 
+		 
+		  <record model="ir.ui.view" id="etat_facture_commande_tree">
+			<field name="name">etat.facture.commande.tree</field>
+			<field name="model">sale.order</field>
+			<field name="inherit_id" ref="sale.view_order_tree"/>
+			<field name="arch" type="xml">
+				
+            	
+             	<xpath expr="//field[@name='invoice_status']" position="after">
+			
+					<field name="etat_fac1_copy" />
+             	</xpath>
+			</field>
+		 </record> 
+		 
+		 
+		   <record model="ir.ui.view" id="etat_facture_commande_search">
+			<field name="name">etat.facture.commande.search</field>
+			<field name="model">sale.order</field>
+			<field name="inherit_id" ref="sale.sale_order_view_search_inherit_sale"/>
+			<field name="arch" type="xml">
+				
+            	
+             	<xpath expr="//filter[@name='sales']" position="before">
+			
+					 <filter string="A facturer" domain="[('etat_fac1_copy','=','A facturer')]"/>
+                    <filter string="Facturé" domain="[('etat_fac1_copy','=','Facturée')]"/>
+					<filter string="Annulée" domain="[('etat_fac1_copy','=','Annulée')]"/>
+                    <!-- <filter string="Upselling" domain="[('invoice_status','=','upselling')]"/> -->
+             	</xpath>
+			</field>
+		 </record> 
+		<!-- Add the total weight in sale form and net weight to the order line subform -->
+ 	    
+		 
+	</data>
+</openerp>
