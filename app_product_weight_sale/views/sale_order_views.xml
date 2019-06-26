@@ -23,8 +23,8 @@
 			     <xpath expr="//field[@name='state']" position="after">
                      <field name="total_weight"/>
 					 <field name="total_colis"/>
-					  <field name="total_ht" string="Montant Total HT"/>
-					 <field name="total_volume_ht" string="Montant Total TTC"/>
+					  <field name="total_ht" string="Montant Total HT" invisible="1" />
+					 <field name="total_volume_ht" string="Montant Total TTC" invisible="1" />
 					
                 </xpath>
 			</field>
