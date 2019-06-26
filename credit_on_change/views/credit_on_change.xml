@@ -164,8 +164,8 @@
 			<field name="arch" type="xml">
 				<data>
 					<xpath expr="//field[@name='email']" position="after">
+						<field name="credit" string="Credit client"/>
 						<field name="bloque" />
-						<field name="credit" />
 					</xpath>
 				</data>
 			</field>
