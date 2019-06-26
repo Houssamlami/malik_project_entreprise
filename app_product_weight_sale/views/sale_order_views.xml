@@ -46,25 +46,25 @@
 						<label for="total_colis" name="total_colis" string="Total Colis: " class="oe_inline"/>
 	                    <field name="total_colis" class="oe_inline"/><span> Colis</span>
 	                </div>
-					<div>
+					<!-- <div>
 						<label for="total_ht" name="total_ht" string="Montant Total HT: " class="oe_inline"/>
 	                    <field name="total_ht" class="oe_inline"/><span>€ </span>
 	                </div>
 					<div>
 						<label for="total_volume_ht" name="total_volume_ht" string="Montant Total TTC: " class="oe_inline"/>
 	                    <field name="total_volume_ht" class="oe_inline"/><span> €</span>
-	                </div>
+	                </div> -->
 	                <newline/>
              	</xpath>
             	<xpath expr="//field[@name='order_line']/tree/field[@name='price_subtotal']" position="after">
                 	<field name="weight" invisible="1"/>
 					<field name="volume" invisible="1"/>
-					<field name="volume_tot" string="Prix Total" invisible="1"/>
+					<field name="volume_tot" string="Prix Total" />
              	</xpath>
              	<xpath expr="//field[@name='order_line']/form/group/group/field[@name='price_subtotal']" position="after">
                     <field name="weight" invisible="1"/>
 					<field name="volume" invisible="1"/>
-					<field name="volume_tot" string="Prix Total" invisible="1"/>
+					<field name="volume_tot" string="Prix Total" />
              	</xpath>
 			</field>
 		 </record>  
