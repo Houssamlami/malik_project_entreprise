@@ -154,6 +154,22 @@
 				</data>
 			</field>
 		</record>
+		
+		
+	<record model="ir.ui.view" id="add_fields_tree_res_partner">
+			<field name="name">add.fields.tree.res.partner</field>
+			<field name="model">res.partner</field>
+			<field name="inherit_id"
+				ref="base.view_partner_tree" />
+			<field name="arch" type="xml">
+				<data>
+					<xpath expr="//field[@name='email']" position="after">
+						<field name="bloque" />
+						<field name="credit" />
+					</xpath>
+				</data>
+			</field>
+		</record>
 
 	</data>
 </odoo>
