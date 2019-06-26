@@ -11,7 +11,7 @@
     Add 
     """,
     'category': 'Sale',
-    'depends' : ['sale'],
+    'depends' : ['sale','etat_facture_commande'],
     'data': [
         'views/sale_order_views.xml',
     ],
