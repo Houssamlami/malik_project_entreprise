@@ -1,0 +1,13 @@
+eclipse.preferences.version=1
+encoding//account_financial_report/models/account_move_line.py=utf-8
+encoding//app_product_weight_sale/__manifest__.py=utf-8
+encoding//app_product_weight_sale/models/sale_order_line.py=utf-8
+encoding//blockage_transport/__manifest__.py=utf-8
+encoding//credit_on_change/__manifest__.py=utf-8
+encoding//credit_on_change/models/respartner.py=utf-8
+encoding//etat_facture_commande/models/sale_order.py=utf-8
+encoding//product_template_fields/models/product_template.py=utf-8
+encoding//purchase_order/models/purchase_order.py=utf-8
+encoding//restriction_pricelist_priceunit/models/sale_order.py=utf-8
+encoding//sale_order_malik_v1/__manifest__.py=utf-8
+encoding//sale_order_malik_v1/models/sale_order.py=utf-8

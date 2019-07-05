@@ -22,12 +22,12 @@ class ProductTemplate(models.Model):
     prix_vente_estime = fields.Float(compute='calcul_prix_vente', string=u"Prix de vente Conseillé")
     code_geo = fields.Text(string="Code Geo")
     
-    @api.constrains('default_code')
+    '''@api.constrains('default_code')
     def _check_default_code(self):
         code = self.search([('default_code','=',self.default_code)])
         if len(code) > 1:
             raise ValidationError(_("Reference interne du produit en double"))
-    
+    '''
     
     @api.depends('charge_fixe', 'cout_ttm', 'cout_avs', 'prix_transport', 'prix_achat','provision_commission')
     def calcul_prix_min_vente_estime(self):
