@@ -11,3 +11,4 @@ encoding//purchase_order/models/purchase_order.py=utf-8
 encoding//restriction_pricelist_priceunit/models/sale_order.py=utf-8
 encoding//sale_order_malik_v1/__manifest__.py=utf-8
 encoding//sale_order_malik_v1/models/sale_order.py=utf-8
+encoding//smart_btn_sale_help/__manifest__.py=utf-8

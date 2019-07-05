@@ -14,7 +14,7 @@ Smart button sales by day for product for helpser
     'author' : 'Najlae B',
     'website' : 'http://www.broadtech-innovations.com',
     'images': ['static/description/banner.jpg'],
-    'depends' : ['sale_management','sale'],
+    'depends' : ['sale_management','sale','app_product_weight_sale'],
     'data': [
         'views/sale_smart_view.xml',
     ],
