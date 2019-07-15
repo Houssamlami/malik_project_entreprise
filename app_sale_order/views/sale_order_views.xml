@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+
+ 	<!-- '''''''''''''''''''''Add the total weight to the sale order list'''''''''''''''''''''''''' -->
+	   	
+	   	<record model="ir.ui.view" id="sale_weight_tree">
+			<field name="name">sale.weight.view.tree</field>
+			<field name="model">sale.order</field>
+			<field name="inherit_id" ref="sale.view_order_tree"/>
+			<field name="arch" type="xml">
+			     <xpath expr="//field[@name='state']" position="after">
+                     <field name="total_weight"/>
+					 <field name="total_volume_ht"/>
+                </xpath>
+                <xpath expr="//field[@name='invoice_status']" position="after">
+			
+					<field name="etat_fac1_copy" />
+             	</xpath>
+			</field>
+		</record> 
+		
+		<record model="ir.ui.view" id="sale_quotation_weight_tree">
+			<field name="name">sale.quotation.weight.view.tree</field>
+			<field name="model">sale.order</field>
+			<field name="inherit_id" ref="sale.view_quotation_tree"/>
+			<field name="arch" type="xml">
+			     <xpath expr="//field[@name='state']" position="after">
+                     <field name="total_weight"/>
+					 <field name="total_colis"/>
+					  <field name="total_ht" string="Montant Total HT"  />
+					 <field name="total_volume_ht" string="Montant Total TTC"  />
+					
+                </xpath>
+			</field>
+		</record> 
+
+		<!-- ''''''''''''''''''''''''Add the total weight in sale form and net weight to the order line subform ''''''''''''' -->
+		
+ 	    <record model="ir.ui.view" id="sale_weight_line_form">
+			<field name="name">sale.weight.view.line.form</field>
+			<field name="model">sale.order</field>
+			<field name="inherit_id" ref="sale.view_order_form"/>
+			<field name="arch" type="xml">
+				<xpath expr="//field[@name='note']" position="before">
+					<div>
+						<label for="total_weight" name="total_weight" string="Total Weight: " class="oe_inline"/>
+	                    <field name="total_weight" class="oe_inline"/><span> kg</span>
+	                </div>
+					<div>
+						<label for="total_colis" name="total_colis" string="Total Colis: " class="oe_inline"/>
+	                    <field name="total_colis" class="oe_inline"/><span> Colis</span>
+	                </div>
+	                <newline/>
+             	</xpath>
+            	<xpath expr="//field[@name='order_line']/tree/field[@name='price_subtotal']" position="after">
+                	<field name="weight" invisible="1"/>
+					<field name="volume" invisible="1"/>
+					<field name="volume_tot" string="Prix Total" />
+             	</xpath>
+             	<xpath expr="//field[@name='order_line']/form/group/group/field[@name='price_subtotal']" position="after">
+                    <field name="weight" invisible="1"/>
+					<field name="volume" invisible="1"/>
+					<field name="volume_tot" string="Prix Total" />
+             	</xpath>
+             	
+             	<xpath expr="//field[@name='partner_shipping_id']"
+					position="after">
+
+					<field name="Bolocagettm" invisible="1" />
+					<field name="Bolocagettm_id" string="Transport" />
+					<field name="Expediteur" />
+					<field name="observation" string="Observation pour TTM" />
+					<field name="total_weight_stock_char" invisible="1" />
+					<field name="total_weight_stock_srg" invisible="1" />
+					<field name="total_weight_stock_vv" invisible="1" />
+					<field name="produitalivrer" invisible="1" />
+				</xpath>
+				
+				<xpath expr="//field[@name='payment_term_id']" position="after">
+			
+                   <!-- <field name="total_qty_ordred1" /> -->
+					 <field name="total_qty_delivred" />
+					<field name="total_qty_invoiced" />
+					<!-- <field name="etat_fac1" /> -->
+					<field name="etat_fac1_copy" />
+					
+					<field name="grand_compte" />
+					<button name="compute_qty_transport"
+						string="Transport Grand Compte" class="btn-primary" type="object"
+						attrs="{'invisible': ['|',('grand_compte', '=', False),('state','not in',('draft','sent'))]}" />
+             	</xpath>
+			</field>
+		 </record>  
+		
+		<!-- ''''''''''''''''''''''''Add Commercial, Vendeur in SO ''''''''''''' --> 
+		 <record model="ir.ui.view" id="client_view__partner_vendeur_sales_form">
+			<field name="name">client.view.partner.vendeur.sales.form</field>
+			<field name="model">sale.order</field>
+			<field name="inherit_id" ref="sale.view_order_form"/>
+			<field name="arch" type="xml">
+            	<xpath expr="//field[@name='user_id']" position="replace">
+					 <field name="user_id" string="Commercial"/>
+             	</xpath>
+             	<xpath expr="//field[@name='user_id']" position="before">     		
+					 <field name="vendeur"/>
+             	</xpath> 
+			</field>
+		 </record>
+		 
+		 <!-- ''''''''''''''''''''''''''''''''''''''''''  filter by billing status  ''''''''''''''''''''''''''''''''''''''''' --> 
+		 
+		 <record model="ir.ui.view" id="etat_facture_commande_search">
+			<field name="name">etat.facture.commande.search</field>
+			<field name="model">sale.order</field>
+			<field name="inherit_id" ref="sale.sale_order_view_search_inherit_sale"/>
+			<field name="arch" type="xml">		
+            	
+             	<xpath expr="//filter[@name='sales']" position="before">
+			
+					 <filter string="A facturer" domain="[('etat_fac1_copy','=','A facturer')]"/>
+                    <filter string="Facturé" domain="[('etat_fac1_copy','=','Facturée')]"/>
+					<filter string="Annulée" domain="[('etat_fac1_copy','=','Annulée')]"/>
+             	</xpath>
+			</field>
+		 </record> 
+		 
+		 
+		<!-- ''''''''''''''''''''''''''''''''''''''''''Tournee TTM''''''''''''''''''''''''''''''''''''''''' --> 
+		
+		<record model="ir.ui.view"
+			id="client_blockage_transport_par_commande_tree2">
+			<field name="name">client.blockage.transport.par.commande.tree2
+			</field>
+			<field name="model">sale.order</field>
+			<field name="priority">20</field>
+			<!--field name="inherit_id" ref="sale.view_order_tree"/ -->
+			<field name="arch" type="xml">
+			<tree string="Tournee ttm"
+				decoration-bf="message_needaction==True"
+				decoration-muted="state=='cancel'">
+				<field name="message_needaction" invisible="1" />
+				<field name="state" invisible="1" />
+				<field name="Expediteur" />
+				<field name="partner_id" />
+				<field name="adresse_liv" />
+				<field name="zip_df" />
+				<field name="city" />
+				<field name="produitalivrer" />
+				<field name="observation" />
+				<field name="Bolocagettm" invisible="1" />
+				<field name="Bolocagettm_id" string="Transport" />
+				<field name="total_weight_stock_char" invisible="1" />
+				<field name="total_weight_stock_srg" invisible="1" />
+				<field name="total_weight_stock_vv" invisible="1" />
+			</tree>
+			</field>
+		</record>
+
+
+		<record id="action_tournee_transport_ttm_tree3"
+			model="ir.actions.act_window">
+			<field name="name">Tournee TTm</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">sale.order</field>
+			<field name="domain">[('requested_date','&gt;=',((context_today()+ relativedelta(days=1)).strftime('%Y-%m-%d 00:00'))),('requested_date','&lt;=',((context_today()+ relativedelta(days=1)).strftime('%Y-%m-%d 23:59')))]</field>
+			<field name="view_type">form</field>
+			<field name="view_id"
+				ref="client_blockage_transport_par_commande_tree2" />
+			<field name="view_mode">tree,form,graph,pivot</field>
+		</record>
+
+		<record id="action_tournee_transport_ttm_treeqll3"
+			model="ir.actions.act_window.view">
+			<field eval="3" name="sequence" />
+			<field name="view_mode">tree</field>
+			<field name="view_id"
+				ref="client_blockage_transport_par_commande_tree2" />
+			<field name="act_window_id"
+				ref="action_tournee_transport_ttm_tree3" />
+		</record>
+
+		<menuitem action="action_tournee_transport_ttm_tree3"
+			id="sale.action_tournee_transport_ttm_tree3"
+			parent="sale.sale_menu_root" />
+			
+			
+	<!-- ########################### Add group "Droits supp vente" to restrict change price unit in SOL ############################### -->
+	
+	<record id="group_to_write_create_unlink_product"
+		model="res.groups">
+		<field name="name">Restriction change Price Unit SOL</field>
+		<field name="category_id" ref="base.module_category_hidden" />
+	</record>
+	
+	<record model="ir.ui.view" id="restriction_price_list_sale_form">
+		<field name="name">restriction.price.list.sale.form</field>
+		<field name="model">sale.order</field>
+		<field name="inherit_id" ref="sale.view_order_form" />
+		<field name="groups_id"
+			eval="[(6, 0, [ref('app_sale_order.group_to_write_create_unlink_product')])]" />
+		<field name="arch" type="xml">
+			<xpath
+				expr="//field[@name='order_line']/form/group/group/field[@name='price_unit']"
+				position="attributes">
+				<!-- <field name="price_unit" attrs="{'readonly': [('is_manager', '!=',True)]}"/> -->
+				<attribute name="readonly">True</attribute>
+			</xpath>
+			<xpath
+				expr="//field[@name='order_line']/tree/field[@name='price_unit']"
+				position="attributes">
+				<attribute name="readonly">True</attribute>
+			</xpath>
+		</field>
+	</record>
+	
+<!-- #################################### Make requested_date require ################################################ -->	
+
+      <record model="ir.ui.view"
+			id="add_required_requested_date_form">
+			<field name="name">add.required.requested.date.form</field>
+			<field name="model">sale.order</field>
+			<field name="inherit_id"
+				ref="sale_order_dates.view_order_form_inherit_sale_stock_inherit_sale_order_dates" />
+			<field name="arch" type="xml">
+				<xpath expr="//field[@name='requested_date']"
+					position="attributes">
+					<attribute name="required">1</attribute>
+				</xpath>
+			</field>
+		</record>
+		
+<!-- '''''''''''''''''''''Add virtuel Qty of product to SOL''''''''''''''''''''''' -->
+
+		<record model="ir.ui.view" id="view_order_stockver_form">
+        <field name="name">sale.order.formver.inherit</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//tree/field[@name='product_uom_qty']" position="after">
+                <field name="test_on_change_ver"  />
+            </xpath>
+            
+            <xpath expr="//form//label[@for='product_uom_qty']" position="before">
+                <field name="test_on_change_ver"  />
+            </xpath>
+        </field>
+    </record>
+	</data>
+</odoo>

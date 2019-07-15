@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+    	<record id="crm_team_view_form_commercial" model="ir.ui.view">
+        	<field name="name">crm.team.view.form.commercial</field>
+        	<field name="model">crm.team</field>
+        	<field name="inherit_id" ref="sales_team.crm_team_view_form"/>
+        	<field name="arch" type="xml">
+            	<xpath expr="//field[@name='company_id']" position="after">
+                	<field string="Vendeur" name="vendeur" />
+            	</xpath>
+        	</field>
+    	</record>
+ 	
+	   <record model="ir.ui.view" id="client_view__partner_vendeur_form">
+			<field name="name">client.view.partner.vendeur.form</field>
+			<field name="model">res.partner</field>
+			<field name="inherit_id" ref="base.view_partner_form"/>
+			<field name="arch" type="xml">
+				<xpath expr="//field[@name='vat']" position="replace">
+					 <field name="vat"/>
+             	</xpath>
+             	<xpath expr="//field[@name='lang']" position="after">
+             	<field  name="client_gc_pc" widget="radio" invisible="1"/>
+             	</xpath>
+				<xpath expr="//field[@name='lang']" position="after">
+				<div>
+                <table>
+                <tr><td><p>Type Client :</p></td></tr>
+				<tr>
+					 <td>Client Volaille</td>
+					 <td><field name="Client_Volaille" string="Client Volaille"/></td>			
+				</tr>
+				<tr>
+					 <td>Client Charcuterie</td>
+					 <td><field name="Client_Charcuterie" string="Client Charcuterie"/></td>	 
+				</tr>
+				<tr><td><p>Taille Client :</p></td></tr>
+				<tr>
+					 	<td> Client Gros Compte</td>
+					 <td> <field name="Client_GC" string="Client Gros Compte"/></td>			 	 
+				</tr>
+				<tr>		 
+					 <td> Client Petit Compte</td>
+					 <td><field name="Client_PC" string="Client Petit Compte"/></td>
+				</tr>
+			  </table>
+			  </div>
+             	</xpath>
+				<xpath expr="//field[@name='vat']" position="replace">           
+					 <field name="vat" />
+             	</xpath>
+            	<xpath expr="//field[@name='user_id']" position="replace">        
+					 <field name="user_id" string="Commercial"/>
+             	</xpath>
+             	<xpath expr="//field[@name='user_id']" position="before">
+                   <p><b><u>Vendeur commercial :</u></b></p>
+					 <field name="team_id"/>
+					 <field name="vendeur"/>
+             	</xpath> 
+             	<!-- Add the total weight in sale form and net weight to the order line 
+			subform -->
+             	<xpath expr="//field[@name='category_id']" position="after">
+
+					<field name="Bolocagettm" string="Transport" />
+				</xpath>
+			</field>
+		 </record>
+		 
+		 <record model="ir.ui.view" id="regroupe_customers_by_pricelist">
+			<field name="name">regroupe.customers.by.pricelist</field>
+			<field name="model">res.partner</field>
+			<field name="inherit_id" ref="base.view_res_partner_filter" />
+			<field name="arch" type="xml">
+				<xpath expr="//group[@name='group_by']"
+					position="inside">
+					<filter name="pricelist" string="Liste de prix" domain="[]" icon="terp-partner" context="{'group_by' : 'pricelist_for_regroupby'}"/>
+				</xpath>
+				</field>
+		</record>
+		  
+		  
+		  <record model="ir.ui.view" id="client_limit_de_credit_form">
+			<field name="name">client.limit.de.credit.form</field>
+			<field name="model">res.partner</field>
+			<field name="inherit_id"
+				ref="account.view_partner_property_form" />
+			<field name="arch" type="xml">
+
+
+				<xpath expr="//field[@name='trust']" position="after">
+					<p attrs="{'invisible': [('Client_Volaille','=', False)]}">
+						<b>
+							<u>Blocage par Limite des credits :</u>
+						</b>
+					</p>
+					<field
+						attrs="{'invisible': [('Client_Volaille','=', False)]}"
+						name="blocagex_limite_credit" />
+					<field
+						attrs="{'invisible': [('Client_Volaille','=', False)]}"
+						name="limite_credit_volaille" />
+					<field
+						attrs="{'invisible': [('Client_Volaille','=', False)]}"
+						name="credit_volaille" />
+					<!-- </xpath> -->
+					<!-- <xpath expr="//field[@name='credit']" position="after"> -->
+
+					<p attrs="{'invisible': [('Client_Volaille','=', False)]}">
+						<b>
+							<u> Blocage par Nombre des facture:</u>
+						</b>
+					</p>
+					<field
+						attrs="{'invisible': [('Client_Volaille','=', False)]}"
+						name="blocagex_limite_nbr_fac" />
+					<field
+						attrs="{'invisible': [('Client_Volaille','=', False)]}"
+						name="limite_nbr_fac" />
+					<field
+						attrs="{'invisible': [('Client_Volaille','=', False)]}"
+						name="nbr_fac_ouverte" />
+
+					<p>
+						<b>
+							<u>Etat Client :</u>
+						</b>
+					</p>
+					<field name="credit" string='Total Crédit' />
+					<field name="bloque" />
+				</xpath>
+				<xpath
+					expr="//field[@name='property_supplier_payment_term_id']"
+					position="after">
+					<p attrs="{'invisible': [('Client_Charcuterie','=', False)]}">
+						<b>
+							<u>Blocage par Limite des credits charcuterie:</u>
+						</b>
+					</p>
+					<field
+						attrs="{'invisible': [('Client_Charcuterie','=', False)]}"
+						name="blocagex_limite_credit_charcuterie" />
+					<field
+						attrs="{'invisible': [('Client_Charcuterie','=', False)]}"
+						name="limite_credit_charcuterie" />
+					<field
+						attrs="{'invisible': [('Client_Charcuterie','=', False)]}"
+						name="credit_charcuterie" />
+					<p attrs="{'invisible': [('Client_Charcuterie','=', False)]}">
+						<b>
+							<u>Blocage par Nombre des facture charcuterie:</u>
+						</b>
+					</p>
+					<field
+						attrs="{'invisible': [('Client_Charcuterie','=', False)]}"
+						name="limite_nbr_fac_charcuterie" />
+					<field
+						attrs="{'invisible': [('Client_Charcuterie','=', False)]}"
+						name="nbr_fac_ouverte_charcuterie" />
+				</xpath>
+			</field>
+		</record>
+		
+		<record model="ir.ui.view" id="add_fields_tree_res_partner">
+			<field name="name">add.fields.tree.res.partner</field>
+			<field name="model">res.partner</field>
+			<field name="inherit_id"
+				ref="base.view_partner_tree" />
+			<field name="arch" type="xml">
+				<data>
+					<xpath expr="//field[@name='email']" position="after">
+					<field name="zip" />
+					<field name="city" />
+					<field name="credit" string="Credit client"/>
+					<field name="bloque" string="Bloque"/>
+						
+					</xpath>
+				</data>
+			</field>
+		</record>
+	</data>
+</odoo>

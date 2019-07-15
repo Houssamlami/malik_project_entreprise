@@ -12,10 +12,17 @@
     "category": "Sale Management",
     "license": "AGPL-3",
     "depends": [
-        "sale","sale_management",
+        'base',"sale","sale_management",'product',
     ],
     "data": [
         #"views/report_sale_analys.xml"
+        'views/tree_view_top_customer_view.xml',
+        'wizard/top_sales_view.xml',
+        'report/selected_product_report.xml',
+        'report/selected_product_template.xml',
+        'report/selected_product_amount_report.xml',
+        'report/selected_product_amount_template.xml',
+        'wizard/wizard_top_customers_view.xml',
     ],
     "installable": True,
     "application": False,

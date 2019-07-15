@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+
+		<record model="ir.ui.view"
+			id="client_limit_de_credit_type_de_fac_form">
+			<field name="name">client.limit.de.credit.type.de.fac.form</field>
+			<field name="model">account.invoice</field>
+			<field name="inherit_id" ref="account.invoice_form" />
+			<field name="arch" type="xml">
+				<xpath expr="//field[@name='team_id']" position="after">
+					<p>
+						<b>
+							<u>Type de Vente :</u>
+						</b>
+					</p>
+					<field name="fac_charcuterie_f" />
+					<field name="fac_volaille_f" />
+					<field name="cli_gc" />
+					<field name="cli_pc" />
+				</xpath>
+			</field>
+		</record>
+		<record model="ir.ui.view" id="add_fields_search_date_commd">
+			<field name="name">add.fields.search.date.commd.search</field>
+			<field name="model">account.invoice</field>
+			<field name="inherit_id"
+				ref="account.view_account_invoice_filter" />
+			<field name="arch" type="xml">
+				<data>
+					<xpath expr="//search" position="inside">
+						<field name="date_commande" />
+					</xpath>
+				</data>
+			</field>
+		</record>
+
+	</data>
+</odoo>
