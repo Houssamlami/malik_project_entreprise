@@ -39,6 +39,4 @@ class ReportController(report.ReportController):
                 )
             ]
             return request.make_response(xlsx, headers=xlsxhttpheaders)
-        return super(ReportController, self).report_routes(
-            reportname, docids, converter, **data
-        )
+        return super(ReportController, self).report_routes(reportname, docids, converter, **data)

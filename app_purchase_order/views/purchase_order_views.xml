@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<data>
+  <!-- ############################## Add fields for logistic ################################################ -->
+ <record model="ir.ui.view" id="view_order_purchase_line_form">
+        <field name="name">purchase.order.line.formver.inherit</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="arch" type="xml">
+            <field name='date_planned' position="after">
+                <field name="location_dest_id" required="1"/>
+            </field>         
+                <field name="partner_ref" position="after">
+					<field name="logistic" />
+					<field name="data_file_cmr"
+						attrs="{'invisible': [('logistic', '=', False)]}" />
+				</field>
+				<field name="date_order" position="after">
+					<field name="qty_totals"
+						attrs="{'invisible': [('logistic', '=', False)]}" />
+					
+					<field name="kilometre"
+						attrs="{'invisible': [('logistic', '=', False)]}" />
+					
+					<field name="prix_transp" widget='monetary'
+						attrs="{'invisible': [('logistic', '=', False)]}" />
+					<field name="prix_par_km" widget='monetary'
+						attrs="{'invisible': [('logistic', '=', False)]}" />
+					<field name="prix_par_kg" widget='monetary'
+						attrs="{'invisible': [('logistic', '=', False)]}" />
+
+				</field>
+				<xpath
+					expr="//field[@name='order_line']/tree/field[@name='product_id']"
+					position="before">
+					<field name="image_small" widget="image" />
+				</xpath>
+				<field name="date_order" position="after">
+					<field name="purchase_order_id"
+						attrs="{'invisible': [('logistic', '=', False)]}" />
+				</field>
+            </field>
+        </record>
+       </data>
+</odoo>
+            
