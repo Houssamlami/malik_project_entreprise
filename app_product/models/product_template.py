@@ -2,9 +2,10 @@
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 
-from odoo import api, fields, models, _
+from odoo import api, fields, exceptions, models, _
 import string
 from odoo.exceptions import ValidationError
+from odoo.exceptions import except_orm, Warning, RedirectWarning
 import datetime
 import time
 from datetime import *
@@ -96,7 +97,7 @@ class ProductTemplate(models.Model):
     @api.multi
     def action_view_saless(self):
         self.ensure_one()
-        action = self.env.ref('app_product.action_product_sale_list34')
+        action = self.env.ref('app_sale_order.action_product_sale_list34')
         product_ids = self.with_context(active_test=False).product_variant_ids.ids
 
         return {
@@ -111,12 +112,19 @@ class ProductTemplate(models.Model):
             'domain': [('product_id.product_tmpl_id', '=', self.id)],
         }
     #'''''''''''''''''''''''uniqueness of the product reference'''''''''''''''''''''''''''''''''''''''''''''''
-    @api.constrains('default_code')
-    def _check_default_code(self):
-        for record in self:
-            code = self.env['product.template'].search([('default_code','=',record.default_code)]).mapped('id')
-            if len(code) > 1:
-                raise ValidationError(_("Reference interne du produit en double"))
+    
+    @api.onchange('default_code')
+    def onchange_default_code_product(self):
+        for product in self:
+            if product.default_code :
+                prod = self.env['product.template'].search([
+                ('default_code', 'like', product.default_code)], limit=1)
+                if prod.default_code == product.default_code:
+                    raise exceptions.ValidationError(_('Reference interne du produit en double !'))
+                    return {
+                        'warning': {'title': _('Error'), 'message': _('Error message'),},
+                    }
+
     
     
     #'''''''''''''''''''''''calculate costs/prices of product'''''''''''''''''''''''''''''''''''''''''''''''''''''

@@ -39,5 +39,6 @@ class StockMove(models.Model):
                 if float_compare(record.product_uom_qty, record.quantity_done, precision_rounding=record.product_uom.rounding) >= 0:
                     unite = record.product_id
                     unit = unite.sale_secondary_uom_id
-                    record.secondary_uom_qty = (record.quantity_done/unit.factor)
+                    if unit.factor != 0:
+                        record.secondary_uom_qty = (record.quantity_done/unit.factor)
             
