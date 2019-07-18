@@ -16,6 +16,7 @@
     ],
     'data': [
         'views/stock_picking_views.xml',
+        'views/stock_order_preparation_report.xml',
     ],
     
     'application': False,
