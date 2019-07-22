@@ -22,6 +22,15 @@ class BlockageBlockage(models.Model):
 
 class ResPartner(models.Model):
     _inherit = "res.partner"
+    
+    
+    @api.model
+    def create(self, vals):
+        if vals.get('customer'):
+            seq = self.env['ir.sequence'].next_by_code('res.partner') or '/'
+            vals['ref'] = seq 
+        result = super(ResPartner,self).create(vals) 
+        return result
 
     user_id = fields.Many2one(comodel_name='res.users',required=True)
     vendeur = fields.Many2one('res.partner',related='team_id.vendeur',required=True)

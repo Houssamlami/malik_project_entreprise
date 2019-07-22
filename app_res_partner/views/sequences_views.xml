@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		<record model="ir.sequence" id="seq_client_malik">
+			<field name="name">Sequence Client</field>
+			<field name="code">res.partner</field>
+			<field name="padding">4</field>
+			<field name="prefix">CL</field>
+			<field name="implementation">standard</field>
+			<field name="active">TRUE</field>
+			<field name="number_increment">1</field>
+		</record>
+
+	</data>
+</odoo>
