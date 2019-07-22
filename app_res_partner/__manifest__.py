@@ -25,7 +25,7 @@
          App Res Partner """,
 
     'description': """
-        Add commercial, vendeur, equipevente , type of costumer, VAT, Size of customer, Bolocagettm to 'res.partner'
+        App Res Partner
     """,
 
     'author': "FHS Solutions",
@@ -37,6 +37,7 @@
     'data': [
 
         'views/res_partner_views.xml',
+        'views/sequences_views.xml',
 
     ],
     'application': True,

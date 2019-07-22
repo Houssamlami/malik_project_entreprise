@@ -17,6 +17,11 @@
 			<field name="model">res.partner</field>
 			<field name="inherit_id" ref="base.view_partner_form"/>
 			<field name="arch" type="xml">
+			<xpath expr="//field[@name='ref']" position="replace">
+             	</xpath>
+			<xpath expr="//h1" position="after">
+			<h2><field name="ref" readonly="1"/></h2>
+             	</xpath>
 				<xpath expr="//field[@name='vat']" position="replace">
 					 <field name="vat"/>
              	</xpath>
