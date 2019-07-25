@@ -4,10 +4,6 @@
 
 from odoo import api, fields, models, exceptions, _
 from odoo.addons.base.res.res_partner import WARNING_MESSAGE, WARNING_HELP
-import datetime
-import time
-from datetime import *
-from datetime import timedelta, datetime
 from openerp.exceptions import except_orm, Warning, RedirectWarning
 from odoo.exceptions import UserError, ValidationError
 
@@ -44,7 +40,7 @@ class ResPartner(models.Model):
     Client_GC =  fields.Boolean('Client Gros Compte')
     Client_PC =  fields.Boolean('Client Petit Compte')
     client_gc_pc = fields.Selection([('client_gros_compte', 'Client gros compte'),('client_petit_compte', 'Client petit compte')],string="Type de client")
-    vat = fields.Char(string='VAT')
+    vat = fields.Char('VAT',required=True)
     pricelist_for_regroupby = fields.Many2one(comodel_name='product.pricelist',related='property_product_pricelist', store=True)
     Bolocagettm = fields.Many2one(comodel_name='blockage.blockage')
     blocagex_limite_nbr_fac=fields.Boolean('Blocage par Nombre de facture')
@@ -53,36 +49,12 @@ class ResPartner(models.Model):
     blocagex_limite_credit=fields.Boolean('Blocage par limite de credit')
     bloque=fields.Boolean('bloque',compute='_on_change_credit',store=True)
     blocagex_limite_credit_charcuterie=fields.Boolean('Blocage par limite de credit charcuterie')
-    blocagex_echeance_facture_charcuterie=fields.Boolean('Blocage par echeance charcuterie')
     limite_nbr_fac_charcuterie=fields.Integer('limite Nombre de facture charcuterie')
-    date_facture_charcuterie=fields.Date('Date de la facture charcuterie impayante',compute='_on_calcule_factures')
     nbr_fac_ouverte_charcuterie=fields.Integer('Nombre de facture ouvertes',compute='_on_calcule_factures')
-    nbr_jours_decheance_charcuterie=fields.Integer('Compteur des jours',compute='_on_calcule_factures')
     limite_credit_charcuterie=fields.Float('limite credit charcuterie')
     limite_credit_volaille=fields.Float('limite credit  volaille')
     credit_charcuterie=fields.Float('Credit charcuterie',compute='_on_calcule_factures')
     credit_volaille=fields.Float('Credit volaille',compute='_on_calcule_factures')
-    date_lyuoMa = fields.Date(string='today', default=date.today())
-#     champs inactive est un champs rempli par l utilisateur c est le nobre des jours qui controle l etat de client si actif ou pas par exemple si le champs inactive st 30 jours cv si le champs diff_time est moins que 30 jours le client est en etat active sinon le client est en etat non actif
-    Inactive = fields.Integer('Nbr de jours d inactivité')
-# champs diff_time est le nombre de jours entre la date de system (to_day) et la date de la dernier commande (date_last_commande)
-    diff_time= fields.Integer('Nbr de jours passés sans commander')
-    Etat= fields.Boolean('Client Actif')
-    date_last_commande=  fields.Datetime('Date de la derniere commande', compute='last_command')
-    date_lyuoM = fields.Datetime(string='today', default=datetime.today())
-    echeance_charcuterie_par_jour=fields.Integer('Limite echeance charcuterie par jour')
-    
-
-    @api.one
-    def last_command(self):
-        for partners in self:
-            date_last_commande = 0
-            if partners.id :
-                productbl = self.env['sale.order'].search([
-                ('partner_id', '=', self.id)], order='id desc', limit=1)
-                date_last_commande = productbl.create_date
-            partners.date_last_commande = date_last_commande
-            # partners.user_id=vendeur_commarcial
 
 
     @api.one
@@ -92,20 +64,13 @@ class ResPartner(models.Model):
             nbr_fac_ouverte_charcuterie=0
             nbr_fac_ouverte=0
             credit_volaille=0
-            date_facture_charcuterie=0
-            nbr_jours_decheance_charcuterie=0
-            DATETIME_FORMAT = "%Y-%m-%d"
             if record.Client_Volaille==True and record.Client_Charcuterie==True :
                 productbl = self.env['account.invoice'].search([('partner_id', '=', self.id),('state', 'like', 'open'),('fac_charcuterie_f', '=', True)])
                 for line in productbl:
                     nbr_fac_ouverte_charcuterie=len(line)
                     credit_charcuterie += line.residual_company_signed
-                    date_facture_charcuterie=min(line).date_invoice
-                    nbr_jours_decheance_charcuterie=abs((datetime.strptime(date_facture_charcuterie, DATETIME_FORMAT)- datetime.strptime(record.date_lyuoMa, DATETIME_FORMAT)).days)
                 record.credit_charcuterie = credit_charcuterie
                 record.nbr_fac_ouverte_charcuterie=nbr_fac_ouverte_charcuterie
-                record.date_facture_charcuterie=date_facture_charcuterie
-                record.nbr_jours_decheance_charcuterie=nbr_jours_decheance_charcuterie
                 productblv = self.env['account.invoice'].search([('partner_id', '=', self.id),('state', 'like', 'open'),('fac_volaille_f', '=', True)])
                 for linev in productblv:
                     nbr_fac_ouverte=len(linev)
@@ -124,19 +89,15 @@ class ResPartner(models.Model):
                 for line in productbl:
                     nbr_fac_ouverte_charcuterie=len(line)
                     credit_charcuterie += line.residual_company_signed
-                    date_facture_charcuterie=min(line).date_invoice
-                    nbr_jours_decheance_charcuterie=abs((datetime.strptime(date_facture_charcuterie, DATETIME_FORMAT)- datetime.strptime(record.date_lyuoMa, DATETIME_FORMAT)).days)
                 record.credit_charcuterie = credit_charcuterie
                 record.nbr_fac_ouverte_charcuterie=nbr_fac_ouverte_charcuterie            
-                record.date_facture_charcuterie=date_facture_charcuterie
-                record.nbr_jours_decheance_charcuterie=nbr_jours_decheance_charcuterie            
 
 
-    @api.depends('credit','credit_limit','credit_charcuterie','limite_nbr_fac','limite_credit_charcuterie','nbr_fac_ouverte','limite_nbr_fac_charcuterie','nbr_fac_ouverte_charcuterie','nbr_jours_decheance_charcuterie','echeance_charcuterie_par_jour')
+    @api.depends('credit','limite_credit_volaille','credit_charcuterie','limite_nbr_fac','limite_credit_charcuterie','nbr_fac_ouverte','limite_nbr_fac_charcuterie','nbr_fac_ouverte_charcuterie')
     def _on_change_credit(self):
         for record in self:
             if record.blocagex_limite_credit:
-                if record.credit_volaille > record.credit_limit:
+                if record.credit_volaille > record.limite_credit_volaille:
                     record.bloque=True
             if record.blocagex_limite_nbr_fac:
                 if record.nbr_fac_ouverte >= record.limite_nbr_fac:
@@ -144,8 +105,8 @@ class ResPartner(models.Model):
             if record.blocagex_limite_credit_charcuterie:
                 if record.credit_charcuterie > record.limite_credit_charcuterie:
                     record.bloque=True
-            if record.blocagex_echeance_facture_charcuterie:
-                if record.nbr_jours_decheance_charcuterie > record.echeance_charcuterie_par_jour:
+            if record.blocagex_limite_credit_charcuterie:
+                if record.nbr_fac_ouverte_charcuterie >= record.limite_nbr_fac_charcuterie:
                     record.bloque=True
     
     

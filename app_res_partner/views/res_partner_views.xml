@@ -69,13 +69,6 @@
 
 					<field name="Bolocagettm" string="Transport" />
 				</xpath>
-				<xpath expr="//field[@name='lang']" position="after">
-					 <field name="Inactive"/> 
-					 <field name="Etat"/>
-					 <field name="date_last_commande"/>
-					  <field name="date_lyuoM"/>  
-					 <field name="diff_time"/>
-             	</xpath>
 			</field>
 		 </record>
 		 
@@ -99,35 +92,77 @@
 				ref="account.view_partner_property_form" />
 			<field name="arch" type="xml">
 
-<xpath expr="//field[@name='trust']" position="before">
-                   <p attrs="{'invisible': [('Client_Volaille','=', False)]}" ><b><u>Blocage par Limite des credits :</u></b></p>
-					  <field attrs="{'invisible': [('Client_Volaille','=', False)]}" name="blocagex_limite_credit"/>
-					   <field attrs="{'invisible': [('Client_Volaille','=', False)]}" name="credit_volaille"/>
-             	</xpath>
+
 				<xpath expr="//field[@name='trust']" position="after">
-				
-                  <p attrs="{'invisible': [('Client_Volaille','=', False)]}" ><b><u> Blocage par Nombre des facture:</u></b></p>
-					  <field attrs="{'invisible': [('Client_Volaille','=', False)]}"  name="blocagex_limite_nbr_fac"/>
-					   <field attrs="{'invisible': [('Client_Volaille','=', False)]}"  name="limite_nbr_fac"/>
-					   <field attrs="{'invisible': [('Client_Volaille','=', False)]}"  name="nbr_fac_ouverte"/>
-					  
-					<p><b><u>Etat Client :</u></b></p>
-					 <field name="bloque"/>
-             	</xpath>
-				<xpath expr="//field[@name='property_supplier_payment_term_id']" position="after">
-                   <p attrs="{'invisible': [('Client_Charcuterie','=', False)]}"><b><u>Blocage par Limite des credits charcuterie:</u></b></p>
-					  <field attrs="{'invisible': [('Client_Charcuterie','=', False)]}" name="blocagex_limite_credit_charcuterie"/>
-					  <field attrs="{'invisible': [('Client_Charcuterie','=', False)]}" name="limite_credit_charcuterie"/>
-					  <field attrs="{'invisible': [('Client_Charcuterie','=', False)]}" name="credit_charcuterie"/>
-					  <p attrs="{'invisible': [('Client_Charcuterie','=', False)]}"><b><u>Blocage par echeance charcuterie:</u></b></p>
-					  <!-- <field attrs="{'invisible': [('Client_Charcuterie','=', False)]}" name="limite_nbr_fac_charcuterie"/> -->
-					  <!-- <field attrs="{'invisible': [('Client_Charcuterie','=', False)]}" name="nbr_fac_ouverte_charcuterie"/> -->
-					  <field attrs="{'invisible': [('Client_Charcuterie','=', False)]}" name="blocagex_echeance_facture_charcuterie"/>
-					  <field attrs="{'invisible': [('Client_Charcuterie','=', False)]}" name="echeance_charcuterie_par_jour"/> 
-					  <field attrs="{'invisible': [('Client_Charcuterie','=', False)]}" name="date_facture_charcuterie"  invisible="1"/>
-					  <field attrs="{'invisible': [('Client_Charcuterie','=', False)]}" name="nbr_jours_decheance_charcuterie"/>
-					  <field attrs="{'invisible': [('Client_Charcuterie','=', False)]}" name="date_lyuoMa" invisible="1"/> 
-             	</xpath>
+					<p attrs="{'invisible': [('Client_Volaille','=', False)]}">
+						<b>
+							<u>Blocage par Limite des credits :</u>
+						</b>
+					</p>
+					<field
+						attrs="{'invisible': [('Client_Volaille','=', False)]}"
+						name="blocagex_limite_credit" />
+					<field
+						attrs="{'invisible': [('Client_Volaille','=', False)]}"
+						name="limite_credit_volaille" />
+					<field
+						attrs="{'invisible': [('Client_Volaille','=', False)]}"
+						name="credit_volaille" />
+					<!-- </xpath> -->
+					<!-- <xpath expr="//field[@name='credit']" position="after"> -->
+
+					<p attrs="{'invisible': [('Client_Volaille','=', False)]}">
+						<b>
+							<u> Blocage par Nombre des facture:</u>
+						</b>
+					</p>
+					<field
+						attrs="{'invisible': [('Client_Volaille','=', False)]}"
+						name="blocagex_limite_nbr_fac" />
+					<field
+						attrs="{'invisible': [('Client_Volaille','=', False)]}"
+						name="limite_nbr_fac" />
+					<field
+						attrs="{'invisible': [('Client_Volaille','=', False)]}"
+						name="nbr_fac_ouverte" />
+
+					<p>
+						<b>
+							<u>Etat Client :</u>
+						</b>
+					</p>
+					<field name="credit" string='Total Crédit' />
+					<field name="bloque" />
+				</xpath>
+				<xpath
+					expr="//field[@name='property_supplier_payment_term_id']"
+					position="after">
+					<p attrs="{'invisible': [('Client_Charcuterie','=', False)]}">
+						<b>
+							<u>Blocage par Limite des credits charcuterie:</u>
+						</b>
+					</p>
+					<field
+						attrs="{'invisible': [('Client_Charcuterie','=', False)]}"
+						name="blocagex_limite_credit_charcuterie" />
+					<field
+						attrs="{'invisible': [('Client_Charcuterie','=', False)]}"
+						name="limite_credit_charcuterie" />
+					<field
+						attrs="{'invisible': [('Client_Charcuterie','=', False)]}"
+						name="credit_charcuterie" />
+					<p attrs="{'invisible': [('Client_Charcuterie','=', False)]}">
+						<b>
+							<u>Blocage par Nombre des facture charcuterie:</u>
+						</b>
+					</p>
+					<field
+						attrs="{'invisible': [('Client_Charcuterie','=', False)]}"
+						name="limite_nbr_fac_charcuterie" />
+					<field
+						attrs="{'invisible': [('Client_Charcuterie','=', False)]}"
+						name="nbr_fac_ouverte_charcuterie" />
+				</xpath>
 			</field>
 		</record>
 		
@@ -138,18 +173,13 @@
 				ref="base.view_partner_tree" />
 			<field name="arch" type="xml">
 				<data>
-				<xpath expr="//field[@name='email']" position="after">
+					<xpath expr="//field[@name='email']" position="after">
 					<field name="zip" />
 					<field name="city" />
-					<field name="credit_limit"/>
 					<field name="credit" string="Credit client"/>
-					<field name="bloque" string="Bloque"/>	
-				</xpath>
-				<xpath expr="//field[@name='display_name']" position="before">
- 
-					 <field name="Etat"/>
-					 <field name="diff_time"/>
-             	</xpath>
+					<field name="bloque" string="Bloque"/>
+						
+					</xpath>
 				</data>
 			</field>
 		</record>
