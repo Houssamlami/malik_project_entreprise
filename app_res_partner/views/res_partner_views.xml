@@ -22,6 +22,18 @@
 			<xpath expr="//h1" position="after">
 			<h2><field name="ref" readonly="1"/></h2>
              	</xpath>
+             	<xpath expr="//form/sheet/group/group/div/field[@name='zip']"
+					position="attributes">
+					<attribute name="required">1</attribute>
+				</xpath>
+				<xpath expr="//form/sheet/group/group/div/field[@name='street']"
+					position="attributes">
+					<attribute name="required">1</attribute>
+				</xpath>
+				<xpath expr="//form/sheet/group/group/div/field[@name='phone']"
+					position="attributes">
+					<attribute name="required">1</attribute>
+				</xpath>
 				<xpath expr="//field[@name='vat']" position="replace">
 					 <field name="vat"/>
              	</xpath>
