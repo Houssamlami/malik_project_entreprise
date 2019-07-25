@@ -33,8 +33,16 @@ class ResPartner(models.Model):
         if vals.get('customer'):
             seq = self.env['ir.sequence'].next_by_code('res.partner') or '/'
             vals['ref'] = seq 
+        productbl = self.env['res.partner'].search([('ref', '=', vals['ref'])], limit=1)
+        if productbl.ref == vals['ref']:
+            raise exceptions.ValidationError(_('Reference client en double !'))
+            return {
+                        'warning': {'title': _('Error'), 'message': _('Error message'),},
+            }    
         result = super(ResPartner,self).create(vals) 
         return result
+    
+      
 
     user_id = fields.Many2one(comodel_name='res.users',required=True)
     vendeur = fields.Many2one('res.partner',related='team_id.vendeur',required=True)
@@ -71,8 +79,13 @@ class ResPartner(models.Model):
     date_last_commande=  fields.Datetime('Date de la derniere commande', compute='last_command')
     date_lyuoM = fields.Datetime(string='today', default=datetime.today())
     echeance_charcuterie_par_jour=fields.Integer('Limite echeance charcuterie par jour')
+    ref = fields.Char(string='Reference interne')
     
-
+    _sql_constraints = [
+        ('ref_unique_part', 'unique(ref)', 'La reference client doit etre unique!'),
+    ]     
+    
+    
     @api.one
     def last_command(self):
         for partners in self:
