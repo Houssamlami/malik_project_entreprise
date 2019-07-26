@@ -32,13 +32,14 @@ class ResPartner(models.Model):
     def create(self, vals):
         if vals.get('customer'):
             seq = self.env['ir.sequence'].next_by_code('res.partner') or '/'
-            vals['ref'] = seq 
-        partner = self.env['res.partner'].search([('ref', '=', vals['ref'])], limit=1)
-        if partner.ref == vals['ref']:
-            raise exceptions.ValidationError(_('Reference client en double !'))
-            return {
+            vals['ref'] = seq
+        if vals.get('customer'):
+            partner = self.env['res.partner'].search([('ref', '=', vals['ref'])], limit=1)
+            if partner.ref == vals['ref']:
+                raise exceptions.ValidationError(_('Reference client en double !'))
+                return {
                         'warning': {'title': _('Error'), 'message': _('Error message'),},
-            }    
+                        }    
         result = super(ResPartner,self).create(vals) 
         return result
     
