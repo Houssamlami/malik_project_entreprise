@@ -84,13 +84,13 @@
 					 <field name="vat" />
              	</xpath>
             	<xpath expr="//field[@name='user_id']" position="replace">        
-					 <field name="user_id" string="Commercial" attrs="{'invisible': [('supplier','=', True)]}"/>
+					 <field name="user_id" string="Commercial" attrs="{'invisible': [('supplier','=', True)], 'required': [('customer', '=', True)]}"/>
              	</xpath>
              	<xpath expr="//field[@name='user_id']" position="before">
                    <p attrs="{'invisible': [('supplier','=', True)]}">
                    <b><u>Vendeur commercial :</u></b></p>
 					 <field name="team_id" string="Arrondissement/Secteur" attrs="{'invisible': [('supplier','=', True)]}"/>
-					 <field name="vendeur" attrs="{'invisible': [('supplier','=', True)]}"/>
+					 <field name="vendeur" attrs="{'invisible': [('supplier','=', True)], 'required': [('customer', '=', True)]}"/>
              	</xpath> 
              	<!-- Add the total weight in sale form and net weight to the order line 
 			subform -->
