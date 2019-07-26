@@ -15,7 +15,7 @@ from odoo.exceptions import UserError, ValidationError
 class CrmTeam(models.Model):
     _inherit = "crm.team"
 
-    vendeur = fields.Many2one(comodel_name='res.partner')
+    vendeur = fields.Many2one(comodel_name='hr.employee')
     
     
 class BlockageBlockage(models.Model):
@@ -45,13 +45,13 @@ class ResPartner(models.Model):
     
       
 
-    user_id = fields.Many2one(comodel_name='res.users',required=True)
-    vendeur = fields.Many2one('res.partner',related='team_id.vendeur',required=True)
+    user_id = fields.Many2one(comodel_name='hr.employee')
+    vendeur = fields.Many2one('hr.employee',related='team_id.vendeur')
     vendeur_commarcial = fields.Many2one(comodel_name='res.users', string="Commercial")
-    Client_Volaille =  fields.Boolean('Client Volailles')
+    Client_Volaille = fields.Boolean('Client Volailles')
     Client_Charcuterie =  fields.Boolean('Client Charcuterie')
-    Client_GC =  fields.Boolean('Client Gros Compte')
-    Client_PC =  fields.Boolean('Client Petit Compte')
+    Client_GC = fields.Boolean(string='Client Gros Compte')
+    Client_PC = fields.Boolean(string='Client Petit Compte')
     client_gc_pc = fields.Selection([('client_gros_compte', 'Client gros compte'),('client_petit_compte', 'Client petit compte')],string="Type de client")
     vat = fields.Char(string='VAT')
     pricelist_for_regroupby = fields.Many2one(comodel_name='product.pricelist',related='property_product_pricelist', store=True)
