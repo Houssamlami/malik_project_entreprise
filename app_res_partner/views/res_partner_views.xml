@@ -34,12 +34,28 @@
 					position="attributes">
 					<attribute name="required">1</attribute>
 				</xpath>
+				
 				<xpath expr="//field[@name='vat']" position="replace">
 					 <field name="vat"/>
              	</xpath>
              	<xpath expr="//field[@name='lang']" position="after">
              	<field  name="client_gc_pc" widget="radio" invisible="1"/>
              	</xpath>
+             	<!-- <xpath expr="//form/sheet/group[1]]"
+					position="inside">
+					<div>
+					<group string="Type Client" name="Type Client">
+					<field name="Client_Volaille" string="Client Volaille"/>
+					<field name="Client_Volaille" string="Client Volaille"/>
+					</group>
+					</div>
+					<div>
+					<group string="Taille Client" name="Taille Client">
+					<field name="Client_GC" string="Client Gros Compte"/>
+					<field name="Client_PC" string="Client Petit Compte"/>
+					</group>
+					</div>
+					</xpath> -->
 				<xpath expr="//field[@name='lang']" position="after">
 				<div>
                 <table>
@@ -72,21 +88,31 @@
              	</xpath>
              	<xpath expr="//field[@name='user_id']" position="before">
                    <p><b><u>Vendeur commercial :</u></b></p>
-					 <field name="team_id"/>
+					 <field name="team_id" string="Arrondissement/Secteur"/>
 					 <field name="vendeur"/>
              	</xpath> 
              	<!-- Add the total weight in sale form and net weight to the order line 
 			subform -->
+			<xpath expr="//form/sheet/group/group/field[@name='category_id']"
+					position="after">
+					<div>
+					<group string="Etat Client" name="Etat Client">
+                                     <field name="Etat"/>
+                                   <field name="Inactive"/>
+                                   <field name="date_last_commande"/>
+                                   <field name="diff_time"/>
+                                </group>
+                                </div>
+                                </xpath>
              	<xpath expr="//field[@name='category_id']" position="after">
 
 					<field name="Bolocagettm" string="Transport" />
+					
 				</xpath>
 				<xpath expr="//field[@name='lang']" position="after">
-					 <field name="Inactive"/> 
-					 <field name="Etat"/>
-					 <field name="date_last_commande"/>
-					  <field name="date_lyuoM"/>  
-					 <field name="diff_time"/>
+					  
+					  <field name="date_lyuoM" invisible="1"/>  
+					 
              	</xpath>
 			</field>
 		 </record>
