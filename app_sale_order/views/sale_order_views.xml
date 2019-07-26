@@ -244,7 +244,12 @@
             <xpath expr="//form//label[@for='product_uom_qty']" position="before">
                 <field name="test_on_change_ver"  />
             </xpath>
+ <!-- '''''''''''''''''''''''''''Modify label of team_id''''''''''''''''''''''''''''''''''''''''''''''' -->
+            <xpath expr="//group[@name='sales_person']/field[@name='team_id']" position="attributes">
+                <attribute name="string">Arrondissement/Secteur</attribute>
+            </xpath>
         </field>
     </record>
+    
 	</data>
 </odoo>

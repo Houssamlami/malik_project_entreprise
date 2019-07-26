@@ -57,7 +57,7 @@
 					</div>
 					</xpath> -->
 				<xpath expr="//field[@name='lang']" position="after">
-				<div>
+				<div attrs="{'invisible': [('supplier','=', True)]}">
                 <table>
                 <tr><td><p>Type Client :</p></td></tr>
 				<tr>
@@ -84,18 +84,19 @@
 					 <field name="vat" />
              	</xpath>
             	<xpath expr="//field[@name='user_id']" position="replace">        
-					 <field name="user_id" string="Commercial"/>
+					 <field name="user_id" string="Commercial" attrs="{'invisible': [('supplier','=', True)]}"/>
              	</xpath>
              	<xpath expr="//field[@name='user_id']" position="before">
-                   <p><b><u>Vendeur commercial :</u></b></p>
-					 <field name="team_id" string="Arrondissement/Secteur"/>
-					 <field name="vendeur"/>
+                   <p attrs="{'invisible': [('supplier','=', True)]}">
+                   <b><u>Vendeur commercial :</u></b></p>
+					 <field name="team_id" string="Arrondissement/Secteur" attrs="{'invisible': [('supplier','=', True)]}"/>
+					 <field name="vendeur" attrs="{'invisible': [('supplier','=', True)]}"/>
              	</xpath> 
              	<!-- Add the total weight in sale form and net weight to the order line 
 			subform -->
 			<xpath expr="//form/sheet/group/group/field[@name='category_id']"
 					position="after">
-					<div>
+					<div attrs="{'invisible': [('supplier','=', True)]}">
 					<group string="Etat Client" name="Etat Client">
                                      <field name="Etat"/>
                                    <field name="Inactive"/>
