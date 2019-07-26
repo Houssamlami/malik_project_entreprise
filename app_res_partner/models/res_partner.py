@@ -33,8 +33,8 @@ class ResPartner(models.Model):
         if vals.get('customer'):
             seq = self.env['ir.sequence'].next_by_code('res.partner') or '/'
             vals['ref'] = seq 
-        productbl = self.env['res.partner'].search([('ref', '=', vals['ref'])], limit=1)
-        if productbl.ref == vals['ref']:
+        partner = self.env['res.partner'].search([('ref', '=', vals['ref'])], limit=1)
+        if partner.ref == vals['ref']:
             raise exceptions.ValidationError(_('Reference client en double !'))
             return {
                         'warning': {'title': _('Error'), 'message': _('Error message'),},
