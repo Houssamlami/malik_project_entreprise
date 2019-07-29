@@ -14,7 +14,7 @@
     'author' : 'FHS Solutions',
     'website' : '',
     'images': ['static/description/banner.jpg'],
-    'depends' : ['sale_management', 'sale', 'sale_order_dates'],
+    'depends' : ['sale_management', 'sale', 'sale_order_dates','sales_team'],
     'data': [
         'views/sale_order_views.xml',
         'views/sale_order_line_views.xml',
