@@ -67,7 +67,7 @@ class ProductTemplate(models.Model):
     prix_transport = fields.Float(string=u"Prix de Transport")
     cout_avs = fields.Float(string=u"Coût AVS")
     cout_ttm = fields.Float(string=u"Coût TTM")
-    charge_fixe = fields.Float(string=u"Charge Fixe")
+    charge_fixe = fields.Float(string=u"Charge Fixe", help=u"Ce pourcentage se base sur la somme du Prix d\'Achat, Prix de Transport, Coût AVS et Coût TTM")
     cout_revient = fields.Float(compute='calcul_prix_min_vente_estime', string=u"Prix de revient")
     prix_min_vente = fields.Float(compute='calcul_prix_min_vente', string=u"Prix de vente Min")
     marge = fields.Float(string=u"Marge Commerciale")
@@ -144,7 +144,7 @@ class ProductTemplate(models.Model):
     @api.depends('marge', 'prix_min_vente')
     def calcul_prix_vente(self):
         for record in self:
-            if record.marge:
+            if record.prix_min_vente:
                 record.prix_vente_estime = record.prix_min_vente + record.marge
                 record.list_price = record.prix_vente_estime
     
