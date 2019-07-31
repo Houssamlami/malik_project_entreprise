@@ -133,13 +133,13 @@ class ProductTemplate(models.Model):
     def calcul_prix_min_vente_estime(self):
         for record in self:
             if record.prix_achat:
-                record.cout_revient = (record.prix_achat + record.prix_transport + record.cout_avs + record.cout_ttm + record.charge_fixe + record.provision_commission)
+                record.cout_revient = ((record.prix_achat + record.prix_transport + record.cout_avs + record.cout_ttm) * (1 +(record.charge_fixe/100)) + record.provision_commission)
                 
     @api.depends('cout_revient','marge_securite')
     def calcul_prix_min_vente(self):
         for record in self:
             if record.marge_securite:
-                record.prix_min_vente = record.cout_revient + record.marge_securite
+                record.prix_min_vente = record.cout_revient *(1 + (record.marge_securite/100))
     
     @api.depends('marge', 'prix_min_vente')
     def calcul_prix_vente(self):

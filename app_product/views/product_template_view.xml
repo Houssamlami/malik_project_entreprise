@@ -15,12 +15,18 @@
             <field name="prix_transport" widget='monetary'/>
             <field name="cout_avs" widget='monetary'/>
             <field name="cout_ttm" widget='monetary'/>
-            <field name="charge_fixe" widget='monetary'/>
+            <label for="charge_fixe" string="Charge Fixe"/>
+            <div>
+            <field name="charge_fixe" string="Charge Fixe" class="oe_inline"/>%
+            </div>
             <field name="provision_commission" widget='monetary'/>
             <field name="cout_revient" widget='monetary'/>
             </group>
             <group name="cout_calculer">
-            <field name="marge_securite" widget='monetary'/>
+            <label for="marge_securite" string="Marge de securité"/>
+            <div>
+           <field name="marge_securite" class="oe_inline"/>%
+           </div>
             <field name="prix_min_vente" widget='monetary'/>
             <field name="marge" widget='monetary'/>
             <field name="prix_vente_estime" widget='monetary'/>
