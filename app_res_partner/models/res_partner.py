@@ -30,10 +30,10 @@ class ResPartner(models.Model):
     
     @api.model
     def create(self, vals):
-        if vals.get('customer'):
+        if vals.get('customer') and vals.get('phone'):
             seq = self.env['ir.sequence'].next_by_code('res.partner') or '/'
             vals['ref'] = seq
-        if vals.get('customer'):
+        if vals.get('customer') and vals.get('phone'):
             partner = self.env['res.partner'].search([('ref', '=', vals['ref'])], limit=1)
             if partner.ref == vals['ref']:
                 raise exceptions.ValidationError(_('Reference client en double !'))
