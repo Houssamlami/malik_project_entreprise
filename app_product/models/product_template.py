@@ -15,7 +15,27 @@ class ProductTemplate(models.Model):
 
 
 #This function calculate Qty available in stock on Colis if uom_id == KG
-
+    @api.multi
+    def _get_prix_vente_produit(self):
+        if self.prix_vente_estime:
+            for record in self:
+                value = record.prix_vente_estime
+                record.list_price = value
+        if self.cout_revient:
+            for record in self:
+                value = record.cout_revient
+                record.standard_price = value
+                record.price_for_buy = record.cout_revient
+                
+    @api.depends('cout_revient')
+    def _compute_standard_price(self):
+        if self.cout_revient:
+            for record in self:
+                value = record.cout_revient
+                record.standard_price = value
+                
+           
+            
     def on_product_state2(self):
         today = str(datetime.now().date())
         test_on_product_version2 = 0
@@ -62,11 +82,12 @@ class ProductTemplate(models.Model):
                     record.total_commande_jour_suivant = total_commande_jour_suivant
                     record.stock_virtuel_jour_suivant = record.test_on_product_vertuel_jours_suivant2 - record.total_commande_jour_suivant
                     
-                
+              
     prix_achat = fields.Float(string=u"Prix d\'Achat")
     prix_transport = fields.Float(string=u"Prix de Transport")
     cout_avs = fields.Float(string=u"Coût AVS")
     cout_ttm = fields.Float(string=u"Coût TTM")
+    price_for_buy = fields.Float(compute='_get_prix_vente_produit')
     charge_fixe = fields.Float(string=u"Charge Fixe", help=u"Ce pourcentage se base sur la somme du Prix d\'Achat, Prix de Transport, Coût AVS et Coût TTM")
     cout_revient = fields.Float(compute='calcul_prix_min_vente_estime', string=u"Prix de revient")
     prix_min_vente = fields.Float(compute='calcul_prix_min_vente', string=u"Prix de vente Min")
@@ -134,7 +155,7 @@ class ProductTemplate(models.Model):
         for record in self:
             if record.prix_achat:
                 record.cout_revient = ((record.prix_achat + record.prix_transport + record.cout_avs + record.cout_ttm) * (1 +(record.charge_fixe/100)) + record.provision_commission)
-                record.standard_price = record.cout_revient
+            record.standard_price = record.cout_revient
                 
     @api.depends('cout_revient','marge_securite')
     def calcul_prix_min_vente(self):
@@ -147,7 +168,7 @@ class ProductTemplate(models.Model):
         for record in self:
             if record.prix_min_vente:
                 record.prix_vente_estime = record.prix_min_vente + record.marge
-                record.list_price = record.prix_vente_estime
+            record.list_price = record.prix_vente_estime
     
     @api.onchange('charge_fixe', 'cout_ttm', 'cout_avs', 'prix_transport', 'prix_achat')
     @api.depends('charge_fixe', 'cout_ttm', 'cout_avs', 'prix_transport', 'prix_achat')
