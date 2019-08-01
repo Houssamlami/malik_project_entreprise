@@ -29,10 +29,11 @@ class ProductTemplate(models.Model):
                 
     @api.depends('cout_revient')
     def _compute_standard_price(self):
-        if self.cout_revient:
-            for record in self:
-                value = record.cout_revient
-                record.standard_price = value
+        for template in self:
+            if template.cout_revient:
+                for record in self:
+                    value = record.cout_revient
+                    record.standard_price = value
                 
            
             
