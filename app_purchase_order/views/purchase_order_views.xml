@@ -7,9 +7,21 @@
         <field name="model">purchase.order</field>
         <field name="inherit_id" ref="purchase.purchase_order_form"/>
         <field name="arch" type="xml">
-            <field name='date_planned' position="after">
-                <field name="location_dest_id" required="1"/>
-            </field>         
+        
+        <xpath expr="//field[@name='order_line']/form/sheet/field[@name='state']" position="after">
+         <field name="logistic" invisible="1"/>
+        </xpath>
+            <xpath expr="//field[@name='order_line']/form/sheet/group/group[2]/field[@name='date_planned']" position="after">
+           
+                <field name="location_dest_id" />
+            </xpath>  
+            <xpath expr="//field[@name='order_line']/tree/field[@name='state']" position="after">
+         <field name="logistic" invisible="1"/>
+        </xpath> 
+        <xpath expr="//field[@name='order_line']/tree/field[@name='date_planned']" position="after">
+           
+                <field name="location_dest_id" />
+            </xpath>       
                 <field name="partner_ref" position="after">
 					<field name="logistic" />
 					<field name="data_file_cmr"

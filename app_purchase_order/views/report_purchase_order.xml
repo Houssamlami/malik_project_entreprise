@@ -231,8 +231,8 @@
             model="purchase.order"
             string="Commande "
             report_type="qweb-pdf"
-            name="stock_picking_modify_loc.report_bona"
-            file="stock_picking_modify_loc.report_bona"
+            name="app_purchase_order.report_bona"
+            file="app_purchase_order.report_bona"
             
         />
         

@@ -31,3 +31,10 @@ class PurchaseOrderLine(models.Model):
     image_small = fields.Binary('Image', related='product_id.image_small')
     km = fields.Integer(string="KM", compute='_get_km_purchase_line')
     location_dest_id = fields.Many2one(comodel_name='stock.location', string='Destination')
+    logistic = fields.Boolean(related='order_id.logistic', store=True)
+    
+    @api.onchange('order_id.logistic','order_id')
+    @api.depends('order_id.logistic','order_id')
+    def logistic_field(self):
+        for record in self:
+            record.logistic = record.order_id.logistic
