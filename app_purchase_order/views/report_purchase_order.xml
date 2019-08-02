@@ -137,7 +137,7 @@
           
           </xpath>
 </template>
-<template id="report_purchasequotation_document_inherit" inherit_id="purchase.report_purchasequotation_document">
+<!-- <template id="report_purchasequotation_document_inherit" inherit_id="purchase.report_purchasequotation_document">
      <xpath expr="//table[@class='table table-condensed']/thead/tr/th[1]" position="before">
          <t t-if="o.print_image and o.image_sizes in ('image', 'image_medium', 'image_small') ">
              <th>
@@ -163,6 +163,7 @@
         </t>
     </xpath>
 </template>
+ -->
 
         <template id="report_bona">
     <t t-call="web.external_layout">
