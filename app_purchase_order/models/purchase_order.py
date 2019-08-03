@@ -92,7 +92,7 @@ class PurchaseOrder(models.Model):
     prix_par_km = fields.Float(string=u"Prix par KM", compute='_get_prix_par_km', store=True ,readonly=True)
     prix_par_kg = fields.Float(string=u"Prix par KG", compute='_get_prix_par_kg', store=True, readonly=True)
     data_file_cmr = fields.Binary(string='Fichier CMR')
-    purchase_order_id = fields.Many2one(comodel_name='purchase.order', string=u'BC Achat', domain=[('partner_id.name', 'in', ('imex','bona'))])
+    purchase_order_id = fields.Many2one(comodel_name='purchase.order', string=u'BC Achat', domain=[('partner_id.name', 'in', ('IMEX','BONA'))])
     
     @api.multi
     def button_confirm(self):

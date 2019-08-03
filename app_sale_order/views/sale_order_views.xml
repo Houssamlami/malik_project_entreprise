@@ -163,7 +163,7 @@
 			<field name="name">Tournee TTm</field>
 			<field name="type">ir.actions.act_window</field>
 			<field name="res_model">sale.order</field>
-			<field name="domain">[('requested_date','&gt;=',((context_today()+ relativedelta(days=1)).strftime('%Y-%m-%d 00:00'))),('requested_date','&lt;=',((context_today()+ relativedelta(days=1)).strftime('%Y-%m-%d 23:59')))]</field>
+			<field name="domain">[('requested_date','&gt;=',((context_today()+ relativedelta(days=1)).strftime('%Y-%m-%d 00:00')))]</field>
 			<field name="view_type">form</field>
 			<field name="view_id"
 				ref="client_blockage_transport_par_commande_tree2" />
