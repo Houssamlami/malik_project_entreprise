@@ -1,4 +1,5 @@
 eclipse.preferences.version=1
 encoding//app_res_partner/__manifest__.py=utf-8
+encoding//app_sale_order/__manifest__.py=utf-8
 encoding//app_stock/__manifest__.py=utf-8
 encoding//app_stock/models/stock_order.py=utf-8
