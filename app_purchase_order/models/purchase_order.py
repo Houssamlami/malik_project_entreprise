@@ -85,6 +85,14 @@ class PurchaseOrder(models.Model):
         for record in self:
             record._get_totals_qty()
     
+    state = fields.Selection([
+        ('draft', u'Commande Brouillon'),
+        ('sent', u'Commande Envoyée'),
+        ('to approve', u'À approuver'),
+        ('purchase', 'Commande Fournisseur'),
+        ('done', u'Bloqué'),
+        ('cancel', u'Annulée')
+        ], string='Status', readonly=True, index=True, copy=False, default='draft', track_visibility='onchange')
     qty_totals = fields.Float(string=u"Quantité Transportée(KG)", compute='_get_totals_qty', store=True , readonly=True)
     logistic = fields.Boolean(string="Logistic")
     kilometre = fields.Float(string=u"Kilométrage(KM)", compute='_get_km', store=True)
