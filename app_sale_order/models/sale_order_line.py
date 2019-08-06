@@ -56,6 +56,7 @@ class SaleOrderLine(models.Model):
     test_on_change = fields.Float('Qte en tock reel')
     test_on_change_ver = fields.Float('Qte restante virtuell')
     test_on_change_version2= fields.Float('Qte a livre apre today')
+    order_requested_date = fields.Datetime(related='order_id.requested_date', store=True, string=u'Date Demandée')
 
 
     @api.onchange('product_id')
