@@ -35,25 +35,29 @@ class ProductTemplate(models.Model):
                     value = record.cout_revient
                     record.standard_price = value
                 
-           
-            
+    @api.one    
     def on_product_state2(self):
+        self.ensure_one()
         today = str(datetime.now().date())
         test_on_product_version2 = 0
         test_on_product_version3 = 0
         for record in self:
-            if record.id:
-                record.test_on_product = record.qty_available
-                record.test_on_product_version3 = self.env['product.product'].search([('product_tmpl_id', '=', record.id)],limit=1).id
-                vouchers = self.env['sale.order'].search([('requested_date', '>', today)])
-                productbl = self.env['sale.order.line'].search([
-                ('product_id', '=', record.test_on_product_version3),('qty_delivered', '=', 0),('order_id', 'in', vouchers.ids)])
-                for rec in productbl:
-                    test_on_product_version2 += rec.product_uom_qty
-                record.test_on_product_version2 = test_on_product_version2
-                record.test_on_product_ver = record.test_on_product-record.test_on_product_version2
-                if record.weight>0 and record.uom_id.id==3:
-                        record.test_on_product_ver_colis_for_kg = round((record.test_on_product_ver/record.weight))
+            record.ensure_one()
+            record.test_on_product = record.qty_available
+            test_on_product_version3 = self.env['product.product'].search([('product_tmpl_id', '=', record.id)], limit=1).id
+            record.test_on_product_version3 = test_on_product_version3
+            vouchers = self.env['sale.order'].search([('requested_date', '>', today)])
+            productbl = self.env['sale.order.line'].search([
+            ('product_id', '=', record.test_on_product_version3.id),('qty_delivered', '=', 0),('order_id', 'in', vouchers.ids)])
+            for rec in productbl:
+                test_on_product_version2 += rec.product_uom_qty
+            record.test_on_product_version2 = test_on_product_version2
+            print(record)
+            
+            print(record.test_on_product_ver)
+            if record.weight>0 and record.uom_id.id==3:
+                    record.test_on_product_ver_colis_for_kg = round((record.test_on_product_ver/record.weight))
+        self.test_on_product_ver = self.test_on_product-self.test_on_product_version2
                         
                         
 #Cette fonction permet de calculer les qte a livrer j+1 (les commande saisie de la jour j) et la qte qui doit rester en stock le jour j                 
@@ -102,7 +106,7 @@ class ProductTemplate(models.Model):
     test_on_product_ver = fields.Float('Qte restante virtuell', compute='on_product_state2')
     test_on_product_ver_colis_for_kg = fields.Float('Qte restante virtuell en colis ', compute='on_product_state2')
     test_on_product_version2= fields.Float('Qte a livre apre today',compute='on_product_state2')
-    test_on_product_version3= fields.Integer('Qte a livre apre today3',compute='on_product_state2')
+    test_on_product_version3= fields.Many2one(comodel_name='product.product', string='Qte a livre apre today3',compute='on_product_state2')
     test_on_product_vertuel_jours_suivant2= fields.Float('max qty disponible en stock le jour j',compute='on_product_vertuel_jours_suivant')
     total_commande_jour_suivant= fields.Float('Qte a livre le jour j+1',compute='on_product_vertuel_jours_suivant')
     stock_virtuel_jour_suivant= fields.Float('Qte en tock virtuel le jour j+1',compute='on_product_vertuel_jours_suivant')
