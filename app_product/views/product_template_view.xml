@@ -19,7 +19,6 @@
             <separator string="Calcul des Coûts/Prix:"/>
             <group>
             <group name="charges">
-            <field name="test_on_product_version3" string='test'/>
             <field name="prix_achat" widget='monetary'/>
             <field name="prix_transport" widget='monetary'/>
             <field name="cout_avs" widget='monetary'/>
