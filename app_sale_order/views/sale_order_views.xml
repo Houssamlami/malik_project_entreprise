@@ -89,6 +89,11 @@
 					<button name="compute_qty_transport"
 						string="Transport Grand Compte" class="btn-primary" type="object"
 						attrs="{'invisible': ['|',('grand_compte', '=', False),('state','not in',('draft','sent'))]}" />
+					
+						
+						<field  name="cmd_volaille"/>
+						<field  name="cmd_charcuterie"/>
+						
              	</xpath>
 			</field>
 		 </record>  

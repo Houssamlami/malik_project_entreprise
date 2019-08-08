@@ -26,6 +26,8 @@ class SaleOrder(models.Model):
     city =  fields.Char(string='Ville', compute='get_default_zip')    
     observation =  fields.Char(string='Observation')
     test_bloque = fields.Char('Test bloque')
+    cmd_charcuterie = fields.Boolean(string="Charcuterie")
+    cmd_volaille = fields.Boolean(string="Volaille")
     fac_charcuterie_volaille = fields.Selection([('charcuterie', 'Charcuterie'),('volaille', 'Volaille')],string="Type de commande")
     client_gc_pc = fields.Selection('Type Client', related='partner_id.client_gc_pc', store=True)
     #ecart_qty_kg = fields.Float(string='Ecart qty (KG)', compute='_get_ecart_qty', readonly=True, store=True)
@@ -37,6 +39,13 @@ class SaleOrder(models.Model):
     etat_fac1_copy = fields.Char(string='Etat facture copy', compute='_compute_colis_total_etat_copy',store=True)
     grand_compte = fields.Boolean(string='Commande Grand Compte', default= False)
     
+    @api.onchange('partner_id')
+    def _get_type_cmd(self):
+        for sale in self:
+            if sale.partner_id.Client_Charcuterie:
+                sale.cmd_charcuterie = True
+            if sale.partner_id.Client_Volaille:
+                sale.cmd_volaille = True
     
     @api.multi
     def compute_qty_transport(self):
@@ -166,6 +175,22 @@ class SaleOrder(models.Model):
             
         }
         return invoice_vals
+    
+    @api.multi
+    def action_confirm(self):
+        if (self.cmd_charcuterie and self.cmd_volaille) or (not self.cmd_charcuterie and not self.cmd_volaille):
+            raise exceptions.ValidationError(_('Merci de specifier le type de la commande !'))
+            return {
+                    'warning': {'title': _('Error'), 'message': _('Error message'),},
+            }
+        if self._get_forbidden_state_confirm() & set(self.mapped('state')):
+            raise UserError(_(
+                'It is not allowed to confirm an order in the following states: %s'
+            ) % (', '.join(self._get_forbidden_state_confirm())))
+        self._action_confirm()
+        if self.env['ir.config_parameter'].sudo().get_param('sale.auto_done_setting'):
+            self.action_done()
+        return True
 
     def _compute_weight_total(self):
         for sale in self:
