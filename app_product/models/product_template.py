@@ -34,6 +34,12 @@ class ProductTemplate(models.Model):
                 for record in self:
                     value = record.cout_revient
                     record.standard_price = value
+            else:
+                unique_variants = self.filtered(lambda template: len(template.product_variant_ids) == 1)
+                for templates in unique_variants:
+                    templates.standard_price = template.product_variant_ids.standard_price
+                for templates in (self - unique_variants):
+                    templates.standard_price = 0.0
                 
     @api.one    
     def on_product_state2(self):
