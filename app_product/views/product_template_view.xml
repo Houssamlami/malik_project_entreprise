@@ -7,10 +7,19 @@
         <field name="model">product.template</field>
         <field name="inherit_id" ref="product.product_template_form_view"/>
         <field name="arch" type="xml">
+        <xpath expr="//field[@name='company_id']" position="before">
+				<field name="number_unit"/>
+            </xpath>
+        <xpath
+				expr="//field[@name='standard_price']"
+				position="attributes">
+				<attribute name="force_save">1</attribute>
+			</xpath>
             <xpath expr="//page[@name='general_information']/group" position="after">
             <separator string="Calcul des Coûts/Prix:"/>
             <group>
             <group name="charges">
+            <field name="test_on_product_version3" string='test'/>
             <field name="prix_achat" widget='monetary'/>
             <field name="prix_transport" widget='monetary'/>
             <field name="cout_avs" widget='monetary'/>

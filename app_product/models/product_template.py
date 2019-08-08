@@ -30,14 +30,15 @@ class ProductTemplate(models.Model):
     @api.depends('cout_revient')
     def _compute_standard_price(self):
         for template in self:
-            if template.cout_revient:
-                for record in self:
-                    value = record.cout_revient
-                    record.standard_price = value
+            if template.number_unit:
+                template.standard_price = template.number_unit*template.cout_revient
+            elif template.cout_revient:
+                value = template.cout_revient
+                template.standard_price = value
             else:
                 unique_variants = self.filtered(lambda template: len(template.product_variant_ids) == 1)
                 for templates in unique_variants:
-                    templates.standard_price = template.product_variant_ids.standard_price
+                    templates.standard_price = templates.product_variant_ids.standard_price
                 for templates in (self - unique_variants):
                     templates.standard_price = 0.0
                 
@@ -93,7 +94,7 @@ class ProductTemplate(models.Model):
                     record.total_commande_jour_suivant = total_commande_jour_suivant
                     record.stock_virtuel_jour_suivant = record.test_on_product_vertuel_jours_suivant2 - record.total_commande_jour_suivant
                     
-              
+    number_unit = fields.Float(string="Nombre d'unité")      
     prix_achat = fields.Float(string=u"Prix d\'Achat")
     prix_transport = fields.Float(string=u"Prix de Transport")
     cout_avs = fields.Float(string=u"Coût AVS")
