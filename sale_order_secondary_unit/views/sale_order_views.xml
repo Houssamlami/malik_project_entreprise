@@ -11,13 +11,13 @@
         <field name="arch" type="xml">
             <xpath expr="//field[@name='order_line']/form//field[@name='price_subtotal']" position="after">
                 <field name="secondary_uom_qty" class="oe_inline oe_no_button" required="1"
-                    attrs="{'readonly': [('state', 'in', ('done', 'cancel'))]"/>
+                    attrs="{'readonly': [('state', 'in', ('done', 'cancel'))]}"/>
                 <field name="secondary_uom_id" class="oe_inline"
                        attrs="{'readonly': [('state', 'in', ('done', 'cancel'))]}"/>
             </xpath>
             <xpath expr="//field[@name='order_line']/tree//field[@name='product_uom_qty']" position="before">
                 <field name="secondary_uom_qty" required="1"
-                       attrs="{'readonly': [('parent.state', 'in', ('done', 'cancel'))]"/>
+                       attrs="{'readonly': [('parent.state', 'in', ('done', 'cancel'))]}"/>
                 <field name="secondary_uom_id"
                        domain="[('product_tmpl_id.product_variant_ids', 'in', [product_id])]"
                        options="{'no_create': True}"
