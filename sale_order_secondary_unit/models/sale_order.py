@@ -55,10 +55,10 @@ class SaleOrderLine(models.Model):
             self.product_uom_qty / (factor or 1.0),
             precision_rounding=self.product_uom.rounding
         )
-        if float_compare(
-                self.secondary_uom_qty, qty,
-                precision_rounding=self.product_uom.rounding) != 0:
-            self.secondary_uom_qty = qty
+        #if float_compare(
+              #  self.secondary_uom_qty, qty,
+               # precision_rounding=self.product_uom.rounding) != 0:
+            #self.secondary_uom_qty = qty
 
     @api.onchange('product_id')
     def onchange_secondary_unit_product_id(self):
