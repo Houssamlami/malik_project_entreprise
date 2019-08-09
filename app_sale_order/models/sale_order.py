@@ -313,4 +313,14 @@ class SaleOrder(models.Model):
                 sales.produitalivrer=" Charc"
             if sales.total_weight_stock_char != 0 and sales.total_weight_stock_srg != 0 and sales.total_weight_stock_vv != 0:
                 sales.produitalivrer="Charc + Surg + VV"
+                
+    @api.model
+    def create(self, vals):
+        sale = super(SaleOrder,self).create(vals)
+        if any(line.secondary_uom_qty == 0.0 for line in sale.order_line):
+            raise exceptions.ValidationError(_('Remplir les QTY !'))
+            return {
+                        'warning': {'title': _('Error'), 'message': _('Error message'),},
+                        }    
+        return sale
     
