@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+			 <record model="ir.ui.view" id="product_androit_position_stockage_preparation_form">
+			<field name="name">product.androit.position.stockage.preparation.form</field>
+			<field name="model">stock.picking</field>
+			<field name="inherit_id" ref="stock.view_picking_form"/>
+			<field name="arch" type="xml">
+			<xpath expr="//field[@name='move_lines']" position="after">
+                   
+					   <field name="total_weight_stock_sec_auto" class="oe_inline" invisible="1"/> 
+				 <field name="total_weight_stock_frais_auto" class="oe_inline" invisible="1"/> 
+				<field name="total_weight_stock_surg_auto" class="oe_inline" invisible="1"/> 
+				   <field name="total_weight_stock_volailles_auto" class="oe_inline" invisible="1"/>
+				 
+	                <newline/>
+             	</xpath>
+		 </field>
+		 </record> 
+       
+    </data>
+</openerp>
+
