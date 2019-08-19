@@ -13,40 +13,39 @@ from odoo.addons import decimal_precision as dp
 class StockPicking(models.Model):
     _inherit = "stock.picking"
 
-    total_weight_stock_sec = fields.Float(string='Total sec', compute='_compute_weight_total_stock_sec')
-    total_weight_stock_frais = fields.Float(string='Total frais)', compute='_compute_weight_total_stock_frais')
-    total_weight_stock_surg = fields.Float(string='Total surg)', compute='_compute_weight_total_stock_surg')
-    total_weight_stock_volailles = fields.Float(string='Total volailles)', compute='_compute_weight_total_stock_volailles')
+    total_weight_stock_sec_auto = fields.Float(string='Total sec', compute='_compute_weight_total_stock_sec')
+    total_weight_stock_frais_auto = fields.Float(string='Total frais)', compute='_compute_weight_total_stock_frais')
+    total_weight_stock_surg_auto = fields.Float(string='Total surg)', compute='_compute_weight_total_stock_surg')
+    total_weight_stock_volailles_auto = fields.Float(string='Total volailles)', compute='_compute_weight_total_stock_volailles')
 
     def _compute_weight_total_stock_sec(self):
         for stock in self:
             weight_stock_sec = 0
             for line in stock.move_lines:
-                if line.product_id.categ_id.parent_id.name in ("Sauces","Chips"):
+                if line.product_id.Androit_stockage.name =="Sec":
                     weight_stock_sec += line.product_uom_qty  or 0.0
-            stock.total_weight_stock_sec = weight_stock_sec
-			
+            stock.total_weight_stock_sec_auto = weight_stock_sec
+
     def _compute_weight_total_stock_frais(self):
         for stock in self:
             weight_stock_frais = 0
             for line in stock.move_lines:
-                if line.product_id.categ_id.parent_id.name in ("Saucissons","Chapelet","Mortadelle","Blocs","Panes","Tranches"):
+                if line.product_id.Androit_stockage.name == "Frais":
                     weight_stock_frais += line.product_uom_qty  or 0.0
-            stock.total_weight_stock_frais = weight_stock_frais
-			
+            stock.total_weight_stock_frais_auto = weight_stock_frais
+
     def _compute_weight_total_stock_surg(self):
         for stock in self:
             weight_stock_surg = 0
             for line in stock.move_lines:
-                if line.product_id.categ_id.parent_id.name in ("Surgeles","IQF"):
+                if line.product_id.Androit_stockage.name == "Surgelé":
                     weight_stock_surg += line.product_uom_qty  or 0.0
-            stock.total_weight_stock_surg = weight_stock_surg
-			
+            stock.total_weight_stock_surg_auto = weight_stock_surg
+
     def _compute_weight_total_stock_volailles(self):
         for stock in self:
             weight_stock_volailles = 0
             for line in stock.move_lines:
-                if line.product_id.categ_id.parent_id.name in ("Volaille","Volailles Espagne","La Volailles BON","Volailles IMEX"):
+                if line.product_id.Androit_stockage.name == "Volailles":
                     weight_stock_volailles += line.product_uom_qty  or 0.0
-            stock.total_weight_stock_volailles = weight_stock_volailles
-			
+            stock.total_weight_stock_volailles_auto = weight_stock_volailles
