@@ -9,6 +9,22 @@ from odoo.exceptions import except_orm, Warning, RedirectWarning
 import datetime
 import time
 from datetime import *
+from odoo.tools.misc import formatLang
+from odoo.addons import decimal_precision as dp
+
+
+# Record l androit de stockage genre : sec , frais, volailles ou surgele , ainsi que la position d'affichage sur le bon de preparation
+class AndroitStotackage(models.Model):
+    _name ="androit.stockage"
+
+
+    name = fields.Char(string='Endroit de stockage')
+
+class Preparation(models.Model):
+    _name ="androit.preparation"
+
+
+    name = fields.Char(string='Position de prepration')
 
 class ProductTemplate(models.Model):
     _inherit = 'product.template'
@@ -93,7 +109,9 @@ class ProductTemplate(models.Model):
                     record.test_on_product_vertuel_jours_suivant2 = max_id
                     record.total_commande_jour_suivant = total_commande_jour_suivant
                     record.stock_virtuel_jour_suivant = record.test_on_product_vertuel_jours_suivant2 - record.total_commande_jour_suivant
-                    
+    
+    Androit_stockage = fields.Many2one(comodel_name='androit.stockage', string="Endroit de stockage", required=True)
+    Androit_preparation = fields.Many2one(comodel_name='androit.preparation', string=u"Endroit de Préparation", required=True)               
     number_unit = fields.Float(string="Nombre d'unité")      
     prix_achat = fields.Float(string=u"Prix d\'Achat")
     prix_transport = fields.Float(string=u"Prix de Transport")
