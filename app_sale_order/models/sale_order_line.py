@@ -92,7 +92,7 @@ class SaleOrderLine(models.Model):
         for line in self:
             weight = 0
             if line.product_id and line.product_id.weight:
-                weight += (line.product_id.weight * line.product_uom_qty * line.product_id.volume / line.product_uom.factor)
+                weight += (line.product_id.weight * line.secondary_uom_qty / line.product_uom.factor)
             line.weight = weight
 
     @api.one
