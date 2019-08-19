@@ -45,7 +45,7 @@
             </field>
          </record>
          
-         <!-- ''''''''''''''''''''''''''''''Vente du jour''''''''''''''''''''''''''''''''''''''''''' -->
+         <!-- ''''''''''''''''''''''''''''''Vente du jour & adding endroit stockage/preparation''''''''''''''''''''''''''''''''''''''''''' -->
          <record model="ir.ui.view" id="product_template_form_view_sale_order_button2">
             <field name="name">product.template.sale.order.button2</field>
             <field name="model">product.template</field>
@@ -58,6 +58,11 @@
                         Vente du jour
                     </button>
                 </button>
+                <xpath expr="//field[@name='tracking']" position="after">
+                   
+					  <field  name="Androit_stockage"/>
+					  <field  name="Androit_preparation"/>
+             	</xpath>
                
             </field>
         </record>
