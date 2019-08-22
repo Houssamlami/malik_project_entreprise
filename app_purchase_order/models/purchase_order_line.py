@@ -14,6 +14,13 @@ class PurchaseOrderLine(models.Model):
     _inherit = "purchase.order.line"
     
     
+    @api.onchange('qty_in_kg')
+    @api.depends('qty_in_kg')
+    def _prix_du_kilogramme(self):
+        for record in self:
+            if record.qty_in_kg and record.qty_in_kg !=0.0:
+                record.price_kg = record.price_subtotal/record.qty_in_kg
+            
     @api.depends('product_id')
     def _get_km_purchase_line(self):
         if not self.product_id:
@@ -27,7 +34,8 @@ class PurchaseOrderLine(models.Model):
         
         self.km = seller.nbr_km
         
-        
+    qty_in_kg = fields.Float(string="GTY en KG")
+    price_kg = fields.Float(string="Prix KG", compute='_prix_du_kilogramme', store=True)
     image_small = fields.Binary('Image', related='product_id.image_small')
     km = fields.Integer(string="KM", compute='_get_km_purchase_line')
     location_dest_id = fields.Many2one(comodel_name='stock.location', string='Destination')
