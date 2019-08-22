@@ -16,20 +16,6 @@ _logger = logging.getLogger(__name__)
 class PurchaseOrder(models.Model):
     _inherit = 'purchase.order'
 
-    
-    @api.depends('kilometre','prix_transp','qty_totals')
-    @api.onchange('prix_transp','kilometre','qty_totals')
-    def _on_change_kilometre(self):
-         for record in self:
-             record._get_prix_par_km()
-             record._get_prix_par_kg()
-             
-    @api.depends('prix_transp')
-    @api.onchange('prix_transp')
-    def _on_change_prix_transp(self):
-         for record in self:
-             record._get_prix_par_km()
-             record._get_prix_par_kg()
              
              
     @api.depends('order_line.price_subtotal')
@@ -94,15 +80,15 @@ class PurchaseOrder(models.Model):
         ('cancel', u'Annulée')
         ], string='Status', readonly=True, index=True, copy=False, default='draft', track_visibility='onchange')
     semaine = fields.Char(string="Semaine")
-    abattage = fields.Char(string="Abattage")
-    qty_totals = fields.Float(string=u"Quantité Transportée(KG)", compute='_get_totals_qty', store=True , readonly=True)
+    abattage = fields.Char(string="Abattage", track_visibility='always')
+    qty_totals = fields.Float(string=u"Quantité Transportée(KG)", track_visibility='always')
     logistic = fields.Boolean(string="Logistic")
-    kilometre = fields.Float(string=u"Kilométrage(KM)", compute='_get_km', store=True)
-    prix_transp = fields.Float(string=u"Coût Transport", compute='_get_prix_transport', store=True)
-    prix_par_km = fields.Float(string=u"Prix par KM", compute='_get_prix_par_km', store=True ,readonly=True)
-    prix_par_kg = fields.Float(string=u"Prix par KG", compute='_get_prix_par_kg', store=True, readonly=True)
+    #kilometre = fields.Float(string=u"Kilométrage(KM)", compute='_get_km', store=True)
+    #prix_transp = fields.Float(string=u"Coût Transport", compute='_get_prix_transport', store=True)
+    #prix_par_km = fields.Float(string=u"Prix par KM", compute='_get_prix_par_km', store=True ,readonly=True)
+    #prix_par_kg = fields.Float(string=u"Prix par KG", compute='_get_prix_par_kg', store=True, readonly=True)
     data_file_cmr = fields.Binary(string='Fichier CMR')
-    purchase_order_id = fields.Many2one(comodel_name='purchase.order', string=u'BC Achat', domain=[('partner_id.name', 'in', ('IMEX','BONA'))])
+    #purchase_order_id = fields.Many2one(comodel_name='purchase.order', string=u'BC Achat', domain=[('partner_id.name', 'in', ('IMEX','BONA'))])
     
     @api.multi
     def button_confirm(self):
@@ -110,6 +96,10 @@ class PurchaseOrder(models.Model):
             if order.state not in ['draft', 'sent']:
                 continue
             order._add_supplier_to_product()
+            #purchase command must have destination in each POL before validation
+            if not order.logistic and any(line.location_dest_id.id is False for line in order.order_line):
+                raise UserError(_("Merci de remplir toute les destinations."))
+            #logistic command must have file CMR before validation 
             if order.logistic and not order.data_file_cmr:
                 raise UserError(_("Merci de joindre un fichier CMR."))
             # Deal with double validation process
