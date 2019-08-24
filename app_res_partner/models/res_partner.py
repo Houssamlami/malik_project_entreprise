@@ -16,6 +16,7 @@ class CrmTeam(models.Model):
     _inherit = "crm.team"
 
     vendeur = fields.Many2one(comodel_name='hr.employee')
+    name = fields.Char(string="Arrondissement/Secteur", required=True)
     
     
 class BlockageBlockage(models.Model):

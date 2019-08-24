@@ -32,12 +32,13 @@
     'website': "",
     'category': '',
     'version': '0.3',
-    'depends': ['sale_management','base','crm'],
+    'depends': ['sale_management','base','crm','sales_team'],
 
     'data': [
 
         'views/res_partner_views.xml',
         'views/sequences_views.xml',
+        'security/ir.model.access.csv',
 
     ],
     'application': True,
