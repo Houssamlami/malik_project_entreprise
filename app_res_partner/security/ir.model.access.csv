@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_blockage_blockage,access_blockage_blockage_user,model_blockage_blockage,base.group_user,1,1,1,1
+access_marchandises_client,access_marchandises_client_user,model_marchandises_client,base.group_user,1,1,1,1
