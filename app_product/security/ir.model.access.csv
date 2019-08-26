@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_androit_stockage,access_androit_stockage_user,model_androit_stockage,base.group_user,1,1,1,1
+access_androit_preparation,access_androit_preparation_user,model_androit_preparation,base.group_user,1,1,1,1
