@@ -90,17 +90,17 @@
                               <t t-set="has_serial_number" t-value="o.move_line_ids.filtered(lambda ml: ml.lot_id or ml.lot_name)" groups="stock.group_production_lot"/>
                               <thead>
                                 <tr>
-                                   <th style="width:40px">Code</th>
-                                    <th width="45%">Product</th>
+                                   <th width="15%">Code</th>
+                                    <th width="20%">Product</th>
                                     <th width="10%">Quantity</th>
-                                    <th width="20%" class="text-center">
+                                    <th width="25%" class="text-center">
                                         <t t-if="has_barcode">Barcode</t>
                                     </th>
                                     <!--th width="15%"> 
                                         <t t-if="o.picking_type_id.code != 'incoming'" align="left">Source</t>
                                     </th-->
-                                    <th width="20%">
-                                        <t t-if="has_serial_number">Lot/Serial Number</t>
+                                    <th width="30%">
+                                        <t t-if="has_serial_number">Numero Lot / DLC</t>
                                     </th>
                                     <!--th width="20%" class="text-right">Destination</th-->
                                 </tr>
@@ -129,6 +129,32 @@
                                                 </span>
                                             </t>
                                         </td>
+                                        
+                                        <td colspan="3">
+                                            <t t-if="move.move_line_ids">
+                                                
+                                                    <t t-foreach="move.move_line_ids.sorted(key=lambda ml: ml.location_id.id)" t-as="ml">
+                                                        
+                                                        <div class="col-xs-5">
+                                                            <t t-if="has_serial_number and ml.product_id.tracking != 'none'">
+                                                                
+                                                                    <span t-field="ml.lot_id"/>
+                                                                    <span t-if="not ml.lot_id" t-field="ml.lot_name"/>
+                                                               
+                                                            </t>
+                                                            
+                                                        </div>
+                                                        <div class="col-xs-7">
+                                                                 <span t-field="ml.lot_id.removal_date"/>
+                                                            
+                                                                                                                           
+                                                            </div>
+                                                    </t>
+                                               
+                                            </t>
+                                     
+                                        </td>
+                     
                                               </t>
                                     </tr>
                               </tbody>
@@ -150,19 +176,18 @@
                               <t t-set="has_serial_number" t-value="o.move_line_ids.filtered(lambda ml: ml.lot_id or ml.lot_name)" groups="stock.group_production_lot"/>
                               <thead>
                                 <tr>
-                                   <th style="width:40px">Code</th>
-                                    <th width="45%">Product</th>
+                                   <th width="15%">Code</th>
+                                    <th width="20%">Product</th>
                                     <th width="10%">Quantity</th>
-                                    <th width="20%" class="text-center">
+                                    <th width="25%" class="text-center">
                                         <t t-if="has_barcode">Barcode</t>
                                     </th>
                                     <!--th width="15%"> 
                                         <t t-if="o.picking_type_id.code != 'incoming'" align="left">Source</t>
                                     </th-->
-                                    <th width="20%">
-                                        <t t-if="has_serial_number">Lot/Serial Number</t>
+                                    <th width="30%">
+                                        <t t-if="has_serial_number">Numero Lot / DLC</t>
                                     </th>
-                                    <!--th width="20%" class="text-right">Destination</th-->
                                 </tr>
                               </thead>
                               <tbody>
@@ -189,6 +214,30 @@
                                                 </span>
                                             </t>
                                         </td>
+                                        <td colspan="3">
+                                            <t t-if="move.move_line_ids">
+                                                
+                                                    <t t-foreach="move.move_line_ids.sorted(key=lambda ml: ml.location_id.id)" t-as="ml">
+                                                        
+                                                        <div class="col-xs-5">
+                                                            <t t-if="has_serial_number and ml.product_id.tracking != 'none'">
+                                                                
+                                                                    <span t-field="ml.lot_id"/>
+                                                                    <span t-if="not ml.lot_id" t-field="ml.lot_name"/>
+                                                               
+                                                            </t>
+                                                            
+                                                        </div>
+                                                        <div class="col-xs-7">
+                                                                 <span t-field="ml.lot_id.removal_date"/>
+                                                            
+                                                                                                                           
+                                                            </div>
+                                                    </t>
+                                               
+                                            </t>
+                                     
+                                        </td>
                                               </t>
                                     </tr>
                               </tbody>
@@ -209,11 +258,17 @@
                               <t t-set="has_serial_number" t-value="o.move_line_ids.filtered(lambda ml: ml.lot_id or ml.lot_name)" groups="stock.group_production_lot"/>
                               <thead>
                                 <tr>
-                                     <th style="width:40px">Code</th>
-                                    <th width="55%">Product</th>
+                                     <th width="15%">Code</th>
+                                    <th width="20%">Product</th>
                                     <th width="10%">Quantity</th>
-                                    <th width="20%" class="text-center">
+                                    <th width="25%" class="text-center">
                                         <t t-if="has_barcode">Barcode</t>
+                                    </th>
+                                    <!--th width="15%"> 
+                                        <t t-if="o.picking_type_id.code != 'incoming'" align="left">Source</t>
+                                    </th-->
+                                    <th width="30%">
+                                        <t t-if="has_serial_number">Numero Lot / DLC</t>
                                     </th>
                                       </tr>
                               </thead>
@@ -241,6 +296,30 @@
                                                 </span>
                                             </t>
                                         </td>
+                                        <td colspan="3">
+                                            <t t-if="move.move_line_ids">
+                                                
+                                                    <t t-foreach="move.move_line_ids.sorted(key=lambda ml: ml.location_id.id)" t-as="ml">
+                                                        
+                                                        <div class="col-xs-5">
+                                                            <t t-if="has_serial_number and ml.product_id.tracking != 'none'">
+                                                                
+                                                                    <span t-field="ml.lot_id"/>
+                                                                    <span t-if="not ml.lot_id" t-field="ml.lot_name"/>
+                                                               
+                                                            </t>
+                                                            
+                                                        </div>
+                                                        <div class="col-xs-7">
+                                                                 <span t-field="ml.lot_id.removal_date"/>
+                                                            
+                                                                                                                           
+                                                            </div>
+                                                    </t>
+                                               
+                                            </t>
+                                     
+                                        </td>
                                           </t>
                                     </tr>
                               </tbody>
@@ -260,11 +339,17 @@
                               <t t-set="has_serial_number" t-value="o.move_line_ids.filtered(lambda ml: ml.lot_id or ml.lot_name)" groups="stock.group_production_lot"/>
                               <thead>
                                 <tr>
-                                     <th style="width:40px">Code</th>
-                                    <th width="55%">Product</th>
+                                     <th width="15%">Code</th>
+                                    <th width="20%">Product</th>
                                     <th width="10%">Quantity</th>
-                                    <th width="20%" class="text-center">
+                                    <th width="25%" class="text-center">
                                         <t t-if="has_barcode">Barcode</t>
+                                    </th>
+                                    <!--th width="15%"> 
+                                        <t t-if="o.picking_type_id.code != 'incoming'" align="left">Source</t>
+                                    </th-->
+                                    <th width="30%">
+                                        <t t-if="has_serial_number">Numero Lot / DLC</t>
                                     </th>
                                       </tr>
                               </thead>
@@ -292,6 +377,30 @@
                                                 </span>
                                             </t>
                                         </td>
+                                        <td colspan="3">
+                                            <t t-if="move.move_line_ids">
+                                                
+                                                    <t t-foreach="move.move_line_ids.sorted(key=lambda ml: ml.location_id.id)" t-as="ml">
+                                                        
+                                                        <div class="col-xs-5">
+                                                            <t t-if="has_serial_number and ml.product_id.tracking != 'none'">
+                                                                
+                                                                    <span t-field="ml.lot_id"/>
+                                                                    <span t-if="not ml.lot_id" t-field="ml.lot_name"/>
+                                                               
+                                                            </t>
+                                                            
+                                                        </div>
+                                                        <div class="col-xs-7">
+                                                                 <span t-field="ml.lot_id.removal_date"/>
+                                                            
+                                                                                                                           
+                                                            </div>
+                                                    </t>
+                                               
+                                            </t>
+                                     
+                                        </td>
                                           </t>
                                     </tr>
                               </tbody>
@@ -313,19 +422,18 @@
                               <t t-set="has_serial_number" t-value="o.move_line_ids.filtered(lambda ml: ml.lot_id or ml.lot_name)" groups="stock.group_production_lot"/>
                               <thead>
                                 <tr>
-                                   <th style="width:40px">Code</th>
-                                    <th width="45%">Product</th>
+                                   <th width="15%">Code</th>
+                                    <th width="20%">Product</th>
                                     <th width="10%">Quantity</th>
-                                    <th width="20%" class="text-center">
+                                    <th width="25%" class="text-center">
                                         <t t-if="has_barcode">Barcode</t>
                                     </th>
                                     <!--th width="15%"> 
                                         <t t-if="o.picking_type_id.code != 'incoming'" align="left">Source</t>
                                     </th-->
-                                    <th width="20%">
-                                        <t t-if="has_serial_number">Lot/Serial Number</t>
+                                    <th width="30%">
+                                        <t t-if="has_serial_number">Numero Lot / DLC</t>
                                     </th>
-                                    <!--th width="20%" class="text-right">Destination</th-->
                                 </tr>
                               </thead>
                               <tbody>
@@ -352,6 +460,30 @@
                                                 </span>
                                             </t>
                                         </td>
+                                        <td colspan="3">
+                                            <t t-if="move.move_line_ids">
+                                                
+                                                    <t t-foreach="move.move_line_ids.sorted(key=lambda ml: ml.location_id.id)" t-as="ml">
+                                                        
+                                                        <div class="col-xs-5">
+                                                            <t t-if="has_serial_number and ml.product_id.tracking != 'none'">
+                                                                
+                                                                    <span t-field="ml.lot_id"/>
+                                                                    <span t-if="not ml.lot_id" t-field="ml.lot_name"/>
+                                                               
+                                                            </t>
+                                                            
+                                                        </div>
+                                                        <div class="col-xs-7">
+                                                                 <span t-field="ml.lot_id.removal_date"/>
+                                                            
+                                                                                                                           
+                                                            </div>
+                                                    </t>
+                                               
+                                            </t>
+                                     
+                                        </td>
                                               </t>
                                     </tr>
                               </tbody>
@@ -373,19 +505,18 @@
                               <t t-set="has_serial_number" t-value="o.move_line_ids.filtered(lambda ml: ml.lot_id or ml.lot_name)" groups="stock.group_production_lot"/>
                               <thead>
                                 <tr>
-                                   <th style="width:40px">Code</th>
-                                    <th width="45%">Product</th>
+                                   <th width="15%">Code</th>
+                                    <th width="20%">Product</th>
                                     <th width="10%">Quantity</th>
-                                    <th width="20%" class="text-center">
+                                    <th width="25%" class="text-center">
                                         <t t-if="has_barcode">Barcode</t>
                                     </th>
                                     <!--th width="15%"> 
                                         <t t-if="o.picking_type_id.code != 'incoming'" align="left">Source</t>
                                     </th-->
-                                    <th width="20%">
-                                        <t t-if="has_serial_number">Lot/Serial Number</t>
+                                    <th width="30%">
+                                        <t t-if="has_serial_number">Numero Lot / DLC</t>
                                     </th>
-                                    <!--th width="20%" class="text-right">Destination</th-->
                                 </tr>
                               </thead>
                               <tbody>
@@ -412,6 +543,30 @@
                                                 </span>
                                             </t>
                                         </td>
+                                        <td colspan="3">
+                                            <t t-if="move.move_line_ids">
+                                                
+                                                    <t t-foreach="move.move_line_ids.sorted(key=lambda ml: ml.location_id.id)" t-as="ml">
+                                                        
+                                                        <div class="col-xs-5">
+                                                            <t t-if="has_serial_number and ml.product_id.tracking != 'none'">
+                                                                
+                                                                    <span t-field="ml.lot_id"/>
+                                                                    <span t-if="not ml.lot_id" t-field="ml.lot_name"/>
+                                                               
+                                                            </t>
+                                                            
+                                                        </div>
+                                                        <div class="col-xs-7">
+                                                                 <span t-field="ml.lot_id.removal_date"/>
+                                                            
+                                                                                                                           
+                                                            </div>
+                                                    </t>
+                                               
+                                            </t>
+                                     
+                                        </td>
                                               </t>
                                     </tr>
                               </tbody>
@@ -434,17 +589,17 @@
                               <t t-set="has_serial_number" t-value="o.move_line_ids.filtered(lambda ml: ml.lot_id or ml.lot_name)" groups="stock.group_production_lot"/>
                               <thead>
                                 <tr>
-                                   <th style="width:40px">Code</th>
-                                    <th width="45%">Product</th>
+                                   <th width="15%">Code</th>
+                                    <th width="20%">Product</th>
                                     <th width="10%">Quantity</th>
-                                    <th width="20%" class="text-center">
+                                    <th width="25%" class="text-center">
                                         <t t-if="has_barcode">Barcode</t>
                                     </th>
                                     <!--th width="15%"> 
                                         <t t-if="o.picking_type_id.code != 'incoming'" align="left">Source</t>
                                     </th-->
-                                    <th width="20%">
-                                        <t t-if="has_serial_number">Lot/Serial Number</t>
+                                    <th width="30%">
+                                        <t t-if="has_serial_number">Numero Lot / DLC</t>
                                     </th>
                                     <!--th width="20%" class="text-right">Destination</th-->
                                 </tr>
@@ -473,6 +628,30 @@
                                                 </span>
                                             </t>
                                         </td>
+                                        <td colspan="3">
+                                            <t t-if="move.move_line_ids">
+                                                
+                                                    <t t-foreach="move.move_line_ids.sorted(key=lambda ml: ml.location_id.id)" t-as="ml">
+                                                        
+                                                        <div class="col-xs-5">
+                                                            <t t-if="has_serial_number and ml.product_id.tracking != 'none'">
+                                                                
+                                                                    <span t-field="ml.lot_id"/>
+                                                                    <span t-if="not ml.lot_id" t-field="ml.lot_name"/>
+                                                               
+                                                            </t>
+                                                            
+                                                        </div>
+                                                        <div class="col-xs-7">
+                                                                 <span t-field="ml.lot_id.removal_date"/>
+                                                            
+                                                                                                                           
+                                                            </div>
+                                                    </t>
+                                               
+                                            </t>
+                                     
+                                        </td>
                                               </t>
                                     </tr>
                               </tbody>
@@ -495,19 +674,18 @@
                               <t t-set="has_serial_number" t-value="o.move_line_ids.filtered(lambda ml: ml.lot_id or ml.lot_name)" groups="stock.group_production_lot"/>
                               <thead>
                                 <tr>
-                                   <th style="width:40px">Code</th>
-                                    <th width="45%">Product</th>
+                                   <th width="15%">Code</th>
+                                    <th width="20%">Product</th>
                                     <th width="10%">Quantity</th>
-                                    <th width="20%" class="text-center">
+                                    <th width="25%" class="text-center">
                                         <t t-if="has_barcode">Barcode</t>
                                     </th>
                                     <!--th width="15%"> 
                                         <t t-if="o.picking_type_id.code != 'incoming'" align="left">Source</t>
                                     </th-->
-                                    <th width="20%">
-                                        <t t-if="has_serial_number">Lot/Serial Number</t>
+                                    <th width="30%">
+                                        <t t-if="has_serial_number">Numero Lot / DLC</t>
                                     </th>
-                                    <!--th width="20%" class="text-right">Destination</th-->
                                 </tr>
                               </thead>
                               <tbody>
@@ -534,6 +712,30 @@
                                                 </span>
                                             </t>
                                         </td>
+                                        <td colspan="3">
+                                            <t t-if="move.move_line_ids">
+                                                
+                                                    <t t-foreach="move.move_line_ids.sorted(key=lambda ml: ml.location_id.id)" t-as="ml">
+                                                        
+                                                        <div class="col-xs-5">
+                                                            <t t-if="has_serial_number and ml.product_id.tracking != 'none'">
+                                                                
+                                                                    <span t-field="ml.lot_id"/>
+                                                                    <span t-if="not ml.lot_id" t-field="ml.lot_name"/>
+                                                               
+                                                            </t>
+                                                            
+                                                        </div>
+                                                        <div class="col-xs-7">
+                                                                 <span t-field="ml.lot_id.removal_date"/>
+                                                            
+                                                                                                                           
+                                                            </div>
+                                                    </t>
+                                               
+                                            </t>
+                                     
+                                        </td>
                                               </t>
                                     </tr>
                               </tbody>
@@ -553,19 +755,18 @@
                               <t t-set="has_serial_number" t-value="o.move_line_ids.filtered(lambda ml: ml.lot_id or ml.lot_name)" groups="stock.group_production_lot"/>
                               <thead>
                                 <tr>
-                                   <th style="width:40px">Code</th>
-                                    <th width="45%">Product</th>
+                                   <th width="15%">Code</th>
+                                    <th width="20%">Product</th>
                                     <th width="10%">Quantity</th>
-                                    <th width="20%" class="text-center">
+                                    <th width="25%" class="text-center">
                                         <t t-if="has_barcode">Barcode</t>
                                     </th>
                                     <!--th width="15%"> 
                                         <t t-if="o.picking_type_id.code != 'incoming'" align="left">Source</t>
                                     </th-->
-                                    <th width="20%">
-                                        <t t-if="has_serial_number">Lot/Serial Number</t>
+                                    <th width="30%">
+                                        <t t-if="has_serial_number">Numero Lot / DLC</t>
                                     </th>
-                                    <!--th width="20%" class="text-right">Destination</th-->
                                 </tr>
                               </thead>
                               <tbody>
@@ -592,6 +793,30 @@
                                                 </span>
                                             </t>
                                         </td>
+                                        <td colspan="3">
+                                            <t t-if="move.move_line_ids">
+                                                
+                                                    <t t-foreach="move.move_line_ids.sorted(key=lambda ml: ml.location_id.id)" t-as="ml">
+                                                        
+                                                        <div class="col-xs-5">
+                                                            <t t-if="has_serial_number and ml.product_id.tracking != 'none'">
+                                                                
+                                                                    <span t-field="ml.lot_id"/>
+                                                                    <span t-if="not ml.lot_id" t-field="ml.lot_name"/>
+                                                               
+                                                            </t>
+                                                            
+                                                        </div>
+                                                        <div class="col-xs-7">
+                                                                 <span t-field="ml.lot_id.removal_date"/>
+                                                            
+                                                                                                                           
+                                                            </div>
+                                                    </t>
+                                               
+                                            </t>
+                                     
+                                        </td>
                                               </t>
                                     </tr>
                               </tbody>
@@ -613,19 +838,18 @@
                               <t t-set="has_serial_number" t-value="o.move_line_ids.filtered(lambda ml: ml.lot_id or ml.lot_name)" groups="stock.group_production_lot"/>
                               <thead>
                                 <tr>
-                                   <th style="width:40px">Code</th>
-                                    <th width="45%">Product</th>
+                                   <th width="15%">Code</th>
+                                    <th width="20%">Product</th>
                                     <th width="10%">Quantity</th>
-                                    <th width="20%" class="text-center">
+                                    <th width="25%" class="text-center">
                                         <t t-if="has_barcode">Barcode</t>
                                     </th>
                                     <!--th width="15%"> 
                                         <t t-if="o.picking_type_id.code != 'incoming'" align="left">Source</t>
                                     </th-->
-                                    <th width="20%">
-                                        <t t-if="has_serial_number">Lot/Serial Number</t>
+                                    <th width="30%">
+                                        <t t-if="has_serial_number">Numero Lot / DLC</t>
                                     </th>
-                                    <!--th width="20%" class="text-right">Destination</th-->
                                 </tr>
                               </thead>
                               <tbody>
@@ -652,6 +876,30 @@
                                                 </span>
                                             </t>
                                         </td>
+                                        <td colspan="3">
+                                            <t t-if="move.move_line_ids">
+                                                
+                                                    <t t-foreach="move.move_line_ids.sorted(key=lambda ml: ml.location_id.id)" t-as="ml">
+                                                        
+                                                        <div class="col-xs-5">
+                                                            <t t-if="has_serial_number and ml.product_id.tracking != 'none'">
+                                                                
+                                                                    <span t-field="ml.lot_id"/>
+                                                                    <span t-if="not ml.lot_id" t-field="ml.lot_name"/>
+                                                               
+                                                            </t>
+                                                            
+                                                        </div>
+                                                        <div class="col-xs-7">
+                                                                 <span t-field="ml.lot_id.removal_date"/>
+                                                            
+                                                                                                                           
+                                                            </div>
+                                                    </t>
+                                               
+                                            </t>
+                                     
+                                        </td>
                                               </t>
                                     </tr>
                               </tbody>
@@ -672,19 +920,18 @@
                               <t t-set="has_serial_number" t-value="o.move_line_ids.filtered(lambda ml: ml.lot_id or ml.lot_name)" groups="stock.group_production_lot"/>
                               <thead>
                                 <tr>
-                                   <th style="width:40px">Code</th>
-                                    <th width="45%">Product</th>
+                                   <th width="15%">Code</th>
+                                    <th width="20%">Product</th>
                                     <th width="10%">Quantity</th>
-                                    <th width="20%" class="text-center">
+                                    <th width="25%" class="text-center">
                                         <t t-if="has_barcode">Barcode</t>
                                     </th>
                                     <!--th width="15%"> 
                                         <t t-if="o.picking_type_id.code != 'incoming'" align="left">Source</t>
                                     </th-->
-                                    <th width="20%">
-                                        <t t-if="has_serial_number">Lot/Serial Number</t>
+                                    <th width="30%">
+                                        <t t-if="has_serial_number">Numero Lot / DLC</t>
                                     </th>
-                                    <!--th width="20%" class="text-right">Destination</th-->
                                 </tr>
                               </thead>
                               <tbody>
@@ -710,6 +957,30 @@
                                                     <img t-else="" t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('Code128', move.product_id.barcode, 600, 100)" style="width:100%;height:50px"/>
                                                 </span>
                                             </t>
+                                        </td>
+                                        <td colspan="3">
+                                            <t t-if="move.move_line_ids">
+                                                
+                                                    <t t-foreach="move.move_line_ids.sorted(key=lambda ml: ml.location_id.id)" t-as="ml">
+                                                        
+                                                        <div class="col-xs-5">
+                                                            <t t-if="has_serial_number and ml.product_id.tracking != 'none'">
+                                                                
+                                                                    <span t-field="ml.lot_id"/>
+                                                                    <span t-if="not ml.lot_id" t-field="ml.lot_name"/>
+                                                               
+                                                            </t>
+                                                            
+                                                        </div>
+                                                        <div class="col-xs-7">
+                                                                 <span t-field="ml.lot_id.removal_date"/>
+                                                            
+                                                                                                                           
+                                                            </div>
+                                                    </t>
+                                               
+                                            </t>
+                                     
                                         </td>
                                               </t>
                                     </tr>
@@ -798,11 +1069,17 @@
                               <t t-set="has_serial_number" t-value="o.move_line_ids.filtered(lambda ml: ml.lot_id or ml.lot_name)" groups="stock.group_production_lot"/>
                               <thead>
                                 <tr>
-                                     <th style="width:40px">Code</th>
-                                    <th width="55%">Product</th>
+                                     <th width="15%">Code</th>
+                                    <th width="20%">Product</th>
                                     <th width="10%">Quantity</th>
-                                    <th width="20%" class="text-center">
+                                    <th width="25%" class="text-center">
                                         <t t-if="has_barcode">Barcode</t>
+                                    </th>
+                                    <!--th width="15%"> 
+                                        <t t-if="o.picking_type_id.code != 'incoming'" align="left">Source</t>
+                                    </th-->
+                                    <th width="30%">
+                                        <t t-if="has_serial_number">Numero Lot / DLC</t>
                                     </th>
                                          </tr>
                               </thead>
@@ -831,6 +1108,30 @@
                                                     <img t-else="" t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('Code128', move.product_id.barcode, 600, 100)" style="width:100%;height:50px"/>
                                                 </span>
                                             </t>
+                                        </td>
+                                        <td colspan="3">
+                                            <t t-if="move.move_line_ids">
+                                                
+                                                    <t t-foreach="move.move_line_ids.sorted(key=lambda ml: ml.location_id.id)" t-as="ml">
+                                                        
+                                                        <div class="col-xs-5">
+                                                            <t t-if="has_serial_number and ml.product_id.tracking != 'none'">
+                                                                
+                                                                    <span t-field="ml.lot_id"/>
+                                                                    <span t-if="not ml.lot_id" t-field="ml.lot_name"/>
+                                                               
+                                                            </t>
+                                                            
+                                                        </div>
+                                                        <div class="col-xs-7">
+                                                                 <span t-field="ml.lot_id.removal_date"/>
+                                                            
+                                                                                                                           
+                                                            </div>
+                                                    </t>
+                                               
+                                            </t>
+                                     
                                         </td>
                                        
                                          </t>
@@ -920,11 +1221,17 @@
                               <t t-set="has_serial_number" t-value="o.move_line_ids.filtered(lambda ml: ml.lot_id or ml.lot_name)" groups="stock.group_production_lot"/>
                               <thead>
                                 <tr>
-                                   <th style="width:40px">Code</th>
-                                    <th width="55%">Product</th>
+                                   <th width="15%">Code</th>
+                                    <th width="20%">Product</th>
                                     <th width="10%">Quantity</th>
-                                    <th width="20%" class="text-center">
+                                    <th width="25%" class="text-center">
                                         <t t-if="has_barcode">Barcode</t>
+                                    </th>
+                                    <!--th width="15%"> 
+                                        <t t-if="o.picking_type_id.code != 'incoming'" align="left">Source</t>
+                                    </th-->
+                                    <th width="30%">
+                                        <t t-if="has_serial_number">Numero Lot / DLC</t>
                                     </th>
                                         </tr>
                               </thead>
@@ -953,6 +1260,30 @@
                                                 </span>
                                             </t>
                                         </td>
+                                        <td colspan="3">
+                                            <t t-if="move.move_line_ids">
+                                                
+                                                    <t t-foreach="move.move_line_ids.sorted(key=lambda ml: ml.location_id.id)" t-as="ml">
+                                                        
+                                                        <div class="col-xs-5">
+                                                            <t t-if="has_serial_number and ml.product_id.tracking != 'none'">
+                                                                
+                                                                    <span t-field="ml.lot_id"/>
+                                                                    <span t-if="not ml.lot_id" t-field="ml.lot_name"/>
+                                                               
+                                                            </t>
+                                                            
+                                                        </div>
+                                                        <div class="col-xs-7">
+                                                                 <span t-field="ml.lot_id.removal_date"/>
+                                                            
+                                                                                                                           
+                                                            </div>
+                                                    </t>
+                                               
+                                            </t>
+                                     
+                                        </td>
                                       
                                          </t>
                                     </tr>
@@ -968,11 +1299,17 @@
                               <t t-set="has_serial_number" t-value="o.move_line_ids.filtered(lambda ml: ml.lot_id or ml.lot_name)" groups="stock.group_production_lot"/>
                               <thead>
                                 <tr>
-                                   <th style="width:40px">Code</th>
-                                    <th width="55%">Product</th>
+                                   <th width="15%">Code</th>
+                                    <th width="20%">Product</th>
                                     <th width="10%">Quantity</th>
-                                    <th width="20%" class="text-center">
+                                    <th width="25%" class="text-center">
                                         <t t-if="has_barcode">Barcode</t>
+                                    </th>
+                                    <!--th width="15%"> 
+                                        <t t-if="o.picking_type_id.code != 'incoming'" align="left">Source</t>
+                                    </th-->
+                                    <th width="30%">
+                                        <t t-if="has_serial_number">Numero Lot / DLC</t>
                                     </th>
                                         </tr>
                               </thead>
@@ -1019,11 +1356,17 @@
                               <t t-set="has_serial_number" t-value="o.move_line_ids.filtered(lambda ml: ml.lot_id or ml.lot_name)" groups="stock.group_production_lot"/>
                               <thead>
                                 <tr>
-                                   <th style="width:40px">Code</th>
-                                    <th width="55%">Product</th>
+                                   <th width="15%">Code</th>
+                                    <th width="20%">Product</th>
                                     <th width="10%">Quantity</th>
-                                    <th width="20%" class="text-center">
+                                    <th width="25%" class="text-center">
                                         <t t-if="has_barcode">Barcode</t>
+                                    </th>
+                                    <!--th width="15%"> 
+                                        <t t-if="o.picking_type_id.code != 'incoming'" align="left">Source</t>
+                                    </th-->
+                                    <th width="30%">
+                                        <t t-if="has_serial_number">Numero Lot / DLC</t>
                                     </th>
                                         </tr>
                               </thead>
@@ -1052,7 +1395,30 @@
                                                 </span>
                                             </t>
                                         </td>
-                                      
+                                      <td colspan="3">
+                                            <t t-if="move.move_line_ids">
+                                                
+                                                    <t t-foreach="move.move_line_ids.sorted(key=lambda ml: ml.location_id.id)" t-as="ml">
+                                                        
+                                                        <div class="col-xs-5">
+                                                            <t t-if="has_serial_number and ml.product_id.tracking != 'none'">
+                                                                
+                                                                    <span t-field="ml.lot_id"/>
+                                                                    <span t-if="not ml.lot_id" t-field="ml.lot_name"/>
+                                                               
+                                                            </t>
+                                                            
+                                                        </div>
+                                                        <div class="col-xs-7">
+                                                                 <span t-field="ml.lot_id.removal_date"/>
+                                                            
+                                                                                                                           
+                                                            </div>
+                                                    </t>
+                                               
+                                            </t>
+                                     
+                                        </td>
                                          </t>
                                     </tr>
                               </tbody>
@@ -1071,11 +1437,17 @@
                               <t t-set="has_serial_number" t-value="o.move_line_ids.filtered(lambda ml: ml.lot_id or ml.lot_name)" groups="stock.group_production_lot"/>
                               <thead>
                                 <tr>
-                                   <th style="width:40px">Code</th>
-                                    <th width="55%">Product</th>
+                                   <th width="15%">Code</th>
+                                    <th width="20%">Product</th>
                                     <th width="10%">Quantity</th>
-                                    <th width="20%" class="text-center">
+                                    <th width="25%" class="text-center">
                                         <t t-if="has_barcode">Barcode</t>
+                                    </th>
+                                    <!--th width="15%"> 
+                                        <t t-if="o.picking_type_id.code != 'incoming'" align="left">Source</t>
+                                    </th-->
+                                    <th width="30%">
+                                        <t t-if="has_serial_number">Numero Lot / DLC</t>
                                     </th>
                                         </tr>
                               </thead>
@@ -1104,7 +1476,30 @@
                                                 </span>
                                             </t>
                                         </td>
-                                      
+                                      <td colspan="3">
+                                            <t t-if="move.move_line_ids">
+                                                
+                                                    <t t-foreach="move.move_line_ids.sorted(key=lambda ml: ml.location_id.id)" t-as="ml">
+                                                        
+                                                        <div class="col-xs-5">
+                                                            <t t-if="has_serial_number and ml.product_id.tracking != 'none'">
+                                                                
+                                                                    <span t-field="ml.lot_id"/>
+                                                                    <span t-if="not ml.lot_id" t-field="ml.lot_name"/>
+                                                               
+                                                            </t>
+                                                            
+                                                        </div>
+                                                        <div class="col-xs-7">
+                                                                 <span t-field="ml.lot_id.removal_date"/>
+                                                            
+                                                                                                                           
+                                                            </div>
+                                                    </t>
+                                               
+                                            </t>
+                                     
+                                        </td>
                                          </t>
                                     </tr>
                               </tbody>
