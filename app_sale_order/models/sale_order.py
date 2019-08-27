@@ -205,7 +205,7 @@ class SaleOrder(models.Model):
             total_colis = 0
             for line in sale.order_line:
                 if line.product_id:
-                    total_colis += line.product_uom_qty or 0.0
+                    total_colis += line.secondary_uom_qty or 0.0
             sale.total_colis = total_colis
 
     def _compute_volumeht_total(self):
