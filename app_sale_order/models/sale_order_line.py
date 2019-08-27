@@ -10,8 +10,16 @@ from datetime import *
 
 # Record the net weight of the order line
 class SaleOrderLine(models.Model):
-    _inherit = 'sale.order.line'    
+    _inherit = 'sale.order.line'  
     
+    
+    @api.model
+    def create(self, vals):
+        if vals.get('secondary_uom_qty'):
+            value = vals.get('secondary_uom_qty')
+            vals['qty_initiale'] = value 
+        result = super(SaleOrderLine,self).create(vals) 
+        return result
     
     #Get Qty available in stock/ Qty demanded
     @api.multi
@@ -57,6 +65,7 @@ class SaleOrderLine(models.Model):
     test_on_change_ver = fields.Float('Qte restante virtuell')
     test_on_change_version2= fields.Float('Qte a livre apre today')
     order_requested_date = fields.Datetime(related='order_id.requested_date', store=True, string=u'Date Demandée')
+    qty_initiale = fields.Float(string='Qty initiale')
 
 
     @api.onchange('product_id')

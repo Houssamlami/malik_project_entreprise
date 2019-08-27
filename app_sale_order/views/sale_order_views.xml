@@ -58,6 +58,10 @@
 					<field name="volume" invisible="1"/>
 					<field name="volume_tot" string="Prix Total" invisible="1"/>
              	</xpath>
+             	<xpath expr="//field[@name='order_line']/tree/field[@name='name']" position="after">
+                	<field name="qty_initiale" />
+					
+             	</xpath>
              	<xpath expr="//field[@name='order_line']/form/group/group/field[@name='price_subtotal']" position="after">
                     <field name="weight" invisible="1"/>
 					<field name="volume" invisible="1"/>
