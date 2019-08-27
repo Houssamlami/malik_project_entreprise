@@ -18,5 +18,17 @@
 					</xpath>
 			</field>
 		</record>
+		<record model="ir.ui.view" id="add_box_stock_picking_form999">
+			<field name="name">add.box.stock.picking.form999</field>
+			<field name="model">stock.production.lot</field>
+			<field name="inherit_id" ref="stock.view_production_lot_form" />
+			<field name="arch" type="xml">
+
+				<xpath expr="//group[@name='main_group']/group"
+					position="inside">
+					<field name="date_refer" />
+					</xpath>
+					</field>
+					</record>
 	</data>
 </odoo>
