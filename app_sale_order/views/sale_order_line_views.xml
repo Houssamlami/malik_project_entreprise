@@ -13,6 +13,7 @@
                     <field name="name"/>
                     <field name="salesman_id"/>
 					<field name="qty_disponible_en_stock" string="Qté réel"/>
+					<field name="qty_initiale" />
                     <field name="secondary_uom_qty" string="Qté commandé" sum="Total"/>
                     <field name="qty_delivered" />
                     <field name="qty_invoiced" />

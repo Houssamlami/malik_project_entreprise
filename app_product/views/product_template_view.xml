@@ -2,6 +2,11 @@
 <odoo>
 	<data>
  <!-- ''''''''''''''''''''''''''''''Prices/Costs of Product''''''''''''''''''''''''''''''''''''''''''' -->
+ <record id="group_to_manage_all"
+		model="res.groups">
+		<field name="name">Manager</field>
+		<field name="category_id" ref="base.module_category_hidden" />
+	</record>
  	 <record id="product_template_add_fields" model="ir.ui.view">
         <field name="name">product.template.add.fields</field>
         <field name="model">product.template</field>
@@ -17,7 +22,7 @@
 			</xpath>
             <xpath expr="//page[@name='general_information']/group" position="after">
             <separator string="Calcul des Coûts/Prix:"/>
-            <group>
+            <group groups="app_product.group_to_manage_all">
             <group name="charges">
             <field name="prix_achat" widget='monetary'/>
             <field name="prix_transport" widget='monetary'/>
