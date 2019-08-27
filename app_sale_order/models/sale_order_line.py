@@ -95,8 +95,8 @@ class SaleOrderLine(models.Model):
                 # record.test_on_change_ver = record.env.cr.fetchone()
                 # record.test_on_change = record.product_id.qty_available
     
-    @api.multi
-    @api.depends('product_id', 'product_uom_qty')
+    @api.onchange('secondary_uom_qty')
+    @api.depends('product_id', 'secondary_uom_qty')
     def _compute_weight(self):
         for line in self:
             weight = 0
