@@ -6,8 +6,12 @@ from odoo import api, fields, models, _
 from odoo.tools import float_is_zero, float_compare, DEFAULT_SERVER_DATETIME_FORMAT
 
 from odoo.tools.misc import formatLang
-
+from odoo.tools import DEFAULT_SERVER_DATE_FORMAT as DF
 from odoo.addons import decimal_precision as dp
+
+from datetime import datetime, timedelta
+from datetime import datetime
+import datetime
 
 
 class StockPicking(models.Model):
@@ -49,3 +53,31 @@ class StockPicking(models.Model):
                 if line.product_id.Androit_stockage.name == "Volailles":
                     weight_stock_volailles += line.product_uom_qty  or 0.0
             stock.total_weight_stock_volailles_auto = weight_stock_volailles
+            
+class StockProductionLot(models.Model):
+    _inherit = "stock.production.lot"
+    
+        
+    date_refer = fields.Datetime(string="Date référence", default=fields.Date.today())
+    
+    
+    def _get_dates(self, product_id=None):
+        """Returns dates based on number of days configured in current lot's product."""
+        mapped_fields = {
+            'life_date': 'life_time',
+            'use_date': 'use_time',
+            'removal_date': 'removal_time',
+            'alert_date': 'alert_time'
+        }
+        
+        str_date = str(self.date_refer)
+        date_r = datetime.datetime.strptime(str_date, '%Y-%m-%d %H:%M:%S')
+        res = dict.fromkeys(mapped_fields, False)
+        product = self.env['product.product'].browse(product_id) or self.product_id
+        if product:
+            for field in mapped_fields:
+                duration = getattr(product, mapped_fields[field])
+                if duration:
+                    date = date_r + datetime.timedelta(days=duration)
+                    res[field] = fields.Datetime.to_string(date)
+        return res
