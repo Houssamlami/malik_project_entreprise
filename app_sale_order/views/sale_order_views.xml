@@ -32,6 +32,16 @@
 					 <field name="total_volume_ht" string="Montant Total TTC"  />
 					
                 </xpath>
+                <xpath
+				expr="//field[@name='user_id']"
+				position="attributes">
+				<attribute name="string">Commercial</attribute>
+			</xpath>
+			<xpath
+				expr="//field[@name='user_id']"
+				position="after">
+				<field name="vendeur" string="Vendeur"/>
+			</xpath>
 			</field>
 		</record> 
 

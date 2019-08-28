@@ -51,6 +51,27 @@
          </record>
          
          <!-- ''''''''''''''''''''''''''''''Vente du jour & adding endroit stockage/preparation''''''''''''''''''''''''''''''''''''''''''' -->
+        <!--  <record model="ir.ui.view" id="product_template_form_view_sale_order_button2">
+            <field name="name">product.template.sale.order.button2</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_only_form_view"/>
+            <field name="groups_id" eval="[(4, ref('sales_team.group_sale_salesman'))]"/>
+            <field name="arch" type="xml">
+                <button name="toggle_active" position="after">
+                    <button class="oe_stat_button" name="action_view_saless"
+                        type="object" icon="fa-usd" groups="sales_team.group_sale_salesman">
+                        Vente du jour
+                    </button>
+                </button>
+                <xpath expr="//field[@name='tracking']" position="after">
+                   
+					  <field  name="Androit_stockage"/>
+					  <field  name="Androit_preparation"/>
+             	</xpath>
+               
+            </field>
+        </record>
+         -->
          <record model="ir.ui.view" id="product_template_form_view_sale_order_button2">
             <field name="name">product.template.sale.order.button2</field>
             <field name="model">product.template</field>

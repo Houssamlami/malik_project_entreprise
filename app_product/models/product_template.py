@@ -156,6 +156,7 @@ class ProductTemplate(models.Model):
             'help': action.help,
             'type': action.type,
             'view_type': action.view_type,
+            'view_id': self.env.ref('app_sale_order.view_sale_order_line_pivot123').id,
             'view_mode': action.view_mode,
             'target': action.target,
             'context': "{'default_product_id': " + str(product_ids[0]) + "}",
