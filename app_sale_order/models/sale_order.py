@@ -19,7 +19,7 @@ class SaleOrder(models.Model):
     total_weight_stock_char = fields.Float(string='Total charcuterie)', compute='_compute_weight_total_stock_char')
     total_weight_stock_srg = fields.Float(string='Total surgele)', compute='_compute_weight_total_stock_srg')
     total_weight_stock_vv = fields.Float(string='Total volaille)', compute='_compute_weight_total_stock_vv')
-    produitalivrer = fields.Char('Produit a livrer', compute='get_product_ttm', store=True)
+    produitalivrer = fields.Char('Produit a livrer', compute='get_product_ttm')
     Expediteur =  fields.Selection([('MV', 'Malik V'), ('An', 'Atlas N')])    
     zip_df =  fields.Char(string='CP', compute='get_default_zip')
     adresse_liv =  fields.Char(string='Adresse livraison', compute='get_default_zip')
@@ -294,8 +294,16 @@ class SaleOrder(models.Model):
                 if line.product_id.Androit_stockage.id == self.env['androit.stockage'].search([('name', '=', 'Volailles')]).id:
                     weight_stock_vv += line.product_uom_qty  or 0.0
             sales.total_weight_stock_vv = weight_stock_vv
-                    
     
+    @api.onchange('order_line','order_line.product_id')
+    def onchange_order_line_livre(self):
+        for record in self:
+            record._compute_weight_total_stock_vv()
+            record._compute_weight_total_stock_srg()
+            record._compute_weight_total_stock_char()
+            record.get_product_ttm()
+                    
+    @api.onchange('total_weight_stock_char','total_weight_stock_srg','total_weight_stock_vv')
     @api.depends('total_weight_stock_char','total_weight_stock_srg','total_weight_stock_vv')
     def get_product_ttm(self):
         for sales in self:
