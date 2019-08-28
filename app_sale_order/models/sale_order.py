@@ -324,3 +324,13 @@ class SaleOrder(models.Model):
                         }    
         return sale
     
+    @api.multi
+    def write(self, vals):
+        sale = super(SaleOrder,self).write(vals)
+        if any(line.secondary_uom_qty == 0.0 for line in self.order_line):
+            raise exceptions.ValidationError(_('Remplir les QTY !'))
+            return {
+                        'warning': {'title': _('Error'), 'message': _('Error message'),},
+                        }    
+        return sale
+        
