@@ -275,23 +275,23 @@ class SaleOrder(models.Model):
         for sales in self:
             weight_stock_char = 0
             for line in sales.order_line:
-                if line.product_id.categ_id.parent_id.name in ("Sauces","Chips","Saucissons","Chapelet","Mortadelle","Blocs","Panes","Tranches"):
-                    weight_stock_char += line.product_uom_qty  or 0.0
+                if line.product_id.Androit_stockage.id == self.env['androit.stockage'].search([('name', '=', 'Sec')]) or self.env['androit.stockage'].search([('name', '=', 'Frais')]):
+                    weight_stock_char += line.secondary_uom_qty  or 0.0
             sales.total_weight_stock_char = weight_stock_char
             
     def _compute_weight_total_stock_srg(self):
         for sales in self:
             weight_stock_srg = 0
             for line in sales.order_line:
-                if line.product_id.categ_id.parent_id.name in ("Surgeles","IQF"):
-                    weight_stock_srg += line.product_uom_qty  or 0.0
+                if line.product_id.Androit_stockage.id == self.env['androit.stockage'].search([('name', '=', 'Surgelé')]).id:
+                    weight_stock_srg += line.secondary_uom_qty  or 0.0
             sales.total_weight_stock_srg = weight_stock_srg
             
     def _compute_weight_total_stock_vv(self):
         for sales in self:
             weight_stock_vv = 0
             for line in sales.order_line:
-                if line.product_id.categ_id.parent_id.name in ("Volaille","Volailles Espagne","La Volailles BON","Volailles IMEX"):
+                if line.product_id.Androit_stockage.id == self.env['androit.stockage'].search([('name', '=', 'Volailles')]).id:
                     weight_stock_vv += line.product_uom_qty  or 0.0
             sales.total_weight_stock_vv = weight_stock_vv
                     

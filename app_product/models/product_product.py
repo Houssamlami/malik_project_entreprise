@@ -25,3 +25,5 @@ class ProductProduct(models.Model):
         return r
 
     sales_count2 = fields.Integer(compute='_sales_count2', string='# Salesss')
+    Androit_stockage = fields.Many2one(comodel_name='androit.stockage', related='product_tmpl_id.Androit_stockage', store= True)
+    Androit_preparation = fields.Many2one(comodel_name='androit.preparation', related='product_tmpl_id.Androit_preparation', store= True)
