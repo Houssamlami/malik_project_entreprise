@@ -107,6 +107,7 @@
 						
 						<field  name="cmd_volaille"/>
 						<field  name="cmd_charcuterie"/>
+						<field  name="commande_type" widget="radio" invisible="1"/>
 						
              	</xpath>
 			</field>

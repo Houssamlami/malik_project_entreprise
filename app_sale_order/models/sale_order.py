@@ -28,8 +28,9 @@ class SaleOrder(models.Model):
     test_bloque = fields.Char('Test bloque')
     cmd_charcuterie = fields.Boolean(string="Charcuterie")
     cmd_volaille = fields.Boolean(string="Volaille")
-    fac_charcuterie_volaille = fields.Selection([('charcuterie', 'Charcuterie'),('volaille', 'Volaille')],string="Type de commande")
+    fac_charcuterie_volaille = fields.Selection([('charcuterie', 'Charcuterie'),('volaille', 'Volaille')],string="Type commande")
     client_gc_pc = fields.Selection('Type Client', related='partner_id.client_gc_pc', store=True)
+    commande_type = fields.Selection([('commande_charc', 'Commande charcuterie'),('commande_volaille', 'Commande Volaille')], string="Type de commande")
     #ecart_qty_kg = fields.Float(string='Ecart qty (KG)', compute='_get_ecart_qty', readonly=True, store=True)
     #ecart_qty_colis = fields.Float('Ecart qty (Colis)', compute=_get_ecart_qty, store=True)
     total_qty_ordred1 = fields.Float(string='Total qtyor', compute='_compute_colis_total_ordred')
@@ -39,6 +40,15 @@ class SaleOrder(models.Model):
     etat_fac1_copy = fields.Char(string='Etat facture copy', compute='_compute_colis_total_etat_copy',store=True)
     grand_compte = fields.Boolean(string='Commande Grand Compte', default= False)
     
+    @api.onchange('cmd_volaille','cmd_charcuterie')
+    def onchange_type_of_commande(self):
+        for sale in self:
+            if sale.cmd_volaille:
+                sale.commande_type = 'commande_volaille'
+            else:
+                sale.commande_type = 'commande_charc'
+                
+                
     @api.onchange('partner_id')
     def _get_type_cmd(self):
         for sale in self:
@@ -46,6 +56,7 @@ class SaleOrder(models.Model):
                 sale.cmd_charcuterie = True
             if sale.partner_id.Client_Volaille:
                 sale.cmd_volaille = True
+                
     
     @api.multi
     def compute_qty_transport(self):
