@@ -81,3 +81,18 @@ class StockProductionLot(models.Model):
                     date = date_r + datetime.timedelta(days=duration)
                     res[field] = fields.Datetime.to_string(date)
         return res
+    
+    @api.model
+    def create(self, vals):
+        lot = super(StockProductionLot, self).create(vals)
+        dates = lot._get_dates(vals.get('product_id') or self.env.context.get('default_product_id'))
+        for d in dates:
+            if not vals.get(d):
+                vals[d] = dates[d]
+        return lot
+    
+    @api.onchange('date_refer')
+    def _onchange_date_refer(self):
+        dates_dict = self._get_dates()
+        for field, value in dates_dict.items():
+            setattr(self, field, value)
