@@ -78,10 +78,10 @@ class StockProductionLot(models.Model):
             i=0
             for field in mapped_fields:
                 duration = getattr(product, mapped_fields[field])
-                if duration and i != 1:
+                if duration and field != 'life_date':
                     date = date_r + datetime.timedelta(days=duration)
                     res[field] = fields.Datetime.to_string(date)              
-                if i == 1:
+                if field == 'life_date':
                     date = date_r + datetime.timedelta(days=0)
                     res[field] = fields.Datetime.to_string(date)
                 i = i+1
