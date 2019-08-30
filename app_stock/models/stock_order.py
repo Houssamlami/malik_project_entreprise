@@ -75,11 +75,16 @@ class StockProductionLot(models.Model):
         res = dict.fromkeys(mapped_fields, False)
         product = self.env['product.product'].browse(product_id) or self.product_id
         if product:
+            i=0
             for field in mapped_fields:
                 duration = getattr(product, mapped_fields[field])
-                if duration:
+                if duration and i != 1:
                     date = date_r + datetime.timedelta(days=duration)
+                    res[field] = fields.Datetime.to_string(date)              
+                if i == 1:
+                    date = date_r + datetime.timedelta(days=0)
                     res[field] = fields.Datetime.to_string(date)
+                i = i+1
         return res
     
     @api.model
