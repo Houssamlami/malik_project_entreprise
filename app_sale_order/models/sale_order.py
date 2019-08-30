@@ -340,7 +340,11 @@ class SaleOrder(models.Model):
             raise exceptions.ValidationError(_('Remplir les QTY !'))
             return {
                         'warning': {'title': _('Error'), 'message': _('Error message'),},
-                        }    
+                        }  
+        if sale.cmd_volaille:
+                sale.commande_type = 'commande_volaille'
+        else:
+            sale.commande_type = 'commande_charc'  
         return sale
     
     @api.multi
