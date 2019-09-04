@@ -233,6 +233,23 @@
 			</xpath>
 		</field>
 	</record>
+	<!-- ########################################restriction change pricelist in SO################################### -->
+	<record model="ir.ui.view" id="restriction_price_list_commercial_externe_form">
+		<field name="name">restriction.price.list.sale.form</field>
+		<field name="model">sale.order</field>
+		<field name="inherit_id" ref="sale.view_order_form" />
+		<field name="groups_id"
+			eval="[(6, 0, [ref('app_sale_order.group_sale_commercial_externe')])]" />
+		<field name="arch" type="xml">
+			<xpath
+				expr="//field[@name='pricelist_id']"
+				position="attributes">
+				<!-- <field name="price_unit" attrs="{'readonly': [('is_manager', '!=',True)]}"/> -->
+				<attribute name="readonly">True</attribute>
+			</xpath>
+			
+		</field>
+	</record>
 	
 <!-- #################################### Make requested_date require ################################################ -->	
 
