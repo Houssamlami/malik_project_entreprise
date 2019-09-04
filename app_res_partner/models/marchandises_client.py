@@ -6,7 +6,7 @@ from odoo import api, fields, models, _
 
 
 
-class Marchandises(models.Model):
+class MarchandisesClient(models.Model):
     
     _name = "marchandises.client"
     

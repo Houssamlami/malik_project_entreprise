@@ -14,10 +14,14 @@
     'author' : 'FHS Solutions',
     'website' : '',
     'images': ['static/description/banner.jpg'],
-    'depends' : ['sale_management', 'sale', 'sale_order_dates', 'sales_team'],
+    'depends' : ['sale_management', 'sale', 'sale_order_dates', 'sales_team','product','base'],
     'data': [
+        'views/group_views.xml',
+        'security/ir.model.access.csv',
         'views/sale_order_views.xml',
         'views/sale_order_line_views.xml',
+        
+        
     ],
     'demo': [
     ],

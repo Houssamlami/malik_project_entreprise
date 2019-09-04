@@ -1,12 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 	<data>
+<!-- ''''''''''''''''''''''''''''''restriction button update qty on hand''''''''''''''''''''''''''''''''''''''''''' -->
+<record model="ir.ui.view" id="product_template_form_restriction_update_button">
+            <field name="name">product.template.form.restriction.update</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="stock.product_template_form_view_procurement_button"/>
+            <field name="arch" type="xml">
+                <data>
+                <xpath
+				expr="//button[@name='240']"
+				position="attributes">
+				<attribute name="groups">stock.group_stock_manager</attribute>
+			</xpath>
+			</data>
+			</field>
+			</record>
  <!-- ''''''''''''''''''''''''''''''Prices/Costs of Product''''''''''''''''''''''''''''''''''''''''''' -->
- <record id="group_to_manage_all"
-		model="res.groups">
-		<field name="name">Manager</field>
-		<field name="category_id" ref="base.module_category_hidden" />
-	</record>
  	 <record id="product_template_add_fields" model="ir.ui.view">
         <field name="name">product.template.add.fields</field>
         <field name="model">product.template</field>
@@ -21,8 +31,8 @@
 				<attribute name="force_save">1</attribute>
 			</xpath>
             <xpath expr="//page[@name='general_information']/group" position="after">
-            <separator string="Calcul des Coûts/Prix:"/>
-            <group groups="app_product.group_to_manage_all">
+            <separator string="Calcul des Coûts/Prix:" groups="sales_team.group_sale_manager"/>
+            <group groups="sales_team.group_sale_manager">
             <group name="charges">
             <field name="prix_achat" widget='monetary'/>
             <field name="prix_transport" widget='monetary'/>

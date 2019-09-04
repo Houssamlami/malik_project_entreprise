@@ -215,7 +215,7 @@ class SaleOrder(models.Model):
         for sale in self:
             total_colis = 0
             for line in sale.order_line:
-                if line.product_id:
+                if line.product_id and line.product_id.type != 'service':
                     total_colis += line.secondary_uom_qty or 0.0
             sale.total_colis = total_colis
 
