@@ -10,6 +10,7 @@ class SaleOrder(models.Model):
 
     total_weight = fields.Float(string='Total Weight(kg)', compute='_compute_weight_total')
     total_colis = fields.Float(string='Total colis', compute='_compute_colis_total')
+    total_colis_livrer = fields.Float(string='Total colis livrer', compute='_compute_colis_livrer_total')
     total_volume_ht = fields.Float(string='Montant Total TTC', compute='_compute_volumeht_total')
     total_ht = fields.Float(string='Montant Total HT', compute='_compute_ht_total')
     vendeur = fields.Many2one(comodel_name='hr.employee', string="Vendeur")
@@ -170,6 +171,7 @@ class SaleOrder(models.Model):
             'name': self.client_order_ref or '',
             'origin': self.name,
             'type': 'out_invoice',
+            'qty_livrer_colis': self.total_colis_livrer,
             'account_id': self.partner_invoice_id.property_account_receivable_id.id,
             'partner_id': self.partner_invoice_id.id,
             'partner_shipping_id': self.partner_shipping_id.id,
@@ -218,6 +220,14 @@ class SaleOrder(models.Model):
                 if line.product_id and line.product_id.type != 'service':
                     total_colis += line.secondary_uom_qty or 0.0
             sale.total_colis = total_colis
+            
+    def _compute_colis_livrer_total(self):
+        for sale in self:
+            total_colis = 0
+            for line in sale.order_line:
+                if line.product_id and line.product_id.type != 'service' and line.secondary_uom_id:
+                    total_colis += (line.qty_delivered/line.secondary_uom_id.factor) or 0.0
+            sale.total_colis_livrer = total_colis
 
     def _compute_volumeht_total(self):
         for sale in self:

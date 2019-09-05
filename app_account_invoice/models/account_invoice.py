@@ -17,6 +17,7 @@ class AccountInvoice(models.Model):
     cli_pc = fields.Boolean('Client petit compte', related='partner_id.Client_PC')
     date_commande = fields.Date(string="Date Commande")
     date_livraison = fields.Date(string="Date Livraison")
+    qty_livrer_colis = fields.Float(string="Colis")
     
     @api.onchange('fac_charcuterie_f','fac_volaille_f')
     def onchange_fac_volaille_volaille(self):
