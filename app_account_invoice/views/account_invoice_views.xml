@@ -19,6 +19,11 @@
 					<field name="cli_gc" />
 					<field name="cli_pc" />
 				</xpath>
+				<xpath expr="//group[@class='oe_subtotal_footer oe_right']" position="after">
+				<group>
+                     <field name="qty_livrer_colis" string="Nombre de colis"/>
+                     </group>
+                </xpath>
 			</field>
 		</record>
 		<record model="ir.ui.view" id="add_fields_search_date_commd">
