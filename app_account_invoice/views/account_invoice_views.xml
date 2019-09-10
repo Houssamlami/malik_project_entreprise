@@ -24,6 +24,9 @@
                      <field name="qty_livrer_colis" string="Nombre de colis"/>
                      </group>
                 </xpath>
+                <field name="date_due" position="after">
+                <field name="date_livraison" attrs="{'invisible': [('type', 'in', ('in_invoice','in_refund'))]}"/>
+                </field>
 			</field>
 		</record>
 		<record model="ir.ui.view" id="add_fields_search_date_commd">
