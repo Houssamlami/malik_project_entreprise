@@ -115,10 +115,9 @@
 			<field name="message_needaction" invisible="1"/>
 		
 			<field name="name"/>
-			<field name="test_on_product_vertuel_jours_suivant2"/>	  
-			<field name="total_commande_jour_suivant"/>	
-			<field name="stock_virtuel_jour_suivant"/>
-			<field name="test_on_product_ver"/>		  
+			<field name="qty_available"/>	  
+			<field name="stock_virtuel_actuel"/>	
+			<field name="nombre_colis_a_livre"/>		  
 					  </tree>	  
              	</field>
 		 </record> 
