@@ -93,7 +93,7 @@ class ProductTemplate(models.Model):
                 ('product_id', '=', self.env['product.product'].search([('product_tmpl_id', '=', record.id)]).id),('order_id', 'in', vouchers.ids)])
                 for rec in productbl:
                     # if record.qty_available:
-                    qty_virtuelle_des_comandes += rec.product_uom_qty
+                    qty_virtuelle_des_comandes += rec.secondary_uom_qty
                 record.qty_virtuelle_des_comandes = qty_virtuelle_des_comandes
                 record.stock_virtuel_actuel = round((record.qty_available-record.qty_virtuelle_des_comandes)) or 0.00
                 # record.test_on_change_ver = record.test_on_change-record.test_on_change_version2
@@ -114,7 +114,7 @@ class ProductTemplate(models.Model):
                 ('product_id', '=', article.id),('order_id', 'in', vouchers1.ids)])
                 if len(productbl1)>0:
                     for rec1 in productbl1:
-                        nombre_colis += rec1.product_uom_qty
+                        nombre_colis += rec1.secondary_uom_qty
                     record.nombre_colis_a_livre = nombre_colis or 0.00                        
 #Cette fonction permet de calculer les qte a livrer j+1 (les commande saisie de la jour j) et la qte qui doit rester en stock le jour j                 
                         
