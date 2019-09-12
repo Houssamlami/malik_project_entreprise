@@ -17,6 +17,16 @@
 			
 					<field name="etat_fac1_copy" />
              	</xpath>
+             	 <xpath
+				expr="//field[@name='user_id']"
+				position="attributes">
+				<attribute name="string">Commercial</attribute>
+			</xpath>
+			<xpath
+				expr="//field[@name='user_id']"
+				position="after">
+				<field name="vendeur" string="Vendeur"/>
+			</xpath>
 			</field>
 		</record> 
 		
@@ -44,6 +54,7 @@
 			</xpath>
 			</field>
 		</record> 
+		
 
 		<!-- ''''''''''''''''''''''''Add the total weight in sale form and net weight to the order line subform ''''''''''''' -->
 		
