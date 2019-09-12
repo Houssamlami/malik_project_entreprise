@@ -81,7 +81,7 @@ class ResPartner(models.Model):
     date_last_commande=  fields.Datetime('Date de la derniere commande', compute='last_command')
     date_lyuoM = fields.Datetime(string='today', default=datetime.today())
     echeance_charcuterie_par_jour=fields.Integer('Limite echeance charcuterie par jour')
-    ref = fields.Char(string='Reference interne', track_visibility='always')
+    ref = fields.Char(string='Reference interne', track_visibility='onchange')
     
     _sql_constraints = [
         ('ref_unique_part', 'unique(ref)', 'La reference client doit etre unique!'),
