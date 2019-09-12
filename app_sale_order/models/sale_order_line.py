@@ -68,6 +68,16 @@ class SaleOrderLine(models.Model):
     qty_initiale = fields.Float(string='Qty initiale')
 
 
+    @api.onchange('price_unit')
+    def onchange_price_unit_min(self):
+
+        if (self.price_unit and self.price_unit < self.product_id.prix_min_vente):
+            return {'warning': {
+                'title': _('Prix de de vente MIN!'),
+                'message': _("Prix unitaire est inférieur au prix de vente minimum")
+                }
+            }
+            
     @api.onchange('product_id')
     def on_change_state2(self):
         today = str(datetime.now().date())
