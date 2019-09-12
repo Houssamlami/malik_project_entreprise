@@ -73,7 +73,7 @@ class SaleOrderLine(models.Model):
 
         if (self.price_unit and self.price_unit < self.product_id.prix_min_vente):
             return {'warning': {
-                'title': _('Prix de de vente MIN!'),
+                'title': _('Prix de vente MIN!'),
                 'message': _("Prix unitaire est inférieur au prix de vente minimum")
                 }
             }

@@ -1,9 +1,12 @@
 eclipse.preferences.version=1
+encoding//app_product/models/product_template.py=utf-8
 encoding//app_purchase_order/models/purchase_order.py=utf-8
+encoding//app_purchase_order/models/purchase_order_line.py=utf-8
 encoding//app_res_partner/__manifest__.py=utf-8
 encoding//app_res_partner/models/res_partner.py=utf-8
 encoding//app_sale_order/__manifest__.py=utf-8
 encoding//app_sale_order/models/sale_order.py=utf-8
+encoding//app_sale_order/models/sale_order_line.py=utf-8
 encoding//app_stock/__init__.py=utf-8
 encoding//app_stock/__manifest__.py=utf-8
 encoding//app_stock/models/__init__.py=utf-8
