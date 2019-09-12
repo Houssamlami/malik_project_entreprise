@@ -220,6 +220,7 @@ class SaleOrder(models.Model):
                 if line.product_id and line.product_id.type != 'service':
                     total_colis += line.secondary_uom_qty or 0.0
             sale.total_colis = total_colis
+            
     #compute total colis delivered       
     def _compute_colis_livrer_total(self):
         for sale in self:
