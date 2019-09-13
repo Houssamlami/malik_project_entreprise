@@ -70,10 +70,11 @@ class SaleOrder(models.Model):
             if len(p) == 0:
                 for lines in line.order_line:
                     if lines.product_id:
-                        dict += lines.product_uom_qty
+                        dict += lines.secondary_uom_qty
                 object_create = object.create({
                 'product_id': productorigine.id,
                 'product_uom_qty': dict,
+                'secondary_uom_qty': dict,
                 'qty_delivered':dict,
                 'product_uom': product.uom_id.id,
                 'order_id':line.id,
@@ -86,10 +87,11 @@ class SaleOrder(models.Model):
                 product_already_exist = self.env['sale.order.line'].search([('product_id', '=', productorigine.id),('order_id','=',line.id)])
                 for lines in line.order_line:
                     if lines.product_id and (lines.product_id.name != 'TRANSPORT GRAND COMPTE'):
-                        dict += lines.product_uom_qty
+                        dict += lines.secondary_uom_qty
                 object_create = product_already_exist.write({
                 'product_id': productorigine.id,
                 'product_uom_qty': dict,
+                'secondary_uom_qty': dict,
                 'qty_delivered':dict,
                 'product_uom': product.uom_id.id,
                 'order_id':line.id,
@@ -172,6 +174,8 @@ class SaleOrder(models.Model):
             'origin': self.name,
             'type': 'out_invoice',
             'qty_livrer_colis': self.total_colis_livrer,
+            'commercial': self.user_id.id,
+            'vendeur': self.vendeur.id,
             'account_id': self.partner_invoice_id.property_account_receivable_id.id,
             'partner_id': self.partner_invoice_id.id,
             'partner_shipping_id': self.partner_shipping_id.id,
