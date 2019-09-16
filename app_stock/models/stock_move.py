@@ -41,4 +41,10 @@ class StockMove(models.Model):
                     unit = unite.sale_secondary_uom_id
                     if unit.factor != 0:
                         record.secondary_uom_qty = (record.quantity_done/unit.factor)
+                        
+class StockQuant(models.Model):
+    _inherit = 'stock.quant'
+    
+    date_dlc = fields.Datetime(related='lot_id.date_refer',
+        string='DLC', store=True, readonly=True)
             
