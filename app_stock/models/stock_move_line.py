@@ -120,3 +120,13 @@ class StockMoveLine(models.Model):
             'product_uom_qty': 0.00,
             'date': fields.Datetime.now(),
         })
+    
+    @api.onchange('qty_done')
+    def onchange_qty_done_dlc(self):
+
+        if ((not self.lot_id or not self.date_reference) and self.picking_id.picking_type_id.code == 'incoming'):
+            return {'warning': {
+                'title': _('Lot ou DLC!'),
+                'message': _("Merci de mentioner le lot et DLC")
+                }
+            }
