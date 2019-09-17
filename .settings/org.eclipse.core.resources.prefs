@@ -10,5 +10,6 @@ encoding//app_sale_order/models/sale_order_line.py=utf-8
 encoding//app_stock/__init__.py=utf-8
 encoding//app_stock/__manifest__.py=utf-8
 encoding//app_stock/models/__init__.py=utf-8
+encoding//app_stock/models/stock_move.py=utf-8
 encoding//app_stock/models/stock_move_line.py=utf-8
 encoding//app_stock/models/stock_order.py=utf-8
