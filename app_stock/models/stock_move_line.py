@@ -22,6 +22,8 @@ class StockMoveLine(models.Model):
     _inherit = 'stock.move.line'
     
     date_reference = fields.Datetime(string="DLC")
+    date_move = fields.Datetime(related='picking_id.scheduled_date', store=True)
+    partner_picking_id = fields.Many2one(comodel_name='res.partner', string="Partenaire", related='picking_id.partner_id', store=True)
     
     
     def _action_done(self):
@@ -120,13 +122,3 @@ class StockMoveLine(models.Model):
             'product_uom_qty': 0.00,
             'date': fields.Datetime.now(),
         })
-    
-    @api.onchange('qty_done')
-    def onchange_qty_done_dlc(self):
-
-        if ((not self.lot_name or not self.date_reference) and self.picking_id.picking_type_id.code == 'incoming'):
-            return {'warning': {
-                'title': _('Lot ou DLC!'),
-                'message': _("Merci de mentioner le lot et DLC")
-                }
-            }
