@@ -9,7 +9,7 @@
             <field name="arch" type="xml">
                 <data>
                 <xpath
-				expr="//button[@name='240']"
+				expr="//button[@name='288']"
 				position="attributes">
 				<attribute name="groups">stock.group_stock_manager</attribute>
 			</xpath>
