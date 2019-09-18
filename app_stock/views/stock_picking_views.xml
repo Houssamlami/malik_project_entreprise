@@ -2,13 +2,14 @@
 <odoo>
 	<data>
 
-
+<!-- 
 <record id="sale_order_commrecial_externe" model="ir.rule">
         <field name="name">BP d'aujourd'hui</field>
         <field ref="stock.model_stock_picking" name="model_id"/>
         <field name="domain_force">['|',('user_id','=',user.id),('user_id','=',False)]</field>
         <field name="groups" eval="[(4, ref('app_stock.group_ttm_externe'))]"/>
 </record>
+ -->
 		<record model="ir.ui.view" id="add_box_stock_picking_form">
 			<field name="name">add.box.stock.picking.form</field>
 			<field name="model">stock.picking</field>
@@ -46,7 +47,7 @@
 			<xpath
 				expr="//button[@name='do_unreserve']"
 				position="attributes">
-				<attribute name="groups">stock.group_stock_manager,stock.group_stock_user,app_stock.group_ttm_externe</attribute>
+				<attribute name="groups">stock.group_stock_manager,stock.group_stock_user</attribute>
 			</xpath>
 			<xpath
 				expr="//button[@name='button_scrap']"
