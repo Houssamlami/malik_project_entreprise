@@ -10,8 +10,16 @@ from datetime import *
 
 # Record the net weight of the order line
 class SaleOrderLine(models.Model):
-    _inherit = 'sale.order.line'    
+    _inherit = 'sale.order.line'  
     
+    
+    @api.model
+    def create(self, vals):
+        if vals.get('secondary_uom_qty'):
+            value = vals.get('secondary_uom_qty')
+            vals['qty_initiale'] = value 
+        result = super(SaleOrderLine,self).create(vals) 
+        return result
     
     #Get Qty available in stock/ Qty demanded
     @api.multi
@@ -57,8 +65,19 @@ class SaleOrderLine(models.Model):
     test_on_change_ver = fields.Float('Qte restante virtuell')
     test_on_change_version2= fields.Float('Qte a livre apre today')
     order_requested_date = fields.Datetime(related='order_id.requested_date', store=True, string=u'Date Demandée')
+    qty_initiale = fields.Float(string='Qty initiale')
 
 
+    @api.onchange('price_unit')
+    def onchange_price_unit_min(self):
+
+        if (self.price_unit and self.price_unit < self.product_id.prix_min_vente):
+            return {'warning': {
+                'title': _('Prix de vente MIN!'),
+                'message': _("Prix unitaire est inférieur au prix de vente minimum")
+                }
+            }
+            
     @api.onchange('product_id')
     def on_change_state2(self):
         today = str(datetime.now().date())
@@ -86,8 +105,8 @@ class SaleOrderLine(models.Model):
                 # record.test_on_change_ver = record.env.cr.fetchone()
                 # record.test_on_change = record.product_id.qty_available
     
-    @api.multi
-    @api.depends('product_id', 'product_uom_qty')
+    @api.onchange('secondary_uom_qty')
+    @api.depends('product_id', 'secondary_uom_qty')
     def _compute_weight(self):
         for line in self:
             weight = 0

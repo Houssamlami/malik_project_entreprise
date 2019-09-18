@@ -14,6 +14,11 @@
                        type="action" icon="fa-shopping-cart">Vente du jour
                    </button>
                 </button>
+                <xpath expr="//field[@name='tracking']" position="after">
+                   
+					  <field  name="Androit_stockage"/>
+					  <field  name="Androit_preparation"/>
+             	</xpath>
                 
             </field>
         </record>

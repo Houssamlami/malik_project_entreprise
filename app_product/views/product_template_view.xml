@@ -1,6 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 	<data>
+<!-- ''''''''''''''''''''''''''''''restriction button update qty on hand''''''''''''''''''''''''''''''''''''''''''' -->
+<record model="ir.ui.view" id="product_template_form_restriction_update_button">
+            <field name="name">product.template.form.restriction.update</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="stock.product_template_form_view_procurement_button"/>
+            <field name="arch" type="xml">
+                <data>
+                <xpath
+				expr="//button[@name='240']"
+				position="attributes">
+				<attribute name="groups">stock.group_stock_manager</attribute>
+			</xpath>
+			</data>
+			</field>
+			</record>
  <!-- ''''''''''''''''''''''''''''''Prices/Costs of Product''''''''''''''''''''''''''''''''''''''''''' -->
  	 <record id="product_template_add_fields" model="ir.ui.view">
         <field name="name">product.template.add.fields</field>
@@ -16,8 +31,8 @@
 				<attribute name="force_save">1</attribute>
 			</xpath>
             <xpath expr="//page[@name='general_information']/group" position="after">
-            <separator string="Calcul des Coûts/Prix:"/>
-            <group>
+            <separator string="Calcul des Coûts/Prix:" groups="sales_team.group_sale_manager"/>
+            <group groups="sales_team.group_sale_manager">
             <group name="charges">
             <field name="prix_achat" widget='monetary'/>
             <field name="prix_transport" widget='monetary'/>
@@ -46,6 +61,27 @@
          </record>
          
          <!-- ''''''''''''''''''''''''''''''Vente du jour & adding endroit stockage/preparation''''''''''''''''''''''''''''''''''''''''''' -->
+        <!--  <record model="ir.ui.view" id="product_template_form_view_sale_order_button2">
+            <field name="name">product.template.sale.order.button2</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_only_form_view"/>
+            <field name="groups_id" eval="[(4, ref('sales_team.group_sale_salesman'))]"/>
+            <field name="arch" type="xml">
+                <button name="toggle_active" position="after">
+                    <button class="oe_stat_button" name="action_view_saless"
+                        type="object" icon="fa-usd" groups="sales_team.group_sale_salesman">
+                        Vente du jour
+                    </button>
+                </button>
+                <xpath expr="//field[@name='tracking']" position="after">
+                   
+					  <field  name="Androit_stockage"/>
+					  <field  name="Androit_preparation"/>
+             	</xpath>
+               
+            </field>
+        </record>
+         -->
          <record model="ir.ui.view" id="product_template_form_view_sale_order_button2">
             <field name="name">product.template.sale.order.button2</field>
             <field name="model">product.template</field>
@@ -79,10 +115,9 @@
 			<field name="message_needaction" invisible="1"/>
 		
 			<field name="name"/>
-			<field name="test_on_product_vertuel_jours_suivant2"/>	  
-			<field name="total_commande_jour_suivant"/>	
-			<field name="stock_virtuel_jour_suivant"/>
-			<field name="test_on_product_ver"/>		  
+			<field name="qty_available"/>	  
+			<field name="stock_virtuel_actuel"/>	
+			<field name="nombre_colis_a_livre"/>		  
 					  </tree>	  
              	</field>
 		 </record> 

@@ -10,6 +10,7 @@ class SaleOrder(models.Model):
 
     total_weight = fields.Float(string='Total Weight(kg)', compute='_compute_weight_total')
     total_colis = fields.Float(string='Total colis', compute='_compute_colis_total')
+    total_colis_livrer = fields.Float(string='Total colis livrer', compute='_compute_colis_livrer_total')
     total_volume_ht = fields.Float(string='Montant Total TTC', compute='_compute_volumeht_total')
     total_ht = fields.Float(string='Montant Total HT', compute='_compute_ht_total')
     vendeur = fields.Many2one(comodel_name='hr.employee', string="Vendeur")
@@ -19,7 +20,7 @@ class SaleOrder(models.Model):
     total_weight_stock_char = fields.Float(string='Total charcuterie)', compute='_compute_weight_total_stock_char')
     total_weight_stock_srg = fields.Float(string='Total surgele)', compute='_compute_weight_total_stock_srg')
     total_weight_stock_vv = fields.Float(string='Total volaille)', compute='_compute_weight_total_stock_vv')
-    produitalivrer = fields.Char('Produit a livrer', compute='get_product_ttm', store=True)
+    produitalivrer = fields.Char('Produit a livrer', compute='get_product_ttm')
     Expediteur =  fields.Selection([('MV', 'Malik V'), ('An', 'Atlas N')])    
     zip_df =  fields.Char(string='CP', compute='get_default_zip')
     adresse_liv =  fields.Char(string='Adresse livraison', compute='get_default_zip')
@@ -28,8 +29,9 @@ class SaleOrder(models.Model):
     test_bloque = fields.Char('Test bloque')
     cmd_charcuterie = fields.Boolean(string="Charcuterie")
     cmd_volaille = fields.Boolean(string="Volaille")
-    fac_charcuterie_volaille = fields.Selection([('charcuterie', 'Charcuterie'),('volaille', 'Volaille')],string="Type de commande")
+    fac_charcuterie_volaille = fields.Selection([('charcuterie', 'Charcuterie'),('volaille', 'Volaille')],string="Type commande")
     client_gc_pc = fields.Selection('Type Client', related='partner_id.client_gc_pc', store=True)
+    commande_type = fields.Selection([('commande_charc', 'Commande charcuterie'),('commande_volaille', 'Commande Volaille')], string="Type de commande")
     #ecart_qty_kg = fields.Float(string='Ecart qty (KG)', compute='_get_ecart_qty', readonly=True, store=True)
     #ecart_qty_colis = fields.Float('Ecart qty (Colis)', compute=_get_ecart_qty, store=True)
     total_qty_ordred1 = fields.Float(string='Total qtyor', compute='_compute_colis_total_ordred')
@@ -39,6 +41,15 @@ class SaleOrder(models.Model):
     etat_fac1_copy = fields.Char(string='Etat facture copy', compute='_compute_colis_total_etat_copy',store=True)
     grand_compte = fields.Boolean(string='Commande Grand Compte', default= False)
     
+    @api.onchange('cmd_volaille','cmd_charcuterie')
+    def onchange_type_of_commande(self):
+        for sale in self:
+            if sale.cmd_volaille:
+                sale.commande_type = 'commande_volaille'
+            else:
+                sale.commande_type = 'commande_charc'
+                
+                
     @api.onchange('partner_id')
     def _get_type_cmd(self):
         for sale in self:
@@ -46,6 +57,7 @@ class SaleOrder(models.Model):
                 sale.cmd_charcuterie = True
             if sale.partner_id.Client_Volaille:
                 sale.cmd_volaille = True
+                
     
     @api.multi
     def compute_qty_transport(self):
@@ -58,10 +70,11 @@ class SaleOrder(models.Model):
             if len(p) == 0:
                 for lines in line.order_line:
                     if lines.product_id:
-                        dict += lines.product_uom_qty
+                        dict += lines.secondary_uom_qty
                 object_create = object.create({
                 'product_id': productorigine.id,
                 'product_uom_qty': dict,
+                'secondary_uom_qty': dict,
                 'qty_delivered':dict,
                 'product_uom': product.uom_id.id,
                 'order_id':line.id,
@@ -74,10 +87,11 @@ class SaleOrder(models.Model):
                 product_already_exist = self.env['sale.order.line'].search([('product_id', '=', productorigine.id),('order_id','=',line.id)])
                 for lines in line.order_line:
                     if lines.product_id and (lines.product_id.name != 'TRANSPORT GRAND COMPTE'):
-                        dict += lines.product_uom_qty
+                        dict += lines.secondary_uom_qty
                 object_create = product_already_exist.write({
                 'product_id': productorigine.id,
                 'product_uom_qty': dict,
+                'secondary_uom_qty': dict,
                 'qty_delivered':dict,
                 'product_uom': product.uom_id.id,
                 'order_id':line.id,
@@ -159,6 +173,9 @@ class SaleOrder(models.Model):
             'name': self.client_order_ref or '',
             'origin': self.name,
             'type': 'out_invoice',
+            'qty_livrer_colis': self.total_colis_livrer,
+            'commercial': self.user_id.id,
+            'vendeur': self.vendeur.id,
             'account_id': self.partner_invoice_id.property_account_receivable_id.id,
             'partner_id': self.partner_invoice_id.id,
             'partner_shipping_id': self.partner_shipping_id.id,
@@ -204,9 +221,18 @@ class SaleOrder(models.Model):
         for sale in self:
             total_colis = 0
             for line in sale.order_line:
-                if line.product_id:
-                    total_colis += line.product_uom_qty or 0.0
+                if line.product_id and line.product_id.type != 'service':
+                    total_colis += line.secondary_uom_qty or 0.0
             sale.total_colis = total_colis
+            
+    #compute total colis delivered       
+    def _compute_colis_livrer_total(self):
+        for sale in self:
+            total_colis = 0
+            for line in sale.order_line:
+                if line.product_id and line.product_id.type != 'service' and line.secondary_uom_id:
+                    total_colis += (line.qty_delivered/line.secondary_uom_id.factor) or 0.0
+            sale.total_colis_livrer = total_colis
 
     def _compute_volumeht_total(self):
         for sale in self:
@@ -275,27 +301,35 @@ class SaleOrder(models.Model):
         for sales in self:
             weight_stock_char = 0
             for line in sales.order_line:
-                if line.product_id.categ_id.parent_id.name in ("Sauces","Chips","Saucissons","Chapelet","Mortadelle","Blocs","Panes","Tranches"):
-                    weight_stock_char += line.product_uom_qty  or 0.0
+                if line.product_id.Androit_stockage.id == self.env['androit.stockage'].search([('name', '=', 'Sec')]) or self.env['androit.stockage'].search([('name', '=', 'Frais')]):
+                    weight_stock_char += line.secondary_uom_qty  or 0.0
             sales.total_weight_stock_char = weight_stock_char
             
     def _compute_weight_total_stock_srg(self):
         for sales in self:
             weight_stock_srg = 0
             for line in sales.order_line:
-                if line.product_id.categ_id.parent_id.name in ("Surgeles","IQF"):
-                    weight_stock_srg += line.product_uom_qty  or 0.0
+                if line.product_id.Androit_stockage.id == self.env['androit.stockage'].search([('name', '=', 'Surgelé')]).id:
+                    weight_stock_srg += line.secondary_uom_qty  or 0.0
             sales.total_weight_stock_srg = weight_stock_srg
             
     def _compute_weight_total_stock_vv(self):
         for sales in self:
             weight_stock_vv = 0
             for line in sales.order_line:
-                if line.product_id.categ_id.parent_id.name in ("Volaille","Volailles Espagne","La Volailles BON","Volailles IMEX"):
+                if line.product_id.Androit_stockage.id == self.env['androit.stockage'].search([('name', '=', 'Volailles')]).id:
                     weight_stock_vv += line.product_uom_qty  or 0.0
             sales.total_weight_stock_vv = weight_stock_vv
-                    
     
+    @api.onchange('order_line','order_line.product_id')
+    def onchange_order_line_livre(self):
+        for record in self:
+            record._compute_weight_total_stock_vv()
+            record._compute_weight_total_stock_srg()
+            record._compute_weight_total_stock_char()
+            record.get_product_ttm()
+                    
+    @api.onchange('total_weight_stock_char','total_weight_stock_srg','total_weight_stock_vv')
     @api.depends('total_weight_stock_char','total_weight_stock_srg','total_weight_stock_vv')
     def get_product_ttm(self):
         for sales in self:
@@ -321,6 +355,20 @@ class SaleOrder(models.Model):
             raise exceptions.ValidationError(_('Remplir les QTY !'))
             return {
                         'warning': {'title': _('Error'), 'message': _('Error message'),},
-                        }    
+                        }  
+        if sale.cmd_volaille:
+                sale.commande_type = 'commande_volaille'
+        else:
+            sale.commande_type = 'commande_charc'  
         return sale
     
+    @api.multi
+    def write(self, vals):
+        sale = super(SaleOrder,self).write(vals)
+        if any(line.secondary_uom_qty == 0.0 for line in self.order_line):
+            raise exceptions.ValidationError(_('Remplir les QTY !'))
+            return {
+                        'warning': {'title': _('Error'), 'message': _('Error message'),},
+                        }    
+        return sale
+        

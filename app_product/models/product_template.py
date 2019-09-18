@@ -81,8 +81,41 @@ class ProductTemplate(models.Model):
             if record.weight>0 and record.uom_id.id==3:
                     record.test_on_product_ver_colis_for_kg = round((record.test_on_product_ver/record.weight))
         self.test_on_product_ver = self.test_on_product-self.test_on_product_version2
-                        
-                        
+        
+#les deux methodes qui fonctionnent pour catalogur --> le stock virtuel :                       
+    def calcule_stock_virtuel_actuel(self):
+        today = str(datetime.now().date())
+        qty_virtuelle_des_comandes=0
+        for record in self:
+            if record.id:
+                vouchers = self.env['sale.order'].search([('requested_date', '>', today)])
+                productbl = self.env['sale.order.line'].search([
+                ('product_id', '=', self.env['product.product'].search([('product_tmpl_id', '=', record.id)]).id),('order_id', 'in', vouchers.ids)])
+                for rec in productbl:
+                    # if record.qty_available:
+                    qty_virtuelle_des_comandes += rec.secondary_uom_qty
+                record.qty_virtuelle_des_comandes = qty_virtuelle_des_comandes
+                record.stock_virtuel_actuel = round((record.qty_available-record.qty_virtuelle_des_comandes)) or 0.00
+                # record.test_on_change_ver = record.test_on_change-record.test_on_change_version2
+                # if record.uom_id.id==3:
+                    # record.stock_virtuel_actuel = round(((record.qty_available-record.qty_virtuelle_des_comandes)/record.weight)) or 0.00
+                # else:
+                    # record.stock_virtuel_actuel = round((record.qty_available-record.qty_virtuelle_des_comandes))
+    # @api.depends('id')
+    def calcule_nombre_colis_a_livre(self):
+        todayy = datetime.today()
+        nombre_colis=0
+        article=0
+        for record in self:
+            if record.id:
+                article= self.env['product.product'].search([('product_tmpl_id', '=', record.id)])
+                vouchers1 = self.env['sale.order'].search([('requested_date', '>', (todayy + timedelta(days=1)).strftime('%Y-%m-%d 00:00:00')), ('requested_date', '<', (todayy + timedelta(days=1)).strftime('%Y-%m-%d 23:59:59'))])
+                productbl1 = self.env['sale.order.line'].search([
+                ('product_id', '=', article.id),('order_id', 'in', vouchers1.ids)])
+                if len(productbl1)>0:
+                    for rec1 in productbl1:
+                        nombre_colis += rec1.secondary_uom_qty
+                    record.nombre_colis_a_livre = nombre_colis or 0.00                        
 #Cette fonction permet de calculer les qte a livrer j+1 (les commande saisie de la jour j) et la qte qui doit rester en stock le jour j                 
                         
     def on_product_vertuel_jours_suivant(self):
@@ -110,24 +143,24 @@ class ProductTemplate(models.Model):
                     record.total_commande_jour_suivant = total_commande_jour_suivant
                     record.stock_virtuel_jour_suivant = record.test_on_product_vertuel_jours_suivant2 - record.total_commande_jour_suivant
     
-    Androit_stockage = fields.Many2one(comodel_name='androit.stockage', string="Endroit de stockage", required=True)
-    Androit_preparation = fields.Many2one(comodel_name='androit.preparation', string=u"Endroit de Préparation", required=True)               
-    number_unit = fields.Float(string="Nombre d'unité")      
-    prix_achat = fields.Float(string=u"Prix d\'Achat")
-    prix_transport = fields.Float(string=u"Prix de Transport")
-    cout_avs = fields.Float(string=u"Coût AVS")
-    cout_ttm = fields.Float(string=u"Coût TTM")
+    Androit_stockage = fields.Many2one(comodel_name='androit.stockage', string="Endroit de stockage", required=True, track_visibility='onchange')
+    Androit_preparation = fields.Many2one(comodel_name='androit.preparation', string=u"Endroit de Préparation", required=True, track_visibility='onchange')               
+    number_unit = fields.Float(string="Nombre d'unité", track_visibility='onchange')      
+    prix_achat = fields.Float(string=u"Prix d\'Achat", track_visibility='onchange')
+    prix_transport = fields.Float(string=u"Transport Achat", track_visibility='onchange')
+    cout_avs = fields.Float(string=u"Certification", track_visibility='onchange')
+    cout_ttm = fields.Float(string=u"Transport Vente", track_visibility='onchange')
     price_for_buy = fields.Float(compute='_get_prix_vente_produit')
-    charge_fixe = fields.Float(string=u"Charge Fixe", help=u"Ce pourcentage se base sur la somme du Prix d\'Achat, Prix de Transport, Coût AVS et Coût TTM")
-    cout_revient = fields.Float(compute='calcul_prix_min_vente_estime', string=u"Prix de revient")
-    prix_min_vente = fields.Float(compute='calcul_prix_min_vente', string=u"Prix de vente Min")
-    marge = fields.Float(string=u"Marge Commerciale")
-    marge_securite = fields.Float(string=u"Marge de securité")
-    provision_commission = fields.Float(string="Provision de commission")
-    prix_vente_estime = fields.Float(compute='calcul_prix_vente', string=u"Prix de vente Conseillé")
-    code_geo = fields.Text(string="Code Geo")
+    charge_fixe = fields.Float(string=u"Charge Fixe", help=u"Ce pourcentage se base sur la somme du Prix d\'Achat, Prix de Transport, Coût AVS et Coût TTM", track_visibility='onchange')
+    cout_revient = fields.Float(compute='calcul_prix_min_vente_estime', string=u"Coût de revient", track_visibility='onchange')
+    prix_min_vente = fields.Float(compute='calcul_prix_min_vente', string=u"Prix de vente Min", track_visibility='onchange')
+    marge = fields.Float(string=u"Marge Commerciale", track_visibility='onchange')
+    marge_securite = fields.Float(string=u"Marge de securité", track_visibility='onchange')
+    provision_commission = fields.Float(string="Provision de commission", track_visibility='onchange')
+    prix_vente_estime = fields.Float(compute='calcul_prix_vente', string=u"Prix de vente Conseillé", track_visibility='onchange')
+    code_geo = fields.Text(string="Code Geo", track_visibility='onchange')
     sales_count2 = fields.Integer(compute='_sales_count2', string='# Salesss')
-    test_on_product = fields.Float('Qte en tock reel', compute='on_product_state2')
+    test_on_product = fields.Float('Qte en stock reel', compute='on_product_state2')
     test_on_product_ver = fields.Float('Qte restante virtuell', compute='on_product_state2')
     test_on_product_ver_colis_for_kg = fields.Float('Qte restante virtuell en colis ', compute='on_product_state2')
     test_on_product_version2= fields.Float('Qte a livre apre today',compute='on_product_state2')
@@ -135,6 +168,8 @@ class ProductTemplate(models.Model):
     test_on_product_vertuel_jours_suivant2= fields.Float('max qty disponible en stock le jour j',compute='on_product_vertuel_jours_suivant')
     total_commande_jour_suivant= fields.Float('Qte a livre le jour j+1',compute='on_product_vertuel_jours_suivant')
     stock_virtuel_jour_suivant= fields.Float('Qte en tock virtuel le jour j+1',compute='on_product_vertuel_jours_suivant')
+    stock_virtuel_actuel = fields.Float('qty virtuel actuel' , compute='calcule_stock_virtuel_actuel')
+    nombre_colis_a_livre = fields.Float('nobre colis a livrer' , compute='calcule_nombre_colis_a_livre')
     
     
     #''''''''''''''''''''''''Smart button sales by day for product for helpser''''''''''''''''''''''''''''''''''''''''
@@ -156,6 +191,7 @@ class ProductTemplate(models.Model):
             'help': action.help,
             'type': action.type,
             'view_type': action.view_type,
+            'view_id': self.env.ref('app_sale_order.view_sale_order_line_pivot123').id,
             'view_mode': action.view_mode,
             'target': action.target,
             'context': "{'default_product_id': " + str(product_ids[0]) + "}",

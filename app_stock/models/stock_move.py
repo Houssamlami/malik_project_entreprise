@@ -41,4 +41,23 @@ class StockMove(models.Model):
                     unit = unite.sale_secondary_uom_id
                     if unit.factor != 0:
                         record.secondary_uom_qty = (record.quantity_done/unit.factor)
+     
+    '''                    
+    @api.multi
+    def fill_lot_name_dlc(self):
+        for move in self:
+            if any(((not line.lot_name or not line.date_reference) and line.picking_id.picking_type_id.code == 'incoming') for line in move.move_line_ids):
+                a = any(((not line.lot_name or not line.date_reference) and line.picking_id.picking_type_id.code == 'incoming') for line in move.move_line_ids)
+                print(a)
+                return {'warning': {
+                'title': _('Lot ou DLC!'),
+                'message': _("Merci de mentioner le lot et DLC")
+                }
+            }
+          '''              
+class StockQuant(models.Model):
+    _inherit = 'stock.quant'
+    
+    date_dlc = fields.Datetime(related='lot_id.date_refer',
+        string='DLC', store=True, readonly=True)
             

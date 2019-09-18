@@ -11,6 +11,9 @@ class SaleReport(models.Model):
 
     ecart_qty = fields.Float('Ecart Qty (kg)', readonly=True)
     ecart_qtys = fields.Float('Ecart Qty (colis)', readonly=True)
+    date_de_livraison = fields.Datetime('Date de livraison', readonly=True)
+    type_client = fields.Selection([('client_gros_compte', 'Client gros compte'),('client_petit_compte', 'Client petit compte')],string="Type de client", readonly=True)
+    type_of_commande = fields.Selection([('commande_charc', 'Commande charcuterie'),('commande_valaille', 'Commande Volaille')],string="Type de commande", readonly=True)
     
     
     def _select(self):
@@ -33,10 +36,12 @@ class SaleReport(models.Model):
                     sum(l.secondary_uom_qty / u.factor * u2.factor)-sum((l.qty_delivered / u.factor * u2.factor)/ u3.factor) as ecart_qtys,
                     s.date_order as date,
                     s.confirmation_date as confirmation_date,
+                    s.requested_date as date_de_livraison,
                     s.state as state,
                     s.partner_id as partner_id,
                     s.user_id as user_id,
                     s.company_id as company_id,
+                    s.commande_type as type_of_commande,
                     extract(epoch from avg(date_trunc('day',s.date_order)-date_trunc('day',s.create_date)))/(24*60*60)::decimal(16,2) as delay,
                     t.categ_id as categ_id,
                     s.pricelist_id as pricelist_id,
@@ -44,6 +49,7 @@ class SaleReport(models.Model):
                     s.team_id as team_id,
                     p.product_tmpl_id,
                     partner.country_id as country_id,
+                    partner.client_gc_pc as type_client,
                     partner.commercial_partner_id as commercial_partner_id,
                     sum(p.weight * l.product_uom_qty / u.factor * u2.factor) as weight,
                     sum(p.volume * l.product_uom_qty / u.factor * u2.factor) as volume
@@ -67,3 +73,28 @@ class SaleReport(models.Model):
                         (cr.date_end is null or cr.date_end > coalesce(s.date_order, now())))
         """
         return from_str
+    
+    def _group_by(self):
+        group_by_str = """
+            GROUP BY l.product_id,
+                    l.order_id,
+                    t.uom_id,
+                    t.categ_id,
+                    s.name,
+                    s.date_order,
+                    s.confirmation_date,
+                    s.requested_date,
+                    s.partner_id,
+                    s.user_id,
+                    s.state,
+                    s.company_id,
+                    s.pricelist_id,
+                    s.analytic_account_id,
+                    s.team_id,
+                    p.product_tmpl_id,
+                    partner.country_id,
+                    partner.client_gc_pc,
+                    s.commande_type,
+                    partner.commercial_partner_id
+        """
+        return group_by_str
