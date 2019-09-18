@@ -1,5 +1,6 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_sale_order_commercial_externe,sale.order.commercial.externe,sale.model_sale_order,app_sale_order.group_sale_commercial_externe,1,1,1,0
+access_sale_report_commercial_externe,sale.order.commercial.externe,sale.model_sale_report,app_sale_order.group_sale_commercial_externe,1,1,0,0
 access_sale_order_commercial_externe_inventaire,sale.order.inventaire.commercial.externe,sale.model_sale_order,app_sale_order.group_inventaire_commercial_externe,1,1,1,0
 access_account_invoice_commercial_externe,account.invoice.commercial.externe,account.model_account_invoice,app_sale_order.group_sale_commercial_externe,1,0,0,0
 access_sale_order_line_commercial_externe,sale.order.line.commercial.externe,sale.model_sale_order_line,app_sale_order.group_sale_commercial_externe,1,1,1,1

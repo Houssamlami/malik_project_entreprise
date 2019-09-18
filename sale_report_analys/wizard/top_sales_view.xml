@@ -42,5 +42,5 @@
             name="Top Ventes"
             parent="sale.menu_sale_report"
             sequence="4"
-            action="open_top_sales_action"/>
+            action="open_top_sales_action" groups="sales_team.group_sale_manager"/>
 </odoo>
