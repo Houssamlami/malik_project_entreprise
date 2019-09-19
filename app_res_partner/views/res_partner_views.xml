@@ -193,5 +193,21 @@
 				</data>
 			</field>
 		</record>
+		<record id="res_partner_view_button_sales_commercial" model="ir.ui.view">
+            <field name="name">res.partner.view.button.sales.commercial</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form" />
+            <field name="priority" eval="20"/>
+            <field name="groups_id" eval="[(4, ref('app_sale_order.group_sale_commercial_externe'))]"/>
+            <field name="arch" type="xml">
+                <button name="toggle_active" position="before">
+                    <button class="oe_stat_button" type="action" name="%(sale.act_res_partner_2_sale_order)d" 
+                        attrs="{'invisible': [('customer', '=', False)]}"
+                        icon="fa-usd">
+                        <field string="Sales" name="sale_order_count" widget="statinfo"/>
+                    </button>     
+                </button>
+                </field>
+                </record>
 	</data>
 </odoo>

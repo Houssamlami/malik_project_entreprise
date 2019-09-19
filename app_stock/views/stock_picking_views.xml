@@ -15,6 +15,14 @@
 			<field name="model">stock.picking</field>
 			<field name="inherit_id" ref="stock.view_picking_form" />
 			<field name="arch" type="xml">
+			
+			<xpath expr="//field[@name='move_lines']"
+					position="after">
+					<group>
+					<field name="total_colis_delivered" attrs="{'invisible': [('picking_type_code', '=', 'incoming')]}"/>
+					<field name="total_weight_delivered" attrs="{'invisible': [('picking_type_code', '=', 'incoming')]}" />
+					</group>
+					</xpath>
 
 				<xpath expr="//field[@name='move_lines']/tree/field[@name='product_uom_qty']"
 					position="after">
