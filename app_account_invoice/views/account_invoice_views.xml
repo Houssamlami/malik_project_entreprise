@@ -12,6 +12,9 @@
 			<xpath expr="//field[@name='payment_term_id']" position="after">
 			<field name="object" />
 			<field name="ref_livraison" />
+			<button name="recompute_qty_transport"
+						string="Transport Grand Compte" class="btn-primary" type="object"
+						attrs="{'invisible': ['|',('type', 'in', ('in_invoice','in_refund')),('state','in',('paid'))]}" />
 			</xpath>
 				<xpath expr="//field[@name='team_id']" position="after">
 					<p>

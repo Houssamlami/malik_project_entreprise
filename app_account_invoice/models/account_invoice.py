@@ -17,7 +17,7 @@ class AccountInvoice(models.Model):
     cli_pc = fields.Boolean('Client petit compte', related='partner_id.Client_PC')
     date_commande = fields.Date(string="Date Commande")
     date_livraison = fields.Date(string="Date Livraison")
-    qty_livrer_colis = fields.Float(string="Colis")
+    qty_livrer_colis = fields.Float(string="Colis", readonly=True)
     commercial = fields.Many2one(comodel_name='hr.employee', string="Commercial")
     vendeur = fields.Many2one(comodel_name='hr.employee', string="Vendeur")
     object = fields.Text(string="Objet")
@@ -33,6 +33,43 @@ class AccountInvoice(models.Model):
             if record.fac_volaille_f == True:
                 account = self.env['account.account'].search([('code','=','411101')])
                 record.account_id = account.id
+                
+    @api.multi
+    def recompute_qty_transport(self):
+        for line in self:
+            object = self.env['account.invoice.line']
+            product = self.env['product.template'].search([('name', '=', 'TRANSPORT GRAND COMPTE')])
+            productorigine = self.env['product.product'].search([('product_tmpl_id', '=', product.id)])
+            dict = 0
+            p = self.env['account.invoice.line'].search([('product_id', '=', productorigine.id),('invoice_id','=',line.id)])
+            if len(p) == 0:
+                for lines in line.invoice_line_ids:
+                    if lines.product_id:
+                        dict += lines.quantity
+                object_create = object.create({
+                'product_id': productorigine.id,
+                'quantity': dict,
+                'product_uom': product.uom_id.id,
+                'account_id': self.env['account.account'].search([('code', '=', '707100')]).id,
+                'invoice_id':line.id,
+                'name':product.name,
+                'price_unit':product.list_price,
+                })
+            else:
+                dict = 0
+                product_already_exist = self.env['account.invoice.line'].search([('product_id', '=', productorigine.id),('invoice_id','=',line.id)])
+                for lines in line.invoice_line_ids:
+                    if lines.product_id and (lines.product_id.name != 'TRANSPORT GRAND COMPTE'):
+                        dict += lines.quantity
+                object_create = product_already_exist.write({
+                'product_id': productorigine.id,
+                'quantity': dict,
+                'product_uom': product.uom_id.id,
+                'invoice_id':line.id,
+                'account_id': self.env['account.account'].search([('code', '=', '707100')]).id,
+                'name':product.name,
+                'price_unit':product.list_price,
+                })
                 
 class AccountInvoiceReport(models.Model):
     _inherit = "account.invoice.report"
