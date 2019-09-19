@@ -21,6 +21,19 @@ class StockPicking(models.Model):
     total_weight_stock_frais_auto = fields.Float(string='Total frais)', compute='_compute_weight_total_stock_frais')
     total_weight_stock_surg_auto = fields.Float(string='Total surg)', compute='_compute_weight_total_stock_surg')
     total_weight_stock_volailles_auto = fields.Float(string='Total volailles)', compute='_compute_weight_total_stock_volailles')
+    total_colis_delivered = fields.Float(string='Total Colis', compute='_compute_colis_poids_total_bl')
+    total_weight_delivered = fields.Float(string='Poids Total', compute='_compute_colis_poids_total_bl')
+    
+    def _compute_colis_poids_total_bl(self):
+        for picking in self:
+            total_colis = 0
+            total_poids = 0
+            for line in picking.move_lines:
+                if line.product_id:
+                    total_poids += (line.quantity_done or 0.0)*line.product_id.weight
+                    total_colis += (line.secondary_uom_qty or 0.0)
+            picking.total_weight_delivered = total_poids
+            picking.total_colis_delivered = total_colis
 
     def _compute_weight_total_stock_sec(self):
         for stock in self:

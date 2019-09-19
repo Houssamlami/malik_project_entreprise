@@ -15,6 +15,7 @@ App Malik Account Invoice
     'depends' : ['sale_management','sale_order_dates','account','sale'],
     'data': [
           'views/account_invoice_views.xml',
+          'views/account_payment_views.xml',
     ],
     'demo': [
     ],

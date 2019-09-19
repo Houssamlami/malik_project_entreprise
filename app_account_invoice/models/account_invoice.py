@@ -20,6 +20,8 @@ class AccountInvoice(models.Model):
     qty_livrer_colis = fields.Float(string="Colis")
     commercial = fields.Many2one(comodel_name='hr.employee', string="Commercial")
     vendeur = fields.Many2one(comodel_name='hr.employee', string="Vendeur")
+    object = fields.Text(string="Objet")
+    ref_livraison = fields.Many2one(comodel_name='stock.picking', string="Ref livraison")
     
     @api.onchange('fac_charcuterie_f','fac_volaille_f')
     def onchange_fac_volaille_volaille(self):

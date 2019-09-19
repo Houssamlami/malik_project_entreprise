@@ -32,17 +32,29 @@ class StockMove(models.Model):
                 picking = record.picking_id
                 if picking.picking_type_id.code == 'outgoing':
                     if record.product_id.name == line.product_id.name:
-                        record.secondary_uom_qty = line.secondary_uom_qty
+                        record.secondary_uom_qty = int(line.secondary_uom_qty)
                     #else:
-                     #   record.secondary_uom_qty = 0.0
+                        #   record.secondary_uom_qty = 0.0
             if record.quantity_done != 0:
                 if float_compare(record.product_uom_qty, record.quantity_done, precision_rounding=record.product_uom.rounding) >= 0:
                     unite = record.product_id
                     unit = unite.sale_secondary_uom_id
                     if unit.factor != 0:
-                        record.secondary_uom_qty = (record.quantity_done/unit.factor)
-     
-    '''                    
+                        record.secondary_uom_qty = int((record.quantity_done/unit.factor))
+
+   
+    @api.multi
+    def write(self, vals):
+        res = super(StockMove,self).write(vals)
+        if (any(not record.lot_name or not record.date_reference for record in self.move_line_ids) and self.picking_id.picking_type_id.code == 'incoming'):
+            return {'warning': {
+                'title': _('Lot ou DLC!'),
+                'message': _("Merci de mentionner le lot et DLC")
+                }
+            }
+        return res
+        
+'''                    
     @api.multi
     def fill_lot_name_dlc(self):
         for move in self:
