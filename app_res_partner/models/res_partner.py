@@ -177,12 +177,15 @@ class ResPartner(models.Model):
         for partner in self:
             if partner.team_id :
                 team=partner.team_id
+                partner.update({
+                'user_id': False,
+                })
                 employees = self.env['hr.employee'].browse()
                 for members in team.member_ids:
                     employees += self.env['hr.employee'].search([('user_id', '=', members.id)]) 
                
                 partner.update({
-                'user_id': employees.ids
+                'user_id': employees.ids,
             })
 
 
