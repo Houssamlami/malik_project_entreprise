@@ -46,7 +46,7 @@ class ResPartner(models.Model):
     
       
 
-    user_id = fields.Many2one(comodel_name='hr.employee', track_visibility='onchange')
+    user_id = fields.Many2many(comodel_name='hr.employee', track_visibility='onchange')
     vendeur = fields.Many2one('hr.employee',related='team_id.vendeur', track_visibility='onchange')
     vendeur_commarcial = fields.Many2one(comodel_name='res.users', string="Commercial", track_visibility='onchange')
     Client_Volaille = fields.Boolean('Client Volailles', track_visibility='onchange')
@@ -174,14 +174,16 @@ class ResPartner(models.Model):
         
     @api.onchange('team_id')
     def onchange_get_default(self):
-        for partners in self:
-            vendeur_commarcial = 0
-            team = 0
-            if partners.team_id :
-                team=partners.team_id.id
-                productbl = self.env['res.users'].search([
-                ('sale_team_id', '=', team)])
-                partners.user_id = productbl.id
+        for partner in self:
+            if partner.team_id :
+                team=partner.team_id
+                employees = self.env['hr.employee'].browse()
+                for members in team.member_ids:
+                    employees += self.env['hr.employee'].search([('user_id', '=', members.id)]) 
+               
+                partner.update({
+                'user_id': employees.ids
+            })
 
 
     @api.onchange('vat')
