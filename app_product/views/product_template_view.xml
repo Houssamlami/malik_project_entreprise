@@ -42,7 +42,10 @@
             <div>
             <field name="charge_fixe" string="Charge Fixe" class="oe_inline"/>%
             </div>
-            <field name="provision_commission" widget='monetary'/>
+            <label for="provision_commission" string="Provision de commission"/>
+            <div>
+            <field name="provision_commission" string="Provision de commission" class="oe_inline"/>%
+            </div>
             <field name="cout_revient" widget='monetary'/>
             </group>
             <group name="cout_calculer">

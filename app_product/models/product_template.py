@@ -220,7 +220,7 @@ class ProductTemplate(models.Model):
     def calcul_prix_min_vente_estime(self):
         for record in self:
             if record.prix_achat:
-                record.cout_revient = ((record.prix_achat + record.prix_transport + record.cout_avs + record.cout_ttm) * (1 +(record.charge_fixe/100)) + record.provision_commission)
+                record.cout_revient = ((record.prix_achat + record.prix_transport + record.cout_avs + record.cout_ttm) * (1 +(record.charge_fixe/100) + (record.provision_commission/100)))
             record.standard_price = record.cout_revient
                 
     @api.depends('cout_revient','marge_securite')
