@@ -131,9 +131,21 @@
 			<xpath
 				expr="//field[@name='order_line']/form/sheet/group/group/div/field[@name='product_qty']"
 				position="attributes">
-				<attribute name="string">Destination finale</attribute>
+				<attribute name="string">Ratio</attribute>
 			</xpath>
-			<xpath
+			
+			</field>
+			</record>
+			
+			
+			<record model="ir.ui.view" id="view_order_purchase_line_hide_fields_standard_form">
+        <field name="name">purchase.order.line.hide.field.standard</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="groups_id"
+			eval="[(6, 0, [ref('app_purchase_order.group_achat_logistique')])]" />
+        <field name="arch" type="xml">
+        <xpath
 				expr="//field[@name='order_line']/form/sheet/group/group[2]/field[@name='account_analytic_id']"
 				position="attributes">
 				<attribute name="string">Destination finale</attribute>
@@ -146,6 +158,9 @@
 			</xpath>
 			</field>
 			</record>
+        
+        
+        
 			<record model="ir.ui.view" id="view_order_purchase_line_hide1_fields_form">
         <field name="name">purchase.order.line.hide1.field</field>
         <field name="model">purchase.order</field>
