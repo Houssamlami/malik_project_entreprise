@@ -5,7 +5,7 @@
 from datetime import datetime
 import logging
 from itertools import groupby
-from odoo import models, api, fields, _
+from odoo import models, api, fields, _, exceptions
 from odoo.exceptions import UserError, AccessError, ValidationError
 from odoo.tools import float_compare, float_round, float_repr
 from odoo.addons import decimal_precision as dp
@@ -88,6 +88,9 @@ class PurchaseOrder(models.Model):
     #prix_par_km = fields.Float(string=u"Prix par KM", compute='_get_prix_par_km', store=True ,readonly=True)
     #prix_par_kg = fields.Float(string=u"Prix par KG", compute='_get_prix_par_kg', store=True, readonly=True)
     data_file_cmr = fields.Binary(string='Fichier CMR')
+    nbr_camions = fields.Float(string='Nombre de Camions')
+    tonnage = fields.Float(string="Tonnage par camion", default=20000)
+    palette = fields.Float(string="Nombre de palette par camion", default=32)
     #purchase_order_id = fields.Many2one(comodel_name='purchase.order', string=u'BC Achat', domain=[('partner_id.name', 'in', ('IMEX','BONA'))])
     
     @api.multi
@@ -156,3 +159,27 @@ class PurchaseOrder(models.Model):
                         subtype_id=self.env.ref('mail.mt_note').id)
             
         return True
+
+
+    @api.model
+    def create(self, vals):
+        purchase = super(PurchaseOrder,self).create(vals)
+        if purchase.logistic == True:
+            if any(not line.account_analytic_id for line in purchase.order_line):
+                raise exceptions.ValidationError(_('Remplir les destinations finales !'))
+                return {
+                        'warning': {'title': _('Error'), 'message': _('Error message'),},
+                        }
+        return purchase
+    '''
+    @api.multi
+    def write(self, vals):
+      #  if vals['logistic'] == 'true':
+            if any(not line.account_analytic_id for line in self.order_line):
+                raise exceptions.ValidationError(_('Remplir les destinations finales !'))
+                return {
+                        'warning': {'title': _('Error'), 'message': _('Error message'),},
+                        }  
+        purchase = super(PurchaseOrder,self).write(vals) 
+        return purchase
+        '''
