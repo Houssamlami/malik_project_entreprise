@@ -233,7 +233,7 @@ class ProductTemplate(models.Model):
     def calcul_prix_vente(self):
         for record in self:
             if record.prix_min_vente:
-                record.prix_vente_estime = record.prix_min_vente + record.marge
+                record.prix_vente_estime = record.prix_min_vente *(1+(record.marge/100))
             record.list_price = record.prix_vente_estime
     
     @api.onchange('charge_fixe', 'cout_ttm', 'cout_avs', 'prix_transport', 'prix_achat')

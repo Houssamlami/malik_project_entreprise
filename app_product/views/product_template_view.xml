@@ -53,8 +53,11 @@
             <div>
            <field name="marge_securite" class="oe_inline"/>%
            </div>
-            <field name="prix_min_vente" widget='monetary'/>
-            <field name="marge" widget='monetary'/>
+            <field name="prix_min_vente" string="Provision de commission" class="oe_inline"/>
+            <label for="marge" string="Marge Commerciale"/>
+            <div>
+            <field name="marge" string="Marge Commerciale" class="oe_inline"/>%
+            </div>
             <field name="prix_vente_estime" widget='monetary'/>
             <field name="code_geo" />
             </group>
