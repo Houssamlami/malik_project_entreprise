@@ -18,7 +18,7 @@
                 <field name="location_dest_id" />
             </xpath> 
             <xpath
-				expr="////field[@name='order_line']/tree/field[@name='product_qty']"
+				expr="//field[@name='order_line']/tree/field[@name='product_qty']"
 				position="attributes">
 				<attribute name="sum">Total</attribute>
 			</xpath>
@@ -26,14 +26,16 @@
 			<xpath expr="//field[@name='order_line']/form/sheet/group/group/div/field[@name='product_qty']" position="after">
            
                 <field name="qty_in_kg" attrs="{'invisible': [('account_analytic_id', '=', False)]}"/>
+                <field name="qty_per_camion" attrs="{'invisible': [('account_analytic_id', '=', False)]}"/>
             </xpath>
 			<xpath
-				expr="////field[@name='order_line']/tree/field[@name='product_qty']"
+				expr="//field[@name='order_line']/tree/field[@name='product_qty']"
 				position="after">
 				<field name="qty_in_kg" attrs="{'invisible': [('account_analytic_id', '=', False)]}"/>
+				<field name="qty_per_camion" attrs="{'invisible': [('account_analytic_id', '=', False)]}"/>
 			</xpath>
 			<xpath
-				expr="////field[@name='order_line']/tree/field[@name='price_subtotal']"
+				expr="//field[@name='order_line']/tree/field[@name='price_subtotal']"
 				position="before">
 				<field name="price_kg" widget="monetary" attrs="{'invisible': [('account_analytic_id', '=', False)]}"/>
 			</xpath>
@@ -54,6 +56,12 @@
 				</field>
 				<field name="date_order" position="after">
 					<field name="qty_totals"
+						attrs="{'invisible': [('logistic', '=', False)]}" />
+				<field name="nbr_camions"
+						attrs="{'invisible': [('logistic', '=', False)]}" />
+						<field name="tonnage"
+						attrs="{'invisible': [('logistic', '=', False)]}" />
+						<field name="palette"
 						attrs="{'invisible': [('logistic', '=', False)]}" />
 				<!-- 	
 					<field name="kilometre"
@@ -78,6 +86,111 @@
 				</field> -->
             </field>
         </record>
+        <record id="group_achat_purchase"
+		model="res.groups">
+		<field name="name">GROUPE ACHAT</field>
+		</record>
+		<record id="group_achat_logistique"
+		model="res.groups">
+		<field name="name">GROUPE LOGISTIQUE</field>
+	</record>
+        <record model="ir.ui.view" id="view_order_purchase_line_hide_fields_form">
+        <field name="name">purchase.order.line.hide.field</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="app_purchase_order.view_order_purchase_line_form"/>
+        <field name="groups_id"
+			eval="[(6, 0, [ref('app_purchase_order.group_achat_logistique')])]" />
+        <field name="arch" type="xml">
+        <xpath
+				expr="//field[@name='order_line']/tree/field[@name='location_dest_id']"
+				position="attributes">
+				<attribute name="invisible">1</attribute>
+			</xpath>
+			<xpath
+				expr="//field[@name='order_line']/form/sheet/group/group[2]/field[@name='location_dest_id']"
+				position="attributes">
+				<attribute name="invisible">1</attribute>
+			</xpath>
+			<xpath
+				expr="//field[@name='order_line']/form/sheet/group/group[2]/field[@name='analytic_tag_ids']"
+				position="attributes">
+				<attribute name="invisible">1</attribute>
+			</xpath>
+			<xpath
+				expr="//field[@name='order_line']/tree/field[@name='analytic_tag_ids']"
+				position="attributes">
+				<attribute name="invisible">1</attribute>
+				
+			</xpath>
+			<xpath
+				expr="//field[@name='order_line']/tree/field[@name='product_qty']"
+				position="attributes">
+				<attribute name="string">Ratio</attribute>
+				
+			</xpath>
+			<xpath
+				expr="//field[@name='order_line']/form/sheet/group/group/div/field[@name='product_qty']"
+				position="attributes">
+				<attribute name="string">Destination finale</attribute>
+			</xpath>
+			<xpath
+				expr="//field[@name='order_line']/form/sheet/group/group[2]/field[@name='account_analytic_id']"
+				position="attributes">
+				<attribute name="string">Destination finale</attribute>
+			</xpath>
+			<xpath
+				expr="//field[@name='order_line']/tree/field[@name='account_analytic_id']"
+				position="attributes">
+				<attribute name="string">Destination finale</attribute>
+				
+			</xpath>
+			</field>
+			</record>
+			<record model="ir.ui.view" id="view_order_purchase_line_hide1_fields_form">
+        <field name="name">purchase.order.line.hide1.field</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="app_purchase_order.view_order_purchase_line_form"/>
+        <field name="groups_id"
+			eval="[(6, 0, [ref('app_purchase_order.group_achat_purchase')])]" />
+        <field name="arch" type="xml">
+        <xpath
+				expr="//field[@name='order_line']/form/sheet/group/group/div/field[@name='qty_in_kg']"
+				position="attributes">
+				<attribute name="invisible">1</attribute>
+			</xpath>
+			<xpath
+				expr="//field[@name='order_line']/form/sheet/group/group/div/field[@name='qty_per_camion']"
+				position="attributes">
+				<attribute name="invisible">1</attribute>
+			</xpath>
+			<xpath
+				expr="//field[@name='order_line']/tree/field[@name='qty_in_kg']"
+				position="attributes">
+				<attribute name="invisible">1</attribute>
+			</xpath>
+			<xpath
+				expr="//field[@name='order_line']/tree/field[@name='qty_per_camion']"
+				position="attributes">
+				<attribute name="invisible">1</attribute>
+			</xpath>
+			<xpath
+				expr="//field[@name='order_line']/tree/field[@name='price_kg']"
+				position="attributes">
+				<attribute name="invisible">1</attribute>
+			</xpath>
+			<xpath
+				expr="//field[@name='order_line']/form/sheet/group/group[2]/field[@name='analytic_tag_ids']"
+				position="attributes">
+				<attribute name="invisible">1</attribute>
+			</xpath>
+			<xpath
+				expr="//field[@name='order_line']/tree/field[@name='analytic_tag_ids']"
+				position="attributes">
+				<attribute name="invisible">1</attribute>
+			</xpath>
+			</field>
+			</record>
+			
        </data>
 </odoo>
             
