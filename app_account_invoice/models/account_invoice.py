@@ -23,6 +23,7 @@ class AccountInvoice(models.Model):
     object = fields.Text(string="Objet")
     ref_livraison = fields.Many2one(comodel_name='stock.picking', string="Ref livraison")
     
+    
     @api.onchange('fac_charcuterie_f','fac_volaille_f')
     def onchange_fac_volaille_volaille(self):
         for record in self:
@@ -70,6 +71,28 @@ class AccountInvoice(models.Model):
                 'name':product.name,
                 'price_unit':product.list_price,
                 })
+                
+                
+    @api.multi
+    def action_invoice_open(self):
+        for invoice in self:
+            if not invoice.date_due and invoice.type in ('out_invoice','out_refund'):
+                raise exceptions.ValidationError(_('Date echeance !'))
+                return {
+                        'warning': {'title': _('Error'), 'message': _('Error message'),},
+                        }    
+            if ((invoice.fac_charcuterie_f and invoice.fac_volaille_f) or (not invoice.fac_charcuterie_f and not invoice.fac_volaille_f)) and invoice.type in ('out_invoice','out_refund'):
+                raise exceptions.ValidationError(_('Merci de specifier le type Facture(Volaille ou chartuterie) !'))
+                return {
+                    'warning': {'title': _('Error'), 'message': _('Error message'),},
+            }
+            if ((invoice.cli_gc and invoice.cli_pc) or (not invoice.cli_gc and not invoice.cli_pc)) and invoice.type in ('out_invoice','out_refund'):
+                raise exceptions.ValidationError(_('Merci de specifier le type Facture(Grand ou petit compte) !'))
+                return {
+                    'warning': {'title': _('Error'), 'message': _('Error message'),},
+            }
+        return super(AccountInvoice, self).action_invoice_open()
+    
                 
 class AccountInvoiceReport(models.Model):
     _inherit = "account.invoice.report"
