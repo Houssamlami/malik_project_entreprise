@@ -15,12 +15,14 @@ class SaleOrder(models.Model):
     total_ht = fields.Float(string='Montant Total HT', compute='_compute_ht_total')
     vendeur = fields.Many2one(comodel_name='hr.employee', string="Vendeur")
     user_id = fields.Many2one(comodel_name='hr.employee', string="Commercial")
+    
     Bolocagettm = fields.Integer('blo')
     Bolocagettm_id = fields.Many2one(comodel_name='blockage.blockage')
     total_weight_stock_char = fields.Float(string='Total charcuterie)', compute='_compute_weight_total_stock_char')
     total_weight_stock_srg = fields.Float(string='Total surgele)', compute='_compute_weight_total_stock_srg')
     total_weight_stock_vv = fields.Float(string='Total volaille)', compute='_compute_weight_total_stock_vv')
     produitalivrer = fields.Char('Produit a livrer', compute='get_product_ttm')
+    commercial_id = fields.Many2one(comodel_name='hr.employee', string="Commercial", related='user_id', store=True)
     Expediteur =  fields.Selection([('MV', 'Malik V'), ('An', 'Atlas N')])    
     zip_df =  fields.Char(string='CP', compute='get_default_zip')
     adresse_liv =  fields.Char(string='Adresse livraison', compute='get_default_zip')
@@ -40,6 +42,15 @@ class SaleOrder(models.Model):
     etat_fac1 = fields.Char(string='Etat facture', compute='_compute_colis_total_etat')
     etat_fac1_copy = fields.Char(string='Etat facture copy', compute='_compute_colis_total_etat_copy',store=True)
     grand_compte = fields.Boolean(string='Commande Grand Compte', default= False)
+    
+    
+    @api.model
+    def fields_get(self, fields=None):
+        fields_to_hide = ['user_id']
+        res = super(SaleOrder, self).fields_get()
+        for field in fields_to_hide:
+            res[field]['selectable'] = False
+        return res
     
     @api.onchange('cmd_volaille','cmd_charcuterie')
     def onchange_type_of_commande(self):
@@ -162,6 +173,7 @@ class SaleOrder(models.Model):
                 }
                 
     
+
     @api.multi
     def _prepare_invoice(self):
         
@@ -180,6 +192,7 @@ class SaleOrder(models.Model):
             'partner_id': self.partner_invoice_id.id,
             'partner_shipping_id': self.partner_shipping_id.id,
             'journal_id': journal_id,
+            'ref_livraison':self.env['stock.picking'].search([('state', '=', 'done'),('picking_type_id.code', '=', 'outgoing'),('origin', '=', self.name)],limit=1).id,
             'date_commande': self.date_order,
             'date_livraison': self.requested_date,
             'currency_id': self.pricelist_id.currency_id.id,
@@ -231,7 +244,10 @@ class SaleOrder(models.Model):
             total_colis = 0
             for line in sale.order_line:
                 if line.product_id and line.product_id.type != 'service' and line.secondary_uom_id:
-                    total_colis += (line.qty_delivered/line.secondary_uom_id.factor) or 0.0
+                    if abs(line.product_uom_qty-line.qty_delivered) >= line.secondary_uom_id.factor:
+                        total_colis += int(line.qty_delivered/line.secondary_uom_id.factor) or 0.0
+                    else:
+                        total_colis += line.secondary_uom_qty
             sale.total_colis_livrer = total_colis
 
     def _compute_volumeht_total(self):
@@ -371,4 +387,3 @@ class SaleOrder(models.Model):
                         'warning': {'title': _('Error'), 'message': _('Error message'),},
                         }    
         return sale
-        
