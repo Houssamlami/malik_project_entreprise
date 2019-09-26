@@ -208,6 +208,16 @@ class SaleOrder(models.Model):
     
     @api.multi
     def action_confirm(self):
+        products = self.order_line.mapped('product_id')
+        for product in products:
+            cmpt = 0
+            for order in self.order_line:
+                if order.product_id.id == product.id:
+                    cmpt+= 1
+            if cmpt>1:
+                raise UserError(_(
+                'Article en double: %s'
+                ) % (product.name))
         if (self.cmd_charcuterie and self.cmd_volaille) or (not self.cmd_charcuterie and not self.cmd_volaille):
             raise exceptions.ValidationError(_('Merci de specifier le type de la commande !'))
             return {
