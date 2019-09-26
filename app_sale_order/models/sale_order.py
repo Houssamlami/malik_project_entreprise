@@ -244,7 +244,7 @@ class SaleOrder(models.Model):
             total_colis = 0
             for line in sale.order_line:
                 if line.product_id and line.product_id.type != 'service' and line.secondary_uom_id:
-                    if abs(line.product_uom_qty-line.qty_delivered) >= line.secondary_uom_id.factor:
+                    if abs(line.product_uom_qty-line.qty_delivered) >= line.secondary_uom_id.factor and line.product_id.uom_id.name =='kg':
                         total_colis += int(line.qty_delivered/line.secondary_uom_id.factor) or 0.0
                     else:
                         total_colis += line.secondary_uom_qty
