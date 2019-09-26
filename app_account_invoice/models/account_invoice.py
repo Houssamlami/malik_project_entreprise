@@ -24,6 +24,7 @@ class AccountInvoice(models.Model):
     ref_livraison = fields.Many2one(comodel_name='stock.picking', string="Ref livraison")
     
     
+    
     @api.onchange('fac_charcuterie_f','fac_volaille_f')
     def onchange_fac_volaille_volaille(self):
         for record in self:
