@@ -30,7 +30,7 @@ class StockPicking(models.Model):
             total_poids = 0
             for line in picking.move_lines:
                 if line.product_id:
-                    total_poids += (line.quantity_done or 0.0)*line.product_id.weight
+                    total_poids += (line.quantity_done or 0.0)
                     total_colis += (line.secondary_uom_qty or 0.0)
             picking.total_weight_delivered = total_poids
             picking.total_colis_delivered = total_colis
@@ -68,7 +68,8 @@ class StockPicking(models.Model):
             stock.total_weight_stock_volailles_auto = weight_stock_volailles
             
 class StockProductionLot(models.Model):
-    _inherit = "stock.production.lot"
+    _name = 'stock.production.lot'
+    _inherit = 'stock.production.lot'
     
         
     date_refer = fields.Datetime(string="Date référence", default=fields.Date.today())
@@ -114,3 +115,16 @@ class StockProductionLot(models.Model):
         dates_dict = self._get_dates()
         for field, value in dates_dict.items():
             setattr(self, field, value)
+            
+    '''@api.onchange('product_expiry_alert')
+    @api.depends('product_expiry_alert')
+    def _notif_expiration_lot(self):
+        for record in self:
+            if record.product_expiry_alert:
+                activity = self.env['mail.activity'].sudo().create({
+                        'activity_type_id': self.env.ref('mail.mail_activity_data_todo').id,
+                        'note': _('Expired lot. '),
+                        'res_id': record.id,
+                        'res_model_id': self.env.ref('stock.model_stock_production_lot').id,
+                        })
+                activity._onchange_activity_type_id()'''
