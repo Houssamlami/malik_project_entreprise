@@ -22,12 +22,7 @@ class StockMove(models.Model):
     _inherit = 'stock.move'
     
     secondary_uom_qty = fields.Float(compute='get_secondary_qty', string="Box")
-    qty_initiale = fields.Float(compute='get_initiale_qty', store=True)
     
-    @api.one
-    def get_initiale_qty(self):
-        for record in self:
-            record.qty_initiale = record.product_uom_qty
     
     @api.multi
     @api.depends('picking_id.origin','quantity_done')
@@ -42,10 +37,10 @@ class StockMove(models.Model):
                     #else:
                         #   record.secondary_uom_qty = 0.0
             if record.quantity_done != 0:
-                if abs(float_compare(record.qty_initiale, record.quantity_done, precision_rounding=record.product_uom.rounding))>= 0:
+                if abs(float_compare(record.sale_line_id.product_uom_qty, record.quantity_done, precision_rounding=record.product_uom.rounding))>= 0:
                     unite = record.product_id
                     unit = unite.sale_secondary_uom_id
-                    if unit.factor != 0 and abs(record.qty_initiale-record.quantity_done)>= unit.factor and unite.uom_id.name =='kg':
+                    if unit.factor != 0 and abs(record.sale_line_id.product_uom_qty-record.quantity_done)>= unit.factor and unite.uom_id.name =='kg' :
                         record.secondary_uom_qty = int((record.quantity_done/unit.factor))
 
 '''
