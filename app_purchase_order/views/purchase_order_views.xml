@@ -144,6 +144,17 @@
 
 				</xpath>
 				<xpath
+					expr="//field[@name='order_line']/form/sheet/group/group[2]/field[@name='account_analytic_id']"
+					position="attributes">
+					<attribute name="required">1</attribute>
+				</xpath>
+				<xpath
+					expr="//field[@name='order_line']/tree/field[@name='account_analytic_id']"
+					position="attributes">
+					<attribute name="required">1</attribute>
+
+				</xpath>
+				<xpath
 					expr="//field[@name='order_line']/form/sheet/group/group[2]/field[@name='analytic_tag_ids']"
 					position="attributes">
 					<attribute name="invisible">1</attribute>
@@ -236,6 +247,17 @@
 					expr="//field[@name='order_line']/tree/field[@name='account_analytic_id']"
 					position="attributes">
 					<attribute name="invisible">1</attribute>
+
+				</xpath>
+				<xpath
+					expr="//field[@name='order_line']/form/sheet/group/group[2]/field[@name='location_dest_id']"
+					position="attributes">
+					<attribute name="required">1</attribute>
+				</xpath>
+				<xpath
+					expr="//field[@name='order_line']/tree/field[@name='location_dest_id']"
+					position="attributes">
+					<attribute name="required">1</attribute>
 
 				</xpath>
 			</field>
