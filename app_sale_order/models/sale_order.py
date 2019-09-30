@@ -2,6 +2,7 @@
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 from odoo.exceptions import UserError, ValidationError
+from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT, float_compare, float_round
 from odoo import api, fields, exceptions, models, _
 
 
@@ -185,7 +186,7 @@ class SaleOrder(models.Model):
             'name': self.client_order_ref or '',
             'origin': self.name,
             'type': 'out_invoice',
-            'qty_livrer_colis': self.total_colis_livrer,
+            'qty_livrer_colis': self.env['stock.picking'].search([('state', '=', 'done'),('picking_type_id.code', '=', 'outgoing'),('origin', '=', self.name)],limit=1).total_colis_delivered,
             'commercial': self.user_id.id,
             'vendeur': self.vendeur.id,
             'account_id': self.partner_invoice_id.property_account_receivable_id.id,
@@ -253,12 +254,20 @@ class SaleOrder(models.Model):
         for sale in self:
             total_colis = 0
             for line in sale.order_line:
+                print('sale order')
                 if line.product_id and line.product_id.type != 'service' and line.secondary_uom_id:
-                    if abs(line.product_uom_qty-line.qty_delivered) >= line.secondary_uom_id.factor and line.product_id.uom_id.name =='kg':
-                        total_colis += int(line.qty_delivered/line.secondary_uom_id.factor) or 0.0
-                    else:
+                    if line.product_uom_qty-line.qty_delivered <= ((-1)* line.secondary_uom_id.factor) and line.product_id.uom_id.name =='kg':
+                        total_colis += int(line.product_uom_qty) + int((line.qty_delivered-line.product_uom_qty)/line.secondary_uom_id.factor) or 0.0
+                    if line.product_uom_qty-line.qty_delivered > ((-1)* line.secondary_uom_id.factor) and line.product_id.uom_id.name =='kg' and line.qty_delivered !=0 and float_compare(line.product_uom_qty, line.qty_delivered, precision_rounding=line.product_uom.rounding)< 0:
                         total_colis += line.secondary_uom_qty
+                    if line.product_uom_qty-line.qty_delivered >= (line.secondary_uom_id.factor) and line.product_id.uom_id.name =='kg':
+                        total_colis += int(line.product_uom_qty) - int((line.product_uom_qty-line.qty_delivered)/line.secondary_uom_id.factor) or 0.0
+                    if line.product_uom_qty-line.qty_delivered < (line.secondary_uom_id.factor) and line.product_id.uom_id.name =='kg' and line.qty_delivered !=0 and line.qty_delivered !=0 and float_compare(line.product_uom_qty, line.qty_delivered, precision_rounding=line.product_uom.rounding)> 0:
+                        total_colis += line.secondary_uom_qty
+                    if line.product_id.uom_id.name !='kg':
+                        total_colis += line.qty_delivered or 0.0
             sale.total_colis_livrer = total_colis
+            
 
     def _compute_volumeht_total(self):
         for sale in self:

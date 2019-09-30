@@ -40,8 +40,10 @@ class StockMove(models.Model):
                 if abs(float_compare(record.sale_line_id.product_uom_qty, record.quantity_done, precision_rounding=record.product_uom.rounding))>= 0:
                     unite = record.product_id
                     unit = unite.sale_secondary_uom_id
-                    if unit.factor != 0 and abs(record.sale_line_id.product_uom_qty-record.quantity_done)>= unit.factor and unite.uom_id.name =='kg' :
-                        record.secondary_uom_qty = int((record.quantity_done/unit.factor))
+                    if unit.factor != 0 and record.sale_line_id.product_uom_qty-record.quantity_done <= ((-1)* unit.factor) and unite.uom_id.name =='kg' :
+                        record.secondary_uom_qty = int(record.secondary_uom_qty)+ int((record.quantity_done-record.sale_line_id.product_uom_qty)/unit.factor)
+                    if unit.factor != 0 and record.sale_line_id.product_uom_qty-record.quantity_done >= (unit.factor) and unite.uom_id.name =='kg' :
+                        record.secondary_uom_qty = int(record.sale_line_id.secondary_uom_qty) - int((record.sale_line_id.product_uom_qty-record.quantity_done)/unit.factor)
                     if unite.uom_id.name !='kg' and abs(record.sale_line_id.secondary_uom_qty-record.quantity_done) > 0:
                         record.secondary_uom_qty = record.quantity_done
 
