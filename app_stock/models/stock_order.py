@@ -21,6 +21,22 @@ class StockPicking(models.Model):
     total_weight_stock_frais_auto = fields.Float(string='Total frais)', compute='_compute_weight_total_stock_frais')
     total_weight_stock_surg_auto = fields.Float(string='Total surg)', compute='_compute_weight_total_stock_surg')
     total_weight_stock_volailles_auto = fields.Float(string='Total volailles)', compute='_compute_weight_total_stock_volailles')
+    total_colis_delivered = fields.Float(string='Total Colis', compute='_compute_colis_poids_total_bl')
+    total_weight_delivered = fields.Float(string='Poids Total', compute='_compute_colis_poids_total_bl')
+    
+    def _compute_colis_poids_total_bl(self):
+        for picking in self:
+            total_colis = 0
+            total_poids = 0
+            for line in picking.move_lines:
+                if line.product_id and line.product_id.uom_id.name != 'kg':
+                    total_poids += (line.quantity_done or 0.0)*line.product_id.weight
+                    total_colis += (line.secondary_uom_qty or 0.0)
+                if line.product_id and line.product_id.uom_id.name == 'kg':
+                    total_poids += (line.quantity_done or 0.0)
+                    total_colis += (line.secondary_uom_qty or 0.0)
+            picking.total_weight_delivered = total_poids
+            picking.total_colis_delivered = total_colis
 
     def _compute_weight_total_stock_sec(self):
         for stock in self:
@@ -55,7 +71,8 @@ class StockPicking(models.Model):
             stock.total_weight_stock_volailles_auto = weight_stock_volailles
             
 class StockProductionLot(models.Model):
-    _inherit = "stock.production.lot"
+    _name = 'stock.production.lot'
+    _inherit = 'stock.production.lot'
     
         
     date_refer = fields.Datetime(string="Date référence", default=fields.Date.today())
@@ -101,3 +118,16 @@ class StockProductionLot(models.Model):
         dates_dict = self._get_dates()
         for field, value in dates_dict.items():
             setattr(self, field, value)
+            
+    '''@api.onchange('product_expiry_alert')
+    @api.depends('product_expiry_alert')
+    def _notif_expiration_lot(self):
+        for record in self:
+            if record.product_expiry_alert:
+                activity = self.env['mail.activity'].sudo().create({
+                        'activity_type_id': self.env.ref('mail.mail_activity_data_todo').id,
+                        'note': _('Expired lot. '),
+                        'res_id': record.id,
+                        'res_model_id': self.env.ref('stock.model_stock_production_lot').id,
+                        })
+                activity._onchange_activity_type_id()'''

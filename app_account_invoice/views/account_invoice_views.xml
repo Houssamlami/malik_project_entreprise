@@ -1,13 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 	<data>
-
 		<record model="ir.ui.view"
 			id="client_limit_de_credit_type_de_fac_form">
 			<field name="name">client.limit.de.credit.type.de.fac.form</field>
 			<field name="model">account.invoice</field>
 			<field name="inherit_id" ref="account.invoice_form" />
 			<field name="arch" type="xml">
+
+				<xpath expr="//field[@name='payment_term_id']"
+					position="after">
+					<field name="object" />
+					<field name="ref_livraison" />
+					<button name="recompute_qty_transport"
+						string="Transport Grand Compte" class="btn-primary" type="object"
+						attrs="{'invisible': ['|',('type', 'in', ('in_invoice','in_refund')),('state','in',('paid'))]}" />
+				</xpath>
 				<xpath expr="//field[@name='team_id']" position="after">
 					<p>
 						<b>
@@ -19,20 +27,30 @@
 					<field name="cli_gc" />
 					<field name="cli_pc" />
 				</xpath>
-				<xpath expr="//group[@class='oe_subtotal_footer oe_right']" position="after">
-				<group>
-                     <field name="qty_livrer_colis" string="Nombre de colis"/>
-                     </group>
-                </xpath>
-                <field name="date_due" position="after">
-                <field name="date_livraison" attrs="{'invisible': [('type', 'in', ('in_invoice','in_refund'))]}"/>
-                </field>
-                <xpath expr="//field[@name='user_id']" position="attributes">
-				<attribute name="string">Responsable Facture</attribute>
-			</xpath>
+				<xpath expr="//group[@class='oe_subtotal_footer oe_right']"
+					position="after">
+					<group>
+						<field name="qty_livrer_colis" string="Nombre de colis" />
+					</group>
+				</xpath>
+				<field name="date_due" position="after">
+					<field name="date_livraison"
+						attrs="{'invisible': [('type', 'in', ('in_invoice','in_refund'))]}" />
+				</field>
+				<xpath expr="//field[@name='user_id']" position="attributes">
+					<attribute name="string">Responsable Facture</attribute>
+				</xpath>
+				<xpath
+					expr="//field[@name='invoice_line_ids']/tree/field[@name='quantity']"
+					position="before">
+
+					<field name="colis"
+						attrs="{'invisible': [('invoice_type', 'in', ('in_invoice','in_refund'))]}" />
+					<field name="invoice_type" invisible="1" />
+				</xpath>
 			</field>
 		</record>
-<!-- ############################Search by date commande################################### -->
+		<!-- ############################Search by date commande################################### -->
 		<record model="ir.ui.view" id="add_fields_search_date_commd">
 			<field name="name">add.fields.search.date.commd.search</field>
 			<field name="model">account.invoice</field>
@@ -46,7 +64,7 @@
 				</data>
 			</field>
 		</record>
-<!-- #################################### Show commercial & vendeur in tree view################################# -->
+		<!-- #################################### Show commercial & vendeur in tree view################################# -->
 		<record model="ir.ui.view"
 			id="tree_account_invoice_commercial_vendeur">
 			<field name="name">tree.account.invoice.commercial.vendeur</field>
@@ -54,10 +72,10 @@
 			<field name="inherit_id" ref="account.invoice_tree" />
 			<field name="arch" type="xml">
 				<xpath expr="//field[@name='user_id']" position="replace">
-		<field name="vendeur" />
-		<field name="commercial" />
-		</xpath>
-		</field>
+					<field name="vendeur" />
+					<field name="commercial" />
+				</xpath>
+			</field>
 		</record>
 	</data>
 </odoo>

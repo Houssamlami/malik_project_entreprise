@@ -32,6 +32,15 @@
         <record id="sale.menu_sale_quotations" model="ir.ui.menu">
             <field name="groups_id" eval="[(4,ref('app_sale_order.group_sale_commercial_externe'))]"/>
             </record>
+            
+            <record id="sale.menu_sale_report" model="ir.ui.menu">
+            <field name="groups_id" eval="[(4,ref('app_sale_order.group_sale_commercial_externe'))]"/>
+            </record>
+            
+            <record id="sale.menu_report_product_all" model="ir.ui.menu">
+            <field name="groups_id" eval="[(4,ref('app_sale_order.group_sale_commercial_externe'))]"/>
+            </record>
+            
             <record id="sale.sale_order_menu" model="ir.ui.menu">
             <field name="groups_id" eval="[(4,ref('app_sale_order.group_sale_commercial_externe'))]"/>
             </record>

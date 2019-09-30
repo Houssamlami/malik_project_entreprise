@@ -17,6 +17,17 @@
 			</field>
 			</record>
  <!-- ''''''''''''''''''''''''''''''Prices/Costs of Product''''''''''''''''''''''''''''''''''''''''''' -->
+ <record id="product_template_add_field_price_cart" model="ir.ui.view">
+        <field name="name">product.template.add.field.price.cart</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_only_form_view"/>
+        <field name="arch" type="xml">
+        <xpath expr="//field[@name='barcode']" position="after">
+				<field name="price_cart" widget='monetary'/>
+            </xpath>
+            </field>
+            </record>
+ 
  	 <record id="product_template_add_fields" model="ir.ui.view">
         <field name="name">product.template.add.fields</field>
         <field name="model">product.template</field>
@@ -42,7 +53,10 @@
             <div>
             <field name="charge_fixe" string="Charge Fixe" class="oe_inline"/>%
             </div>
-            <field name="provision_commission" widget='monetary'/>
+            <label for="provision_commission" string="Provision de commission"/>
+            <div>
+            <field name="provision_commission" string="Provision de commission" class="oe_inline"/>%
+            </div>
             <field name="cout_revient" widget='monetary'/>
             </group>
             <group name="cout_calculer">
@@ -50,8 +64,11 @@
             <div>
            <field name="marge_securite" class="oe_inline"/>%
            </div>
-            <field name="prix_min_vente" widget='monetary'/>
-            <field name="marge" widget='monetary'/>
+            <field name="prix_min_vente" string="Provision de commission" class="oe_inline"/>
+            <label for="marge" string="Marge Commerciale"/>
+            <div>
+            <field name="marge" string="Marge Commerciale" class="oe_inline"/>%
+            </div>
             <field name="prix_vente_estime" widget='monetary'/>
             <field name="code_geo" />
             </group>

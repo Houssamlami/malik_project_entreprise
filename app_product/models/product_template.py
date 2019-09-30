@@ -145,7 +145,8 @@ class ProductTemplate(models.Model):
     
     Androit_stockage = fields.Many2one(comodel_name='androit.stockage', string="Endroit de stockage", required=True, track_visibility='onchange')
     Androit_preparation = fields.Many2one(comodel_name='androit.preparation', string=u"Endroit de Préparation", required=True, track_visibility='onchange')               
-    number_unit = fields.Float(string="Nombre d'unité", track_visibility='onchange')      
+    number_unit = fields.Float(string="Nombre d'unité", track_visibility='onchange')
+    price_cart = fields.Float(string="Prix de vente sur la carte", track_visibility='onchange') 
     prix_achat = fields.Float(string=u"Prix d\'Achat", track_visibility='onchange')
     prix_transport = fields.Float(string=u"Transport Achat", track_visibility='onchange')
     cout_avs = fields.Float(string=u"Certification", track_visibility='onchange')
@@ -220,7 +221,7 @@ class ProductTemplate(models.Model):
     def calcul_prix_min_vente_estime(self):
         for record in self:
             if record.prix_achat:
-                record.cout_revient = ((record.prix_achat + record.prix_transport + record.cout_avs + record.cout_ttm) * (1 +(record.charge_fixe/100)) + record.provision_commission)
+                record.cout_revient = ((record.prix_achat + record.prix_transport + record.cout_avs + record.cout_ttm) * (1 +(record.charge_fixe/100) + (record.provision_commission/100)))
             record.standard_price = record.cout_revient
                 
     @api.depends('cout_revient','marge_securite')
@@ -233,7 +234,7 @@ class ProductTemplate(models.Model):
     def calcul_prix_vente(self):
         for record in self:
             if record.prix_min_vente:
-                record.prix_vente_estime = record.prix_min_vente + record.marge
+                record.prix_vente_estime = record.prix_min_vente *(1+(record.marge/100))
             record.list_price = record.prix_vente_estime
     
     @api.onchange('charge_fixe', 'cout_ttm', 'cout_avs', 'prix_transport', 'prix_achat')

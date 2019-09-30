@@ -23,5 +23,20 @@
             </field>
         </record>
         
-        </data>
+       
+<!-- ''''''''''''''''''''''''''''''''Price in carte'''''''''''''''''''''''''''''''''''''''''''''' -->
+<record model="ir.ui.view" id="product_form_view_narmal_price_cart">
+            <field name="name">product.product.price.cart</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="product.product_normal_form_view"/>
+            <field name="arch" type="xml">
+                
+                <xpath expr="//field[@name='barcode']" position="after">
+					  <field  name="price_cart" widget='monetary'/>
+             	</xpath>
+                
+            </field>
+        </record>
+        
+ </data>
         </odoo>

@@ -23,6 +23,7 @@ class StockMove(models.Model):
     
     secondary_uom_qty = fields.Float(compute='get_secondary_qty', string="Box")
     
+    
     @api.multi
     @api.depends('picking_id.origin','quantity_done')
     def get_secondary_qty(self):
@@ -32,17 +33,33 @@ class StockMove(models.Model):
                 picking = record.picking_id
                 if picking.picking_type_id.code == 'outgoing':
                     if record.product_id.name == line.product_id.name:
-                        record.secondary_uom_qty = line.secondary_uom_qty
+                        record.secondary_uom_qty = int(line.secondary_uom_qty)
                     #else:
-                     #   record.secondary_uom_qty = 0.0
+                        #   record.secondary_uom_qty = 0.0
             if record.quantity_done != 0:
-                if float_compare(record.product_uom_qty, record.quantity_done, precision_rounding=record.product_uom.rounding) >= 0:
+                if abs(float_compare(record.sale_line_id.product_uom_qty, record.quantity_done, precision_rounding=record.product_uom.rounding))>= 0:
                     unite = record.product_id
                     unit = unite.sale_secondary_uom_id
-                    if unit.factor != 0:
-                        record.secondary_uom_qty = (record.quantity_done/unit.factor)
-     
-    '''                    
+                    if unit.factor != 0 and record.sale_line_id.product_uom_qty-record.quantity_done <= ((-1)* unit.factor) and unite.uom_id.name =='kg' :
+                        record.secondary_uom_qty = int(record.secondary_uom_qty)+ int((record.quantity_done-record.sale_line_id.product_uom_qty)/unit.factor)
+                    if unit.factor != 0 and record.sale_line_id.product_uom_qty-record.quantity_done >= (unit.factor) and unite.uom_id.name =='kg' :
+                        record.secondary_uom_qty = int(record.sale_line_id.secondary_uom_qty) - int((record.sale_line_id.product_uom_qty-record.quantity_done)/unit.factor)
+                    if unite.uom_id.name !='kg' and abs(record.sale_line_id.secondary_uom_qty-record.quantity_done) > 0:
+                        record.secondary_uom_qty = record.quantity_done
+
+'''
+    @api.multi
+    def write(self, vals):
+        res = super(StockMove,self).write(vals)
+        if (any(not record.lot_name or not record.date_reference for record in self.move_line_ids) and self.picking_id.picking_type_id.code == 'incoming'):
+            return {'warning': {
+                'title': _('Lot ou DLC!'),
+                'message': _("Merci de mentionner le lot et DLC")
+                }
+            }
+        return res
+'''      
+'''                    
     @api.multi
     def fill_lot_name_dlc(self):
         for move in self:
