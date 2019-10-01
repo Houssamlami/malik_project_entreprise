@@ -127,6 +127,8 @@
 					position="inside">
 					<filter name="pricelist" string="Liste de prix" domain="[]" icon="terp-partner" context="{'group_by' : 'pricelist_for_regroupby'}"/>
 				</xpath>
+				<filter name="salesperson" position="replace">
+				</filter>
 				</field>
 		</record>
 		  
