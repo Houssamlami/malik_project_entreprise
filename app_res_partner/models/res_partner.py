@@ -44,11 +44,16 @@ class ResPartner(models.Model):
         result = super(ResPartner,self).create(vals) 
         return result
     
+    
+    def get_manager_canal_arond(self):
+        for res in self:
+            res.user_id = self.env['hr.employee'].search([('user_id', '=', res.team_id.user_id.id)])
+    
       
 
-    user_id = fields.Many2one(comodel_name='hr.employee', track_visibility='onchange', string='Commercial')
+    user_id = fields.Many2one(comodel_name='hr.employee', compute='get_manager_canal_arond', track_visibility='onchange', string='Commercial')
     vendeur = fields.Many2one(comodel_name='hr.employee',related='team_id.vendeur', track_visibility='onchange', string='Vendeur')
-    vendeur_commarcial = fields.Many2one(comodel_name='res.users', string="Commercial", track_visibility='onchange')
+    vendeur_commarcial = fields.Many2one(comodel_name='res.users', string="", track_visibility='onchange')
     Client_Volaille = fields.Boolean('Client Volailles', track_visibility='onchange')
     Client_Charcuterie =  fields.Boolean('Client Charcuterie', track_visibility='onchange')
     Client_GC = fields.Boolean(string='Client Gros Compte', track_visibility='onchange')
