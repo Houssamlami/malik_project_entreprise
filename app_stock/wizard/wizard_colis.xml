@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+ 
+        
+        <record id="view_stock_move_change_colis" model="ir.ui.view">
+            <field name="name">stock.move.change.colis</field>
+            <field name="model">stock.move</field>
+            <field name="priority">1000</field>
+            <field name="arch" type="xml">
+                <form string="Move Colis">
+                    
+                    <group>
+                        <group>
+                            <field name="product_id" readonly="1"/>
+                            
+                            <label for="secondary_uom_qty_regul"/>
+                            <div class="o_row">
+                                <span><field name="secondary_uom_qty_regul" readonly="0"/></span>
+                                
+                            </div>
+
+                        </group>
+                    </group>
+
+                    <footer class="oe_edit_only">
+                        <button string="Valider" name="action_accept_colis"  type="object" class="oe_highlight"/>
+                        <button string="Discard" special="Annuler"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+        
+    </data>
+</odoo>
