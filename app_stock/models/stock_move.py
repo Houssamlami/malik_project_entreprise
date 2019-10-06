@@ -57,6 +57,34 @@ class StockMove(models.Model):
                         record.secondary_uom_qty = record.quantity_done
                     if record.quantity_done != 0 and record.secondary_uom_qty_regul != 0.0:
                         record.secondary_uom_qty = record.secondary_uom_qty_regul
+                        
+    def action_modify_colis(self):
+       
+        self.ensure_one()
+        if self.picking_id.picking_type_id.code == 'outgoing':
+            view = self.env.ref('app_stock.view_stock_move_change_colis')
+        return {
+            'name': _('Change colis'),
+            'type': 'ir.actions.act_window',
+            'view_type': 'form',
+            'view_mode': 'form',
+            'res_model': 'stock.move',
+            'views': [(view.id, 'form')],
+            'view_id': view.id,
+            'target': 'new',
+            'res_id': self.id,
+            
+            
+        }
+        
+    @api.multi
+    def action_accept_colis(self):
+        
+        for wiz in self:
+            picking = self.env['stock.move'].browse(self.env.context['active_id'])
+            wiz.write({'secondary_uom_qty': wiz.secondary_uom_qty_regul})
+            wiz.get_secondary_qty()
+            
   
 '''@api.multi
     def write(self, vals):
