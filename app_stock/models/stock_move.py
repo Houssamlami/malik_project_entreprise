@@ -22,7 +22,16 @@ class StockMove(models.Model):
     _inherit = 'stock.move'
     
     secondary_uom_qty = fields.Float(compute='get_secondary_qty', string="Box")
+    secondary_uom_qty_regul = fields.Float(string="Colis", readonly=False)
+    unite_is_kg = fields.Boolean(compute='get_unit_move')
     
+    def get_unit_move(self):
+        for record in self:
+            if record.product_id.uom_id.name =='kg':
+                record.unite_is_kg = True
+            else:
+                record.unite_is_kg = False
+
     
     @api.multi
     @api.depends('picking_id.origin','quantity_done')
@@ -46,9 +55,10 @@ class StockMove(models.Model):
                         record.secondary_uom_qty = int(record.sale_line_id.secondary_uom_qty) - int((record.sale_line_id.product_uom_qty-record.quantity_done)/unit.factor)
                     if unite.uom_id.name !='kg' and abs(record.sale_line_id.secondary_uom_qty-record.quantity_done) > 0:
                         record.secondary_uom_qty = record.quantity_done
-
-'''
-    @api.multi
+                    if record.quantity_done != 0 and record.secondary_uom_qty_regul != 0.0:
+                        record.secondary_uom_qty = record.secondary_uom_qty_regul
+  
+'''@api.multi
     def write(self, vals):
         res = super(StockMove,self).write(vals)
         if (any(not record.lot_name or not record.date_reference for record in self.move_line_ids) and self.picking_id.picking_type_id.code == 'incoming'):

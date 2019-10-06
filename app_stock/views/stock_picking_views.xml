@@ -155,5 +155,20 @@
             <field name="comment">the user will have an access limit to the sales</field>
             <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
 </record>-->
+<record model="ir.ui.view" id="secondary_qty_stock_move">
+			<field name="name">secondary.qty.stock.move</field>
+			<field name="model">stock.move</field>
+			<field name="inherit_id" ref="stock.view_stock_move_operations" />
+			<field name="arch" type="xml">
+			<xpath expr="//group/group/div[@class='o_row'][2]"
+					position="after">
+					<label for="secondary_uom_qty_regul"/>
+					<div class="o_row">
+					<field name="unite_is_kg" invisible="1"/>
+					<field name="secondary_uom_qty_regul" attrs="{'readonly': [('unite_is_kg', '=', False)]}"/>
+					</div>
+					</xpath>
+					</field>
+					</record>
 	</data>
 </odoo>
