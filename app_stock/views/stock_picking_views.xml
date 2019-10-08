@@ -28,7 +28,7 @@
 					position="after">
 					<field name="secondary_uom_qty" attrs="{'invisible': [('picking_code','!=','outgoing')]}"/>
 					<field name="unite_is_kg" invisible="1"/>
-					<button name="action_modify_colis" string="colis" type="object" icon="fa-list" attrs="{'invisible': [('unite_is_kg','=',False)]}"/>
+					<button name="action_modify_colis" string="colis" type="object" icon="fa-list" attrs="{'invisible': ['|','|',('unite_is_kg','=',False),('state','in',('done','cancel')),('picking_code','=','incoming')]}"/>
 					</xpath>
 					<xpath expr="//field[@name='move_lines']/tree/field[@name='reserved_availability']"
 					position="attributes">

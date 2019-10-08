@@ -26,6 +26,7 @@ class StockMoveLine(models.Model):
     partner_picking_id = fields.Many2one(comodel_name='res.partner', string="Partenaire", related='picking_id.partner_id', store=True)
     
     
+    
     def _action_done(self):
         """ This method is called during a move's `action_done`. It'll actually move a quant from
         the source location to the destination location, and unreserve if needed in the source
@@ -61,7 +62,7 @@ class StockMoveLine(models.Model):
                             # If a picking type is linked, we may have to create a production lot on
                             # the fly before assigning it to the move line if the user checked both
                             # `use_create_lots` and `use_existing_lots`.
-                            if ml.lot_name and not ml.lot_id:
+                            if ml.lot_name and ml.date_reference and not ml.lot_id:
                                 lot = self.env['stock.production.lot'].create(
                                     {'name': ml.lot_name, 'product_id': ml.product_id.id, 'date_refer': ml.date_reference}
                                 )
@@ -122,3 +123,21 @@ class StockMoveLine(models.Model):
             'product_uom_qty': 0.00,
             'date': fields.Datetime.now(),
         })
+        
+        
+'''@api.multi
+    def write(self, vals):
+        move = super(StockMoveLine,self).write(vals)
+        name = vals.get('lot_name')
+        date = vals.get('date_reference')
+        print(name,date)
+        if (name == 'None' or date == 'None') and self.picking_id.picking_type_id.code == 'incoming':
+            return {'warning': {
+                'title': _('Lot ou DLC!'),
+                'message': _("Merci de mentionner le lot et DLC")
+                }
+            }
+
+        
+        return move
+'''
