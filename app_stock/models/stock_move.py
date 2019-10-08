@@ -22,7 +22,7 @@ class StockMove(models.Model):
     _inherit = 'stock.move'
     
     secondary_uom_qty = fields.Float(compute='get_secondary_qty', string="Box")
-    secondary_uom_qty_regul = fields.Float(string="Colis", readonly=False)
+    secondary_uom_qty_regul = fields.Float(string="Colis", readonly=False, track_visibility='onchange')
     unite_is_kg = fields.Boolean(compute='get_unit_move')
     
     def get_unit_move(self):
@@ -31,6 +31,13 @@ class StockMove(models.Model):
                 record.unite_is_kg = True
             else:
                 record.unite_is_kg = False
+                
+    def _update_secondary_uom_qty_regul(self, values):
+        for line in self:
+            pickings = line.picking_id.filtered(lambda p: p.state not in ('cancel'))
+            for picking in pickings:
+                picking.message_post("Colis du %s a été changé de %d à %d" %
+                                      (line.product_id.display_name, line.secondary_uom_qty_regul, values['secondary_uom_qty_regul']))
 
     
     @api.multi
@@ -77,6 +84,17 @@ class StockMove(models.Model):
             
         }
         
+    
+        
+    @api.multi
+    def write(self, values):
+        if 'secondary_uom_qty_regul' in values:
+            precision = self.env['decimal.precision'].precision_get('Product Unit of Measure')
+            self.filtered(
+                lambda r: r.state not in 'cancel' and float_compare(r.secondary_uom_qty_regul, values['secondary_uom_qty_regul'], precision_digits=precision) != 0)._update_secondary_uom_qty_regul(values)
+        result = super(StockMove, self).write(values)
+        return result
+        
     @api.multi
     def action_accept_colis(self):
         
@@ -86,30 +104,7 @@ class StockMove(models.Model):
             wiz.get_secondary_qty()
             
   
-'''@api.multi
-    def write(self, vals):
-        res = super(StockMove,self).write(vals)
-        if (any(not record.lot_name or not record.date_reference for record in self.move_line_ids) and self.picking_id.picking_type_id.code == 'incoming'):
-            return {'warning': {
-                'title': _('Lot ou DLC!'),
-                'message': _("Merci de mentionner le lot et DLC")
-                }
-            }
-        return res
-'''      
-'''                    
-    @api.multi
-    def fill_lot_name_dlc(self):
-        for move in self:
-            if any(((not line.lot_name or not line.date_reference) and line.picking_id.picking_type_id.code == 'incoming') for line in move.move_line_ids):
-                a = any(((not line.lot_name or not line.date_reference) and line.picking_id.picking_type_id.code == 'incoming') for line in move.move_line_ids)
-                print(a)
-                return {'warning': {
-                'title': _('Lot ou DLC!'),
-                'message': _("Merci de mentioner le lot et DLC")
-                }
-            }
-          '''              
+              
 class StockQuant(models.Model):
     _inherit = 'stock.quant'
     
