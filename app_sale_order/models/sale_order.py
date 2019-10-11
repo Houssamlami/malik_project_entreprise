@@ -186,7 +186,7 @@ class SaleOrder(models.Model):
             'name': self.client_order_ref or '',
             'origin': self.name,
             'type': 'out_invoice',
-            'qty_livrer_colis': self.env['stock.picking'].search([('state', '=', 'done'),('picking_type_id.code', '=', 'outgoing'),('origin', '=', self.name)],limit=1).total_colis_delivered,
+            'qty_livrer_colis': self.env['stock.picking'].search([('state', '=', 'done'),('picking_type_id.code', '=', 'outgoing'),('origin', '=', self.name)],limit=1).total_colis_delivered - self.picking_ids.filtered(lambda r: r.picking_type_id.code == 'incoming' and r.state == 'done').total_colis_delivered ,
             'commercial': self.user_id.id,
             'vendeur': self.vendeur.id,
             'account_id': self.partner_invoice_id.property_account_receivable_id.id,

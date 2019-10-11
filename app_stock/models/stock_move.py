@@ -45,11 +45,17 @@ class StockMove(models.Model):
     def get_secondary_qty(self):
         for record in self:
             so = self.env['sale.order'].search([('name', '=', record.picking_id.origin)])
+            if record.picking_type_id.code == 'incoming':
+                returns = self.env['stock.picking'].search([('group_id', '=', record.picking_id.group_id.id),('state','=','done'),('picking_type_id.code','=','outgoing')])
+                if returns and record.picking_type_id.code == 'incoming':
+                    for lines in returns.move_lines.filtered(lambda s: s.product_id.id == record.product_id.id):
+                        record.secondary_uom_qty = lines.secondary_uom_qty
             for line in so.order_line:
                 picking = record.picking_id
                 if picking.picking_type_id.code == 'outgoing':
                     if record.product_id.name == line.product_id.name:
                         record.secondary_uom_qty = int(line.secondary_uom_qty)
+            
                     #else:
                         #   record.secondary_uom_qty = 0.0
             if record.quantity_done != 0:
@@ -64,6 +70,13 @@ class StockMove(models.Model):
                         record.secondary_uom_qty = record.quantity_done
                     if record.quantity_done != 0 and record.secondary_uom_qty_regul != 0.0:
                         record.secondary_uom_qty = record.secondary_uom_qty_regul
+            if record.quantity_done != 0 and record.picking_code == 'incoming':
+                unite = record.product_id
+                unit = unite.sale_secondary_uom_id
+                if unit.factor != 0 and unite.uom_id.name =='kg' :
+                    record.secondary_uom_qty = int((record.quantity_done)/unit.factor)
+                if unite.uom_id.name !='kg' and abs(record.sale_line_id.secondary_uom_qty-record.quantity_done) >= 0:
+                    record.secondary_uom_qty = record.quantity_done
                         
     def action_modify_colis(self):
        
