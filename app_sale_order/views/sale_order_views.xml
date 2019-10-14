@@ -105,8 +105,8 @@
 				<xpath expr="//field[@name='payment_term_id']" position="after">
 			
                    <!-- <field name="total_qty_ordred1" /> -->
-					 <field name="total_qty_delivred" />
-					<field name="total_qty_invoiced" />
+					 <field name="total_qty_delivred" invisible="1"/>
+					<field name="total_qty_invoiced" invisible="1"/>
 					<!-- <field name="etat_fac1" /> -->
 					<field name="etat_fac1_copy" />
 					
@@ -131,11 +131,16 @@
 			<field name="inherit_id" ref="sale.view_order_form"/>
 			<field name="arch" type="xml">
             	<xpath expr="//field[@name='user_id']" position="replace">
-					 <field name="user_id" string="Commercial"/>
+					 <field name="user_id" string="Commercial" readonly="1"/>
              	</xpath>
              	<xpath expr="//field[@name='user_id']" position="before">     		
-					 <field name="vendeur"/>
+					 <field name="vendeur" readonly="1"/>
              	</xpath> 
+             	<xpath
+				expr="//field[@name='team_id']"
+				position="attributes">
+				<attribute name="readonly">1</attribute>
+			</xpath>
 			</field>
 		 </record>
 		 
