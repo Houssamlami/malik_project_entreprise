@@ -62,3 +62,4 @@ class PickingModifyLoc(models.TransientModel):
                      if picking.picking_type_id.code == 'outgoing'
                      else wiz.location_dest_in_id.id})
         return {'type': 'ir.actions.act_window_close'}
+    

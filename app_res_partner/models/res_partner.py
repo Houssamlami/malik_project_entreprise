@@ -44,15 +44,21 @@ class ResPartner(models.Model):
         result = super(ResPartner,self).create(vals) 
         return result
     
+    
+    def get_manager_canal_arond(self):
+        for res in self:
+            res.user_id = self.env['hr.employee'].search([('user_id', '=', res.team_id.user_id.id)])
+    
       
 
-    user_id = fields.Many2one(comodel_name='hr.employee', track_visibility='onchange', string='Commercial')
-    vendeur = fields.Many2one('hr.employee',related='team_id.vendeur', track_visibility='onchange', string='Vendeur')
-    vendeur_commarcial = fields.Many2one(comodel_name='res.users', string="Commercial", track_visibility='onchange')
+    user_id = fields.Many2one(comodel_name='hr.employee', compute='get_manager_canal_arond', track_visibility='onchange', string='Commercial')
+    vendeur = fields.Many2one(comodel_name='hr.employee',related='team_id.vendeur', track_visibility='onchange', string='Vendeur')
+    vendeur_commarcial = fields.Many2one(comodel_name='res.users', string="", track_visibility='onchange')
     Client_Volaille = fields.Boolean('Client Volailles', track_visibility='onchange')
     Client_Charcuterie =  fields.Boolean('Client Charcuterie', track_visibility='onchange')
     Client_GC = fields.Boolean(string='Client Gros Compte', track_visibility='onchange')
     Client_PC = fields.Boolean(string='Client Petit Compte', track_visibility='onchange')
+    commercial_id = fields.Many2one(comodel_name='hr.employee', string="Commercial", related='user_id', store=True)
     client_gc_pc = fields.Selection([('client_gros_compte', 'Client gros compte'),('client_petit_compte', 'Client petit compte')],string="Type de client")
     vat = fields.Char(string='VAT', track_visibility='onchange')
     pricelist_for_regroupby = fields.Many2one(comodel_name='product.pricelist',related='property_product_pricelist', store=True)
@@ -144,7 +150,16 @@ class ResPartner(models.Model):
                 record.credit_charcuterie = credit_charcuterie
                 record.nbr_fac_ouverte_charcuterie=nbr_fac_ouverte_charcuterie            
                 record.date_facture_charcuterie=date_facture_charcuterie
-                record.nbr_jours_decheance_charcuterie=nbr_jours_decheance_charcuterie            
+                record.nbr_jours_decheance_charcuterie=nbr_jours_decheance_charcuterie         
+                
+                
+    @api.model
+    def fields_get(self, fields=None):
+        fields_to_hide = ['user_id','vendeur_commarcial']
+        res = super(ResPartner, self).fields_get()
+        for field in fields_to_hide:
+            res[field]['selectable'] = False
+        return res   
 
 
     @api.depends('credit','credit_limit','credit_charcuterie','limite_nbr_fac','limite_credit_charcuterie','nbr_fac_ouverte','limite_nbr_fac_charcuterie','nbr_fac_ouverte_charcuterie','nbr_jours_decheance_charcuterie','echeance_charcuterie_par_jour')

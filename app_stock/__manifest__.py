@@ -18,6 +18,7 @@
         'views/stock_picking_views.xml',
         'views/stock_order_preparation_report.xml',
         'views/preparation_type_produit_pour_affichage.xml',
+        'wizard/wizard_colis.xml',
     ],
     
     'application': False,

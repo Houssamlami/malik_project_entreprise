@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+
+
+		<record model="ir.ui.view"
+			id="add_filter_ligistic_purchase_report">
+			<field name="name">add.filter.ligistic.purchase.report</field>
+			<field name="model">purchase.report</field>
+			<field name="inherit_id"
+				ref="purchase.view_purchase_order_search" />
+			<field name="arch" type="xml">
+				<xpath expr="//search" position="inside">
+					<filter string="Logistic" name="logistic"
+						domain="[('logistic','=',True)]" />
+				</xpath>
+			</field>
+		</record>
+	</data>
+</odoo>
