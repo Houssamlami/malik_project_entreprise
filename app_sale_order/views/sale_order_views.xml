@@ -131,16 +131,11 @@
 			<field name="inherit_id" ref="sale.view_order_form"/>
 			<field name="arch" type="xml">
             	<xpath expr="//field[@name='user_id']" position="replace">
-					 <field name="user_id" string="Commercial" readonly="1"/>
+					 <field name="user_id" string="Commercial"/>
              	</xpath>
              	<xpath expr="//field[@name='user_id']" position="before">     		
-					 <field name="vendeur" readonly="1"/>
+					 <field name="vendeur"/>
              	</xpath> 
-             	<xpath
-				expr="//field[@name='team_id']"
-				position="attributes">
-				<attribute name="readonly">1</attribute>
-			</xpath>
 			</field>
 		 </record>
 		 
