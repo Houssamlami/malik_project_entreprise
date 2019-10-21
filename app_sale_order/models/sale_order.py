@@ -201,7 +201,7 @@ class SaleOrder(models.Model):
             'payment_term_id': self.payment_term_id.id,
             'fiscal_position_id': self.fiscal_position_id.id or self.partner_invoice_id.property_account_position_id.id,
             'company_id': self.company_id.id,
-            'user_id': self.user_id and self.user_id.id,
+            'user_id': self.env.user.id,
             'team_id': self.team_id.id,
             
         }
@@ -224,6 +224,13 @@ class SaleOrder(models.Model):
             return {
                     'warning': {'title': _('Error'), 'message': _('Error message'),},
             }
+        
+        if not self.vendeur  or not self.commercial:
+            raise exceptions.ValidationError(_('Merci de remplir vendeur ou commercial !'))
+            return {
+                    'warning': {'title': _('Error'), 'message': _('Error message'),},
+            }
+            
         if self._get_forbidden_state_confirm() & set(self.mapped('state')):
             raise UserError(_(
                 'It is not allowed to confirm an order in the following states: %s'
@@ -288,18 +295,11 @@ class SaleOrder(models.Model):
 
     @api.onchange('partner_id')
     def onchange_get_default_ven(self):
-        for partners in self:
-            team = 0
-            vendeur = 0
-            user_id = 0
-            if partners.partner_id :
-                team=partners.partner_id.id
-                productbl = self.env['res.partner'].search([
-                ('id', '=', team)])
-                vendeur = productbl.vendeur
-                user_id = productbl.user_id
-            partners.vendeur = vendeur
-            partners.user_id = user_id
+        for sale in self:
+            if sale.partner_id :
+                partner_id = sale.partner_id.id
+                sale.vendeur = sale.partner_id.vendeur
+                sale.user_id = sale.partner_id.user_id
             # partners.user_id=vendeur_commarcial
             
     @api.multi    
