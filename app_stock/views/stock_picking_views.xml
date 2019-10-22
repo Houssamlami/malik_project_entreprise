@@ -15,7 +15,10 @@
 			<field name="model">stock.picking</field>
 			<field name="inherit_id" ref="stock.view_picking_form" />
 			<field name="arch" type="xml">
-			
+			<xpath expr="//header/button[@name='action_confirm']"
+					position="after">
+					<button name="change_state_to_ready" attrs="{'invisible': [('state', 'not in', ['confirmed'])]}" string="Mettre prét" type="object" class="oe_highlight" />
+					</xpath>
 			<xpath expr="//field[@name='move_lines']"
 					position="after">
 					<group>
@@ -71,7 +74,24 @@
 			</xpath>
 			</field>
 		</record>
-		<record model="ir.ui.view" id="add_date_refer_stock_production_lot">
+		<record model="ir.ui.view"
+	id="add_dates_stock_production_lot_tree_view">
+	<field name="name">add.dates.stock.production.lot.tree.view</field>
+	<field name="model">stock.production.lot</field>
+	<field name="inherit_id" ref="stock.view_production_lot_tree" />
+	<field name="arch" type="xml">
+
+		<xpath expr="//tree/field[@name='create_date']"
+			position="after">
+			<field name="product_expiry_alert"/> 
+	<field name="use_date"/>
+	<field name="removal_date"/>
+	<field name="life_date"/>
+	<field name="alert_date"/>
+		</xpath>
+	</field>
+</record>
+					<record model="ir.ui.view" id="add_date_refer_stock_production_lot">
 			<field name="name">add.date.refer.stock.production.lot</field>
 			<field name="model">stock.production.lot</field>
 			<field name="inherit_id" ref="stock.view_production_lot_form" />
