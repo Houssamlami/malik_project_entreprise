@@ -4,6 +4,7 @@
 
 from odoo import api, fields, models, _
 from odoo.tools import float_is_zero, float_compare, DEFAULT_SERVER_DATETIME_FORMAT
+from odoo.exceptions import UserError, ValidationError
 
 from odoo.tools.misc import formatLang
 from odoo.tools import DEFAULT_SERVER_DATE_FORMAT as DF
@@ -21,8 +22,8 @@ class StockPicking(models.Model):
     total_weight_stock_frais_auto = fields.Float(string='Total frais)', compute='_compute_weight_total_stock_frais')
     total_weight_stock_surg_auto = fields.Float(string='Total surg)', compute='_compute_weight_total_stock_surg')
     total_weight_stock_volailles_auto = fields.Float(string='Total volailles)', compute='_compute_weight_total_stock_volailles')
-    total_colis_delivered = fields.Float(string='Total Colis', compute='_compute_colis_poids_total_bl')
-    total_weight_delivered = fields.Float(string='Poids Total', compute='_compute_colis_poids_total_bl')
+    total_colis_delivered = fields.Float(string='Total Colis', compute='_compute_colis_poids_total_bl', track_visibility='onchange')
+    total_weight_delivered = fields.Float(string='Poids Total', compute='_compute_colis_poids_total_bl', track_visibility='onchange')
     
     def _compute_colis_poids_total_bl(self):
         for picking in self:
@@ -70,12 +71,36 @@ class StockPicking(models.Model):
                     weight_stock_volailles += line.product_uom_qty  or 0.0
             stock.total_weight_stock_volailles_auto = weight_stock_volailles
             
+    @api.multi
+    def change_state_to_ready(self):
+        for record in self:
+            if record.state == 'confirmed':
+                record.state = 'assigned'
+    
+'''@api.multi
+    def write(self, vals):
+        if self.env.user.has_group('app_sale_order.group_inventaire_commercial_externe'):
+            raise UserError(_('Vous n avez pas le droit de modifier.'))
+        picking = super(StockPicking,self).create(vals)
+        return picking'''
+            
 class StockProductionLot(models.Model):
     _name = 'stock.production.lot'
     _inherit = 'stock.production.lot'
     
         
     date_refer = fields.Datetime(string="Date référence", default=fields.Date.today())
+    char_expiration = fields.Char(default='Expiration Alert', string="Alerte d'expiration de produit")
+    product_removal_alert = fields.Boolean(compute='_compute_product_use_removal_alerts', string="Alerte Retrait")
+    product_use_alert = fields.Boolean(compute='_compute_product_use_removal_alerts', string=u"Alerte Limite d'utilisation")
+
+    @api.depends('removal_date','use_date')
+    def _compute_product_use_removal_alerts(self):
+        current_date = fields.Datetime.now()
+        for lot in self.filtered(lambda l: l.removal_date):
+            lot.product_removal_alert = lot.removal_date <= current_date
+        for lots in self.filtered(lambda l: l.use_date):
+            lots.product_use_alert = lots.use_date <= current_date
     
     
     def _get_dates(self, product_id=None):
