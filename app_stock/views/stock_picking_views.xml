@@ -86,7 +86,8 @@
 
 				<xpath expr="//tree/field[@name='create_date']"
 					position="after">
-					<field name="char_expiration" />
+					<field name="product_expiry_alert" invisible="1"/>
+					<field name="char_expiration" class="label label-danger pull-right" attrs="{'invisible': [('product_expiry_alert', '=', False)]}"/>
 					<field name="use_date" />
 					<field name="removal_date" />
 					<field name="life_date" />
@@ -104,6 +105,7 @@
 				<xpath expr="//group[@name='main_group']/group"
 					position="inside">
 					<field name="date_refer" />
+					<field name="stock_not_empty" invisible="1"/>
 				</xpath>
 			</field>
 		</record>
@@ -117,6 +119,7 @@
 				<xpath expr="//field[@name='product_id']" position="after">
                 <filter string="Alertes de Retrait" domain="[('removal_date', '&lt;=', time.strftime('%Y-%m-%d %H:%M:%S'))]"/>
                 <filter string="Alertes Limite d'utilisation" domain="[('use_date', '&lt;=', time.strftime('%Y-%m-%d %H:%M:%S'))]"/>
+                <filter string="Stock Non Vide" domain="[('stock_not_empty', '=', True)]"/>
             </xpath>
 			</field>
 		</record>

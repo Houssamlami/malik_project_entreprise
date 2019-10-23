@@ -88,11 +88,19 @@ class StockProductionLot(models.Model):
     _name = 'stock.production.lot'
     _inherit = 'stock.production.lot'
     
-        
+    
+    @api.depends('product_qty')
+    def _compute_stock_not_empty(self):
+        for lot in self:
+            lot.stock_not_empty = lot.product_qty > 0.0
+            print(lot.stock_not_empty)
+            
+             
     date_refer = fields.Datetime(string="Date référence", default=fields.Date.today())
     char_expiration = fields.Char(default='Expiration Alert', string="Alerte d'expiration de produit")
     product_removal_alert = fields.Boolean(compute='_compute_product_use_removal_alerts', string="Alerte Retrait")
     product_use_alert = fields.Boolean(compute='_compute_product_use_removal_alerts', string=u"Alerte Limite d'utilisation")
+    stock_not_empty = fields.Boolean(compute='_compute_stock_not_empty', string=u"Stock non vide", store=True)
 
     @api.depends('removal_date','use_date')
     def _compute_product_use_removal_alerts(self):
