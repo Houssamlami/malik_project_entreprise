@@ -53,6 +53,18 @@ class SaleOrder(models.Model):
             res[field]['selectable'] = False
         return res
     
+    @api.onchange('cmd_charcuterie', 'cmd_volaille')
+    def onchange_payment_term_id_so(self):
+        for sale in self:
+            if sale.cmd_charcuterie:
+                payment_term = self.env['account.payment.term'].search([('name', '=', 'CHARCUTERIE ÉCHÉANCE')])
+                sale.payment_term_id = payment_term
+            if sale.cmd_volaille:
+                payment_term = self.env['account.payment.term'].search([('name', '=', 'VOLAILLES ÉCHÉANCE')])
+                sale.payment_term_id = payment_term
+            if (sale.cmd_charcuterie and sale.cmd_volaille) or (not sale.cmd_charcuterie and not sale.cmd_volaille):
+                sale.payment_term_id = False
+    
     @api.onchange('cmd_volaille','cmd_charcuterie')
     def onchange_type_of_commande(self):
         for sale in self:
@@ -225,8 +237,8 @@ class SaleOrder(models.Model):
                     'warning': {'title': _('Error'), 'message': _('Error message'),},
             }
         
-        if not self.vendeur  or not self.commercial:
-            raise exceptions.ValidationError(_('Merci de remplir vendeur ou commercial !'))
+        if not self.vendeur  or not self.user_id:
+            raise exceptions.ValidationError(_('Merci de mentionner vendeur/commercial !'))
             return {
                     'warning': {'title': _('Error'), 'message': _('Error message'),},
             }
