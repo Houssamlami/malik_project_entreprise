@@ -17,6 +17,7 @@
     'data': [
         'views/stock_picking_views.xml',
         'views/stock_order_preparation_report.xml',
+        'views/report_br_stock_empty.xml',
         'views/preparation_type_produit_pour_affichage.xml',
         'wizard/wizard_colis.xml',
     ],

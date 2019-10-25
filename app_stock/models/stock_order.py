@@ -72,10 +72,8 @@ class StockPicking(models.Model):
             stock.total_weight_stock_volailles_auto = weight_stock_volailles
             
     @api.multi
-    def change_state_to_ready(self):
-        for record in self:
-            if record.state == 'confirmed':
-                record.state = 'assigned'
+    def print_br_stock_empty(self):
+        return self.env.ref('app_stock.report_br_stock_empty').report_action(self)
     
 '''@api.multi
     def write(self, vals):
