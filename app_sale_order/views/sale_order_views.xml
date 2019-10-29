@@ -100,6 +100,7 @@
 					<field name="total_weight_stock_srg" invisible="1" />
 					<field name="total_weight_stock_vv" invisible="1" />
 					<field name="produitalivrer" invisible="1" />
+					<field name="refused_command" attrs="{'invisible': [('state','not in',('done','sale'))]}" />
 				</xpath>
 				
 				<xpath expr="//field[@name='payment_term_id']" position="attributes">
