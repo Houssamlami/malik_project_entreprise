@@ -37,12 +37,14 @@ class SaleOrder(models.Model):
     commande_type = fields.Selection([('commande_charc', 'Commande charcuterie'),('commande_volaille', 'Commande Volaille')], string="Type de commande")
     #ecart_qty_kg = fields.Float(string='Ecart qty (KG)', compute='_get_ecart_qty', readonly=True, store=True)
     #ecart_qty_colis = fields.Float('Ecart qty (Colis)', compute=_get_ecart_qty, store=True)
+    refused_command = fields.Boolean(string="CMD Refusée", track_visibility='onchange')
     total_qty_ordred1 = fields.Float(string='Total qtyor', compute='_compute_colis_total_ordred')
     total_qty_delivred = fields.Float(string='Total delievred', compute='_compute_colis_total_delivred')
     total_qty_invoiced = fields.Float(string='Total invoiced', compute='_compute_colis_total_invoiced')
     etat_fac1 = fields.Char(string='Etat facture', compute='_compute_colis_total_etat')
     etat_fac1_copy = fields.Char(string='Etat facture copy', compute='_compute_colis_total_etat_copy',store=True)
     grand_compte = fields.Boolean(string='Commande Grand Compte', default= False)
+    payment_term_id = fields.Many2one('account.payment.term', string='Conditions de règlement', oldname='payment_term', compute='onchange_payment_term_id_so')
     
     
     @api.model
@@ -52,6 +54,7 @@ class SaleOrder(models.Model):
         for field in fields_to_hide:
             res[field]['selectable'] = False
         return res
+    
     
     @api.onchange('cmd_charcuterie', 'cmd_volaille')
     def onchange_payment_term_id_so(self):
@@ -64,7 +67,8 @@ class SaleOrder(models.Model):
                 sale.payment_term_id = payment_term
             if (sale.cmd_charcuterie and sale.cmd_volaille) or (not sale.cmd_charcuterie and not sale.cmd_volaille):
                 sale.payment_term_id = False
-    
+                
+                
     @api.onchange('cmd_volaille','cmd_charcuterie')
     def onchange_type_of_commande(self):
         for sale in self:
@@ -156,7 +160,7 @@ class SaleOrder(models.Model):
             if sale.total_qty_invoiced > 0 :
                 sale.etat_fac1 = "facturé"
                 
-    @api.depends('order_line.qty_invoiced','state')                
+    @api.depends('order_line.qty_invoiced','state','refused_command')                
     def _compute_colis_total_etat_copy(self):
         for sale in self:
             if sale.total_qty_invoiced == 0:
@@ -165,6 +169,8 @@ class SaleOrder(models.Model):
                 sale.etat_fac1_copy = "Facturée"
             if sale.state == "cancel":
                 sale.etat_fac1_copy = "Annulée"
+            if sale.refused_command:
+                sale.etat_fac1_copy = "A ne pas facturer"
 
     @api.onchange('partner_id')
     def on_change_statecr(self):
@@ -407,6 +413,36 @@ class SaleOrder(models.Model):
                 sale.commande_type = 'commande_volaille'
         else:
             sale.commande_type = 'commande_charc'  
+        
+        if ('cmd_charcuterie' in vals and vals['cmd_charcuterie'] and 'cmd_volaille' in vals and vals['cmd_volaille']) or ('cmd_charcuterie' in vals and not vals['cmd_charcuterie'] and 'cmd_volaille' in vals and not vals['cmd_volaille']):
+            raise exceptions.ValidationError(_('Merci de specifier le type de la commande !'))
+            return {
+                    'warning': {'title': _('Error'), 'message': _('Error message'),},
+            }
+            
+        if self.cmd_volaille:
+            categ = self.order_line.mapped('product_id')
+            category = categ.mapped('categ_id')
+            categs = self.env['product.category'].search([('complete_name', 'ilike', 'charcut')])
+            charcut = category.filtered(lambda r: r.display_name in categs)
+            if any(line in categs for line in category) :
+                raise exceptions.ValidationError(_('Commande Volaille !'))
+                return {
+                        'warning': {'title': _('Error'), 'message': _('Error message'),},
+                        } 
+        
+        if self.cmd_charcuterie:
+            categ = self.order_line.mapped('product_id')
+            category = categ.mapped('categ_id')
+            categs = self.env['product.category'].search([('complete_name', 'ilike', 'volaille')])
+            charcut = category.filtered(lambda r: r.display_name in categs)
+            if any(line in categs for line in category) :
+                raise exceptions.ValidationError(_('Commande Charcuterie !'))
+                return {
+                        'warning': {'title': _('Error'), 'message': _('Error message'),},
+                        } 
+            
+        
         return sale
     
     @api.multi
@@ -416,5 +452,21 @@ class SaleOrder(models.Model):
             raise exceptions.ValidationError(_('Remplir les QTY !'))
             return {
                         'warning': {'title': _('Error'), 'message': _('Error message'),},
-                        }    
+                        }  
+        if (self.cmd_charcuterie and self.cmd_volaille) or (not self.cmd_charcuterie and not self.cmd_volaille):
+            raise exceptions.ValidationError(_('Merci de specifier le type de la commande !'))
+            return {
+                    'warning': {'title': _('Error'), 'message': _('Error message'),},
+            }
+            
+        if self.cmd_volaille:
+            categ = self.order_line.mapped('product_id')
+            category = categ.mapped('categ_id')
+            categs = self.env['product.category'].search([('complete_name', 'ilike', 'charcut')])
+            charcut = category.filtered(lambda r: r.display_name in categs)
+            if any(line in categs for line in category) :
+                raise exceptions.ValidationError(_('Commande Volaille !'))
+                return {
+                        'warning': {'title': _('Error'), 'message': _('Error message'),},
+                        }  
         return sale

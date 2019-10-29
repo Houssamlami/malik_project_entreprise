@@ -11,10 +11,12 @@ class SaleReport(models.Model):
 
     ecart_qty = fields.Float('Ecart Qty (kg)', readonly=True)
     ecart_qtys = fields.Float('Ecart Qty (colis)', readonly=True)
+    cmd_colis = fields.Float('Qty commandée (colis)', readonly=True)
+    delivered_colis = fields.Float('Qty delivrée (colis)', readonly=True)
     date_de_livraison = fields.Datetime('Date de livraison', readonly=True)
     type_client = fields.Selection([('client_gros_compte', 'Client gros compte'),('client_petit_compte', 'Client petit compte')],string="Type de client", readonly=True)
     type_of_commande = fields.Selection([('commande_charc', 'Commande charcuterie'),('commande_valaille', 'Commande Volaille')],string="Type de commande", readonly=True)
-    
+    refused_command = fields.Boolean(string="CMD Refusée", readonly=True)
     
     def _select(self):
         select_str = """
@@ -34,11 +36,13 @@ class SaleReport(models.Model):
                     s.name as name,
                     sum(l.product_uom_qty / u.factor * u2.factor)-sum(l.qty_delivered / u.factor * u2.factor) as ecart_qty,
                     sum(l.secondary_uom_qty / u.factor * u2.factor)-sum((l.qty_delivered / u.factor * u2.factor)/ u3.factor) as ecart_qtys,
+                    l.secondary_uom_qty as cmd_colis,
                     s.date_order as date,
                     s.confirmation_date as confirmation_date,
                     s.requested_date as date_de_livraison,
                     s.state as state,
                     s.partner_id as partner_id,
+                    s.refused_command as refused_command,
                     s.user_id as user_id,
                     s.company_id as company_id,
                     s.commande_type as type_of_commande,
@@ -91,10 +95,12 @@ class SaleReport(models.Model):
                     s.pricelist_id,
                     s.analytic_account_id,
                     s.team_id,
+                    s.refused_command,
                     p.product_tmpl_id,
                     partner.country_id,
                     partner.client_gc_pc,
                     s.commande_type,
+                    l.secondary_uom_qty,
                     partner.commercial_partner_id
         """
         return group_by_str
