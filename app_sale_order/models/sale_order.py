@@ -172,15 +172,69 @@ class SaleOrder(models.Model):
             if sale.refused_command:
                 sale.etat_fac1_copy = "A ne pas facturer"
 
-    @api.onchange('partner_id')
+#@api.onchange('partner_id')
+# def on_change_statecr(self):
+#    for record in self:
+#     if record.partner_id.bloque:
+#        record.test_bloque="bloquer"
+#        raise exceptions.ValidationError(_('Votre Client est bloqué , merci de  procéder au réglement !'))
+#        return {'warning': {'title': _('Error'), 'message': _('Error message'),},}
+
+                
+
+    @api.onchange('partner_id','cmd_charcuterie','cmd_volaille')
     def on_change_statecr(self):
         for record in self:
-            if record.partner_id.bloque:
-                record.test_bloque="bloquer"
-                raise exceptions.ValidationError(_('Votre Client est bloqué , merci de  procéder au réglement !'))
-                return {
-                    'warning': {'title': _('Error'), 'message': _('Error message'),},
-                }
+            if record.cmd_charcuterie==True:
+                if record.partner_id.Client_Charcuterie==False:
+                    raise exceptions.ValidationError(_('Votre Client ne peux pas passer une commande charcuterie veuillez modifier le type de votre client sur sa fiche ! ')) 
+                    return {
+                        'warning': {'title': _('Error'), 'message': _('Error message'),},
+                        }
+            if record.cmd_volaille==True:
+                if record.partner_id.Client_Volaille==False:
+                    raise exceptions.ValidationError(_('Votre Client ne peux pas passer une commande volaille veuillez modifier le type de votre client sur sa fiche ! ')) 
+                    return {
+                        'warning': {'title': _('Error'), 'message': _('Error message'),},
+                        }
+            if record.cmd_charcuterie==True and record.cmd_volaille==False:
+                if record.partner_id.Client_Charcuterie: 
+                    if record.partner_id.credit_charcuterie > record.partner_id.limite_credit_charcuterie: 
+                        if record.partner_id.bloque:
+                            record.test_bloque="bloquer"
+                            raise exceptions.ValidationError(_('Votre Client est bloqué , merci de  procéder au réglement de vos factures charcuteries!'))
+                            return {
+                                'warning': {'title': _('Error'), 'message': _('Error message'),},
+                            }
+
+            if record.cmd_charcuterie==True and record.cmd_volaille==False:
+                if record.partner_id.Client_Charcuterie: 
+                    if record.partner_id.nbr_jours_decheance_charcuterie > record.partner_id.echeance_charcuterie_par_jour: 
+                        if record.partner_id.bloque:
+                            record.test_bloque="bloquer"
+                            raise exceptions.ValidationError(_('Votre Client est bloqué , merci de  procéder au réglement de vos factures charcuteries!'))
+                            return {
+                                'warning': {'title': _('Error'), 'message': _('Error message'),},
+                            }
+            if record.cmd_charcuterie==False and record.cmd_volaille==True: 
+                if record.partner_id.Client_Volaille: 
+                    if record.partner_id.credit_volaille > record.partner_id.credit_limit: 
+                        if record.partner_id.bloque:
+                            record.test_bloque="bloquer"
+                            raise exceptions.ValidationError(_('Votre Client est bloqué , merci de  procéder au réglement de vos factures volailles!'))
+                            return {
+                                'warning': {'title': _('Error'), 'message': _('Error message'),},
+                            }
+            if record.cmd_charcuterie==False and record.cmd_volaille==True:
+                if record.partner_id.Client_Volaille: 
+                    if record.partner_id.nbr_fac_ouverte >= record.partner_id.limite_nbr_fac: 
+                        if record.partner_id.bloque:
+                            record.test_bloque="bloquer"
+                            raise exceptions.ValidationError(_('Votre Client est bloqué , merci de  procéder au réglement de vos factures volailles!'))
+                            return {
+                                'warning': {'title': _('Error'), 'message': _('Error message'),},
+                            } 
+    
 
     @api.onchange('product_id')
     def on_change_stateproduct(self):

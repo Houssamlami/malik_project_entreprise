@@ -32,33 +32,5 @@
             target="new"
             key2="client_action_multi"
             id="action_picking_modify_loc"/>
-            
-            <record id="view_stock_move_colis" model="ir.ui.view">
-            <field name="name">view_stock_move_colis</field>
-            <field name="model">wiz.picking_modify_colis</field>
-            <field name="type">form</field>
-            <field name="arch" type="xml">
-                <form string="Modify Colis">
-                    <group colspan="4" col="2">
-                        <separator string="Modifier colis" colspan="4"/>
-                        
-                        <field name="secondary_uom_qty"/> 
-                    </group>
-                    <footer>
-                        <button string="Valider" name="action_accept" type="object" class="oe_highlight"/>
-                        <button string="Annuler" class="oe_link" special="cancel"/>
-                    </footer>
-                </form>
-            </field>
-        </record>
-        <act_window name="Modifier Colis"
-            res_model="wiz.picking_modify_colis"
-            src_model="stock.move"
-            view_mode="form"
-            view_type="form"
-            view_id="view_stock_move_colis"
-            target="new"
-            key2="client_action_multi"
-            id="action_modify_colis_move_stock"/>
     </data>
 </odoo>
