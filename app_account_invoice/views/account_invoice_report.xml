@@ -13,8 +13,8 @@
                                 <th ><center>Description</center></th>                                                          
                                 <th class="text-right"><center>Quantité</center></th>
                                 <th t-if="o.fac_charcuterie_f and not o.fac_volaille_f" class="text-right"><center>Nombre d'unités</center></th>
-                                <th class="text-right"><center>Prix unitaire</center></th>
                                 <th class="text-right"><center>Taxes</center></th>
+                                <th class="text-right"><center>Prix unitaire</center></th>
                                 <th class="text-right"><center>Montant</center></th>
                             </tr>
                             </thead>
@@ -22,8 +22,12 @@
                             <tr t-foreach="o.invoice_line_ids" t-as="l" >
                                 <td ><div style="margin: auto;"><span t-field="l.name"/></div></td>                             
                                 <td class="text-right">
-                                   <div style="margin: auto;"> <span t-field="l.quantity"/>
-                                    <span t-field="l.uom_id"  groups="product.group_uom"/></div>
+                                   <div style="margin: auto;"> <span t-field="l.colis" t-if="o.fac_volaille_f and l.product_id.uom_id.name == 'kg'"/>
+                                   <span t-if="o.fac_volaille_f and l.product_id.uom_id.name == 'kg'">Colis(</span>
+                                   <span t-field="l.quantity"/>
+                                    <span t-field="l.uom_id"  groups="product.group_uom"/>
+                                     <span t-if="o.fac_volaille_f and l.product_id.uom_id.name == 'kg'">)</span>
+                                    </div>
                                 </td>
                                 <td t-if="o.fac_charcuterie_f and not o.fac_volaille_f" class="text-right">
 					           <span t-field="l.product_id.number_unit" />

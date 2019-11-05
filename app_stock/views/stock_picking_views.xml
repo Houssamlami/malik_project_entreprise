@@ -25,7 +25,12 @@
 							attrs="{'invisible': [('picking_type_code', '=', 'incoming')]}" />
 					</group>
 				</xpath>
-
+					<xpath expr="//h1" position="replace">
+					<h1 class="hidden-xs">
+                        <field name="name" attrs="{'invisible': ['|',('name','=','/'),('name_provisoir','!=',False)]}" readonly="1"/>
+                         <field name="name_provisoir" attrs="{'invisible': [('name_provisoir','=','/')]}" readonly="1"/>
+                    </h1>
+				</xpath>
 				<xpath
 					expr="//field[@name='move_lines']/tree/field[@name='product_uom_qty']"
 					position="after">

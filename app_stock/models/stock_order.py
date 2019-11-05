@@ -15,6 +15,7 @@ from datetime import datetime
 import datetime
 
 
+
 class StockPicking(models.Model):
     _inherit = "stock.picking"
 
@@ -24,7 +25,26 @@ class StockPicking(models.Model):
     total_weight_stock_volailles_auto = fields.Float(string='Total volailles)', compute='_compute_weight_total_stock_volailles')
     total_colis_delivered = fields.Float(string='Total Colis', compute='_compute_colis_poids_total_bl', track_visibility='onchange')
     total_weight_delivered = fields.Float(string='Poids Total', compute='_compute_colis_poids_total_bl', track_visibility='onchange')
+    is_return_picking = fields.Boolean(string="Is Retour", compute='get_is_return_picking')
+    name_provisoir = fields.Char(string="Nom Provisoir", compute='get_is_return_picking')
     
+    
+    def get_is_return_picking(self):
+        for record in self:
+            SO = 'SO'
+            char = ''
+            char = record.group_id.name
+            if char != False:
+                if char.find(SO) != -1 and record.picking_type_id.code == 'incoming':
+                    record.is_return_picking = True
+                    string = ''
+                    string = record.name
+                    print(string)
+                    record.name_provisoir = string.replace('Bon de Réception','Bon de Retour')
+                    print(record.name_provisoir)
+                else:
+                    record.is_return_picking = False
+                
     def _compute_colis_poids_total_bl(self):
         for picking in self:
             total_colis = 0
@@ -38,6 +58,10 @@ class StockPicking(models.Model):
                     total_colis += (line.secondary_uom_qty or 0.0)
             picking.total_weight_delivered = total_poids
             picking.total_colis_delivered = total_colis
+            
+    @api.multi
+    def print_br_stock_empty(self):
+        return self.env.ref('app_stock.report_br_stock_empty').report_action(self)
 
     def _compute_weight_total_stock_sec(self):
         for stock in self:
@@ -70,17 +94,24 @@ class StockPicking(models.Model):
                 if line.product_id.Androit_stockage.name == "Volailles":
                     weight_stock_volailles += line.product_uom_qty  or 0.0
             stock.total_weight_stock_volailles_auto = weight_stock_volailles
-            
-    @api.multi
-    def print_br_stock_empty(self):
-        return self.env.ref('app_stock.report_br_stock_empty').report_action(self)
     
-'''@api.multi
-    def write(self, vals):
-        if self.env.user.has_group('app_sale_order.group_inventaire_commercial_externe'):
-            raise UserError(_('Vous n avez pas le droit de modifier.'))
-        picking = super(StockPicking,self).create(vals)
-        return picking'''
+    '''@api.model
+    def fields_view_get(self, view_id=None, view_type='form', toolbar=False, submenu=False):
+        res = super(StockPicking, self).fields_view_get(
+            view_id=view_id,
+            view_type=view_type,
+            toolbar=toolbar,
+            submenu=submenu)
+        active_model = self.env.context.get('active_model')
+        picking_id = self.env.context.get('active_id')
+        if res.get('fields').get('state')['selection'][0][1] == 'confirmed':
+            if res.get('toolbar', False) and res.get('toolbar').get('print', False):
+                reports = res.get('toolbar').get('print')
+                for report in reports:
+                    if report.get('report_file', False) and report.get('report_file') == 'app_stock.report_br_stock_empty':
+                        res['toolbar']['print'].remove(report)
+        return res'''
+            
             
 class StockProductionLot(models.Model):
     _name = 'stock.production.lot'
@@ -90,7 +121,10 @@ class StockProductionLot(models.Model):
     @api.depends('product_qty')
     def _compute_stock_not_empty(self):
         for lot in self:
-            lot.stock_not_empty = lot.product_qty > 0.0
+            if lot.product_qty > 0:
+                lot.stock_not_empty = True
+            else:
+                lot.stock_not_empty = False
             print(lot.stock_not_empty)
             
              
@@ -100,6 +134,20 @@ class StockProductionLot(models.Model):
     product_use_alert = fields.Boolean(compute='_compute_product_use_removal_alerts', string=u"Alerte Limite d'utilisation")
     stock_not_empty = fields.Boolean(compute='_compute_stock_not_empty', string=u"Stock non vide", store=True)
 
+    @api.one
+    def _product_qty(self):
+        # We only care for the quants in internal or transit locations.
+        quants = self.quant_ids.filtered(lambda q: q.location_id.usage in ['internal', 'transit'])
+        self.product_qty = sum(quants.mapped('quantity'))
+        print('stock egual to ', self.product_qty)
+        if self.product_qty > 0:
+            self.stock_not_empty = True
+            print('stock not null ', self.product_qty)
+        else:
+            self.stock_not_empty = False
+            print('stock null ', self.product_qty)
+        
+        
     @api.depends('removal_date','use_date')
     def _compute_product_use_removal_alerts(self):
         current_date = fields.Datetime.now()
@@ -161,4 +209,18 @@ class StockProductionLot(models.Model):
                         'res_id': record.id,
                         'res_model_id': self.env.ref('stock.model_stock_production_lot').id,
                         })
-                activity._onchange_activity_type_id()'''
+                activity._onchange_activity_type_id()
+            
+
+class ReturnPicking(models.TransientModel):
+    _inherit = 'stock.return.picking'
+    _description = 'Return Picking'
+    
+    @api.multi
+    def _create_returns(self):
+        new_picking, pick_type_id = super(ReturnPicking, self)._create_returns()
+        picking = self.env['stock.picking'].browse(new_picking)
+        picking.update({'is_return_picking': True,
+                       })
+        return new_picking, pick_type_id'''
+    
