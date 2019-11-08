@@ -132,7 +132,7 @@
 			<field name="message_needaction" invisible="1"/>
 		
 			<field name="name"/>
-			<field name="qty_available"/>	  
+			<field name="qty_available_colis_real_stock"/>	  
 			<field name="stock_virtuel_actuel"/>	
 			<field name="nombre_colis_a_livre"/>		  
 					  </tree>	  
@@ -211,7 +211,7 @@
                                     
                                 </strong>
                                 <div>stock vertuel :  <field name="test_on_product_ver" />  <field name="uom_id"/></div>
-                                 <div t-if="record.uom_id.value == 'kg'">stock vertuel :  <field name="test_on_product_ver_colis_for_kg" />  Colis</div>
+                                 <div t-if="record.uom_id.value == 'kg'">stock vertuel ≈ <field name="test_on_product_ver_colis_for_kg" />  Colis</div>
                                 <div t-if="record.product_variant_count.value &gt; 1" groups="product.group_product_variant">
                                     <strong>
                                         <t t-esc="record.product_variant_count.value"/> Variants
@@ -237,7 +237,7 @@
                                     
                                 </strong>
                                 <div>stock vertuel :  <field name="test_on_product_ver" />  <field name="uom_id"/></div>
-                                 <div t-if="record.uom_id.value == 'kg'">stock vertuel :  <field name="test_on_product_ver_colis_for_kg" />  Colis</div>
+                                 <div t-if="record.uom_id.value == 'kg'">stock vertuel ≈  <field name="test_on_product_ver_colis_for_kg" />  Colis</div>
                                 <div t-if="record.product_variant_count.value &gt; 1" groups="product.group_product_variant">
                                     <strong>
                                         <t t-esc="record.product_variant_count.value"/> Variants
