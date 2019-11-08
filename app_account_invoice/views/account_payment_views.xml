@@ -9,12 +9,25 @@
 				ref="account.view_account_payment_form" />
 			<field name="arch" type="xml">
 				<xpath expr="//field[@name='communication']" position="after">
-
 					<field name="charcuterie" />
 					<field name="volaille" />
 				</xpath>
+				<xpath expr="//field[@name='payment_transaction_id']" position="after">
+					<field name="note_payment" />
+				</xpath>
 			</field>
 		</record>
+		
+		<record model="ir.ui.view" id="account_payment_add_fields_tree">
+			<field name="name">account.payment.add.fields.tree</field>
+			<field name="model">account.payment</field>
+			<field name="inherit_id" ref="account.view_account_payment_tree"/>
+			<field name="arch" type="xml">
+			     <xpath expr="//field[@name='state']" position="after">
+                     <field name="note_payment" />	
+                </xpath>
+                </field>
+                </record>
 	</data>
 </odoo>
 				
