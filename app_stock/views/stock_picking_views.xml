@@ -11,12 +11,6 @@
 			<field name="model">stock.picking</field>
 			<field name="inherit_id" ref="stock.view_picking_form" />
 			<field name="arch" type="xml">
-				<xpath expr="//header/button[@name='action_confirm']"
-					position="after">
-					<button name="change_state_to_ready"
-						attrs="{'invisible': [('state', 'not in', ['confirmed'])]}"
-						string="Mettre prét" type="object" class="oe_highlight" />
-				</xpath>
 				<xpath expr="//field[@name='move_lines']" position="after">
 					<group>
 						<field name="total_colis_delivered"
@@ -25,7 +19,7 @@
 							attrs="{'invisible': [('picking_type_code', '=', 'incoming')]}" />
 					</group>
 				</xpath>
-					<xpath expr="//h1" position="replace">
+				<xpath expr="//h1" position="replace">
 					<h1 class="hidden-xs">
                         <field name="name" attrs="{'invisible': ['|',('name','=','/'),('name_provisoir','!=',False)]}" readonly="1"/>
                          <field name="name_provisoir" attrs="{'invisible': [('name_provisoir','=','/')]}" readonly="1"/>
@@ -116,7 +110,20 @@
 				<xpath expr="//group[@name='main_group']/group"
 					position="inside">
 					<field name="date_refer" />
-					<field name="stock_not_empty" invisible="1"/>
+				</xpath>
+			</field>
+		</record>
+		
+		<record model="ir.ui.view"
+			id="add_date_refer_stock_production_lot_simple">
+			<field name="name">add.date.refer.stock.production.lot.simple</field>
+			<field name="model">stock.production.lot</field>
+			<field name="inherit_id" ref="stock.view_production_lot_form_simple" />
+			<field name="arch" type="xml">
+
+				<xpath expr="//group[@name='main_group']"
+					position="inside">
+					<field name="date_refer" />
 				</xpath>
 			</field>
 		</record>
@@ -132,7 +139,7 @@
                 <separator />
                 <filter string="Alertes Limite d'utilisation" domain="[('use_date', '&lt;=', time.strftime('%Y-%m-%d %H:%M:%S'))]"/>
                 <separator />
-                <filter string="Stock Non Vide" domain="[('stock_not_empty', '=', True)]"/>
+                 <filter name="qty" string="Stock non vide" domain="[('stock_qty_lot', '&gt;', 0.0)]"/>
                 <separator />
             </xpath>
 			</field>
@@ -147,6 +154,10 @@
 
 				<xpath expr="//field[@name='lot_name']" position="after">
 					<field name="date_reference" />
+				</xpath>
+				<xpath expr="//tree/field[@name='lot_id']" position="attributes">
+					<attribute name="options">{'no_create_edit': True, 'no_create':True}
+					</attribute>
 				</xpath>
 			</field>
 		</record>
@@ -208,7 +219,5 @@
 			externe</field> <field name="comment">the user will have an access limit 
 			to the sales</field> <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/> 
 			</record> -->
-
-
 	</data>
 </odoo>

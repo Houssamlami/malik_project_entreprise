@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+
+		<record model="ir.ui.view"
+			id="add_date_refer_stock_inventory_line_form">
+			<field name="name">add.date.refer.stock.inventory.line.form</field>
+			<field name="model">stock.inventory</field>
+			<field name="inherit_id" ref="stock.view_inventory_form" />
+			<field name="arch" type="xml">
+				<xpath
+					expr="//field[@name='line_ids']/tree/field[@name='prod_lot_id']"
+					position="before">
+					<field name="date_refer" />
+				</xpath>
+				<xpath
+					expr="//field[@name='line_ids']/kanban/field[@name='prod_lot_id']"
+					position="before">
+					<field name="date_refer" />
+				</xpath>
+			</field>
+		</record>
+	</data>
+</odoo>

@@ -132,20 +132,13 @@ class StockProductionLot(models.Model):
     char_expiration = fields.Char(default='Expiration Alert', string="Alerte d'expiration de produit")
     product_removal_alert = fields.Boolean(compute='_compute_product_use_removal_alerts', string="Alerte Retrait")
     product_use_alert = fields.Boolean(compute='_compute_product_use_removal_alerts', string=u"Alerte Limite d'utilisation")
-    stock_not_empty = fields.Boolean(compute='_compute_stock_not_empty', string=u"Stock non vide", store=True)
-
+    stock_qty_lot = fields.Float(string=u"Qty lot", compute='_product_qty_in_lot', store=True)
+    
     @api.one
-    def _product_qty(self):
-        # We only care for the quants in internal or transit locations.
+    @api.depends('product_qty','quant_ids.quantity')
+    def _product_qty_in_lot(self):
         quants = self.quant_ids.filtered(lambda q: q.location_id.usage in ['internal', 'transit'])
-        self.product_qty = sum(quants.mapped('quantity'))
-        print('stock egual to ', self.product_qty)
-        if self.product_qty > 0:
-            self.stock_not_empty = True
-            print('stock not null ', self.product_qty)
-        else:
-            self.stock_not_empty = False
-            print('stock null ', self.product_qty)
+        self.stock_qty_lot = sum(quants.mapped('quantity'))
         
         
     @api.depends('removal_date','use_date')
