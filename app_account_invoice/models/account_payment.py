@@ -1,6 +1,3 @@
-
-
-
 # -*- coding: utf-8 -*-
 
 from odoo import models, fields, api, _
@@ -16,6 +13,7 @@ class AccountPayment(models.Model):
     
     charcuterie = fields.Boolean(string="Charcuterie", default=False)
     volaille = fields.Boolean(string="Volaille", default=False)
+    note_payment = fields.Text(string="Remarque")
     
     
     @api.one
