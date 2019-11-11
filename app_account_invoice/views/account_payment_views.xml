@@ -9,12 +9,16 @@
 				ref="account.view_account_payment_form" />
 			<field name="arch" type="xml">
 				<xpath expr="//field[@name='communication']" position="after">
+			
 					<field name="charcuterie" />
+					<field name="amount_charcuterie" attrs="{'invisible': [('charcuterie','!=',True)]}" widget="monetary"/>
 					<field name="volaille" />
+					<field name="amount_volaille" attrs="{'invisible': [('volaille','!=',True)]}" widget="monetary"/>
 				</xpath>
 				<xpath expr="//field[@name='payment_transaction_id']" position="after">
 					<field name="note_payment" />
 				</xpath>
+				
 			</field>
 		</record>
 		
