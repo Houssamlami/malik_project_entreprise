@@ -11,9 +11,9 @@
 				<xpath expr="//field[@name='communication']" position="after">
 			
 					<field name="charcuterie" />
-					<field name="amount_charcuterie" attrs="{'invisible': [('charcuterie','!=',True)]}" widget="monetary"/>
+					<field name="amount_charcuterie" attrs="{'invisible': ['|',('charcuterie','!=',True),('volaille','!=',True)]}" widget="monetary"/>
 					<field name="volaille" />
-					<field name="amount_volaille" attrs="{'invisible': [('volaille','!=',True)]}" widget="monetary"/>
+					<field name="amount_volaille" attrs="{'invisible': ['|',('volaille','!=',True),('charcuterie','!=',True)]}" widget="monetary"/>
 				</xpath>
 				<xpath expr="//field[@name='payment_transaction_id']" position="after">
 					<field name="note_payment" />
