@@ -37,12 +37,14 @@ class SaleOrder(models.Model):
     commande_type = fields.Selection([('commande_charc', 'Commande charcuterie'),('commande_volaille', 'Commande Volaille')], string="Type de commande")
     #ecart_qty_kg = fields.Float(string='Ecart qty (KG)', compute='_get_ecart_qty', readonly=True, store=True)
     #ecart_qty_colis = fields.Float('Ecart qty (Colis)', compute=_get_ecart_qty, store=True)
+    refused_command = fields.Boolean(string="CMD Refusée", track_visibility='onchange')
     total_qty_ordred1 = fields.Float(string='Total qtyor', compute='_compute_colis_total_ordred')
     total_qty_delivred = fields.Float(string='Total delievred', compute='_compute_colis_total_delivred')
     total_qty_invoiced = fields.Float(string='Total invoiced', compute='_compute_colis_total_invoiced')
     etat_fac1 = fields.Char(string='Etat facture', compute='_compute_colis_total_etat')
     etat_fac1_copy = fields.Char(string='Etat facture copy', compute='_compute_colis_total_etat_copy',store=True)
     grand_compte = fields.Boolean(string='Commande Grand Compte', default= False)
+    payment_term_id = fields.Many2one('account.payment.term', string='Conditions de règlement', oldname='payment_term', compute='onchange_payment_term_id_so')
     
     
     @api.model
@@ -53,6 +55,20 @@ class SaleOrder(models.Model):
             res[field]['selectable'] = False
         return res
     
+    
+    @api.onchange('cmd_charcuterie', 'cmd_volaille')
+    def onchange_payment_term_id_so(self):
+        for sale in self:
+            if sale.cmd_charcuterie:
+                payment_term = self.env['account.payment.term'].search([('name', '=', 'CHARCUTERIE ÉCHÉANCE')])
+                sale.payment_term_id = payment_term
+            if sale.cmd_volaille:
+                payment_term = self.env['account.payment.term'].search([('name', '=', 'VOLAILLES ÉCHÉANCE')])
+                sale.payment_term_id = payment_term
+            if (sale.cmd_charcuterie and sale.cmd_volaille) or (not sale.cmd_charcuterie and not sale.cmd_volaille):
+                sale.payment_term_id = False
+                
+                
     @api.onchange('cmd_volaille','cmd_charcuterie')
     def onchange_type_of_commande(self):
         for sale in self:
@@ -144,7 +160,7 @@ class SaleOrder(models.Model):
             if sale.total_qty_invoiced > 0 :
                 sale.etat_fac1 = "facturé"
                 
-    @api.depends('order_line.qty_invoiced','state')                
+    @api.depends('order_line.qty_invoiced','state','refused_command')                
     def _compute_colis_total_etat_copy(self):
         for sale in self:
             if sale.total_qty_invoiced == 0:
@@ -153,16 +169,72 @@ class SaleOrder(models.Model):
                 sale.etat_fac1_copy = "Facturée"
             if sale.state == "cancel":
                 sale.etat_fac1_copy = "Annulée"
+            if sale.refused_command:
+                sale.etat_fac1_copy = "A ne pas facturer"
 
-    @api.onchange('partner_id')
+#@api.onchange('partner_id')
+# def on_change_statecr(self):
+#    for record in self:
+#     if record.partner_id.bloque:
+#        record.test_bloque="bloquer"
+#        raise exceptions.ValidationError(_('Votre Client est bloqué , merci de  procéder au réglement !'))
+#        return {'warning': {'title': _('Error'), 'message': _('Error message'),},}
+
+                
+
+    @api.onchange('partner_id','cmd_charcuterie','cmd_volaille')
     def on_change_statecr(self):
         for record in self:
-            if record.partner_id.bloque:
-                record.test_bloque="bloquer"
-                raise exceptions.ValidationError(_('Votre Client est bloqué , merci de  procéder au réglement !'))
-                return {
-                    'warning': {'title': _('Error'), 'message': _('Error message'),},
-                }
+            if record.cmd_charcuterie==True:
+                if record.partner_id.Client_Charcuterie==False:
+                    raise exceptions.ValidationError(_('Votre Client ne peux pas passer une commande charcuterie veuillez modifier le type de votre client sur sa fiche ! ')) 
+                    return {
+                        'warning': {'title': _('Error'), 'message': _('Error message'),},
+                        }
+            if record.cmd_volaille==True:
+                if record.partner_id.Client_Volaille==False:
+                    raise exceptions.ValidationError(_('Votre Client ne peux pas passer une commande volaille veuillez modifier le type de votre client sur sa fiche ! ')) 
+                    return {
+                        'warning': {'title': _('Error'), 'message': _('Error message'),},
+                        }
+            if record.cmd_charcuterie==True and record.cmd_volaille==False:
+                if record.partner_id.Client_Charcuterie: 
+                    if record.partner_id.credit_charcuterie > record.partner_id.limite_credit_charcuterie: 
+                        if record.partner_id.bloque:
+                            record.test_bloque="bloquer"
+                            raise exceptions.ValidationError(_('Votre Client est bloqué , merci de  procéder au réglement de vos factures charcuteries!'))
+                            return {
+                                'warning': {'title': _('Error'), 'message': _('Error message'),},
+                            }
+
+            if record.cmd_charcuterie==True and record.cmd_volaille==False:
+                if record.partner_id.Client_Charcuterie: 
+                    if record.partner_id.nbr_jours_decheance_charcuterie > record.partner_id.echeance_charcuterie_par_jour: 
+                        if record.partner_id.bloque:
+                            record.test_bloque="bloquer"
+                            raise exceptions.ValidationError(_('Votre Client est bloqué , merci de  procéder au réglement de vos factures charcuteries!'))
+                            return {
+                                'warning': {'title': _('Error'), 'message': _('Error message'),},
+                            }
+            if record.cmd_charcuterie==False and record.cmd_volaille==True: 
+                if record.partner_id.Client_Volaille: 
+                    if record.partner_id.credit_volaille > record.partner_id.credit_limit: 
+                        if record.partner_id.bloque:
+                            record.test_bloque="bloquer"
+                            raise exceptions.ValidationError(_('Votre Client est bloqué , merci de  procéder au réglement de vos factures volailles!'))
+                            return {
+                                'warning': {'title': _('Error'), 'message': _('Error message'),},
+                            }
+            if record.cmd_charcuterie==False and record.cmd_volaille==True:
+                if record.partner_id.Client_Volaille: 
+                    if record.partner_id.nbr_fac_ouverte >= record.partner_id.limite_nbr_fac: 
+                        if record.partner_id.bloque:
+                            record.test_bloque="bloquer"
+                            raise exceptions.ValidationError(_('Votre Client est bloqué , merci de  procéder au réglement de vos factures volailles!'))
+                            return {
+                                'warning': {'title': _('Error'), 'message': _('Error message'),},
+                            } 
+    
 
     @api.onchange('product_id')
     def on_change_stateproduct(self):
@@ -201,7 +273,7 @@ class SaleOrder(models.Model):
             'payment_term_id': self.payment_term_id.id,
             'fiscal_position_id': self.fiscal_position_id.id or self.partner_invoice_id.property_account_position_id.id,
             'company_id': self.company_id.id,
-            'user_id': self.user_id and self.user_id.id,
+            'user_id': self.env.user.id,
             'team_id': self.team_id.id,
             
         }
@@ -224,6 +296,13 @@ class SaleOrder(models.Model):
             return {
                     'warning': {'title': _('Error'), 'message': _('Error message'),},
             }
+        
+        if not self.vendeur  or not self.user_id:
+            raise exceptions.ValidationError(_('Merci de mentionner vendeur/commercial !'))
+            return {
+                    'warning': {'title': _('Error'), 'message': _('Error message'),},
+            }
+            
         if self._get_forbidden_state_confirm() & set(self.mapped('state')):
             raise UserError(_(
                 'It is not allowed to confirm an order in the following states: %s'
@@ -288,18 +367,11 @@ class SaleOrder(models.Model):
 
     @api.onchange('partner_id')
     def onchange_get_default_ven(self):
-        for partners in self:
-            team = 0
-            vendeur = 0
-            user_id = 0
-            if partners.partner_id :
-                team=partners.partner_id.id
-                productbl = self.env['res.partner'].search([
-                ('id', '=', team)])
-                vendeur = productbl.vendeur
-                user_id = productbl.user_id
-            partners.vendeur = vendeur
-            partners.user_id = user_id
+        for sale in self:
+            if sale.partner_id :
+                partner_id = sale.partner_id.id
+                sale.vendeur = sale.partner_id.vendeur
+                sale.user_id = sale.partner_id.user_id
             # partners.user_id=vendeur_commarcial
             
     @api.multi    
@@ -395,6 +467,36 @@ class SaleOrder(models.Model):
                 sale.commande_type = 'commande_volaille'
         else:
             sale.commande_type = 'commande_charc'  
+        
+        if ('cmd_charcuterie' in vals and vals['cmd_charcuterie'] and 'cmd_volaille' in vals and vals['cmd_volaille']) or ('cmd_charcuterie' in vals and not vals['cmd_charcuterie'] and 'cmd_volaille' in vals and not vals['cmd_volaille']):
+            raise exceptions.ValidationError(_('Merci de specifier le type de la commande !'))
+            return {
+                    'warning': {'title': _('Error'), 'message': _('Error message'),},
+            }
+            
+        if self.cmd_volaille:
+            categ = self.order_line.mapped('product_id')
+            category = categ.mapped('categ_id')
+            categs = self.env['product.category'].search([('complete_name', 'ilike', 'charcut')])
+            charcut = category.filtered(lambda r: r.display_name in categs)
+            if any(line in categs for line in category) :
+                raise exceptions.ValidationError(_('Commande Volaille !'))
+                return {
+                        'warning': {'title': _('Error'), 'message': _('Error message'),},
+                        } 
+        
+        if self.cmd_charcuterie:
+            categ = self.order_line.mapped('product_id')
+            category = categ.mapped('categ_id')
+            categs = self.env['product.category'].search([('complete_name', 'ilike', 'volaille')])
+            charcut = category.filtered(lambda r: r.display_name in categs)
+            if any(line in categs for line in category) :
+                raise exceptions.ValidationError(_('Commande Charcuterie !'))
+                return {
+                        'warning': {'title': _('Error'), 'message': _('Error message'),},
+                        } 
+            
+        
         return sale
     
     @api.multi
@@ -404,5 +506,21 @@ class SaleOrder(models.Model):
             raise exceptions.ValidationError(_('Remplir les QTY !'))
             return {
                         'warning': {'title': _('Error'), 'message': _('Error message'),},
-                        }    
+                        }  
+        if (self.cmd_charcuterie and self.cmd_volaille) or (not self.cmd_charcuterie and not self.cmd_volaille):
+            raise exceptions.ValidationError(_('Merci de specifier le type de la commande !'))
+            return {
+                    'warning': {'title': _('Error'), 'message': _('Error message'),},
+            }
+            
+        if self.cmd_volaille:
+            categ = self.order_line.mapped('product_id')
+            category = categ.mapped('categ_id')
+            categs = self.env['product.category'].search([('complete_name', 'ilike', 'charcut')])
+            charcut = category.filtered(lambda r: r.display_name in categs)
+            if any(line in categs for line in category) :
+                raise exceptions.ValidationError(_('Commande Volaille !'))
+                return {
+                        'warning': {'title': _('Error'), 'message': _('Error message'),},
+                        }  
         return sale

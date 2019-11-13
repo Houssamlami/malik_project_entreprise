@@ -25,7 +25,7 @@
 
                     <footer class="oe_edit_only">
                         <button string="Valider" name="action_accept_colis"  type="object" class="oe_highlight"/>
-                        <button string="Discard" special="Annuler"/>
+                        <button string="Annuler" special="cancel"/>
                     </footer>
                 </form>
             </field>

@@ -4,6 +4,7 @@
 
 from odoo import api, fields, models, _
 from odoo.tools import float_is_zero, float_compare, DEFAULT_SERVER_DATETIME_FORMAT
+from odoo.exceptions import UserError, ValidationError
 
 from odoo.tools.misc import formatLang
 from odoo.tools import DEFAULT_SERVER_DATE_FORMAT as DF
@@ -14,6 +15,7 @@ from datetime import datetime
 import datetime
 
 
+
 class StockPicking(models.Model):
     _inherit = "stock.picking"
 
@@ -21,9 +23,28 @@ class StockPicking(models.Model):
     total_weight_stock_frais_auto = fields.Float(string='Total frais)', compute='_compute_weight_total_stock_frais')
     total_weight_stock_surg_auto = fields.Float(string='Total surg)', compute='_compute_weight_total_stock_surg')
     total_weight_stock_volailles_auto = fields.Float(string='Total volailles)', compute='_compute_weight_total_stock_volailles')
-    total_colis_delivered = fields.Float(string='Total Colis', compute='_compute_colis_poids_total_bl')
-    total_weight_delivered = fields.Float(string='Poids Total', compute='_compute_colis_poids_total_bl')
+    total_colis_delivered = fields.Float(string='Total Colis', compute='_compute_colis_poids_total_bl', track_visibility='onchange')
+    total_weight_delivered = fields.Float(string='Poids Total', compute='_compute_colis_poids_total_bl', track_visibility='onchange')
+    is_return_picking = fields.Boolean(string="Is Retour", compute='get_is_return_picking')
+    name_provisoir = fields.Char(string="Nom Provisoir", compute='get_is_return_picking')
     
+    
+    def get_is_return_picking(self):
+        for record in self:
+            SO = 'SO'
+            char = ''
+            char = record.group_id.name
+            if char != False:
+                if char.find(SO) != -1 and record.picking_type_id.code == 'incoming':
+                    record.is_return_picking = True
+                    string = ''
+                    string = record.name
+                    print(string)
+                    record.name_provisoir = string.replace('Bon de Réception','Bon de Retour')
+                    print(record.name_provisoir)
+                else:
+                    record.is_return_picking = False
+                
     def _compute_colis_poids_total_bl(self):
         for picking in self:
             total_colis = 0
@@ -37,6 +58,10 @@ class StockPicking(models.Model):
                     total_colis += (line.secondary_uom_qty or 0.0)
             picking.total_weight_delivered = total_poids
             picking.total_colis_delivered = total_colis
+            
+    @api.multi
+    def print_br_stock_empty(self):
+        return self.env.ref('app_stock.report_br_stock_empty').report_action(self)
 
     def _compute_weight_total_stock_sec(self):
         for stock in self:
@@ -69,13 +94,60 @@ class StockPicking(models.Model):
                 if line.product_id.Androit_stockage.name == "Volailles":
                     weight_stock_volailles += line.product_uom_qty  or 0.0
             stock.total_weight_stock_volailles_auto = weight_stock_volailles
+    
+    '''@api.model
+    def fields_view_get(self, view_id=None, view_type='form', toolbar=False, submenu=False):
+        res = super(StockPicking, self).fields_view_get(
+            view_id=view_id,
+            view_type=view_type,
+            toolbar=toolbar,
+            submenu=submenu)
+        active_model = self.env.context.get('active_model')
+        picking_id = self.env.context.get('active_id')
+        if res.get('fields').get('state')['selection'][0][1] == 'confirmed':
+            if res.get('toolbar', False) and res.get('toolbar').get('print', False):
+                reports = res.get('toolbar').get('print')
+                for report in reports:
+                    if report.get('report_file', False) and report.get('report_file') == 'app_stock.report_br_stock_empty':
+                        res['toolbar']['print'].remove(report)
+        return res'''
+            
             
 class StockProductionLot(models.Model):
     _name = 'stock.production.lot'
     _inherit = 'stock.production.lot'
     
-        
+    
+    @api.depends('product_qty')
+    def _compute_stock_not_empty(self):
+        for lot in self:
+            if lot.product_qty > 0:
+                lot.stock_not_empty = True
+            else:
+                lot.stock_not_empty = False
+            print(lot.stock_not_empty)
+            
+             
     date_refer = fields.Datetime(string="Date référence", default=fields.Date.today())
+    char_expiration = fields.Char(default='Expiration Alert', string="Alerte d'expiration de produit")
+    product_removal_alert = fields.Boolean(compute='_compute_product_use_removal_alerts', string="Alerte Retrait")
+    product_use_alert = fields.Boolean(compute='_compute_product_use_removal_alerts', string=u"Alerte Limite d'utilisation")
+    stock_qty_lot = fields.Float(string=u"Qty lot", compute='_product_qty_in_lot', store=True)
+    
+    @api.one
+    @api.depends('product_qty','quant_ids.quantity')
+    def _product_qty_in_lot(self):
+        quants = self.quant_ids.filtered(lambda q: q.location_id.usage in ['internal', 'transit'])
+        self.stock_qty_lot = sum(quants.mapped('quantity'))
+        
+        
+    @api.depends('removal_date','use_date')
+    def _compute_product_use_removal_alerts(self):
+        current_date = fields.Datetime.now()
+        for lot in self.filtered(lambda l: l.removal_date):
+            lot.product_removal_alert = lot.removal_date <= current_date
+        for lots in self.filtered(lambda l: l.use_date):
+            lots.product_use_alert = lots.use_date <= current_date
     
     
     def _get_dates(self, product_id=None):
@@ -130,4 +202,18 @@ class StockProductionLot(models.Model):
                         'res_id': record.id,
                         'res_model_id': self.env.ref('stock.model_stock_production_lot').id,
                         })
-                activity._onchange_activity_type_id()'''
+                activity._onchange_activity_type_id()
+            
+
+class ReturnPicking(models.TransientModel):
+    _inherit = 'stock.return.picking'
+    _description = 'Return Picking'
+    
+    @api.multi
+    def _create_returns(self):
+        new_picking, pick_type_id = super(ReturnPicking, self)._create_returns()
+        picking = self.env['stock.picking'].browse(new_picking)
+        picking.update({'is_return_picking': True,
+                       })
+        return new_picking, pick_type_id'''
+    

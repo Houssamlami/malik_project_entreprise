@@ -2,76 +2,107 @@
 <odoo>
 	<data>
 
-<!-- 
-<record id="sale_order_commrecial_externe" model="ir.rule">
-        <field name="name">BP d'aujourd'hui</field>
-        <field ref="stock.model_stock_picking" name="model_id"/>
-        <field name="domain_force">['|',('user_id','=',user.id),('user_id','=',False)]</field>
-        <field name="groups" eval="[(4, ref('app_stock.group_ttm_externe'))]"/>
-</record>
- -->
+		<!-- <record id="sale_order_commrecial_externe" model="ir.rule"> <field 
+			name="name">BP d'aujourd'hui</field> <field ref="stock.model_stock_picking" 
+			name="model_id"/> <field name="domain_force">['|',('user_id','=',user.id),('user_id','=',False)]</field> 
+			<field name="groups" eval="[(4, ref('app_stock.group_ttm_externe'))]"/> </record> -->
 		<record model="ir.ui.view" id="add_box_stock_picking_form">
 			<field name="name">add.box.stock.picking.form</field>
 			<field name="model">stock.picking</field>
 			<field name="inherit_id" ref="stock.view_picking_form" />
 			<field name="arch" type="xml">
-			
-			<xpath expr="//field[@name='move_lines']"
-					position="after">
+				<xpath expr="//field[@name='move_lines']" position="after">
 					<group>
-					<field name="total_colis_delivered" attrs="{'invisible': [('picking_type_code', '=', 'incoming')]}"/>
-					<field name="total_weight_delivered" attrs="{'invisible': [('picking_type_code', '=', 'incoming')]}" />
+						<field name="total_colis_delivered"
+							attrs="{'invisible': [('picking_type_code', '=', 'incoming')]}" />
+						<field name="total_weight_delivered"
+							attrs="{'invisible': [('picking_type_code', '=', 'incoming')]}" />
 					</group>
-					</xpath>
-
-				<xpath expr="//field[@name='move_lines']/tree/field[@name='product_uom_qty']"
+				</xpath>
+				<xpath expr="//h1" position="replace">
+					<h1 class="hidden-xs">
+                        <field name="name" attrs="{'invisible': ['|',('name','=','/'),('name_provisoir','!=',False)]}" readonly="1"/>
+                         <field name="name_provisoir" attrs="{'invisible': [('name_provisoir','=','/')]}" readonly="1"/>
+                    </h1>
+				</xpath>
+				<xpath
+					expr="//field[@name='move_lines']/tree/field[@name='product_uom_qty']"
 					position="after">
-					<field name="secondary_uom_qty" attrs="{'invisible': [('picking_code','!=','outgoing')]}"/>
-					<field name="unite_is_kg" invisible="1"/>
-					<button name="action_modify_colis" string="colis" type="object" icon="fa-list" attrs="{'invisible': ['|','|',('unite_is_kg','=',False),('state','in',('done','cancel')),('picking_code','=','incoming')]}"/>
-					</xpath>
-					<xpath expr="//field[@name='move_lines']/tree/field[@name='reserved_availability']"
+					<field name="secondary_uom_qty"
+						attrs="{'invisible': [('picking_code','!=','outgoing')]}" />
+					<field name="unite_is_kg" invisible="1" />
+					<button name="action_modify_colis" string="colis"
+						type="object" icon="fa-list"
+						attrs="{'invisible': ['|','|',('unite_is_kg','=',False),('state','in',('done','cancel')),('picking_code','=','incoming')]}" />
+				</xpath>
+				<xpath
+					expr="//field[@name='move_lines']/tree/field[@name='reserved_availability']"
 					position="attributes">
 					<attribute name="invisible">1</attribute>
-					</xpath>
-				<xpath
-				expr="//button[@name='action_confirm']"
-				position="attributes">
-				<attribute name="groups">stock.group_stock_manager,stock.group_stock_user</attribute>
-			</xpath>
-			<xpath
-				expr="//button[@name='button_validate']"
-				position="attributes">
-				<attribute name="groups">stock.group_stock_manager,stock.group_stock_user</attribute>
-			</xpath>
-			<xpath
-				expr="//button[@name='289']"
-				position="attributes">
-				<attribute name="groups">stock.group_stock_manager,stock.group_stock_user</attribute>
-			</xpath>
-			<xpath
-				expr="//button[@name='action_cancel']"
-				position="attributes">
-				<attribute name="groups">stock.group_stock_manager,stock.group_stock_user</attribute>
-			</xpath>
-			<xpath
-				expr="//button[@name='do_unreserve']"
-				position="attributes">
-				<attribute name="groups">stock.group_stock_manager,stock.group_stock_user</attribute>
-			</xpath>
-			<xpath
-				expr="//button[@name='button_scrap']"
-				position="attributes">
-				<attribute name="groups">stock.group_stock_manager,stock.group_stock_user</attribute>
-			</xpath>
-			<xpath
-				expr="//button[@name='action_toggle_is_locked']"
-				position="attributes">
-				<attribute name="groups">stock.group_stock_manager,stock.group_stock_user</attribute>
-			</xpath>
+				</xpath>
+				<xpath expr="//header/button[@name='action_confirm']"
+					position="after">
+					<button name="print_br_stock_empty"
+						attrs="{'invisible': [('state', 'not in', ['confirmed'])]}"
+						string="BP Provisoir" type="object" class="oe_highlight" />
+				</xpath>
+				<xpath expr="//button[@name='action_confirm']"
+					position="attributes">
+					<attribute name="groups">stock.group_stock_manager,stock.group_stock_user
+					</attribute>
+				</xpath>
+				<xpath expr="//button[@name='button_validate']"
+					position="attributes">
+					<attribute name="groups">stock.group_stock_manager,stock.group_stock_user
+					</attribute>
+				</xpath>
+				<xpath expr="//button[@name='289']" position="attributes">
+					<attribute name="groups">stock.group_stock_manager,stock.group_stock_user
+					</attribute>
+				</xpath>
+				<xpath expr="//button[@name='action_cancel']"
+					position="attributes">
+					<attribute name="groups">stock.group_stock_manager,stock.group_stock_user
+					</attribute>
+				</xpath>
+				<xpath expr="//button[@name='do_unreserve']"
+					position="attributes">
+					<attribute name="groups">stock.group_stock_manager,stock.group_stock_user
+					</attribute>
+				</xpath>
+				<xpath expr="//button[@name='button_scrap']"
+					position="attributes">
+					<attribute name="groups">stock.group_stock_manager,stock.group_stock_user
+					</attribute>
+				</xpath>
+				<xpath expr="//button[@name='action_toggle_is_locked']"
+					position="attributes">
+					<attribute name="groups">stock.group_stock_manager,stock.group_stock_user
+					</attribute>
+				</xpath>
+					
 			</field>
 		</record>
-		<record model="ir.ui.view" id="add_date_refer_stock_production_lot">
+		<record model="ir.ui.view"
+			id="add_dates_stock_production_lot_tree_view">
+			<field name="name">add.dates.stock.production.lot.tree.view</field>
+			<field name="model">stock.production.lot</field>
+			<field name="inherit_id" ref="stock.view_production_lot_tree" />
+			<field name="arch" type="xml">
+
+				<xpath expr="//tree/field[@name='create_date']"
+					position="after">
+					<field name="product_expiry_alert" invisible="1"/>
+					<field name="char_expiration" class="label label-danger pull-right" attrs="{'invisible': [('product_expiry_alert', '=', False)]}"/>
+					<field name="use_date" />
+					<field name="removal_date" />
+					<field name="life_date" />
+					<field name="alert_date" />
+				</xpath>
+			</field>
+		</record>
+		<record model="ir.ui.view"
+			id="add_date_refer_stock_production_lot">
 			<field name="name">add.date.refer.stock.production.lot</field>
 			<field name="model">stock.production.lot</field>
 			<field name="inherit_id" ref="stock.view_production_lot_form" />
@@ -80,84 +111,114 @@
 				<xpath expr="//group[@name='main_group']/group"
 					position="inside">
 					<field name="date_refer" />
-					</xpath>
-					</field>
-					</record>
-					<record model="ir.ui.view" id="add_date_reference_lot_stock_move_line">
-			<field name="name">add_date_reference_lot_stock_move_line</field>
-			<field name="model">stock.move.line</field>
-			<field name="inherit_id" ref="stock.view_stock_move_line_operation_tree" />
+				</xpath>
+			</field>
+		</record>
+		
+		<record model="ir.ui.view"
+			id="add_date_refer_stock_production_lot_simple">
+			<field name="name">add.date.refer.stock.production.lot.simple</field>
+			<field name="model">stock.production.lot</field>
+			<field name="inherit_id" ref="stock.view_production_lot_form_simple" />
 			<field name="arch" type="xml">
 
-				<xpath expr="//field[@name='lot_name']"
-					position="after">
+				<xpath expr="//group[@name='main_group']"
+					position="inside">
+					<field name="date_refer" />
+				</xpath>
+			</field>
+		</record>
+		<record model="ir.ui.view"
+			id="filters_use_removal_lots_dates">
+			<field name="name">filters.use.removal.lots.dates</field>
+			<field name="model">stock.production.lot</field>
+			<field name="inherit_id" ref="product_expiry.search_product_lot_filter_inherit_product_expiry" />
+			<field name="arch" type="xml">
+
+				<xpath expr="//field[@name='product_id']" position="after">
+                <filter string="Alertes de Retrait" domain="[('removal_date', '&lt;=', time.strftime('%Y-%m-%d %H:%M:%S'))]"/>
+                <separator />
+                <filter string="Alertes Limite d'utilisation" domain="[('use_date', '&lt;=', time.strftime('%Y-%m-%d %H:%M:%S'))]"/>
+                <separator />
+                 <filter name="qty" string="Stock non vide" domain="[('stock_qty_lot', '&gt;', 0.0)]"/>
+                <separator />
+            </xpath>
+			</field>
+		</record>
+		<record model="ir.ui.view"
+			id="add_date_reference_lot_stock_move_line">
+			<field name="name">add_date_reference_lot_stock_move_line</field>
+			<field name="model">stock.move.line</field>
+			<field name="inherit_id"
+				ref="stock.view_stock_move_line_operation_tree" />
+			<field name="arch" type="xml">
+
+				<xpath expr="//field[@name='lot_name']" position="after">
 					<field name="date_reference" />
-					</xpath>
-					</field>
-					</record>	
-					<record model="ir.ui.view" id="add_date_liv_rec_stock_move_line">
+				</xpath>
+				<xpath expr="//tree/field[@name='lot_id']" position="attributes">
+					<attribute name="options">{'no_create_edit': True, 'no_create':True}
+					</attribute>
+				</xpath>
+			</field>
+		</record>
+		<record model="ir.ui.view"
+			id="add_date_liv_rec_stock_move_line">
 			<field name="name">add.date.liv.rec.stock.move.line</field>
 			<field name="model">stock.move.line</field>
 			<field name="inherit_id" ref="stock.view_move_line_tree" />
 			<field name="arch" type="xml">
 
-				<xpath expr="//field[@name='date']"
-					position="before">
+				<xpath expr="//field[@name='date']" position="before">
 					<field name="partner_picking_id" />
-					<field name="date_move" string="Date prévue"/>
-					</xpath>
-					</field>
-					</record>
-					
-<!-- ################################Filter by scheduled date######################################## -->
-<record model="ir.ui.view" id="view_picking_internal_search_filter_date">
-			<field name="name">add.filter.stock.scheduled.date.picking.form</field>
-			<field name="model">stock.picking</field>
-			<field name="inherit_id" ref="stock.view_picking_internal_search" />
-			<field name="arch" type="xml">
-			<xpath expr="//search/filter[@name='draft']"
-					position="before">
-					<filter string="Bons de preparation" name="bon_prepara" icon="terp-personal" domain="[('scheduled_date','&gt;=',((context_today()+ relativedelta(days=1)).strftime('%Y-%m-%d 00:00'))),('scheduled_date','&lt;=',((context_today()+ relativedelta(days=1)).strftime('%Y-%m-%d 23:59')))]" />
-					<separator orientation="vertical"/>
-					</xpath>
-					</field>
-					</record>
-		<record id="filter_bon_prepararion_ttm" model="ir.filters">
-        <field name="name">Bon de préparation</field>
-        <field name="model_id">stock.picking</field>
-        <field name="is_default">True</field>
-        <field name="domain">[('scheduled_date','&gt;=',((context_today()+ relativedelta(days=1)).strftime('%Y-%m-%d 00:00'))),('scheduled_date','&lt;=',((context_today()+ relativedelta(days=1)).strftime('%Y-%m-%d 23:59')))]</field>
-        <field name="user_id" eval="False"/>
-        <field name="context">{}</field>
-    </record>
-					<!--  <record id="action_picking_tree_done_J1" model="ir.actions.act_window">
-            <field name="name">J+1 Transfers</field>
-            <field name="res_model">stock.picking</field>
-            <field name="type">ir.actions.act_window</field>
-            <field name="view_type">form</field>
-            <field name="groups_id">app_stock.group_ttm</field>
-            <field name="filter">True</field>
-            <field name="view_mode">tree,kanban,form,calendar</field>
-            <field name="domain">[('scheduled_date','&gt;=',((context_today()+ relativedelta(days=1)).strftime('%Y-%m-%d 00:00'))),('scheduled_date','&lt;=',((context_today()+ relativedelta(days=1)).strftime('%Y-%m-%d 23:59')))]</field>
-            <field name="context">{
-                    'contact_display': 'partner_address',
-            }
-            </field>
-            <field name="search_view_id" ref="stock.view_picking_internal_search"/>
-            <field name="help" type="html">
-              <p class="oe_view_nocontent_create">
-                Click here to create a new transfer.
-              </p><p>
-                You can either do it immediately or mark it as Todo for future processing. Use your scanner to validate the transferred quantity quicker.
-              </p>
-            </field>
-        </record>
-        <record id="group_ttm" model="res.groups">
-            <field name="name">Commercial externe</field>
-            <field name="comment">the user will have an access limit to the sales</field>
-            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
-</record>-->
+					<field name="date_move" string="Date prévue" />
+				</xpath>
+			</field>
+		</record>
 
-					
+		<!-- ################################Filter by scheduled date######################################## -->
+		<record model="ir.ui.view"
+			id="view_picking_internal_search_filter_date">
+			<field name="name">add.filter.stock.scheduled.date.picking.form
+			</field>
+			<field name="model">stock.picking</field>
+			<field name="inherit_id"
+				ref="stock.view_picking_internal_search" />
+			<field name="arch" type="xml">
+				<xpath expr="//search/filter[@name='draft']" position="before">
+					<filter string="Bons de preparation" name="bon_prepara"
+						icon="terp-personal"
+						domain="[('scheduled_date','&gt;=',((context_today()+ relativedelta(days=1)).strftime('%Y-%m-%d 00:00'))),('scheduled_date','&lt;=',((context_today()+ relativedelta(days=1)).strftime('%Y-%m-%d 23:59')))]" />
+					<separator orientation="vertical" />
+				</xpath>
+			</field>
+		</record>
+		<record id="filter_bon_prepararion_ttm" model="ir.filters">
+			<field name="name">Bon de préparation</field>
+			<field name="model_id">stock.picking</field>
+			<field name="is_default">True</field>
+			<field name="domain">[('scheduled_date','&gt;=',((context_today()+
+				relativedelta(days=1)).strftime('%Y-%m-%d
+				00:00'))),('scheduled_date','&lt;=',((context_today()+
+				relativedelta(days=1)).strftime('%Y-%m-%d 23:59')))]</field>
+			<field name="user_id" eval="False" />
+			<field name="context">{}</field>
+		</record>
+		<!-- <record id="action_picking_tree_done_J1" model="ir.actions.act_window"> 
+			<field name="name">J+1 Transfers</field> <field name="res_model">stock.picking</field> 
+			<field name="type">ir.actions.act_window</field> <field name="view_type">form</field> 
+			<field name="groups_id">app_stock.group_ttm</field> <field name="filter">True</field> 
+			<field name="view_mode">tree,kanban,form,calendar</field> <field name="domain">[('scheduled_date','&gt;=',((context_today()+ 
+			relativedelta(days=1)).strftime('%Y-%m-%d 00:00'))),('scheduled_date','&lt;=',((context_today()+ 
+			relativedelta(days=1)).strftime('%Y-%m-%d 23:59')))]</field> <field name="context">{ 
+			'contact_display': 'partner_address', } </field> <field name="search_view_id" 
+			ref="stock.view_picking_internal_search"/> <field name="help" type="html"> 
+			<p class="oe_view_nocontent_create"> Click here to create a new transfer. 
+			</p><p> You can either do it immediately or mark it as Todo for future processing. 
+			Use your scanner to validate the transferred quantity quicker. </p> </field> 
+			</record> <record id="group_ttm" model="res.groups"> <field name="name">Commercial 
+			externe</field> <field name="comment">the user will have an access limit 
+			to the sales</field> <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/> 
+			</record> -->
 	</data>
 </odoo>

@@ -78,9 +78,13 @@ class ProductTemplate(models.Model):
             print(record)
             
             print(record.test_on_product_ver)
-            if record.weight>0 and record.uom_id.id==3:
-                    record.test_on_product_ver_colis_for_kg = round((record.test_on_product_ver/record.weight))
+            if record.weight>0 and record.uom_id.name == 'kg':
+                record.test_on_product_ver_colis_for_kg = round((record.test_on_product_ver/record.weight))
         self.test_on_product_ver = self.test_on_product-self.test_on_product_version2
+        if self.sale_secondary_uom_id and self.uom_id.name == 'kg':
+            factor = self.sale_secondary_uom_id.factor
+            if factor != 0:
+                self.test_on_product_ver_colis_for_kg = round((self.test_on_product_ver/(factor)))
         
 #les deux methodes qui fonctionnent pour catalogur --> le stock virtuel :                       
     def calcule_stock_virtuel_actuel(self):
@@ -95,7 +99,19 @@ class ProductTemplate(models.Model):
                     # if record.qty_available:
                     qty_virtuelle_des_comandes += rec.secondary_uom_qty
                 record.qty_virtuelle_des_comandes = qty_virtuelle_des_comandes
-                record.stock_virtuel_actuel = round((record.qty_available-record.qty_virtuelle_des_comandes)) or 0.00
+                if record.sale_secondary_uom_id and record.uom_id.name == 'kg':
+                    factor = record.sale_secondary_uom_id.factor
+                    if factor != 0:
+                        record.stock_virtuel_actuel = round((record.qty_available-record.qty_virtuelle_des_comandes)/(factor))
+                else:
+                    record.stock_virtuel_actuel = round((record.qty_available-record.qty_virtuelle_des_comandes)) or 0.00
+                    
+                if record.sale_secondary_uom_id and record.uom_id.name == 'kg':
+                    factor = record.sale_secondary_uom_id.factor
+                    if factor != 0:
+                        record.qty_available_colis_real_stock = round(record.qty_available/factor)
+                else:
+                    record.qty_available_colis_real_stock = record.qty_available
                 # record.test_on_change_ver = record.test_on_change-record.test_on_change_version2
                 # if record.uom_id.id==3:
                     # record.stock_virtuel_actuel = round(((record.qty_available-record.qty_virtuelle_des_comandes)/record.weight)) or 0.00
@@ -170,6 +186,7 @@ class ProductTemplate(models.Model):
     total_commande_jour_suivant= fields.Float('Qte a livre le jour j+1',compute='on_product_vertuel_jours_suivant')
     stock_virtuel_jour_suivant= fields.Float('Qte en tock virtuel le jour j+1',compute='on_product_vertuel_jours_suivant')
     stock_virtuel_actuel = fields.Float('qty virtuel actuel' , compute='calcule_stock_virtuel_actuel')
+    qty_available_colis_real_stock = fields.Float(string=u"Quantité en stock" , compute='calcule_stock_virtuel_actuel')
     nombre_colis_a_livre = fields.Float('nobre colis a livrer' , compute='calcule_nombre_colis_a_livre')
     
     

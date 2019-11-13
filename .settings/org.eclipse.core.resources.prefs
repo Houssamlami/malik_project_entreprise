@@ -1,5 +1,8 @@
 eclipse.preferences.version=1
+encoding//app_account_invoice/__manifest__.py=utf-8
 encoding//app_account_invoice/models/account_invoice.py=utf-8
+encoding//app_account_invoice/models/account_invoice_line.py=utf-8
+encoding//app_account_invoice/models/account_payment.py=utf-8
 encoding//app_product/models/product_template.py=utf-8
 encoding//app_purchase_order/models/purchase_order.py=utf-8
 encoding//app_purchase_order/models/purchase_order_line.py=utf-8
@@ -14,3 +17,5 @@ encoding//app_stock/models/__init__.py=utf-8
 encoding//app_stock/models/stock_move.py=utf-8
 encoding//app_stock/models/stock_move_line.py=utf-8
 encoding//app_stock/models/stock_order.py=utf-8
+encoding//app_stock/wizard/stock_picking_modify_loc.py=utf-8
+encoding//sale_report_analys/models/report_sale_analys.py=utf-8
