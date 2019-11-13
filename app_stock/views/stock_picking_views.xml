@@ -56,7 +56,7 @@
 					<attribute name="groups">stock.group_stock_manager,stock.group_stock_user
 					</attribute>
 				</xpath>
-				<xpath expr="//button[@name='241']" position="attributes">
+				<xpath expr="//button[@name='289']" position="attributes">
 					<attribute name="groups">stock.group_stock_manager,stock.group_stock_user
 					</attribute>
 				</xpath>
@@ -80,6 +80,7 @@
 					<attribute name="groups">stock.group_stock_manager,stock.group_stock_user
 					</attribute>
 				</xpath>
+					
 			</field>
 		</record>
 		<record model="ir.ui.view"
