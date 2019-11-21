@@ -15,7 +15,7 @@ class SaleOrder(models.Model):
     total_volume_ht = fields.Float(string='Montant Total TTC', compute='_compute_volumeht_total')
     total_ht = fields.Float(string='Montant Total HT', compute='_compute_ht_total')
     vendeur = fields.Many2one(comodel_name='hr.employee', string="Vendeur")
-    user_id = fields.Many2one(comodel_name='hr.employee', string="Commercial")
+    user_id = fields.Many2one(comodel_name='hr.employee', string="Commercial", default=False)
     
     Bolocagettm = fields.Integer('blo')
     Bolocagettm_id = fields.Many2one(comodel_name='blockage.blockage')
