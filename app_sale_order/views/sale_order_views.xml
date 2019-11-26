@@ -260,9 +260,30 @@
 			<field name="pricelist_id" position="attributes">	
 				<attribute name="readonly">True</attribute>
 			</field>
+			<field name="team_id" position="attributes">	
+				<attribute name="readonly">True</attribute>
+			</field>
 			
 		</field>
 	</record>
+	
+	<record model="ir.ui.view" id="restriction_vend_user_team_commercial_externe_form">
+		<field name="name">restriction.vend.user.team.commercial.form</field>
+		<field name="model">sale.order</field>
+		<field name="inherit_id" ref="client_view__partner_vendeur_sales_form" />
+		<field name="priority">2</field>
+		<field name="groups_id" eval="[(6, 0, [ref('app_sale_order.group_to_write_create_unlink_product')])]" />
+		<field name="arch" type="xml">
+			<field name="user_id" position="attributes">	
+				<attribute name="readonly">1</attribute>
+			</field>
+			
+			<field name="vendeur" position="attributes">	
+				<attribute name="readonly">1</attribute>
+			</field>
+			
+		</field>
+	</record>  
 	
 <!-- #################################### Make requested_date require ################################################ -->	
 
