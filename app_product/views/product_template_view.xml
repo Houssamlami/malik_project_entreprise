@@ -64,7 +64,7 @@
             <div>
            <field name="marge_securite" class="oe_inline"/>%
            </div>
-            <field name="prix_min_vente" string="Provision de commission" class="oe_inline"/>
+            <field name="prix_min_vente" string="Prix de vente Min" class="oe_inline"/>
             <label for="marge" string="Marge Commerciale"/>
             <div>
             <field name="marge" string="Marge Commerciale" class="oe_inline"/>%

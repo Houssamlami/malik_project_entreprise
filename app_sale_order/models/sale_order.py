@@ -14,8 +14,8 @@ class SaleOrder(models.Model):
     total_colis_livrer = fields.Float(string='Total colis livrer', compute='_compute_colis_livrer_total')
     total_volume_ht = fields.Float(string='Montant Total TTC', compute='_compute_volumeht_total')
     total_ht = fields.Float(string='Montant Total HT', compute='_compute_ht_total')
-    vendeur = fields.Many2one(comodel_name='hr.employee', string="Vendeur")
-    user_id = fields.Many2one(comodel_name='hr.employee', string="Commercial")
+    vendeur = fields.Many2one(comodel_name='hr.employee', string="Vendeur", compute='onchange_get_default_ven', store=True)
+    user_id = fields.Many2one(comodel_name='hr.employee', string="Commercial", default=False, compute='onchange_get_default_ven', store=True)
     
     Bolocagettm = fields.Integer('blo')
     Bolocagettm_id = fields.Many2one(comodel_name='blockage.blockage')
@@ -54,7 +54,6 @@ class SaleOrder(models.Model):
         for field in fields_to_hide:
             res[field]['selectable'] = False
         return res
-    
     
     @api.onchange('cmd_charcuterie', 'cmd_volaille')
     def onchange_payment_term_id_so(self):
@@ -365,6 +364,16 @@ class SaleOrder(models.Model):
             sale.total_ht = total_ht
             
 
+    '''@api.onchange('partner_id')
+    def onchange_get_default_ven(self):
+        for sale in self:
+            if sale.partner_id :
+                partner_id = sale.partner_id.id
+                sale.vendeur = sale.partner_id.vendeur
+                sale.user_id = sale.partner_id.user_id
+            # partners.user_id=vendeur_commarcial'''
+            
+    @api.depends('partner_id')
     @api.onchange('partner_id')
     def onchange_get_default_ven(self):
         for sale in self:
@@ -494,8 +503,7 @@ class SaleOrder(models.Model):
                 raise exceptions.ValidationError(_('Commande Charcuterie !'))
                 return {
                         'warning': {'title': _('Error'), 'message': _('Error message'),},
-                        } 
-            
+                        }   
         
         return sale
     
@@ -512,6 +520,7 @@ class SaleOrder(models.Model):
             return {
                     'warning': {'title': _('Error'), 'message': _('Error message'),},
             }
+            
             
         if self.cmd_volaille:
             categ = self.order_line.mapped('product_id')
