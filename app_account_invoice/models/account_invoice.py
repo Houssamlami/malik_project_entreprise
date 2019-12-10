@@ -11,17 +11,17 @@ class AccountInvoice(models.Model):
 
     _inherit = 'account.invoice'
             
-    fac_charcuterie_f = fields.Boolean('Charcuterie')
-    fac_volaille_f = fields.Boolean('Volaille')
-    cli_gc = fields.Boolean('Client Gros compte', related='partner_id.Client_GC')
-    cli_pc = fields.Boolean('Client petit compte', related='partner_id.Client_PC')
+    fac_charcuterie_f = fields.Boolean('Charcuterie', track_visibility='onchange')
+    fac_volaille_f = fields.Boolean('Volaille', track_visibility='onchange')
+    cli_gc = fields.Boolean('Client Gros compte', related='partner_id.Client_GC', track_visibility='onchange', store=True)
+    cli_pc = fields.Boolean('Client petit compte', related='partner_id.Client_PC', track_visibility='onchange', store=True)
     date_commande = fields.Date(string="Date Commande")
     date_livraison = fields.Date(string="Date Livraison")
     qty_livrer_colis = fields.Float(string="Colis", readonly=True)
     commercial = fields.Many2one(comodel_name='hr.employee', string="Commercial")
     vendeur = fields.Many2one(comodel_name='hr.employee', string="Vendeur")
     object = fields.Text(string="Objet")
-    ref_livraison = fields.Many2one(comodel_name='stock.picking', string="Ref livraison")
+    ref_livraison = fields.Many2one(comodel_name='stock.picking', string="Ref livraison", track_visibility='onchange')
     
     
     
@@ -100,12 +100,16 @@ class AccountInvoiceReport(models.Model):
     
     
     date_livraison = fields.Date(string='Date Livraison', readonly=True)
+    fac_charcuterie_f = fields.Boolean('Charcuterie', readonly=True)
+    fac_volaille_f = fields.Boolean('Volaille', readonly=True)
+    cli_gc = fields.Boolean('Client Gros compte', readonly=True)
+    cli_pc = fields.Boolean('Client petit compte', readonly=True)
     
     
     def _select(self):
         select_str = """
-            SELECT sub.id, sub.date,sub.date_livraison, sub.product_id, sub.partner_id, sub.country_id, sub.account_analytic_id,
-                sub.payment_term_id, sub.uom_name, sub.currency_id, sub.journal_id,
+            SELECT sub.id, sub.date,sub.date_livraison, sub.fac_volaille_f, sub.fac_charcuterie_f, sub.cli_gc, sub.cli_pc, sub.product_id, sub.partner_id, 
+                sub.country_id, sub.account_analytic_id, sub.payment_term_id, sub.uom_name, sub.currency_id, sub.journal_id,
                 sub.fiscal_position_id, sub.user_id, sub.company_id, sub.nbr, sub.type, sub.state,
                 sub.categ_id, sub.date_due, sub.account_id, sub.account_line_id, sub.partner_bank_id,
                 sub.product_qty, sub.price_total as price_total, sub.price_average as price_average,
@@ -119,6 +123,10 @@ class AccountInvoiceReport(models.Model):
                 SELECT ail.id AS id,
                     ai.date_invoice AS date,
                     ai.date_livraison AS date_livraison,
+                    ai.fac_charcuterie_f AS fac_charcuterie_f,
+                    ai.fac_volaille_f AS fac_volaille_f,
+                    ai.cli_pc AS cli_pc,
+                    ai.cli_gc AS cli_gc,
                     ail.product_id, ai.partner_id, ai.payment_term_id, ail.account_analytic_id,
                     u2.name AS uom_name,
                     ai.currency_id, ai.journal_id, ai.fiscal_position_id, ai.user_id, ai.company_id,
