@@ -483,27 +483,6 @@ class SaleOrder(models.Model):
                     'warning': {'title': _('Error'), 'message': _('Error message'),},
             }
             
-        if self.cmd_volaille:
-            categ = self.order_line.mapped('product_id')
-            category = categ.mapped('categ_id')
-            categs = self.env['product.category'].search([('complete_name', 'ilike', 'charcut')])
-            charcut = category.filtered(lambda r: r.display_name in categs)
-            if any(line in categs for line in category) :
-                raise exceptions.ValidationError(_('Commande Volaille !'))
-                return {
-                        'warning': {'title': _('Error'), 'message': _('Error message'),},
-                        } 
-        
-        if self.cmd_charcuterie:
-            categ = self.order_line.mapped('product_id')
-            category = categ.mapped('categ_id')
-            categs = self.env['product.category'].search([('complete_name', 'ilike', 'volaille')])
-            charcut = category.filtered(lambda r: r.display_name in categs)
-            if any(line in categs for line in category) :
-                raise exceptions.ValidationError(_('Commande Charcuterie !'))
-                return {
-                        'warning': {'title': _('Error'), 'message': _('Error message'),},
-                        }   
         
         return sale
     
@@ -521,15 +500,4 @@ class SaleOrder(models.Model):
                     'warning': {'title': _('Error'), 'message': _('Error message'),},
             }
             
-            
-        if self.cmd_volaille:
-            categ = self.order_line.mapped('product_id')
-            category = categ.mapped('categ_id')
-            categs = self.env['product.category'].search([('complete_name', 'ilike', 'charcut')])
-            charcut = category.filtered(lambda r: r.display_name in categs)
-            if any(line in categs for line in category) :
-                raise exceptions.ValidationError(_('Commande Volaille !'))
-                return {
-                        'warning': {'title': _('Error'), 'message': _('Error message'),},
-                        }  
         return sale
