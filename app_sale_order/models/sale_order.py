@@ -45,6 +45,7 @@ class SaleOrder(models.Model):
     etat_fac1_copy = fields.Char(string='Etat facture copy', compute='_compute_colis_total_etat_copy',store=True)
     grand_compte = fields.Boolean(string='Commande Grand Compte', default= False)
     payment_term_id = fields.Many2one('account.payment.term', string='Conditions de règlement', oldname='payment_term', compute='onchange_payment_term_id_so')
+    normal_cmd = fields.Boolean(string='Commande Normale', default=True)
     
     
     @api.model
@@ -482,28 +483,6 @@ class SaleOrder(models.Model):
             return {
                     'warning': {'title': _('Error'), 'message': _('Error message'),},
             }
-            
-        if self.cmd_volaille:
-            categ = self.order_line.mapped('product_id')
-            category = categ.mapped('categ_id')
-            categs = self.env['product.category'].search([('complete_name', 'ilike', 'charcut')])
-            charcut = category.filtered(lambda r: r.display_name in categs)
-            if any(line in categs for line in category) :
-                raise exceptions.ValidationError(_('Commande Volaille !'))
-                return {
-                        'warning': {'title': _('Error'), 'message': _('Error message'),},
-                        } 
-        
-        if self.cmd_charcuterie:
-            categ = self.order_line.mapped('product_id')
-            category = categ.mapped('categ_id')
-            categs = self.env['product.category'].search([('complete_name', 'ilike', 'volaille')])
-            charcut = category.filtered(lambda r: r.display_name in categs)
-            if any(line in categs for line in category) :
-                raise exceptions.ValidationError(_('Commande Charcuterie !'))
-                return {
-                        'warning': {'title': _('Error'), 'message': _('Error message'),},
-                        }   
         
         return sale
     
@@ -520,16 +499,5 @@ class SaleOrder(models.Model):
             return {
                     'warning': {'title': _('Error'), 'message': _('Error message'),},
             }
-            
-            
-        if self.cmd_volaille:
-            categ = self.order_line.mapped('product_id')
-            category = categ.mapped('categ_id')
-            categs = self.env['product.category'].search([('complete_name', 'ilike', 'charcut')])
-            charcut = category.filtered(lambda r: r.display_name in categs)
-            if any(line in categs for line in category) :
-                raise exceptions.ValidationError(_('Commande Volaille !'))
-                return {
-                        'warning': {'title': _('Error'), 'message': _('Error message'),},
-                        }  
+             
         return sale
