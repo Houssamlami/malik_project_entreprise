@@ -25,7 +25,7 @@ class AccountInvoice(models.Model):
     
     
     
-    @api.onchange('fac_charcuterie_f','fac_volaille_f')
+    '''@api.onchange('fac_charcuterie_f','fac_volaille_f')
     def onchange_fac_volaille_volaille(self):
         for record in self:
             if record.fac_charcuterie_f == True:
@@ -34,7 +34,7 @@ class AccountInvoice(models.Model):
                 
             if record.fac_volaille_f == True:
                 account = self.env['account.account'].search([('code','=','411101')])
-                record.account_id = account.id
+                record.account_id = account.id'''
                 
     @api.multi
     def recompute_qty_transport(self):
