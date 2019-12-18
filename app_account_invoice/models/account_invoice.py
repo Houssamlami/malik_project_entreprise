@@ -52,7 +52,7 @@ class AccountInvoice(models.Model):
                 'product_id': productorigine.id,
                 'quantity': dict,
                 'product_uom': product.uom_id.id,
-                'account_id': self.env['account.account'].search([('code', '=', '707100')]).id,
+                'account_id': self.env['account.account'].search([('code', '=', '706003')]).id,
                 'invoice_id':line.id,
                 'name':product.name,
                 'price_unit':product.list_price,
@@ -68,7 +68,7 @@ class AccountInvoice(models.Model):
                 'quantity': dict,
                 'product_uom': product.uom_id.id,
                 'invoice_id':line.id,
-                'account_id': self.env['account.account'].search([('code', '=', '707100')]).id,
+                'account_id': self.env['account.account'].search([('code', '=', '706003')]).id,
                 'name':product.name,
                 'price_unit':product.list_price,
                 })
