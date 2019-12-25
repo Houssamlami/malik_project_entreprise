@@ -81,7 +81,7 @@ class StockMove(models.Model):
     def action_modify_colis(self):
        
         self.ensure_one()
-        if self.picking_id.picking_type_id.code == 'outgoing':
+        if self.picking_id.picking_type_id.code == 'outgoing' or self.picking_id.picking_type_id.code == 'incoming':
             view = self.env.ref('app_stock.view_stock_move_change_colis')
         return {
             'name': _('Change colis'),
@@ -117,10 +117,12 @@ class StockMove(models.Model):
             wiz.get_secondary_qty()
             
   
-              
+             
 class StockQuant(models.Model):
     _inherit = 'stock.quant'
     
     date_dlc = fields.Datetime(related='lot_id.date_refer',
         string='DLC', store=True, readonly=True)
+    
+
             

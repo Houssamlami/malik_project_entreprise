@@ -162,6 +162,7 @@ class ProductTemplate(models.Model):
     Androit_stockage = fields.Many2one(comodel_name='androit.stockage', string="Endroit de stockage", required=True, track_visibility='onchange')
     Androit_preparation = fields.Many2one(comodel_name='androit.preparation', string=u"Endroit de Préparation", required=True, track_visibility='onchange')               
     number_unit = fields.Float(string="Nombre d'unité", track_visibility='onchange')
+    name_uom_product = fields.Char(related='uom_id.name', string="Nom Unité de mesure")
     price_cart = fields.Float(string="Prix de vente sur la carte", track_visibility='onchange') 
     prix_achat = fields.Float(string=u"Prix d\'Achat", track_visibility='onchange')
     prix_transport = fields.Float(string=u"Transport Achat", track_visibility='onchange')
@@ -185,9 +186,27 @@ class ProductTemplate(models.Model):
     test_on_product_vertuel_jours_suivant2= fields.Float('max qty disponible en stock le jour j',compute='on_product_vertuel_jours_suivant')
     total_commande_jour_suivant= fields.Float('Qte a livre le jour j+1',compute='on_product_vertuel_jours_suivant')
     stock_virtuel_jour_suivant= fields.Float('Qte en tock virtuel le jour j+1',compute='on_product_vertuel_jours_suivant')
-    stock_virtuel_actuel = fields.Float('qty virtuel actuel' , compute='calcule_stock_virtuel_actuel')
+    stock_virtuel_actuel = fields.Float('Qty virtuel actuel' , compute='calcule_stock_virtuel_actuel')
     qty_available_colis_real_stock = fields.Float(string=u"Quantité en stock" , compute='calcule_stock_virtuel_actuel')
     nombre_colis_a_livre = fields.Float('nobre colis a livrer' , compute='calcule_nombre_colis_a_livre')
+    qty_vertuel_second_unit = fields.Float(string="Qty in second unit", compute='get_qty_vertuel_second_unit')
+    secondary_unit_qty_available = fields.Float(string='Second', readonly=True)
+    product_service_commercial = fields.Boolean(string='Disponibilté Service Commercial')
+    
+
+    def get_qty_vertuel_second_unit(self):
+        date_today = datetime.today()
+        colis = 0
+        product = 0
+        for record in self:
+            if record.id:
+                product = self.env['product.product'].search([('product_tmpl_id', '=', record.id)])
+                sales = self.env['sale.order'].search([('state','in',['sale']),('requested_date', '>', fields.Date.to_string(date_today))])
+                sale_lines = self.env['sale.order.line'].search([('product_id', '=', product.id),('order_id', 'in', sales.ids),('qty_delivered','=',0)])
+                if len(sale_lines) > 0:
+                    for line in sale_lines:
+                        colis += line.secondary_uom_qty
+                record.qty_vertuel_second_unit = record.secondary_unit_qty_available - colis 
     
     
     #''''''''''''''''''''''''Smart button sales by day for product for helpser''''''''''''''''''''''''''''''''''''''''

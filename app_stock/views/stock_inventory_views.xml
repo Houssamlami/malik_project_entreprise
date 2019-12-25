@@ -14,9 +14,21 @@
 					<field name="date_refer" />
 				</xpath>
 				<xpath
+					expr="//field[@name='line_ids']/tree/field[@name='prod_lot_id']"
+					position="after">
+					<field name="qty_colis_stock" />
+					<field name="qty_colis_stock_real" />
+				</xpath>
+				<xpath
 					expr="//field[@name='line_ids']/kanban/field[@name='prod_lot_id']"
 					position="before">
 					<field name="date_refer" />
+				</xpath>
+				<xpath
+					expr="//field[@name='line_ids']/kanban/field[@name='prod_lot_id']"
+					position="after">
+					<field name="qty_colis_stock" />
+					<field name="qty_colis_stock_real" />
 				</xpath>
 			</field>
 		</record>
