@@ -77,5 +77,21 @@
 				</xpath>
 			</field>
 		</record>
+	<!-- ##############################################################Show account invoice line#################################################### -->
+	 <record id="action_show_invoice_line_fhs" model="ir.actions.act_window">
+            <field name="name">lignes de Factures</field>
+            <field name="res_model">account.invoice.line</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        
+	<menuitem
+            id="account_line_show_fhs_menu"
+            name="Lignes de Factures"
+            parent="account.menu_finance_entries"
+            action="action_show_invoice_line_fhs"
+            />
+            
+           
 	</data>
 </odoo>

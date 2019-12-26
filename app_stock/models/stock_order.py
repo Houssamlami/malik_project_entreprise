@@ -52,10 +52,12 @@ class StockPicking(models.Model):
             for line in picking.move_lines:
                 if line.product_id and line.product_id.uom_id.name != 'kg':
                     total_poids += (line.quantity_done or 0.0)*line.product_id.weight
-                    total_colis += (line.secondary_uom_qty or 0.0)
+                    if line.quantity_done != 0.0:
+                        total_colis += (line.secondary_uom_qty or 0.0)
                 if line.product_id and line.product_id.uom_id.name == 'kg':
                     total_poids += (line.quantity_done or 0.0)
-                    total_colis += (line.secondary_uom_qty or 0.0)
+                    if line.quantity_done != 0.0:
+                        total_colis += (line.secondary_uom_qty or 0.0)
             picking.total_weight_delivered = total_poids
             picking.total_colis_delivered = total_colis
             
@@ -111,6 +113,92 @@ class StockPicking(models.Model):
                     if report.get('report_file', False) and report.get('report_file') == 'app_stock.report_br_stock_empty':
                         res['toolbar']['print'].remove(report)
         return res'''
+            
+    @api.multi
+    def button_validate(self):
+        self.ensure_one()
+        if not self.move_lines and not self.move_line_ids:
+            raise UserError(_('Please add some lines to move'))
+
+        # If no lots when needed, raise error
+        picking_type = self.picking_type_id
+        precision_digits = self.env['decimal.precision'].precision_get('Product Unit of Measure')
+        no_quantities_done = all(float_is_zero(move_line.qty_done, precision_digits=precision_digits) for move_line in self.move_line_ids.filtered(lambda m: m.state not in ('done', 'cancel')))
+        no_reserved_quantities = all(float_is_zero(move_line.product_qty, precision_rounding=move_line.product_uom_id.rounding) for move_line in self.move_line_ids)
+        if no_reserved_quantities and no_quantities_done:
+            raise UserError(_('You cannot validate a transfer if you have not processed any quantity. You should rather cancel the transfer.'))
+
+        if picking_type.use_create_lots or picking_type.use_existing_lots:
+            lines_to_check = self.move_line_ids
+            if not no_quantities_done:
+                lines_to_check = lines_to_check.filtered(
+                    lambda line: float_compare(line.qty_done, 0,
+                                               precision_rounding=line.product_uom_id.rounding)
+                )
+
+            for line in lines_to_check:
+                product = line.product_id
+                if product and product.tracking != 'none':
+                    if not line.lot_name and not line.lot_id:
+                        raise UserError(_('You need to supply a lot/serial number for %s.') % product.display_name)
+
+        if no_quantities_done:
+            view = self.env.ref('stock.view_immediate_transfer')
+            wiz = self.env['stock.immediate.transfer'].create({'pick_ids': [(4, self.id)]})
+            return {
+                'name': _('Immediate Transfer?'),
+                'type': 'ir.actions.act_window',
+                'view_type': 'form',
+                'view_mode': 'form',
+                'res_model': 'stock.immediate.transfer',
+                'views': [(view.id, 'form')],
+                'view_id': view.id,
+                'target': 'new',
+                'res_id': wiz.id,
+                'context': self.env.context,
+            }
+
+        if self._get_overprocessed_stock_moves() and not self._context.get('skip_overprocessed_check'):
+            view = self.env.ref('stock.view_overprocessed_transfer')
+            wiz = self.env['stock.overprocessed.transfer'].create({'picking_id': self.id})
+            return {
+                'type': 'ir.actions.act_window',
+                'view_type': 'form',
+                'view_mode': 'form',
+                'res_model': 'stock.overprocessed.transfer',
+                'views': [(view.id, 'form')],
+                'view_id': view.id,
+                'target': 'new',
+                'res_id': wiz.id,
+                'context': self.env.context,
+            }
+
+        # Check backorder should check for other barcodes
+        if self._check_backorder():
+            return self.action_generate_backorder_wizard()
+        self.action_done()
+        #//////////////////////////////////////////////////////////////
+        for mov_lines in self.move_lines:
+            if self.location_dest_id.usage == 'internal':
+                print('stock move internal')
+                qty = mov_lines.product_id.with_context({'location' : self.location_dest_id.id}).secondary_unit_qty_available
+            #res.qty_available = qty
+                mov_lines.product_id.with_context({'location' : self.location_dest_id.id}).secondary_unit_qty_available += mov_lines.secondary_uom_qty
+            
+            elif self.location_dest_id.usage == 'customer' or self.location_dest_id.scrap_location:
+                print('stock move customer')
+                qty = mov_lines.product_id.with_context({'location' : self.location_id.id}).secondary_unit_qty_available
+                print(qty)
+                #res.qty_available = qty
+                mov_lines.product_id.with_context({'location' : self.location_id.id}).secondary_unit_qty_available -= mov_lines.secondary_uom_qty
+                print(mov_lines.product_id.with_context({'location' : self.location_id.id}).secondary_unit_qty_available)
+                print(mov_lines.secondary_uom_qty)
+            
+            else:
+                print('stock move any')
+                return True
+        #//////////////////////////////////////////////////////////////
+        return
             
             
 class StockProductionLot(models.Model):

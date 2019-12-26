@@ -45,6 +45,7 @@ class SaleOrder(models.Model):
     etat_fac1_copy = fields.Char(string='Etat facture copy', compute='_compute_colis_total_etat_copy',store=True)
     grand_compte = fields.Boolean(string='Commande Grand Compte', default= False)
     payment_term_id = fields.Many2one('account.payment.term', string='Conditions de règlement', oldname='payment_term', compute='onchange_payment_term_id_so')
+    normal_cmd = fields.Boolean(string='Commande Normale', default=True)
     
     
     @api.model

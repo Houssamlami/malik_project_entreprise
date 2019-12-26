@@ -17,6 +17,7 @@ class SaleReport(models.Model):
     type_client = fields.Selection([('client_gros_compte', 'Client gros compte'),('client_petit_compte', 'Client petit compte')],string="Type de client", readonly=True)
     type_of_commande = fields.Selection([('commande_charc', 'Commande charcuterie'),('commande_valaille', 'Commande Volaille')],string="Type de commande", readonly=True)
     refused_command = fields.Boolean(string="CMD Refusée", readonly=True)
+    user_id = fields.Many2one('hr.employee', 'Commercial', readonly=True)
     
     def _select(self):
         select_str = """
@@ -43,7 +44,7 @@ class SaleReport(models.Model):
                     s.state as state,
                     s.partner_id as partner_id,
                     s.refused_command as refused_command,
-                    s.user_id as user_id,
+                    s.vendeur as user_id,
                     s.company_id as company_id,
                     s.commande_type as type_of_commande,
                     extract(epoch from avg(date_trunc('day',s.date_order)-date_trunc('day',s.create_date)))/(24*60*60)::decimal(16,2) as delay,
@@ -89,7 +90,7 @@ class SaleReport(models.Model):
                     s.confirmation_date,
                     s.requested_date,
                     s.partner_id,
-                    s.user_id,
+                    s.vendeur,
                     s.state,
                     s.company_id,
                     s.pricelist_id,

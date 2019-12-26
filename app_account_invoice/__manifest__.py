@@ -17,6 +17,7 @@ App Malik Account Invoice
           'views/account_invoice_views.xml',
           'views/account_invoice_report.xml',
           'views/account_payment_views.xml',
+          'views/account_invoice_report_gros_compte.xml',
     ],
     'demo': [
     ],
