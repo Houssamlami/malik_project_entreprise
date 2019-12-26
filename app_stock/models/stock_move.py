@@ -16,7 +16,10 @@ import logging
 _logger = logging.getLogger(__name__)
 
 
-
+class ProductTemplate(models.Model):
+    _inherit = 'product.template'
+    
+    #secondary_unit_qty_available = fields.Float(string='Second', readonly=True)
 
 class StockMove(models.Model):
     _inherit = 'stock.move'
@@ -77,6 +80,8 @@ class StockMove(models.Model):
                     record.secondary_uom_qty = int((record.quantity_done)/unit.factor)
                 if unite.uom_id.name !='kg' and abs(record.sale_line_id.secondary_uom_qty-record.quantity_done) >= 0:
                     record.secondary_uom_qty = record.quantity_done
+                if record.quantity_done != 0 and record.secondary_uom_qty_regul != 0.0:
+                        record.secondary_uom_qty = record.secondary_uom_qty_regul
                         
     def action_modify_colis(self):
        
@@ -106,6 +111,7 @@ class StockMove(models.Model):
             self.filtered(
                 lambda r: r.state not in 'cancel' and float_compare(r.secondary_uom_qty_regul, values['secondary_uom_qty_regul'], precision_digits=precision) != 0)._update_secondary_uom_qty_regul(values)
         result = super(StockMove, self).write(values)
+    
         return result
         
     @api.multi
@@ -116,8 +122,30 @@ class StockMove(models.Model):
             wiz.write({'secondary_uom_qty': wiz.secondary_uom_qty_regul})
             wiz.get_secondary_qty()
             
-  
-             
+'''@api.multi
+    def write(self, vals):
+        res = super(StockMove,self).write(vals)
+        if (any(not record.lot_name or not record.date_reference for record in self.move_line_ids) and self.picking_id.picking_type_id.code == 'incoming'):
+            return {'warning': {
+                'title': _('Lot ou DLC!'),
+                'message': _("Merci de mentionner le lot et DLC")
+                }
+            }
+        return res
+'''      
+'''                    
+    @api.multi
+    def fill_lot_name_dlc(self):
+        for move in self:
+            if any(((not line.lot_name or not line.date_reference) and line.picking_id.picking_type_id.code == 'incoming') for line in move.move_line_ids):
+                a = any(((not line.lot_name or not line.date_reference) and line.picking_id.picking_type_id.code == 'incoming') for line in move.move_line_ids)
+                print(a)
+                return {'warning': {
+                'title': _('Lot ou DLC!'),
+                'message': _("Merci de mentioner le lot et DLC")
+                }
+            }
+          '''              
 class StockQuant(models.Model):
     _inherit = 'stock.quant'
     
