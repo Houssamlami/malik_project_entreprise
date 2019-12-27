@@ -24,6 +24,10 @@
         <field name="arch" type="xml">
         <xpath expr="//field[@name='barcode']" position="after">
 				<field name="price_cart" widget='monetary'/>
+				<field name="secondary_unit_qty_available"/>
+				<field name="qty_vertuel_second_unit"/>
+				<field name="product_service_commercial"/>
+				<field name="name_uom_product" invisible="1"/>
             </xpath>
             </field>
             </record>
@@ -255,5 +259,31 @@
             </xpath>
         </field>
     </record>	
+    <!-- ''''''''''''''''''''''''''''''''''''''second qty tracking''''''''''''''''''''''''''''''''''''''''''' -->
+    <record id="product_template_add_second_qty" model="ir.ui.view">
+        <field name="name">product.template.add.second.qty</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_only_form_view"/>
+        <field name="arch" type="xml">
+        <button name="action_view_stock_move_lines" position="before">
+				<button class="oe_stat_button" name="action_open_quants" icon="fa-building-o" type="object" attrs="{'invisible':['|',('type', '!=', 'product'),('name_uom_product', '!=', 'kg')]}">
+                            
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_value"><field name="secondary_unit_qty_available" widget="statinfo" />
+                                </span>
+                                <span class="o_stat_text">Stock Colis</span>
+                            </div>
+                </button>
+                <button class="oe_stat_button" name="action_open_quants" icon="fa-building-o" type="object" attrs="{'invisible':['|',('type', '!=', 'product'),('name_uom_product', '!=', 'kg')]}">
+                            
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_value"><field name="qty_vertuel_second_unit" widget="statinfo" />
+                                </span>
+                                <span class="o_stat_text">Prs Colis</span>
+                            </div>
+                </button>
+           </button>
+            </field>
+         </record>
        </data>
 </odoo>

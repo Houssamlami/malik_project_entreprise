@@ -3,6 +3,7 @@ encoding//app_account_invoice/__manifest__.py=utf-8
 encoding//app_account_invoice/models/account_invoice.py=utf-8
 encoding//app_account_invoice/models/account_invoice_line.py=utf-8
 encoding//app_account_invoice/models/account_payment.py=utf-8
+encoding//app_product/models/product_product.py=utf-8
 encoding//app_product/models/product_template.py=utf-8
 encoding//app_purchase_order/models/purchase_order.py=utf-8
 encoding//app_purchase_order/models/purchase_order_line.py=utf-8
