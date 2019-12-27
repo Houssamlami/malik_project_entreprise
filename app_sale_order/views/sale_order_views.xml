@@ -101,6 +101,7 @@
 					<field name="total_weight_stock_vv" invisible="1" />
 					<field name="produitalivrer" invisible="1" />
 					<field name="refused_command" attrs="{'invisible': [('state','not in',('done','sale'))]}" />
+					<field name="reason_refuse" attrs="{'invisible': [('refused_command','=',False)]}" />
 				</xpath>
 				
 				<xpath expr="//field[@name='payment_term_id']" position="attributes">
@@ -119,7 +120,7 @@
 					<button name="compute_qty_transport"
 						string="Transport Grand Compte" class="btn-primary" type="object"
 						attrs="{'invisible': ['|',('grand_compte', '=', False),('state','not in',('draft','sent'))]}" />
-					
+					<field name="cmd_validated" attrs="{'invisible': ['|',('grand_compte', '=', False),('state','not in',('sale'))]}"/>
 						
 						<field  name="cmd_volaille"/>
 						<field  name="cmd_charcuterie"/>
