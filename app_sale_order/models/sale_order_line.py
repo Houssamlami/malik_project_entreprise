@@ -143,3 +143,15 @@ class SaleOrderLine(models.Model):
     @api.one
     def _set_volume_tot(self):
         pass
+    
+    @api.multi
+    def get_default_fact_qty(self):
+        for line in self:
+            qty_delivered = 0
+            if line.product_id and qty_delivered == 0:
+                picking = self.env['stock.picking'].search([('origin', '=', line.order_id.name),('state','=','done')],limit=1)
+                sml = self.env['stock.move.line'].search([('picking_id', '=', picking.id)])
+                for lines in sml:
+                    if line.product_id == lines.product_id:
+                        qty_delivered = lines.qty_done
+            line.qty_delivered = qty_delivered
