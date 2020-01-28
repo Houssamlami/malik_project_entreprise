@@ -88,7 +88,6 @@
                     <field name="weight" invisible="1"/>
 					<field name="volume" invisible="1"/>
 					<field name="volume_tot" string="Prix Total" invisible="1"/>
-					<field name="second_test" invisible="1"/>
              	</xpath>
              	
              	<xpath expr="//field[@name='partner_shipping_id']"
