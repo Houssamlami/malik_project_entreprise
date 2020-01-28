@@ -285,6 +285,17 @@
 			<field name="pricelist_id" position="attributes">	
 				<attribute name="readonly">True</attribute>
 			</field>
+			
+		</field>
+	</record>
+	
+	<record model="ir.ui.view" id="restriction_team_id_so_form">
+		<field name="name">restriction.team.so.form</field>
+		<field name="model">sale.order</field>
+		<field name="inherit_id" ref="sale.view_order_form" />
+		<field name="priority">2</field>
+		<field name="arch" type="xml">
+			
 			<field name="team_id" position="attributes">	
 				<attribute name="readonly">True</attribute>
 			</field>
@@ -309,6 +320,20 @@
 			
 		</field>
 	</record>  
+	
+	<record model="ir.ui.view" id="restriction_team_id_so_form">
+		<field name="name">restriction.team.so.form</field>
+		<field name="model">sale.order</field>
+		<field name="inherit_id" ref="sale.view_order_form" />
+		<field name="priority">2</field>
+		<field name="arch" type="xml">
+			
+			<field name="team_id" position="attributes">	
+				<attribute name="readonly">True</attribute>
+			</field>
+			
+		</field>
+	</record>
 	
 <!-- #################################### Make requested_date require ################################################ -->	
 
