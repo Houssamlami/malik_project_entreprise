@@ -214,7 +214,6 @@
 				<field name="total_weight_stock_char" invisible="1" />
 				<field name="total_weight_stock_srg" invisible="1" />
 				<field name="total_weight_stock_vv" invisible="1" />
-				<field name="cmd_validated" attrs="{'invisible': [('grand_compte', '=', False)]}"/>
 			</tree>
 			</field>
 		</record>
