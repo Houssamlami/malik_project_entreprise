@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 	<data>
-
+ 	
+ 	
  	<!-- '''''''''''''''''''''Add the total weight to the sale order list'''''''''''''''''''''''''' -->
 	   	
 	   	<record model="ir.ui.view" id="sale_weight_tree">
@@ -79,14 +80,27 @@
 					<field name="volume" invisible="1"/>
 					<field name="volume_tot" string="Prix Total" invisible="1"/>
              	</xpath>
-     
+     <!-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+     <xpath expr="//field[@name='order_line']/tree/field[@name='product_id']" position="attributes">
+                	<attribute name="domain">[('product_service_commercial','=',product_service_commercial)]</attribute>
+					
+      </xpath>
+             	 <xpath expr="//field[@name='order_line']/form/group/group/field[@name='product_id']" position="attributes">
+                	<attribute name="domain">['|',('product_service_commercial','=',product_service_commercial), ('product_service_commercial','=',second_test)]</attribute>
+					
+             	</xpath>
+     <!-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
              	<xpath expr="//field[@name='order_line']/tree/field[@name='name']" position="after">
                 	<field name="qty_initiale" />
+					<field name="product_service_commercial" invisible="1"/>
+					<field name="second_test" invisible="1"/>
              	</xpath>
              	<xpath expr="//field[@name='order_line']/form/group/group/field[@name='price_subtotal']" position="after">
                     <field name="weight" invisible="1"/>
 					<field name="volume" invisible="1"/>
 					<field name="volume_tot" string="Prix Total" invisible="1"/>
+					<field name="product_service_commercial" invisible="1"/>
+					<field name="second_test" invisible="1"/>
              	</xpath>
              	
              	<xpath expr="//field[@name='partner_shipping_id']"
@@ -100,9 +114,29 @@
 					<field name="total_weight_stock_srg" invisible="1" />
 					<field name="total_weight_stock_vv" invisible="1" />
 					<field name="produitalivrer" invisible="1" />
-					<field name="refused_command" attrs="{'invisible': [('state','not in',('done','sale'))]}" />
-					<field name="reason_refuse" attrs="{'invisible': [('refused_command','=',False)]}" />
 				</xpath>
+				<!-- '''''''''''''''''''''Add new page command refused & BL not conform'''''''''''''''''''''''''' -->
+				<xpath expr="//notebook" position="inside">
+				<page string="Commande refusée / BL non conforme">
+				<group>
+				<group string="Commande Refusée">
+				<field name="refused_command" />
+				<field name="reason_refuse" />
+				<field name="cmd_validated"/>
+				</group>
+				<group string="BL non conforme">
+				<field name="bl_not_conform" />
+				<field name="reason_no_conformity" />
+				<field name="precise_no_conformity" />
+				<field name="detail_no_conformity" />
+				<field name="confirm_service_commercial" />
+				<field name="delivery_noconform_treated" />
+				<field name="confirm_accounting" />
+				</group>
+				</group>
+				</page>
+				</xpath>
+				<!-- '''''''''''''''''''''Add new page command refused & BL not conform end'''''''''''''''''''''''''' -->
 				
 				<xpath expr="//field[@name='payment_term_id']" position="attributes">
 				<attribute name="readonly">True</attribute>
@@ -117,7 +151,7 @@
 					<field name="etat_fac1_copy" />
 					
 					<field name="grand_compte" />
-					<field name="cmd_validated" attrs="{'invisible': ['|',('grand_compte', '=', False),('state','not in',('sale'))]}"/>
+					
 					<button name="compute_qty_transport"
 						string="Transport Grand Compte" class="btn-primary" type="object"
 						attrs="{'invisible': ['|',('grand_compte', '=', False),('state','not in',('draft','sent'))]}" />
@@ -129,7 +163,7 @@
 						
              	</xpath>
              	<xpath expr="//field[@name='effective_date']" position="after">
-                    <field name="normal_cmd"/>
+                    <field name="normal_cmd" groups="sales_team.group_sale_manager"/>
              	</xpath>
 			</field>
 		 </record>  
