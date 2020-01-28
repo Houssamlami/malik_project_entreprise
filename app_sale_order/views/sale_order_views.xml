@@ -294,11 +294,13 @@
 		<field name="name">restriction.team.so.form</field>
 		<field name="model">sale.order</field>
 		<field name="inherit_id" ref="sale.view_order_form" />
-		<field name="priority">2</field>
 		<field name="arch" type="xml">
 			
 			<field name="team_id" position="attributes">	
-				<attribute name="readonly">True</attribute>
+				<attribute name="attrs">{'readonly': [('state', 'in', ['draft', 'sale','done','sent','cancel'])]}</attribute>
+			</field>
+			<field name="team_id" position="attributes">	
+				<attribute name="force_save">1</attribute>
 			</field>
 			
 		</field>
