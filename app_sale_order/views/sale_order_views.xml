@@ -101,6 +101,7 @@
 					<field name="total_weight_stock_srg" invisible="1" />
 					<field name="total_weight_stock_vv" invisible="1" />
 					<field name="produitalivrer" invisible="1" />
+					<field name="cmd_validated" attrs="{'invisible': [('grand_compte', '=', False)]}"/>
 				</xpath>
 				<!-- '''''''''''''''''''''Add new page command refused & BL not conform'''''''''''''''''''''''''' -->
 				<xpath expr="//notebook" position="inside">
@@ -321,19 +322,7 @@
 		</field>
 	</record>  
 	
-	<record model="ir.ui.view" id="restriction_team_id_so_form">
-		<field name="name">restriction.team.so.form</field>
-		<field name="model">sale.order</field>
-		<field name="inherit_id" ref="sale.view_order_form" />
-		<field name="priority">2</field>
-		<field name="arch" type="xml">
-			
-			<field name="team_id" position="attributes">	
-				<attribute name="readonly">True</attribute>
-			</field>
-			
-		</field>
-	</record>
+	
 	
 <!-- #################################### Make requested_date require ################################################ -->	
 
