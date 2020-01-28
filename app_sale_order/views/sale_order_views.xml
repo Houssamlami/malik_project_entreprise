@@ -108,17 +108,16 @@
 				<group>
 				<group string="Commande Refusée">
 				<field name="refused_command" />
-				<field name="reason_refuse" />
-				<field name="cmd_validated"/>
+				<field name="reason_refuse" attrs="{'invisible': [('refused_command', '=', False)]}"/>
 				</group>
 				<group string="BL non conforme">
 				<field name="bl_not_conform" />
-				<field name="reason_no_conformity" />
-				<field name="precise_no_conformity" />
-				<field name="detail_no_conformity" />
-				<field name="confirm_service_commercial" />
-				<field name="delivery_noconform_treated" />
-				<field name="confirm_accounting" />
+				<field name="reason_no_conformity" attrs="{'invisible': [('bl_not_conform', '=', False)]}"/>
+				<field name="precise_no_conformity" attrs="{'invisible': [('bl_not_conform', '=', False)]}"/>
+				<field name="detail_no_conformity" attrs="{'invisible': [('bl_not_conform', '=', False)]}"/>
+				<field name="confirm_service_commercial" attrs="{'invisible': [('bl_not_conform', '=', False)]}"/>
+				<field name="delivery_noconform_treated" attrs="{'invisible': [('bl_not_conform', '=', False)]}"/>
+				<field name="confirm_accounting" attrs="{'invisible': [('bl_not_conform', '=', False)]}"/>
 				</group>
 				</group>
 				</page>
@@ -143,7 +142,7 @@
 						string="Transport Grand Compte" class="btn-primary" type="object"
 						attrs="{'invisible': ['|',('grand_compte', '=', False),('state','not in',('draft','sent'))]}" />
 					
-						
+					
 						<field  name="cmd_volaille"/>
 						<field  name="cmd_charcuterie"/>
 						<field  name="commande_type" widget="radio" invisible="1"/>
@@ -215,6 +214,7 @@
 				<field name="total_weight_stock_char" invisible="1" />
 				<field name="total_weight_stock_srg" invisible="1" />
 				<field name="total_weight_stock_vv" invisible="1" />
+				<field name="cmd_validated" attrs="{'invisible': [('grand_compte', '=', False)]}"/>
 			</tree>
 			</field>
 		</record>

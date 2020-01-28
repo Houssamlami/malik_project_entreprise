@@ -39,7 +39,7 @@ class SaleOrder(models.Model):
     #ecart_qty_colis = fields.Float('Ecart qty (Colis)', compute=_get_ecart_qty, store=True)
     refused_command = fields.Boolean(string="CMD Refusée", track_visibility='onchange')
     reason_refuse = fields.Selection([('relivraison', 'Relivraison'),('remet_en_stock', 'Remet en Stock '), ('detruit', 'Detruit')], track_visibility='onchange', string="Raison Refus")
-    cmd_validated = fields.Boolean(string=u"CMD Validée", track_visibility='onchange')
+    cmd_validated = fields.Boolean(string=u"CMD Validée gros compte", track_visibility='onchange')
     total_qty_ordred1 = fields.Float(string='Total qtyor', compute='_compute_colis_total_ordred')
     total_qty_delivred = fields.Float(string='Total delievred', compute='_compute_colis_total_delivred')
     total_qty_invoiced = fields.Float(string='Total invoiced', compute='_compute_colis_total_invoiced')
