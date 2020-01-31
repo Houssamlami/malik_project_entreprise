@@ -104,11 +104,12 @@ class AccountInvoiceReport(models.Model):
     fac_volaille_f = fields.Boolean('Volaille', readonly=True)
     cli_gc = fields.Boolean('Client Gros compte', readonly=True)
     cli_pc = fields.Boolean('Client petit compte', readonly=True)
+    team_id = fields.Many2one('crm.team', string='Sales Channel')
     
     
     def _select(self):
         select_str = """
-            SELECT sub.id, sub.date,sub.date_livraison, sub.fac_volaille_f, sub.fac_charcuterie_f, sub.cli_gc, sub.cli_pc, sub.product_id, sub.partner_id, 
+            SELECT sub.id, sub.date,sub.date_livraison, sub.team_id as team_id, sub.fac_volaille_f, sub.fac_charcuterie_f, sub.cli_gc, sub.cli_pc, sub.product_id, sub.partner_id, 
                 sub.country_id, sub.account_analytic_id, sub.payment_term_id, sub.uom_name, sub.currency_id, sub.journal_id,
                 sub.fiscal_position_id, sub.user_id, sub.company_id, sub.nbr, sub.type, sub.state,
                 sub.categ_id, sub.date_due, sub.account_id, sub.account_line_id, sub.partner_bank_id,
@@ -123,6 +124,7 @@ class AccountInvoiceReport(models.Model):
                 SELECT ail.id AS id,
                     ai.date_invoice AS date,
                     ai.date_livraison AS date_livraison,
+                    ai.team_id as team_id,
                     ai.fac_charcuterie_f AS fac_charcuterie_f,
                     ai.fac_volaille_f AS fac_volaille_f,
                     ai.cli_pc AS cli_pc,
@@ -146,4 +148,7 @@ class AccountInvoiceReport(models.Model):
                     coalesce(partner.country_id, partner_ai.country_id) AS country_id
         """
         return select_str
+    
+    def _group_by(self):
+        return super(AccountInvoiceReport, self)._group_by() + ", ai.team_id"
             

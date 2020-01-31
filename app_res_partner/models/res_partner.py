@@ -89,9 +89,9 @@ class ResPartner(models.Model):
     echeance_charcuterie_par_jour=fields.Integer('Limite echeance charcuterie par jour')
     ref = fields.Char(string='Reference interne', track_visibility='onchange')
     
-    _sql_constraints = [
+    '''_sql_constraints = [
         ('ref_unique_part', 'unique(ref)', 'La reference client doit etre unique!'),
-    ]     
+    ]    ''' 
     
     
     @api.one

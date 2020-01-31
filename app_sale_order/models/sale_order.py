@@ -38,8 +38,8 @@ class SaleOrder(models.Model):
     #ecart_qty_kg = fields.Float(string='Ecart qty (KG)', compute='_get_ecart_qty', readonly=True, store=True)
     #ecart_qty_colis = fields.Float('Ecart qty (Colis)', compute=_get_ecart_qty, store=True)
     refused_command = fields.Boolean(string="CMD Refusée", track_visibility='onchange')
-    reason_refuse = fields.Selection([('relivraison', 'Relivraison'),('remet_en_stock', 'Remet en Stock '), ('detruit', 'Detruit')], string="Raison Refus")
-    cmd_validated = fields.Boolean(string=u"CMD Validée", track_visibility='onchange')
+    reason_refuse = fields.Selection([('relivraison', 'Relivraison'),('remet_en_stock', 'Remet en Stock '), ('detruit', 'Detruit')], track_visibility='onchange', string="Raison Refus")
+    cmd_validated = fields.Boolean(string=u"CMD Validée gros compte", track_visibility='onchange')
     total_qty_ordred1 = fields.Float(string='Total qtyor', compute='_compute_colis_total_ordred')
     total_qty_delivred = fields.Float(string='Total delievred', compute='_compute_colis_total_delivred')
     total_qty_invoiced = fields.Float(string='Total invoiced', compute='_compute_colis_total_invoiced')
@@ -47,8 +47,14 @@ class SaleOrder(models.Model):
     etat_fac1_copy = fields.Char(string='Etat facture copy', compute='_compute_colis_total_etat_copy',store=True)
     grand_compte = fields.Boolean(string='Commande Grand Compte', default= False)
     payment_term_id = fields.Many2one('account.payment.term', string='Conditions de règlement', oldname='payment_term', compute='onchange_payment_term_id_so')
-    normal_cmd = fields.Boolean(string='Commande Normale', default=True)
-    
+    normal_cmd = fields.Boolean(string='Commande Normale', default=True, track_visibility='onchange')
+    bl_not_conform = fields.Boolean(string='BL Non Conforme', default=False, track_visibility='onchange')
+    reason_no_conformity = fields.Selection([('colis_moins', 'Colis en moins'),('colis_plus', 'Colis en plus')], track_visibility='onchange', string="Raison")
+    precise_no_conformity = fields.Selection([('non', 'Non'),('oui', 'Oui')], track_visibility='onchange', string="Précisé")
+    detail_no_conformity = fields.Text(string='Détail', track_visibility='onchange')
+    confirm_service_commercial = fields.Boolean(string='Confirmation Service Commercial', default=False, track_visibility='onchange')
+    delivery_noconform_treated = fields.Boolean(string='Livraison non conforme traitée', default=False, track_visibility='onchange')
+    confirm_accounting = fields.Boolean(string='Confirmation Comptabilité', default=False, track_visibility='onchange')
     
     @api.model
     def fields_get(self, fields=None):
@@ -486,9 +492,6 @@ class SaleOrder(models.Model):
                     'warning': {'title': _('Error'), 'message': _('Error message'),},
             }
         
-        
-            
-        
         return sale
     
     @api.multi
@@ -504,7 +507,5 @@ class SaleOrder(models.Model):
             return {
                     'warning': {'title': _('Error'), 'message': _('Error message'),},
             }
-        
-    
-            
+             
         return sale
