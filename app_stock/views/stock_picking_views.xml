@@ -13,10 +13,8 @@
 			<field name="arch" type="xml">
 				<xpath expr="//field[@name='move_lines']" position="after">
 					<group>
-						<field name="total_colis_delivered"
-							attrs="{'invisible': [('picking_type_code', '=', 'incoming')]}" />
-						<field name="total_weight_delivered"
-							attrs="{'invisible': [('picking_type_code', '=', 'incoming')]}" />
+						<field name="total_colis_delivered"/>
+						<field name="total_weight_delivered"/>
 					</group>
 				</xpath>
 				<xpath expr="//h1" position="replace">
