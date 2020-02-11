@@ -49,7 +49,7 @@ class StockMove(models.Model):
         for record in self:
             so = self.env['sale.order'].search([('name', '=', record.picking_id.origin)])
             if record.picking_type_id.code == 'incoming':
-                returns = self.env['stock.picking'].search([('group_id', '=', record.picking_id.group_id.id),('state','=','done'),('picking_type_id.code','=','outgoing')])
+                returns = self.env['stock.picking'].search([('group_id', '=', record.picking_id.group_id.id),('state','=','done'),('picking_type_id.code','=','outgoing')], order='id desc', limit=1)
                 if returns and record.picking_type_id.code == 'incoming':
                     for lines in returns.move_lines.filtered(lambda s: s.product_id.id == record.product_id.id):
                         record.secondary_uom_qty = lines.secondary_uom_qty
