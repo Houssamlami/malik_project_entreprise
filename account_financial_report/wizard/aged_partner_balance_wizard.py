@@ -22,7 +22,7 @@ class AgedPartnerBalanceWizard(models.TransientModel):
         required=False,
         string='Company'
     )
-    date_at = fields.Date(required=True,
+    date_at = fields.Date(required=True, string="A la Date",
                           default=fields.Date.context_today)
     target_move = fields.Selection([('posted', 'All Posted Entries'),
                                     ('all', 'All Entries')],
@@ -31,15 +31,15 @@ class AgedPartnerBalanceWizard(models.TransientModel):
                                    default='all')
     account_ids = fields.Many2many(
         comodel_name='account.account',
-        string='Filter accounts',
+        string='Filtre des comptes',
     )
-    receivable_accounts_only = fields.Boolean()
-    payable_accounts_only = fields.Boolean()
+    receivable_accounts_only = fields.Boolean(string=u"Comptes de revenus uniquement")
+    payable_accounts_only = fields.Boolean(string=u"Comptes de depenses uniquement")
     partner_ids = fields.Many2many(
         comodel_name='res.partner',
-        string='Filter partners',
+        string='Filtre des partenaires',
     )
-    show_move_line_details = fields.Boolean()
+    show_move_line_details = fields.Boolean(string=u"Afficher les details de la ligne du mouvement")
 
     @api.onchange('company_id')
     def onchange_company_id(self):
