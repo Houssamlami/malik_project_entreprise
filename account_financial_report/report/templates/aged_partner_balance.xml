@@ -111,15 +111,15 @@
                 <!--## current-->
                 <div class="act_as_cell" style="width: 9.64%;">Not due</div>
                 <!--## age_30_days-->
-                <div class="act_as_cell" style="width: 9.64%;">1 - 30 d.</div>
+                <div class="act_as_cell" style="width: 9.64%;">1 - 15 d.</div>
                 <!--## age_60_days-->
-                <div class="act_as_cell" style="width: 9.64%;">31 - 60 d.</div>
+                <div class="act_as_cell" style="width: 9.64%;">15 - 30 d.</div>
                 <!--## age_90_days-->
-                <div class="act_as_cell" style="width: 9.64%;">61 - 90 d.</div>
+                <div class="act_as_cell" style="width: 9.64%;">30 - 45 d.</div>
                 <!--## age_120_days-->
-                <div class="act_as_cell" style="width: 9.64%;">91 - 120 d.</div>
+                <div class="act_as_cell" style="width: 9.64%;">45 - 60 d.</div>
                 <!--## older-->
-                <div class="act_as_cell" style="width: 9.64%;"> > 120 d.</div>
+                <div class="act_as_cell" style="width: 9.64%;"> > 60 d.</div>
             </div>
         </div>
     </template>

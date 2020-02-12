@@ -324,10 +324,10 @@ WITH
         (
             SELECT
                 DATE %s AS date_current,
-                DATE %s - INTEGER '30' AS date_less_30_days,
-                DATE %s - INTEGER '60' AS date_less_60_days,
-                DATE %s - INTEGER '90' AS date_less_90_days,
-                DATE %s - INTEGER '120' AS date_less_120_days
+                DATE %s - INTEGER '15' AS date_less_30_days,
+                DATE %s - INTEGER '30' AS date_less_60_days,
+                DATE %s - INTEGER '45' AS date_less_90_days,
+                DATE %s - INTEGER '60' AS date_less_120_days
         )
 INSERT INTO
     report_aged_partner_balance_line
@@ -444,10 +444,10 @@ WITH
         (
             SELECT
                 DATE %s AS date_current,
-                DATE %s - INTEGER '30' AS date_less_30_days,
-                DATE %s - INTEGER '60' AS date_less_60_days,
-                DATE %s - INTEGER '90' AS date_less_90_days,
-                DATE %s - INTEGER '120' AS date_less_120_days
+                DATE %s - INTEGER '15' AS date_less_30_days,
+                DATE %s - INTEGER '30' AS date_less_60_days,
+                DATE %s - INTEGER '45' AS date_less_90_days,
+                DATE %s - INTEGER '60' AS date_less_120_days
         )
 INSERT INTO
     report_aged_partner_balance_move_line
