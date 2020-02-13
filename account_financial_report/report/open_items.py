@@ -22,6 +22,8 @@ class OpenItemsReport(models.TransientModel):
     # Filters fields, used for data computation
     date_at = fields.Date()
     only_posted_moves = fields.Boolean()
+    charcuterie = fields.Boolean(string="Charcuterie")
+    volaille = fields.Boolean(string="Volaille")
     hide_account_at_0 = fields.Boolean()
     foreign_currency = fields.Boolean()
     company_id = fields.Many2one(comodel_name='res.company')
@@ -219,11 +221,19 @@ WITH
             INNER JOIN
                 res_partner p ON ml.partner_id = p.id
             """
-        if self.only_posted_moves:
+        
+        if self.charcuterie:
             query_inject_account += """
             INNER JOIN
-                account_move m ON ml.move_id = m.id AND m.state = 'posted'
+            account_invoice ai ON ml.invoice_id = ai.id AND ai.fac_charcuterie_f = True
+            
             """
+        if self.volaille:
+            query_inject_account += """
+            INNER JOIN
+            account_invoice ai ON ml.invoice_id = ai.id AND ai.fac_volaille_f = True
+            """
+        
         query_inject_account += """
             WHERE
                 a.company_id = %s
@@ -314,10 +324,15 @@ WITH
             INNER JOIN
                 account_move_line ml ON a.id = ml.account_id AND ml.date <= %s
         """
-        if self.only_posted_moves:
+        if self.charcuterie:
             query_inject_partner += """
             INNER JOIN
-                account_move m ON ml.move_id = m.id AND m.state = 'posted'
+             account_invoice ai ON ml.invoice_id = ai.id AND ai.fac_charcuterie_f = True
+            """
+        if self.volaille:
+            query_inject_partner += """
+           INNER JOIN
+             account_invoice ai ON ml.invoice_id = ai.id AND ai.fac_volaille_f = True
             """
         query_inject_partner += """
             LEFT JOIN
@@ -575,6 +590,8 @@ INNER JOIN
 INNER JOIN
     account_move m ON ml.move_id = m.id
 INNER JOIN
+    account_invoice ai ON ml.invoice_id = ai.id
+INNER JOIN
     account_journal j ON ml.journal_id = j.id
 INNER JOIN
     account_account a ON ml.account_id = a.id
@@ -595,10 +612,15 @@ WHERE
 AND
     ml.date <= %s
         """
-        if self.only_posted_moves:
+        if self.charcuterie:
             query_inject_move_line += """
 AND
-    m.state = 'posted'
+    ai.fac_charcuterie_f = True
+        """
+        if self.volaille:
+            query_inject_move_line += """
+AND
+    ai.fac_volaille_f = True
         """
         if only_empty_partner_line:
             query_inject_move_line += """
