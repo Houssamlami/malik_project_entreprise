@@ -23,6 +23,8 @@ class AgedPartnerBalanceReport(models.TransientModel):
     # Filters fields, used for data computation
     date_at = fields.Date()
     only_posted_moves = fields.Boolean()
+    charcuterie = fields.Boolean(string="Charcuterie")
+    volaille = fields.Boolean(string="Volaille")
     company_id = fields.Many2one(comodel_name='res.company')
     filter_account_ids = fields.Many2many(comodel_name='account.account')
     filter_partner_ids = fields.Many2many(comodel_name='res.partner')
@@ -218,6 +220,8 @@ class AgedPartnerBalanceReportCompute(models.TransientModel):
         return {
             'date_at': self.date_at,
             'only_posted_moves': self.only_posted_moves,
+            'charcuterie': self.charcuterie,
+            'volaille': self.volaille,
             'company_id': self.company_id.id,
             'filter_account_ids': [(6, 0, self.filter_account_ids.ids)],
             'filter_partner_ids': [(6, 0, self.filter_partner_ids.ids)],
