@@ -13,10 +13,8 @@
 			<field name="arch" type="xml">
 				<xpath expr="//field[@name='move_lines']" position="after">
 					<group>
-						<field name="total_colis_delivered"
-							attrs="{'invisible': [('picking_type_code', '=', 'incoming')]}" />
-						<field name="total_weight_delivered"
-							attrs="{'invisible': [('picking_type_code', '=', 'incoming')]}" />
+						<field name="total_colis_delivered"/>
+						<field name="total_weight_delivered"/>
 					</group>
 				</xpath>
 				<xpath expr="//h1" position="replace">
@@ -207,6 +205,22 @@
 			<field name="user_id" eval="False" />
 			<field name="context">{}</field>
 		</record>
+<!-- ################################Move stock for adjustment######################################## -->
+		<record id="stock_move_line_action_adjustment_ecart" model="ir.actions.act_window">
+            <field name="name">Mouvements d'ajustement</field>
+            <field name="res_model">stock.move.line</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,kanban,pivot,form</field>
+            <field name="view_id" ref="stock.view_move_line_tree"/>
+            <field name="domain">[('partner_picking_id','=',False),('move_id.scrapped','=',False)]</field>
+            <field name="context">{'search_default_done': 1, 'default_partner_picking_id': False, 'partner_picking_id': False}</field>
+    </record>
+
+    <menuitem 
+        action="stock_move_line_action_adjustment_ecart" 
+        id="stock_move_line_menu_adjustment_ecart" 
+        parent="stock.menu_warehouse_report" sequence="159" name="Mouvements d'ajustement"/>
 		<!-- <record id="action_picking_tree_done_J1" model="ir.actions.act_window"> 
 			<field name="name">J+1 Transfers</field> <field name="res_model">stock.picking</field> 
 			<field name="type">ir.actions.act_window</field> <field name="view_type">form</field> 

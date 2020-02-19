@@ -13,12 +13,14 @@
                 <group name="filters">
                     <group name="date_range">
                         <field name="date_at"/>
+                        <newline/>
+                        <field name="charcuterie"/>
+                        <field name="volaille"/>
                     </group>
                     <group name="other_filters">
                         <field name="target_move" widget="radio"/>
                         <field name="show_move_line_details"/>
-                        <field name="charcuterie"/>
-                        <field name="volaille"/>
+                        
                     </group>
                 </group>
                 <group name="partner_filter" col="1">
