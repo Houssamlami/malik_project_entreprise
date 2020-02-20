@@ -67,7 +67,7 @@ class StockMoveLine(models.Model):
                                     {'name': ml.lot_name, 'product_id': ml.product_id.id, 'date_refer': ml.date_reference}
                                 )
                                 ml.write({'lot_id': lot.id})
-                                data_dates = ml.lot_id._get_dates(ml.product_id.id)
+                                data_dates = ml.lot_id._get_dattes(ml.product_id.id)
                                 for field, value in data_dates.items():
                                     setattr(ml.lot_id, field, value)
                         elif not picking_type_id.use_create_lots and not picking_type_id.use_existing_lots:
@@ -123,21 +123,3 @@ class StockMoveLine(models.Model):
             'product_uom_qty': 0.00,
             'date': fields.Datetime.now(),
         })
-        
-        
-'''@api.multi
-    def write(self, vals):
-        move = super(StockMoveLine,self).write(vals)
-        name = vals.get('lot_name')
-        date = vals.get('date_reference')
-        print(name,date)
-        if (name == 'None' or date == 'None') and self.picking_id.picking_type_id.code == 'incoming':
-            return {'warning': {
-                'title': _('Lot ou DLC!'),
-                'message': _("Merci de mentionner le lot et DLC")
-                }
-            }
-
-        
-        return move
-'''

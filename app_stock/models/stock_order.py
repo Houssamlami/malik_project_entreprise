@@ -238,7 +238,7 @@ class StockProductionLot(models.Model):
             lots.product_use_alert = lots.use_date <= current_date
     
     
-    def _get_dates(self, product_id=None):
+    def _get_datttes(self, product_id=None):
         """Returns dates based on number of days configured in current lot's product."""
         mapped_fields = {
             'life_date': 'life_time',
@@ -264,18 +264,49 @@ class StockProductionLot(models.Model):
                 i = i+1
         return res
     
+    def _get_dattes(self, product_id=None,date=None):
+        """Returns dates based on number of days configured in current lot's product."""
+        mapped_fields = {
+            'life_date': 'life_time',
+            'use_date': 'use_time',
+            'removal_date': 'removal_time',
+            'alert_date': 'alert_time'
+        }
+        
+        str_date = str(date)
+        print(str_date)
+        date_r = datetime.datetime.strptime(str_date, '%Y-%m-%d %H:%M:%S')
+        res = dict.fromkeys(mapped_fields, False)
+        product = self.env['product.product'].browse(product_id) or self.product_id
+        if product:
+            i=0
+            for field in mapped_fields:
+                duration = getattr(product, mapped_fields[field])
+                if duration and field != 'life_date':
+                    date = date_r + datetime.timedelta(days=duration)
+                    res[field] = fields.Datetime.to_string(date)              
+                if field == 'life_date':
+                    date = date_r + datetime.timedelta(days=0)
+                    res[field] = fields.Datetime.to_string(date)
+                i = i+1
+        return res
+    
+    
+    
     @api.model
-    def create(self, vals):
-        lot = super(StockProductionLot, self).create(vals)
-        dates = lot._get_dates(vals.get('product_id') or self.env.context.get('default_product_id'))
+    def create(self, values):
+        
+        date = values.get('date_refer')
+        dates = self._get_dattes(values.get('product_id') or self.env.context.get('default_product_id'), date)
         for d in dates:
-            if not vals.get(d):
-                vals[d] = dates[d]
+            if not values.get(d):
+                values[d] = dates[d]
+        lot = super(StockProductionLot, self).create(values)  
         return lot
     
     @api.onchange('date_refer')
     def _onchange_date_refer(self):
-        dates_dict = self._get_dates()
+        dates_dict = self._get_datttes()
         for field, value in dates_dict.items():
             setattr(self, field, value)
             
@@ -304,4 +335,3 @@ class ReturnPicking(models.TransientModel):
         picking.update({'is_return_picking': True,
                        })
         return new_picking, pick_type_id'''
-    
