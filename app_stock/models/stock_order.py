@@ -179,7 +179,7 @@ class StockPicking(models.Model):
         self.action_done()
         #//////////////////////////////////////////////////////////////
         for mov_lines in self.move_lines:
-            if self.location_dest_id.usage == 'internal':
+            if self.location_dest_id.usage == 'internal' and self.location_id.usage != 'internal':
                 print('stock move internal')
                 qty = mov_lines.product_id.with_context({'location' : self.location_dest_id.id}).secondary_unit_qty_available
             #res.qty_available = qty
