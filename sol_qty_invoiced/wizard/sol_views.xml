@@ -26,7 +26,7 @@
     </record>
 
     <act_window id="quantit_delivered_fhs_ail"
-        name="Update qty delivered"
+        name="Update qty invoiced"
         src_model="sale.order.line"
         res_model="ail.update.qty.wizard"
         view_type="form"
