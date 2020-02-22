@@ -161,7 +161,7 @@ class SaleOrderLine(models.Model):
         for line in self:
             qty_invoiced = 0
             if line.product_id and qty_invoiced == 0:
-                invoice = self.env['account.invoice'].search([('origin', 'ilike', line.order_id.name),('state','=','paid')])
+                invoice = self.env['account.invoice'].search([('origin', 'ilike', line.order_id.name),('state','in',['paid','open'])])
                 ail = self.env['account.invoice.line'].search([('invoice_id', '=', invoice.ids)])
                 for lines in ail:
                     if line.product_id == lines.product_id:
