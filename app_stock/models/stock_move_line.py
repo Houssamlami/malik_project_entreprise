@@ -67,7 +67,7 @@ class StockMoveLine(models.Model):
                                     {'name': ml.lot_name, 'product_id': ml.product_id.id, 'date_refer': ml.date_reference}
                                 )
                                 ml.write({'lot_id': lot.id})
-                                data_dates = ml.lot_id._get_dattes(ml.product_id.id)
+                                data_dates = ml.lot_id._get_dattes(ml.product_id.id,ml.date_reference)
                                 for field, value in data_dates.items():
                                     setattr(ml.lot_id, field, value)
                         elif not picking_type_id.use_create_lots and not picking_type_id.use_existing_lots:

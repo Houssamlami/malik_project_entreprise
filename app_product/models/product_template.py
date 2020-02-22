@@ -206,7 +206,7 @@ class ProductTemplate(models.Model):
                 if len(sale_lines) > 0:
                     for line in sale_lines:
                         colis += line.secondary_uom_qty
-        record.qty_vertuel_second_unit = record.secondary_unit_qty_available - colis 
+            record.qty_vertuel_second_unit = record.secondary_unit_qty_available - colis 
     
     
     #''''''''''''''''''''''''Smart button sales by day for product for helpser''''''''''''''''''''''''''''''''''''''''
