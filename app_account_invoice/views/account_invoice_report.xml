@@ -51,7 +51,7 @@
 	<template id="report_modify_external_standard_fhs"
 			inherit_id="web.external_layout_standard">
 		<xpath expr="//div[@class='header']" position="replace">
-			<div class="header background_header" style="">
+			<div class="header o_background_header">
             <div class="pull-right">
                 <h3 class="mt0 text-right" t-field="company.report_header"/>
             </div>
