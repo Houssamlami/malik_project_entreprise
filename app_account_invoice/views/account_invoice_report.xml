@@ -4,10 +4,7 @@
 
 		  <template id="report_account_invoice_inherit_unit_fhs"
 			inherit_id="account.report_invoice_document">
-			<xpath expr="//div[@name='invoice_address']"
-				position="attributes">
-				<attribute name="style">"margin-top:30px;"</attribute>
-				</xpath>
+			
 				<xpath expr="//table[@class='table table-condensed']"
 				position="replace">
 				<table class="table table-condensed" name="invoice_line_table">
@@ -67,6 +64,7 @@
                     t-field-options='{"widget": "contact", "fields": ["address"], "no_marker": true}'/>
             </div>
         </div>
+        <div class="clearfix mb8"/>
 			</xpath>
 </template>
 </odoo>
