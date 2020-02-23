@@ -327,11 +327,11 @@
 		<field name="groups_id" eval="[(6, 0, [ref('app_sale_order.group_to_write_create_unlink_product')])]" />
 		<field name="arch" type="xml">
 			<field name="user_id" position="attributes">	
-				<attribute name="readonly">1</attribute>
+				<attribute name="readonly">0</attribute>
 			</field>
 			
 			<field name="vendeur" position="attributes">	
-				<attribute name="readonly">1</attribute>
+				<attribute name="readonly">0</attribute>
 			</field>
 			
 		</field>
