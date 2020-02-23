@@ -12,7 +12,7 @@ class AccountInvoiceLine(models.Model):
     _inherit = 'account.invoice.line'
     
     
-    colis = fields.Float(string="Colis", readonly=True, compute='get_colis_invoice_line')
+    colis = fields.Float(string="Colis", readonly=True, compute='get_colis_invoice_line', store=True)
     
     @api.multi
     def get_colis_invoice_line(self):
