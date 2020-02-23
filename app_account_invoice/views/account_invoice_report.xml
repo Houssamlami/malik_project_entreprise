@@ -48,5 +48,23 @@
 				</xpath>
 				
 		</template>
+	<template id="report_modify_external_standard_fhs"
+			inherit_id="web.external_layout_standard">
+		<xpath expr="//div[@class='header']" position="replace">
+			<div class="header background_header">
+            <div class="pull-right">
+                <h3 class="mt0 text-right" t-field="company.report_header"/>
+            </div>
+            <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" class="pull-left"/>
+            <div class="pull-left company_address" style="margin-top:4%;">
+                <div>
+                    <strong t-field="company.partner_id.name"/>
+                </div>
+                <span t-field="company.partner_id"
+                    t-field-options='{"widget": "contact", "fields": ["address"], "no_marker": true}'/>
+            </div>
+        </div>
+			</xpath>
+</template>
 </odoo>
 			
