@@ -4,7 +4,14 @@
 
 		  <template id="report_account_invoice_inherit_unit_fhs"
 			inherit_id="account.report_invoice_document">
-
+				<xpath expr="//div[@name='invoice_address']"
+				position="replace">
+				<div name="invoice_address" class="col-xs-5 col-xs-offset-7" style="margin-top:4%;">
+                            <address t-field="o.partner_id"
+                                t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": True}' />
+                            <div t-if="o.partner_id.vat" class="mt16"><t t-esc="o.company_id.country_id.vat_label or 'TIN'"/>: <span t-field="o.partner_id.vat"/></div>
+                        </div>
+				</xpath>
 				<xpath expr="//table[@class='table table-condensed']"
 				position="replace">
 				<table class="table table-condensed" name="invoice_line_table">
@@ -56,7 +63,7 @@
                 <h3 class="mt0 text-right" t-field="company.report_header"/>
             </div>
             <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" class="pull-left"/>
-            <div class="pull-left company_address" style="margin-top:6%;">
+            <div class="pull-left company_address" style="margin-top:4%;">
                 <div>
                     <strong t-field="company.partner_id.name"/>
                 </div>
