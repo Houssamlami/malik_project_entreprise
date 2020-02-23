@@ -66,6 +66,8 @@ class SaleOrderLine(models.Model):
     test_on_change_version2= fields.Float('Qte a livre apre today')
     order_requested_date = fields.Datetime(related='order_id.requested_date', store=True, string=u'Date Demandée')
     qty_initiale = fields.Float(string='Qty initiale')
+    product_service_commercial = fields.Boolean(string="CMD TTM")
+    second_test = fields.Boolean(string="Second test")
 
 
     @api.onchange('price_unit')
