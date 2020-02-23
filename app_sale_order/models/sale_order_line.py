@@ -155,3 +155,15 @@ class SaleOrderLine(models.Model):
                     if line.product_id == lines.product_id:
                         qty_delivered = lines.qty_done
             line.qty_delivered = qty_delivered
+            
+    @api.multi
+    def get_default_fact_qtys(self):
+        for line in self:
+            qty_invoiced = 0
+            if line.product_id and qty_invoiced == 0:
+                invoice = self.env['account.invoice'].search([('origin', 'ilike', line.order_id.name),('state','in',['paid','open'])])
+                ail = self.env['account.invoice.line'].search([('invoice_id', '=', invoice.ids)])
+                for lines in ail:
+                    if line.product_id == lines.product_id:
+                        qty_invoiced = lines.quantity
+            line.qty_invoiced = qty_invoiced
