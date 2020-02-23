@@ -4,7 +4,10 @@
 
 		  <template id="report_account_invoice_inherit_unit_fhs"
 			inherit_id="account.report_invoice_document">
-			
+			<xpath expr="//div[@name='invoice_address']"
+				position="attributes">
+				<attribute name="style">"margin-top:30px;"</attribute>
+				</xpath>
 				<xpath expr="//table[@class='table table-condensed']"
 				position="replace">
 				<table class="table table-condensed" name="invoice_line_table">
@@ -51,7 +54,7 @@
 	<template id="report_modify_external_standard_fhs"
 			inherit_id="web.external_layout_standard">
 		<xpath expr="//div[@class='header']" position="replace">
-			<div class="header background_header" style="margin-bottom:10px; padding-bottom:10px;">
+			<div class="header background_header" style="">
             <div class="pull-right">
                 <h3 class="mt0 text-right" t-field="company.report_header"/>
             </div>
