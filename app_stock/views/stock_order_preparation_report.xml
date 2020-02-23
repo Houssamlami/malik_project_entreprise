@@ -2158,7 +2158,7 @@
 			</xpath>
 
 		</template>
-		<template id="report_deliveryslip_inherit_provisoir"
+	<template id="report_deliveryslip_inherit_provisoir"
 			inherit_id="stock.report_delivery_document">
 
 			<xpath expr="//h2" position="replace">
@@ -2168,26 +2168,35 @@
 			
 			</h2>
 			</xpath>
-			</template>
+	</template>
 			
 	<template id="report_delivery_document_inherit_dlc"
 	inherit_id="stock.report_delivery_document">
-	<xpath expr="//table[@class='table table-condensed mt48'][2]/thead/tr/th"
-		position="inside">
+	<xpath expr="//h2"
+		position="replace">
+		<h2><span>Bon de livraison:</span><span t-field="o.name"/></h2>
+	</xpath>
+	<xpath expr="//table[@class='table table-condensed mt48'][2]" position="attributes">
+	<attribute name="style">table-layout: auto;</attribute>
+	</xpath>
+	<xpath expr="//th[@name='lot_serial']" position="inside">
 		<t t-if="o.picking_type_code == 'incoming' and o.is_return_picking">
 			<t
 				t-if="any([move_lines.lot_id.life_date for move_lines in o.move_line_ids])">
-				<th style="margin-left: 170px;">DLC</th>
+				<span style="margin-left: 170px;">DLC</span>
 			</t>
+		
 		</t>
 	</xpath>
 	<xpath expr="//td[@name='lot_qty']" position="after">
+	<t t-if="o.picking_type_code == 'incoming' and o.is_return_picking">
 		<td>
 			<span
 				t-if="o.picking_type_code == 'incoming' and o.is_return_picking"
 				class="pull-right" t-field="move_line.lot_id.life_date"
 				t-field-options='{"widget": "date"}' />
 		</td>
+		</t>
 	</xpath>
 	<xpath expr="//table[@class='table table-condensed mt48'][2]" position="after">
 		<table class="table" style="width:350px;">
@@ -2209,6 +2218,7 @@
 			</tr>
 		</table>
 		<br/>
+		<div align="right">
 		<table t-if="o.picking_type_id.code == 'outgoing'" class="table" style="width:350px;border: 5px solid red;">
 			<tr t-if="o.partner_id.Client_Charcuterie">
 				<td>
@@ -2227,8 +2237,8 @@
 				</td>
 			</tr>
 		</table>
+		</div>
 	</xpath>
-	
 	<xpath expr="//table[@class='table table-condensed mt48'][1]/tbody/tr/td[2]"
 		position="replace">
 		<td>
