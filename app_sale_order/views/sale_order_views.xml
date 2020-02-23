@@ -80,14 +80,27 @@
 					<field name="volume" invisible="1"/>
 					<field name="volume_tot" string="Prix Total" invisible="1"/>
              	</xpath>
-     
+     <!-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+     <xpath expr="//field[@name='order_line']/tree/field[@name='product_id']" position="attributes">
+                	<attribute name="domain">[('product_service_commercial','=',product_service_commercial)]</attribute>
+					
+      </xpath>
+             	 <xpath expr="//field[@name='order_line']/form/group/group/field[@name='product_id']" position="attributes">
+                	<attribute name="domain">['|',('product_service_commercial','=',product_service_commercial), ('product_service_commercial','=',second_test)]</attribute>
+					
+             	</xpath>
+     <!-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
              	<xpath expr="//field[@name='order_line']/tree/field[@name='name']" position="after">
                 	<field name="qty_initiale" />
+                	<field name="product_service_commercial" invisible="1"/>
+					<field name="second_test" invisible="1"/>
              	</xpath>
              	<xpath expr="//field[@name='order_line']/form/group/group/field[@name='price_subtotal']" position="after">
                     <field name="weight" invisible="1"/>
 					<field name="volume" invisible="1"/>
 					<field name="volume_tot" string="Prix Total" invisible="1"/>
+					<field name="product_service_commercial" invisible="1"/>
+					<field name="second_test" invisible="1"/>
              	</xpath>
              	
              	<xpath expr="//field[@name='partner_shipping_id']"
