@@ -15,6 +15,7 @@ class AccountInvoiceLine(models.Model):
     colis = fields.Float(string="Colis", readonly=True, compute='get_colis_invoice_line', store=True)
     
     @api.multi
+    @api.depends('invoice_id.ref_livraison')
     def get_colis_invoice_line(self):
         for line in self:
             print('iiiiiiiiiiiii')
