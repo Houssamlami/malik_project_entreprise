@@ -107,6 +107,7 @@
 												<th name="td_sched_date_h">
 													<strong>Scheduled Date</strong>
 												</th>
+												<th><strong>Produits à préparer</strong></th>
 											</tr>
 										</thead>
 										<tbody>
@@ -123,6 +124,7 @@
 												<td name="td_sched_date">
 													<span t-field="o.scheduled_date" />
 												</td>
+												<td><span t-field="o.number_product_to_deliver" /></td>
 											</tr>
 										</tbody>
 									</table>
@@ -1456,6 +1458,7 @@
 												<th name="td_sched_date_h">
 													<strong>Scheduled Date</strong>
 												</th>
+												<th><strong>Produits à préparer</strong></th>
 											</tr>
 										</thead>
 										<tbody>
@@ -1472,6 +1475,7 @@
 												<td name="td_sched_date">
 													<span t-field="o.scheduled_date" />
 												</td>
+												<td><span t-field="o.number_product_to_deliver" /></td>
 											</tr>
 										</tbody>
 									</table>
@@ -1679,6 +1683,7 @@
 												<th name="td_sched_date_h">
 													<strong>Scheduled Date</strong>
 												</th>
+												<th><strong>Produits à préparer</strong></th>
 											</tr>
 										</thead>
 										<tbody>
@@ -1695,6 +1700,7 @@
 												<td name="td_sched_date">
 													<span t-field="o.scheduled_date" />
 												</td>
+												<td><span t-field="o.number_product_to_deliver" /></td>
 											</tr>
 										</tbody>
 									</table>
