@@ -221,7 +221,7 @@
 				<field name="adresse_liv" />
 				<field name="zip_df" />
 				<field name="city" />
-				<field name="produitalivrer" />
+				<!--  <field name="produitalivrer" />-->
 				<field name="observation" />
 				<field name="Bolocagettm" invisible="1" />
 				<field name="Bolocagettm_id" string="Transport" />
