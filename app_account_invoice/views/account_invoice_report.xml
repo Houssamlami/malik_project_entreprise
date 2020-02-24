@@ -51,19 +51,19 @@
 	<template id="report_modify_external_standard_fhs"
 			inherit_id="web.external_layout_standard">
 		<xpath expr="//div[@class='header']" position="replace">
-			<div class="header background_header">
-            <div class="pull-right">
-                <h3 class="mt0 text-right" t-field="company.report_header"/>
-            </div>
-            <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" class="pull-left"/>
-            <div class="pull-left company_address" style="margin-top:16px;">
-                <div>
-                    <strong t-field="company.partner_id.name"/>
+			<div class="header o_clean_header">
+            <div class="row">
+                <div class="col-xs-6">
+                    <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)"/>
                 </div>
-                <span t-field="company.partner_id"
-                    t-field-options='{"widget": "contact", "fields": ["address"], "no_marker": true}'/>
+                <div class="col-xs-5 col-xs-offset-1" name="company_address">
+                    <ul class="list-unstyled">
+                        <strong><li t-if="company.name"><span t-field="company.name"/></li></strong>
+                        <li t-if="company.vat"><t t-esc="company.country_id.vat_label or 'TIN'"/>: <span t-field="company.vat"/></li>
+                        <li t-if="company.phone">Tel: <span t-field="company.phone"/></li>
+                    </ul>
+                </div>
             </div>
-            <div class="clearfix mb8"/>
         </div>
 			</xpath>
 </template>
