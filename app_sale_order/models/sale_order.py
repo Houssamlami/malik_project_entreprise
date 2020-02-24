@@ -22,7 +22,7 @@ class SaleOrder(models.Model):
     total_weight_stock_char = fields.Float(string='Total charcuterie)', compute='_compute_weight_total_stock_char')
     total_weight_stock_srg = fields.Float(string='Total surgele)', compute='_compute_weight_total_stock_srg')
     total_weight_stock_vv = fields.Float(string='Total volaille)', compute='_compute_weight_total_stock_vv')
-    produitalivrer = fields.Char('Produit a livrer', compute='get_product_ttm')
+    #produitalivrer = fields.Char('Produit a livrer', compute='get_product_ttm')
     commercial_id = fields.Many2one(comodel_name='hr.employee', string="Commercial", related='user_id', store=True)
     Expediteur =  fields.Selection([('MV', 'Malik V'), ('An', 'Atlas N')])    
     zip_df =  fields.Char(string='CP', compute='get_default_zip')
@@ -454,7 +454,7 @@ class SaleOrder(models.Model):
             record._compute_weight_total_stock_char()
             record.get_product_ttm()
                     
-    @api.onchange('total_weight_stock_char','total_weight_stock_srg','total_weight_stock_vv')
+    '''@api.onchange('total_weight_stock_char','total_weight_stock_srg','total_weight_stock_vv')
     @api.depends('total_weight_stock_char','total_weight_stock_srg','total_weight_stock_vv')
     def get_product_ttm(self):
         for sales in self:
@@ -471,7 +471,7 @@ class SaleOrder(models.Model):
             if  sales.total_weight_stock_srg == sales.total_weight_stock_vv == 0 and sales.total_weight_stock_char != 0:
                 sales.produitalivrer=" Charc"
             if sales.total_weight_stock_char != 0 and sales.total_weight_stock_srg != 0 and sales.total_weight_stock_vv != 0:
-                sales.produitalivrer="Charc + Surg + VV"
+                sales.produitalivrer="Charc + Surg + VV"'''
                 
     @api.model
     def create(self, vals):
