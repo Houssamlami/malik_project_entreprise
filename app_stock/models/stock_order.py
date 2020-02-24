@@ -27,6 +27,17 @@ class StockPicking(models.Model):
     total_weight_delivered = fields.Float(string='Poids Total', compute='_compute_colis_poids_total_bl', track_visibility='onchange')
     is_return_picking = fields.Boolean(string="Is Retour", compute='get_is_return_picking')
     name_provisoir = fields.Char(string="Nom Provisoir", compute='get_is_return_picking')
+    number_product_to_deliver = fields.Float(string='Produits à livrer', compute='_compute_number_product_to_deliver')
+    
+            
+    def _compute_number_product_to_deliver(self):
+        for record in self:
+            pickings = self.env['stock.picking'].search([('partner_id', '=', self.partner_id.id),('picking_type_code','=','outgoing')])
+            cmpt = 0
+            for picking in pickings:
+                if dateutil.parser.parse(picking.scheduled_date).date() == dateutil.parser.parse(record.scheduled_date).date():
+                    cmpt += len(picking.move_lines)
+            record.number_product_to_deliver = cmpt
     
     
     def get_is_return_picking(self):
