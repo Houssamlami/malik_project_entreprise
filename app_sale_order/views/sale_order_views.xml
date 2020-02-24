@@ -113,7 +113,7 @@
 					<field name="total_weight_stock_char" invisible="1" />
 					<field name="total_weight_stock_srg" invisible="1" />
 					<field name="total_weight_stock_vv" invisible="1" />
-					<field name="produitalivrer" invisible="1" />
+					<!--  <field name="produitalivrer" invisible="1" />-->
 					<field name="cmd_validated" attrs="{'invisible': [('grand_compte', '=', False)]}"/>
 				</xpath>
 				<!-- '''''''''''''''''''''Add new page command refused & BL not conform'''''''''''''''''''''''''' -->
