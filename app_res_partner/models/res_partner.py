@@ -47,7 +47,7 @@ class ResPartner(models.Model):
     
     def get_manager_canal_arond(self):
         for res in self:
-            res.user_id = self.env['hr.employee'].search([('user_id', '=', res.team_id.user_id.id)])
+            res.user_id = self.env['hr.employee'].search([('user_id', '=', res.team_id.user_id.id)],limit=1)
     
       
 
