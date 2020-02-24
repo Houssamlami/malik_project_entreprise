@@ -452,7 +452,7 @@ class SaleOrder(models.Model):
             record._compute_weight_total_stock_vv()
             record._compute_weight_total_stock_srg()
             record._compute_weight_total_stock_char()
-            record.get_product_ttm()
+            #record.get_product_ttm()
                     
     '''@api.onchange('total_weight_stock_char','total_weight_stock_srg','total_weight_stock_vv')
     @api.depends('total_weight_stock_char','total_weight_stock_srg','total_weight_stock_vv')
