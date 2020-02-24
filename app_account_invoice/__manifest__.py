@@ -12,7 +12,7 @@ App Malik Account Invoice
     """,
     'category': 'Generic Modules/Sales',
     'author' : 'FHS IT Solutions',
-    'depends' : ['sale_management','sale_order_dates','account','sale','base','web'],
+    'depends' : ['sale_management','sale_order_dates','account','sale','base'],
     'data': [
           'views/account_invoice_views.xml',
           'views/account_invoice_report.xml',
