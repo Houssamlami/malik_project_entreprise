@@ -6,7 +6,7 @@
 			inherit_id="account.report_invoice_document">
 			
 			<xpath expr="//h2" position="after">
-				<div class="row mt32 mb32"> <span>Objet : </span> <p t-field="o.objet"/></div>
+				<div class="row mt32 mb32"> <span>Objet : </span> <p t-field="o.object"/></div>
 				</xpath>
 			
 				<xpath expr="//table[@class='table table-condensed']"
