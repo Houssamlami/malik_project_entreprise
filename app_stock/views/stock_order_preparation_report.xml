@@ -186,7 +186,7 @@
 													t-esc="move.product_uom._compute_quantity(move.quantity_done, move.product_id.uom_id, rounding_method='HALF-UP')" />
 												<span t-field="move.product_id.uom_id"
 													groups="product.group_uom" />
-												<span t-if="move.unite_is_kg">(<span t-field="move.secondary_uom_qty"></span>)</span>
+												<span t-if="move.unite_is_kg">(<span t-field="move.secondary_uom_qty"></span>Colis)</span>
 											</td>
 											<td>
 												<t t-if="has_barcode">
@@ -302,7 +302,7 @@
 													t-esc="move.product_uom._compute_quantity(move.quantity_done, move.product_id.uom_id, rounding_method='HALF-UP')" />
 												<span t-field="move.product_id.uom_id"
 													groups="product.group_uom" />
-												<span t-if="move.unite_is_kg">(<span t-field="move.secondary_uom_qty"></span>)</span>
+												<span t-if="move.unite_is_kg">(<span t-field="move.secondary_uom_qty"></span>Colis)</span>
 											</td>
 											<td>
 												<t t-if="has_barcode">
@@ -414,7 +414,7 @@
 													t-esc="move.product_uom._compute_quantity(move.quantity_done, move.product_id.uom_id, rounding_method='HALF-UP')" />
 												<span t-field="move.product_id.uom_id"
 													groups="product.group_uom" />
-												<span t-if="move.unite_is_kg">(<span t-field="move.secondary_uom_qty"></span>)</span>
+												<span t-if="move.unite_is_kg">(<span t-field="move.secondary_uom_qty"></span>Colis)</span>
 											</td>
 											<td>
 												<t t-if="has_barcode">
@@ -525,7 +525,7 @@
 													t-esc="move.product_uom._compute_quantity(move.quantity_done, move.product_id.uom_id, rounding_method='HALF-UP')" />
 												<span t-field="move.product_id.uom_id"
 													groups="product.group_uom" />
-												<span t-if="move.unite_is_kg">(<span t-field="move.secondary_uom_qty"></span>)</span>
+												<span t-if="move.unite_is_kg">(<span t-field="move.secondary_uom_qty"></span>Colis)</span>
 											</td>
 											<td>
 												<t t-if="has_barcode">
@@ -640,7 +640,7 @@
 													t-esc="move.product_uom._compute_quantity(move.quantity_done, move.product_id.uom_id, rounding_method='HALF-UP')" />
 												<span t-field="move.product_id.uom_id"
 													groups="product.group_uom" />
-												<span t-if="move.unite_is_kg">(<span t-field="move.secondary_uom_qty"></span>)</span>
+												<span t-if="move.unite_is_kg">(<span t-field="move.secondary_uom_qty"></span>Colis)</span>
 											</td>
 											<td>
 												<t t-if="has_barcode">
@@ -754,7 +754,7 @@
 													t-esc="move.product_uom._compute_quantity(move.quantity_done, move.product_id.uom_id, rounding_method='HALF-UP')" />
 												<span t-field="move.product_id.uom_id"
 													groups="product.group_uom" />
-												<span t-if="move.unite_is_kg">(<span t-field="move.secondary_uom_qty"></span>)</span>
+												<span t-if="move.unite_is_kg">(<span t-field="move.secondary_uom_qty"></span>Colis)</span>
 											</td>
 											<td>
 												<t t-if="has_barcode">
@@ -870,7 +870,7 @@
 													t-esc="move.product_uom._compute_quantity(move.quantity_done, move.product_id.uom_id, rounding_method='HALF-UP')" />
 												<span t-field="move.product_id.uom_id"
 													groups="product.group_uom" />
-												<span t-if="move.unite_is_kg">(<span t-field="move.secondary_uom_qty"></span>)</span>
+												<span t-if="move.unite_is_kg">(<span t-field="move.secondary_uom_qty"></span>Colis)</span>
 											</td>
 											<td>
 												<t t-if="has_barcode">
@@ -985,7 +985,7 @@
 													t-esc="move.product_uom._compute_quantity(move.quantity_done, move.product_id.uom_id, rounding_method='HALF-UP')" />
 												<span t-field="move.product_id.uom_id"
 													groups="product.group_uom" />
-												<span t-if="move.unite_is_kg">(<span t-field="move.secondary_uom_qty"></span>)</span>
+												<span t-if="move.unite_is_kg">(<span t-field="move.secondary_uom_qty"></span>Colis)</span>
 											</td>
 											<td>
 												<t t-if="has_barcode">
@@ -1097,7 +1097,7 @@
 													t-esc="move.product_uom._compute_quantity(move.quantity_done, move.product_id.uom_id, rounding_method='HALF-UP')" />
 												<span t-field="move.product_id.uom_id"
 													groups="product.group_uom" />
-												<span t-if="move.unite_is_kg">(<span t-field="move.secondary_uom_qty"></span>)</span>
+												<span t-if="move.unite_is_kg">(<span t-field="move.secondary_uom_qty"></span>Colis)</span>
 											</td>
 											<td>
 												<t t-if="has_barcode">
@@ -1211,7 +1211,7 @@
 													t-esc="move.product_uom._compute_quantity(move.quantity_done, move.product_id.uom_id, rounding_method='HALF-UP')" />
 												<span t-field="move.product_id.uom_id"
 													groups="product.group_uom" />
-												<span t-if="move.unite_is_kg">(<span t-field="move.secondary_uom_qty"></span>)</span>
+												<span t-if="move.unite_is_kg">(<span t-field="move.secondary_uom_qty"></span>Colis)</span>
 											</td>
 											<td>
 												<t t-if="has_barcode">
@@ -1324,7 +1324,7 @@
 													t-esc="move.product_uom._compute_quantity(move.quantity_done, move.product_id.uom_id, rounding_method='HALF-UP')" />
 												<span t-field="move.product_id.uom_id"
 													groups="product.group_uom" />
-												<span t-if="move.unite_is_kg">(<span t-field="move.secondary_uom_qty"></span>)</span>
+												<span t-if="move.unite_is_kg">(<span t-field="move.secondary_uom_qty"></span>Colis)</span>
 											</td>
 											<td>
 												<t t-if="has_barcode">
@@ -1548,7 +1548,7 @@
 													t-esc="move.product_uom._compute_quantity(move.quantity_done, move.product_id.uom_id, rounding_method='HALF-UP')" />
 												<span t-field="move.product_id.uom_id"
 													groups="product.group_uom" />
-												<span t-if="move.unite_is_kg">(<span t-field="move.secondary_uom_qty"></span>)</span>
+												<span t-if="move.unite_is_kg">(<span t-field="move.secondary_uom_qty"></span>Colis)</span>
 											</td>
 											<td>
 												<t t-if="has_barcode">
@@ -1772,7 +1772,7 @@
 													t-esc="move.product_uom._compute_quantity(move.quantity_done, move.product_id.uom_id, rounding_method='HALF-UP')" />
 												<span t-field="move.product_id.uom_id"
 													groups="product.group_uom" />
-												<span t-if="move.unite_is_kg">(<span t-field="move.secondary_uom_qty"></span>)</span>
+												<span t-if="move.unite_is_kg">(<span t-field="move.secondary_uom_qty"></span>Colis)</span>
 											</td>
 											<td>
 												<t t-if="has_barcode">
@@ -1880,7 +1880,7 @@
 													t-esc="move.product_uom._compute_quantity(move.quantity_done, move.product_id.uom_id, rounding_method='HALF-UP')" />
 												<span t-field="move.product_id.uom_id"
 													groups="product.group_uom" />
-												<span t-if="move.unite_is_kg">(<span t-field="move.secondary_uom_qty"></span>)</span>
+												<span t-if="move.unite_is_kg">(<span t-field="move.secondary_uom_qty"></span>Colis)</span>
 											</td>
 											<td>
 												<t t-if="has_barcode">
@@ -1964,7 +1964,7 @@
 													t-esc="move.product_uom._compute_quantity(move.quantity_done, move.product_id.uom_id, rounding_method='HALF-UP')" />
 												<span t-field="move.product_id.uom_id"
 													groups="product.group_uom" />
-												<span t-if="move.unite_is_kg">(<span t-field="move.secondary_uom_qty"></span>)</span>
+												<span t-if="move.unite_is_kg">(<span t-field="move.secondary_uom_qty"></span>Colis)</span>
 											</td>
 											<td>
 												<t t-if="has_barcode">
@@ -2075,7 +2075,7 @@
 													t-esc="move.product_uom._compute_quantity(move.quantity_done, move.product_id.uom_id, rounding_method='HALF-UP')" />
 												<span t-field="move.product_id.uom_id"
 													groups="product.group_uom" />
-												<span t-if="move.unite_is_kg">(<span t-field="move.secondary_uom_qty"></span>)</span>
+												<span t-if="move.unite_is_kg">(<span t-field="move.secondary_uom_qty"></span>Colis)</span>
 											</td>
 											<td>
 												<t t-if="has_barcode">
