@@ -32,6 +32,7 @@ class StockPicking(models.Model):
     
             
     def _compute_number_product_to_deliver(self):
+        self.ensure_one()
         for record in self:
             pickings = self.env['stock.picking'].search([('partner_id', '=', self.partner_id.id),('picking_type_code','=','outgoing')])
             cmpt = 0
@@ -40,6 +41,7 @@ class StockPicking(models.Model):
                     for move in picking.move_lines:
                         cmpt += move.secondary_uom_qty
             record.number_product_to_deliver = cmpt
+            
     
     
     def get_is_return_picking(self):
