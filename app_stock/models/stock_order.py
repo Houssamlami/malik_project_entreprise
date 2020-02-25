@@ -37,7 +37,7 @@ class StockPicking(models.Model):
             cmpt = 0
             for picking in pickings:
                 if dateutil.parser.parse(picking.scheduled_date).date() == dateutil.parser.parse(record.scheduled_date).date():
-                    cmpt += len(picking.move_lines)
+                    cmpt += picking.move_lines.secondary_uom_qty
             record.number_product_to_deliver = cmpt
     
     
