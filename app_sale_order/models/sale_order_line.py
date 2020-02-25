@@ -150,13 +150,17 @@ class SaleOrderLine(models.Model):
     def get_default_fact_qty(self):
         for line in self:
             qty_delivered = 0
-            if line.product_id and qty_delivered == 0:
-                picking = self.env['stock.picking'].search([('origin', '=', line.order_id.name),('state','=','done')],limit=1)
-                sml = self.env['stock.move.line'].search([('picking_id', '=', picking.id)])
-                for lines in sml:
-                    if line.product_id == lines.product_id:
-                        qty_delivered = lines.qty_done
-            line.qty_delivered = qty_delivered
+            if line.product_id and line.qty_delivered == 0:
+                pickings = self.env['stock.picking'].search([('origin', '=', line.order_id.name),('state','=','done'),('picking_type_code','=','outgoing')])
+                sml = self.env['stock.move.line'].search([('picking_id', 'in', pickings.ids),('state','=','done')])
+                if len(sml) != 0:
+                    for lines in sml:
+                        if line.product_id == lines.product_id:
+                            qty_delivered = lines.qty_done
+                    line.qty_delivered = qty_delivered
+                else:
+                    line.qty_delivered = 0
+                    
             
     @api.multi
     def get_default_fact_qtys(self):
