@@ -42,6 +42,7 @@ class StockPicking(models.Model):
             record.number_product_to_deliver = cmpt
     
     
+    
     def get_is_return_picking(self):
         for record in self:
             SO = 'SO'
