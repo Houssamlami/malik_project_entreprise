@@ -150,13 +150,13 @@ class SaleOrderLine(models.Model):
     def get_default_fact_qty(self):
         for line in self:
             qty_delivered = 0
-            if line.product_id and line.qty_delivered == 0:
+            if line.product_id:
                 pickings = self.env['stock.picking'].search([('origin', '=', line.order_id.name),('state','=','done'),('picking_type_code','=','outgoing')])
                 sml = self.env['stock.move.line'].search([('picking_id', 'in', pickings.ids),('state','=','done')])
                 if len(sml) != 0:
                     for lines in sml:
                         if line.product_id == lines.product_id:
-                            qty_delivered = lines.qty_done
+                            qty_delivered += lines.qty_done
                     line.qty_delivered = qty_delivered
                 else:
                     line.qty_delivered = 0
@@ -166,10 +166,13 @@ class SaleOrderLine(models.Model):
     def get_default_fact_qtys(self):
         for line in self:
             qty_invoiced = 0
-            if line.product_id and qty_invoiced == 0:
-                invoice = self.env['account.invoice'].search([('origin', 'ilike', line.order_id.name),('state','in',['paid','open'])])
-                ail = self.env['account.invoice.line'].search([('invoice_id', '=', invoice.ids)])
-                for lines in ail:
-                    if line.product_id == lines.product_id:
-                        qty_invoiced = lines.quantity
-            line.qty_invoiced = qty_invoiced
+            if line.product_id:
+                invoices = self.env['account.invoice'].search([('origin', '=', line.order_id.name),('state','in',['paid','open'])])
+                ail = self.env['account.invoice.line'].search([('invoice_id', 'in', invoice.ids)])
+                if len(ail) != 0:
+                    for lines in ail:
+                        if line.product_id == lines.product_id:
+                            qty_invoiced += lines.quantity
+                    line.qty_invoiced = qty_invoiced
+                else:
+                    line.qty_invoiced = 0
