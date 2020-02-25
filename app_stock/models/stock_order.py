@@ -33,7 +33,7 @@ class StockPicking(models.Model):
             
     def _compute_number_product_to_deliver(self):
         for record in self:
-            pickings = self.env['stock.picking'].search([('partner_id', '=', self.partner_id.id),('picking_type_code','=','outgoing')])
+            pickings = self.env.context.get('active_ids').env['stock.picking'].search([('partner_id', '=', self.partner_id.id),('picking_type_code','=','outgoing')])
             cmpt = 0
             for picking in pickings:
                 if dateutil.parser.parse(picking.scheduled_date).date() == dateutil.parser.parse(record.scheduled_date).date():
