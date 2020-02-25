@@ -30,9 +30,8 @@ class StockPicking(models.Model):
     name_provisoir = fields.Char(string="Nom Provisoir", compute='get_is_return_picking')
     number_product_to_deliver = fields.Float(string='Produits à livrer', compute='_compute_number_product_to_deliver')
     
-            
+    @api.one      
     def _compute_number_product_to_deliver(self):
-        self.ensure_one()
         for record in self:
             pickings = self.env['stock.picking'].search([('partner_id', '=', self.partner_id.id),('picking_type_code','=','outgoing')])
             cmpt = 0
