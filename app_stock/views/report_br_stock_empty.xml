@@ -88,8 +88,8 @@
 									<img
 										t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('Code128', o.name, 600, 100)"
 										style="width:300px;height:50px" class="pull-right mb16" />
-									<h1 t-if="not o.name_provisoir" t-field="o.name" class="mt0 pull-left" />
-									<h1 t-if="o.name_provisoir" t-field="o.name_provisoir" class="mt0 pull-left" />
+									<h1 t-if="not o.name_provisoir" class="mt0 pull-left" ><span t-if="o.picking_type_code == 'outgoing'">Bon de Préparation:</span><span t-field="o.name"/></h1>
+									<h1 t-if="o.name_provisoir" class="mt0 pull-left" ><span t-field="o.name_provisoir"/></h1>
 
 									<div class="clearfix" />
 									<table class="table table-condensed">
@@ -107,7 +107,7 @@
 												<th name="td_sched_date_h">
 													<strong>Scheduled Date</strong>
 												</th>
-												<th><strong>Produits à préparer</strong></th>
+												<th><strong>Colis à préparer</strong></th>
 											</tr>
 										</thead>
 										<tbody>
@@ -194,6 +194,7 @@
 																t-esc="move.product_uom._compute_quantity(move.quantity_done, move.product_id.uom_id, rounding_method='HALF-UP')" />
 															<span t-field="move.product_id.uom_id"
 																groups="product.group_uom" />
+															<span t-if="move.unite_is_kg">(<span t-field="move.secondary_uom_qty"></span>)</span>
 														</td>
 														<td>
 
@@ -308,6 +309,7 @@
 																t-esc="move.product_uom._compute_quantity(move.quantity_done, move.product_id.uom_id, rounding_method='HALF-UP')" />
 															<span t-field="move.product_id.uom_id"
 																groups="product.group_uom" />
+															<span t-if="move.unite_is_kg">(<span t-field="move.secondary_uom_qty"></span>)</span>
 														</td>
 														<td>
 
@@ -418,6 +420,7 @@
 																t-esc="move.product_uom._compute_quantity(move.quantity_done, move.product_id.uom_id, rounding_method='HALF-UP')" />
 															<span t-field="move.product_id.uom_id"
 																groups="product.group_uom" />
+															<span t-if="move.unite_is_kg">(<span t-field="move.secondary_uom_qty"></span>)</span>
 														</td>
 														<td>
 
@@ -527,6 +530,7 @@
 																t-esc="move.product_uom._compute_quantity(move.quantity_done, move.product_id.uom_id, rounding_method='HALF-UP')" />
 															<span t-field="move.product_id.uom_id"
 																groups="product.group_uom" />
+															<span t-if="move.unite_is_kg">(<span t-field="move.secondary_uom_qty"></span>)</span>
 														</td>
 														<td>
 
@@ -641,6 +645,7 @@
 																t-esc="move.product_uom._compute_quantity(move.quantity_done, move.product_id.uom_id, rounding_method='HALF-UP')" />
 															<span t-field="move.product_id.uom_id"
 																groups="product.group_uom" />
+															<span t-if="move.unite_is_kg">(<span t-field="move.secondary_uom_qty"></span>)</span>
 														</td>
 														<td>
 
@@ -753,6 +758,7 @@
 																t-esc="move.product_uom._compute_quantity(move.quantity_done, move.product_id.uom_id, rounding_method='HALF-UP')" />
 															<span t-field="move.product_id.uom_id"
 																groups="product.group_uom" />
+															<span t-if="move.unite_is_kg">(<span t-field="move.secondary_uom_qty"></span>)</span>
 														</td>
 														<td>
 
@@ -867,6 +873,7 @@
 																t-esc="move.product_uom._compute_quantity(move.quantity_done, move.product_id.uom_id, rounding_method='HALF-UP')" />
 															<span t-field="move.product_id.uom_id"
 																groups="product.group_uom" />
+															<span t-if="move.unite_is_kg">(<span t-field="move.secondary_uom_qty"></span>)</span>
 														</td>
 														<td>
 
@@ -980,6 +987,7 @@
 																t-esc="move.product_uom._compute_quantity(move.quantity_done, move.product_id.uom_id, rounding_method='HALF-UP')" />
 															<span t-field="move.product_id.uom_id"
 																groups="product.group_uom" />
+															<span t-if="move.unite_is_kg">(<span t-field="move.secondary_uom_qty"></span>)</span>
 														</td>
 														<td>
 
@@ -1090,6 +1098,7 @@
 																t-esc="move.product_uom._compute_quantity(move.quantity_done, move.product_id.uom_id, rounding_method='HALF-UP')" />
 															<span t-field="move.product_id.uom_id"
 																groups="product.group_uom" />
+															<span t-if="move.unite_is_kg">(<span t-field="move.secondary_uom_qty"></span>)</span>
 														</td>
 														<td>
 
@@ -1202,6 +1211,7 @@
 																t-esc="move.product_uom._compute_quantity(move.quantity_done, move.product_id.uom_id, rounding_method='HALF-UP')" />
 															<span t-field="move.product_id.uom_id"
 																groups="product.group_uom" />
+															<span t-if="move.unite_is_kg">(<span t-field="move.secondary_uom_qty"></span>)</span>
 														</td>
 														<td>
 
@@ -1313,6 +1323,7 @@
 																t-esc="move.product_uom._compute_quantity(move.quantity_done, move.product_id.uom_id, rounding_method='HALF-UP')" />
 															<span t-field="move.product_id.uom_id"
 																groups="product.group_uom" />
+															<span t-if="move.unite_is_kg">(<span t-field="move.secondary_uom_qty"></span>)</span>
 														</td>
 														<td>
 
@@ -1440,8 +1451,8 @@
 									<img
 										t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('Code128', o.name, 600, 100)"
 										style="width:300px;height:50px" class="pull-right mb16" />
-									<h1 t-if="not o.name_provisoir" t-field="o.name" class="mt0 pull-left" />
-									<h1 t-if="o.name_provisoir" t-field="o.name_provisoir" class="mt0 pull-left" />
+									<h1 t-if="not o.name_provisoir" class="mt0 pull-left" ><span t-if="o.picking_type_code == 'outgoing'">Bon de Préparation:</span><span t-field="o.name"/></h1>
+									<h1 t-if="o.name_provisoir" class="mt0 pull-left" ><span t-field="o.name_provisoir"/></h1>
 									<div class="clearfix" />
 									<table class="table table-condensed">
 										<thead>
@@ -1458,7 +1469,7 @@
 												<th name="td_sched_date_h">
 													<strong>Scheduled Date</strong>
 												</th>
-												<th><strong>Produits à préparer</strong></th>
+												<th><strong>Colis à préparer</strong></th>
 											</tr>
 										</thead>
 										<tbody>
@@ -1536,6 +1547,7 @@
 																t-esc="move.product_uom._compute_quantity(move.quantity_done, move.product_id.uom_id, rounding_method='HALF-UP')" />
 															<span t-field="move.product_id.uom_id"
 																groups="product.group_uom" />
+															<span t-if="move.unite_is_kg">(<span t-field="move.secondary_uom_qty"></span>)</span>
 														</td>
 														<td>
 
@@ -1664,8 +1676,8 @@
 									<img
 										t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('Code128', o.name, 600, 100)"
 										style="width:300px;height:50px" class="pull-right mb16" />
-									<h1 t-if="not o.name_provisoir" t-field="o.name" class="mt0 pull-left" />
-									<h1 t-if="o.name_provisoir" t-field="o.name_provisoir" class="mt0 pull-left" />
+									<h1 t-if="not o.name_provisoir" class="mt0 pull-left" ><span t-if="o.picking_type_code == 'outgoing'">Bon de Préparation:</span><span t-field="o.name"/></h1>
+									<h1 t-if="o.name_provisoir" class="mt0 pull-left" ><span t-field="o.name_provisoir"/></h1>
 
 									<div class="clearfix" />
 									<table class="table table-condensed">
@@ -1683,7 +1695,7 @@
 												<th name="td_sched_date_h">
 													<strong>Scheduled Date</strong>
 												</th>
-												<th><strong>Produits à préparer</strong></th>
+												<th><strong>Colis à préparer</strong></th>
 											</tr>
 										</thead>
 										<tbody>
@@ -1759,6 +1771,7 @@
 																t-esc="move.product_uom._compute_quantity(move.quantity_done, move.product_id.uom_id, rounding_method='HALF-UP')" />
 															<span t-field="move.product_id.uom_id"
 																groups="product.group_uom" />
+															<span t-if="move.unite_is_kg">(<span t-field="move.secondary_uom_qty"></span>)</span>
 														</td>
 														<td>
 
@@ -1866,6 +1879,7 @@
 																t-esc="move.product_uom._compute_quantity(move.quantity_done, move.product_id.uom_id, rounding_method='HALF-UP')" />
 															<span t-field="move.product_id.uom_id"
 																groups="product.group_uom" />
+															<span t-if="move.unite_is_kg">(<span t-field="move.secondary_uom_qty"></span>)</span>
 														</td>
 														<td>
 
@@ -1949,6 +1963,7 @@
 																t-esc="move.product_uom._compute_quantity(move.quantity_done, move.product_id.uom_id, rounding_method='HALF-UP')" />
 															<span t-field="move.product_id.uom_id"
 																groups="product.group_uom" />
+															<span t-if="move.unite_is_kg">(<span t-field="move.secondary_uom_qty"></span>)</span>
 														</td>
 														<td>
 
@@ -2059,6 +2074,7 @@
 																t-esc="move.product_uom._compute_quantity(move.quantity_done, move.product_id.uom_id, rounding_method='HALF-UP')" />
 															<span t-field="move.product_id.uom_id"
 																groups="product.group_uom" />
+															<span t-if="move.unite_is_kg">(<span t-field="move.secondary_uom_qty"></span>)</span>
 														</td>
 														<td>
 
