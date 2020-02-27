@@ -129,7 +129,7 @@ class AccountInvoiceReport(models.Model):
                     ai.fac_charcuterie_f AS fac_charcuterie_f,
                     ai.fac_volaille_f AS fac_volaille_f,
                     ai.cli_pc AS cli_pc,
-                    ai.name AS ref_invoice_name,
+                    ai.number AS ref_invoice_name,
                     ai.cli_gc AS cli_gc,
                     ail.product_id, ai.partner_id, ai.payment_term_id, ail.account_analytic_id,
                     u2.name AS uom_name,
