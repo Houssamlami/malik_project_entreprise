@@ -17,6 +17,9 @@
 						<field name="total_weight_delivered"/>
 					</group>
 				</xpath>
+				<xpath expr="//field[@name='owner_id']" position="after">
+						<field name="expediteur_in_picking" attrs="{'invisible': [('picking_type_code','=','incoming')]}"/>
+				</xpath>
 				<xpath expr="//h1" position="replace">
 					<h1 class="hidden-xs">
                         <field name="name" attrs="{'invisible': ['|',('name','=','/'),('name_provisoir','!=',False)]}" readonly="1"/>
