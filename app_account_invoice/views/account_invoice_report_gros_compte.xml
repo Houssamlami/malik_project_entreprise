@@ -94,7 +94,7 @@
 		<t t-set="invoice_lines" t-value="o.invoice_line_ids" />
 		<t t-foreach="invoice_lines" t-as="l">
 
-			<!-- <t t-if="l.move_line_ids.picking_id == picking"> -->
+			<t t-if="l.move_line_ids.picking_id == picking">
 				<tr>
 					<!-- <t t-set="next_picking" t-value="[lines[i + 1] for i in enumerate(lines)"/> -->
 					<td>
@@ -125,7 +125,7 @@
 				</tr>
 			</t>
 		</t>
-		<!--  </t>-->
+		</t>
 		<tr t-foreach="o.invoice_line_ids" t-as="l">
 		<t t-if="l.product_id.name == 'TRANSPORT GRAND COMPTE'">
                                 <td><span t-field="l.name"/></td>

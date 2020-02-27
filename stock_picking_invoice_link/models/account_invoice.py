@@ -13,6 +13,7 @@ class AccountInvoice(models.Model):
     picking_ids = fields.Many2many(
         comodel_name='stock.picking',
         string='Related Pickings',
+        readonly=True,
         copy=False,
         help="Related pickings "
              "(only when the invoice has been generated from a sale order).",
