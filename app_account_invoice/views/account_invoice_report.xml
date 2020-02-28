@@ -71,9 +71,9 @@
 			<div class="header o_clean_header">
             <div class="row">
                 <div class="col-xs-6">
-                    <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" style="max-height: 195px;"/>
+                    <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" style="max-height: 185px;"/>
                 </div>
-                <div class="col-xs-5 col-xs-offset-1" name="company_address" style="margin-left:-250px">
+                <div class="col-xs-5 col-xs-offset-1" name="company_address" style="margin-left:-265px">
                     <ul class="list-unstyled">
                         <strong><li t-if="company.name"><span t-field="company.name"/></li></strong>
                         <li t-if="company.vat"><t t-esc="company.country_id.vat_label or 'TIN'"/>: <span t-field="company.vat"/></li>
