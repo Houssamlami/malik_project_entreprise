@@ -12,12 +12,12 @@ class AccountInvoice(models.Model):
 
     picking_ids = fields.Many2many(
         comodel_name='stock.picking',
-        string='Related Pickings',
         readonly=True,
+        string='Related Pickings',
         copy=False,
         help="Related pickings "
              "(only when the invoice has been generated from a sale order).",
-    )
+    ) 
 
     @api.model
     def _refund_cleanup_lines(self, lines):
@@ -36,11 +36,11 @@ class AccountInvoiceLine(models.Model):
 
     move_line_ids = fields.Many2many(
         comodel_name='stock.move',
+        readonly=True,
         relation='stock_move_invoice_line_rel',
         column1='invoice_line_id',
         column2='move_id',
         string='Related Stock Moves',
-        readonly=True,
         help="Related stock moves "
              "(only when the invoice has been generated from a sale order).",
     )
