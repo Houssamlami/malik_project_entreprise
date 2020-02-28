@@ -12,6 +12,7 @@ class AccountInvoice(models.Model):
 
     picking_ids = fields.Many2many(
         comodel_name='stock.picking',
+        readonly=True,
         string='Related Pickings',
         copy=False,
         help="Related pickings "
@@ -35,6 +36,7 @@ class AccountInvoiceLine(models.Model):
 
     move_line_ids = fields.Many2many(
         comodel_name='stock.move',
+        readonly=True,
         relation='stock_move_invoice_line_rel',
         column1='invoice_line_id',
         column2='move_id',
