@@ -16,7 +16,7 @@ class AccountInvoice(models.Model):
         copy=False,
         help="Related pickings "
              "(only when the invoice has been generated from a sale order).",
-    )
+    ) 
 
     @api.model
     def _refund_cleanup_lines(self, lines):
