@@ -8,7 +8,14 @@
 			<xpath expr="//h2" position="after">
 				<div class="row mt32 mb32"> <span>Objet : </span> <p t-field="o.object"/></div>
 				</xpath>
-			
+				
+			<xpath expr="//div[@class='row mt32 mb32']/div[3]"
+				position="after">
+			<div class="col-xs-2" t-if="o.date_livraison and o.type == 'out_invoice' and (o.state == 'open' or o.state == 'paid')">
+                            <strong>Date de livraison:</strong>
+                            <p t-field="o.date_livraison"/>
+                        </div>
+			</xpath>		
 				<xpath expr="//table[@class='table table-condensed']"
 				position="replace">
 				<table class="table table-condensed" name="invoice_line_table">
@@ -52,6 +59,26 @@
 				</xpath>
 				
 		</template>
-	
+	<template id="report_modify_external_standard_fhs"
+	inherit_id="web.external_layout_standard">
+	<xpath expr="//div[@class='header']" position="replace">
+			<div class="header o_background_header">
+				<div class="pull-right">
+					<h3 class="mt0 text-right" t-field="company.report_header" />
+				</div>
+				<img t-if="company.logo"
+					t-att-src="'data:image/png;base64,%s' % to_text(company.logo)"
+					class="pull-left" />
+				<div class="pull-left company_address" style="margin-top:16px;">
+					<div>
+						<strong t-field="company.partner_id.name" />
+					</div>
+					<span t-field="company.partner_id"
+						t-field-options='{"widget": "contact", "fields": ["address"], "no_marker": true}' />
+				</div>
+				<div class="clearfix mb8" />
+			</div>
+	</xpath>
+</template>
 </odoo>
 			
