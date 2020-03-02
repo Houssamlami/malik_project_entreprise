@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		<record model="ir.ui.view"
+			id="view_product_margin_tree_inherit">
+			<field name="name">view.product.margin.tree.inherit</field>
+			<field name="model">product.product</field>
+			<field name="inherit_id"
+				ref="product_margin.view_product_margin_tree" />
+			<field name="arch" type="xml">
+				<xpath expr="//field[@name='purchase_num_invoiced']"
+					position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+			</field>
+		</record>
+		
+		<record model="ir.ui.view"
+			id="view_product_margin_form_inherit">
+			<field name="name">view.product.margin.form.inherit</field>
+			<field name="model">product.product</field>
+			<field name="inherit_id"
+				ref="product_margin.view_product_margin_form" />
+			<field name="arch" type="xml">
+				<xpath expr="//field[@name='purchase_num_invoiced']"
+					position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+			</field>
+		</record>
+	</data>
+</odoo>
