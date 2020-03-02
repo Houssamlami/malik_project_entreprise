@@ -13,12 +13,20 @@ class AccountInvoice(models.Model):
 
 
     type_avoir = fields.Selection([
-        ('Qualité de Produit BONA', 'Qualité de Produit Crusvi'),
-        ('Qualité de Produit Imex', 'Qualité de Produit Atlas negoce'),
-        ('Qualité de Produit Nouvelle Atlas', 'Qualité de Produit Tradco'),
-        ('Refus de commandes', 'Manque de produit à la livraison'),
-        ('Erreur de préparation TTM', 'Annulation de facture et refacturation'),
-        ('DLC Courte', 'Erreur de saisie'),
-        ('Gonflement par commercial', 'Erreur sur la remise'),
-        ('Erreur sur le prix', 'Geste commercial'),
+        ('Qualité de Produit BONA', 'Qualité de Produit BONA'),
+        ('Qualité de Produit Crusvi', 'Qualité de Produit Crusvi'),
+        ('Qualité de Produit Imex', 'Qualité de Produit Imex'),
+        ('Qualité de Produit Atlas negoce', 'Qualité de Produit Atlas negoce'),
+        ('Qualité de Produit Nouvelle Atlas', 'Qualité de Produit Nouvelle Atlas'),
+        ('Qualité de Produit Tradco', 'Qualité de Produit Tradco'),
+        ('Refus de commandes', 'Refus de commandes'),
+        ('Manque de produit à la livraison', 'Manque de produit à la livraison'),
+        ('Erreur de préparation TTM', 'Erreur de préparation TTM'),
+        ('Annulation de facture et refacturation', 'Annulation de facture et refacturation'),
+        ('DLC Courte', 'DLC Courte'),
+        ('Erreur de saisie', 'Erreur de saisie'),
+        ('Gonflement par commercial', 'Gonflement par commercial'),
+        ('Erreur sur la remise', 'Erreur sur la remise'),
+        ('Erreur sur le prix', 'Erreur sur le prix'),
+        ('Geste commercial', 'Geste commercial'),
         ],)
