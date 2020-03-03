@@ -17,7 +17,6 @@ class ProductProduct(models.Model):
         for val in self:
             res[val.id] = {}
             date_from = self.env.context.get('date_from', time.strftime('%Y-01-01'))
-            standard_price = val.product_tmpl_id.standard_price
             date_to = self.env.context.get('date_to', time.strftime('%Y-12-31'))
             invoice_state = self.env.context.get('invoice_state', 'open_paid')
             res[val.id]['date_from'] = date_from
@@ -42,7 +41,8 @@ class ProductProduct(models.Model):
                     sum(l.price_unit * l.quantity)/nullif(sum(l.quantity),0) as avg_unit_price,
                     sum(l.quantity) as num_qty,
                     sum(l.quantity * (l.price_subtotal_signed/(nullif(l.quantity,0)))) as total,
-                    sum(l.quantity * pt.list_price) as sale_expected
+                    sum(l.quantity * pt.list_price) as sale_expected,
+                    pt.standard_price as sp
                 from account_invoice_line l
                 left join account_invoice i on (l.invoice_id = i.id)
                 left join product_product product on (product.id=l.product_id)
@@ -61,6 +61,7 @@ class ProductProduct(models.Model):
             res[val.id]['sale_num_invoiced'] = result[1] and result[1] or 0.0
             res[val.id]['sale_expected'] = result[3] and result[3] or 0.0
             res[val.id]['sales_gap'] = res[val.id]['sale_expected'] - res[val.id]['turnover']
+            standard_price = result[4] and result[4] or 0.0
             ctx = self.env.context.copy()
             ctx['force_company'] = company_id
             invoice_types = ('in_invoice', 'out_refund')
