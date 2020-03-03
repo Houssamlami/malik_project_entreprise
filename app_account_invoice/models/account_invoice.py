@@ -17,11 +17,16 @@ class AccountInvoice(models.Model):
     cli_pc = fields.Boolean('Client petit compte', related='partner_id.Client_PC', track_visibility='onchange', store=True)
     date_commande = fields.Date(string="Date Commande")
     date_livraison = fields.Date(string="Date Livraison")
-    qty_livrer_colis = fields.Float(string="Colis", readonly=True)
+    qty_livrer_colis = fields.Float(string="Colis", readonly=True, compute='get_total_colis_invoice')
     commercial = fields.Many2one(comodel_name='hr.employee', string="Commercial")
     vendeur = fields.Many2one(comodel_name='hr.employee', string="Vendeur")
     object = fields.Text(string="Objet")
     ref_livraison = fields.Many2one(comodel_name='stock.picking', string="Ref livraison", track_visibility='onchange')
+    
+    def get_total_colis_invoice(self):
+        for record in self:
+            colis = sum(self.env['stock.picking'].search([('state', '=', 'done'),('picking_type_id.code', '=', 'outgoing'),('origin', 'ilike', self.origin)]).mapped('total_colis_delivered')) - self.picking_ids.filtered(lambda r: r.picking_type_id.code == 'incoming' and r.state == 'done').total_colis_delivered
+            record.qty_livrer_colis = colis
     
     
     
