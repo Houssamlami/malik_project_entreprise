@@ -17,6 +17,7 @@ class ProductProduct(models.Model):
         for val in self:
             res[val.id] = {}
             date_from = self.env.context.get('date_from', time.strftime('%Y-01-01'))
+            standard_price = val.product_tmpl_id.standard_price
             date_to = self.env.context.get('date_to', time.strftime('%Y-12-31'))
             invoice_state = self.env.context.get('invoice_state', 'open_paid')
             res[val.id]['date_from'] = date_from
@@ -48,12 +49,16 @@ class ProductProduct(models.Model):
                 left join product_template pt on (pt.id = product.product_tmpl_id)
                 where l.product_id = %s and i.state in %s and i.type IN %s and (i.date_invoice IS NULL or (i.date_invoice>=%s and i.date_invoice<=%s and i.company_id=%s))
                 """
+            invoice_type = ('out_invoice', 'out_refund')
+            self.env.cr.execute(sqlstr, (val.id, states, invoice_type, date_from, date_to, company_id))
+            result = self.env.cr.fetchall()[0]
+            res[val.id]['turnover'] = result[2] and result[2] or 0.0
+            
             invoice_types = ('out_invoice', 'in_refund')
             self.env.cr.execute(sqlstr, (val.id, states, invoice_types, date_from, date_to, company_id))
             result = self.env.cr.fetchall()[0]
             res[val.id]['sale_avg_price'] = result[0] and result[0] or 0.0
             res[val.id]['sale_num_invoiced'] = result[1] and result[1] or 0.0
-            res[val.id]['turnover'] = result[2] and result[2] or 0.0
             res[val.id]['sale_expected'] = result[3] and result[3] or 0.0
             res[val.id]['sales_gap'] = res[val.id]['sale_expected'] - res[val.id]['turnover']
             ctx = self.env.context.copy()
@@ -63,7 +68,7 @@ class ProductProduct(models.Model):
             result = self.env.cr.fetchall()[0]
             res[val.id]['purchase_avg_price'] = result[0] and result[0] or 0.0
             res[val.id]['purchase_num_invoiced'] = result[1] and result[1] or 0.0
-            res[val.id]['total_cost'] = res[val.id]['sale_num_invoiced'] * val.product_tmpl_id.standard_price
+            res[val.id]['total_cost'] = res[val.id]['sale_num_invoiced'] * standard_price
             res[val.id]['normal_cost'] = val.standard_price * res[val.id]['sale_num_invoiced']
             res[val.id]['purchase_gap'] = res[val.id]['normal_cost'] - res[val.id]['total_cost']
 
