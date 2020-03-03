@@ -2372,7 +2372,7 @@
 					</td>
 				</tr>
 			</table>
-			<br />
+			<!--  <br />
 			<div align="right" style="margin-bottom:4%;">
 				<table t-if="o.picking_type_id.code == 'outgoing'"
 					class="table table-condensed" style="width:350px;">
@@ -2393,7 +2393,7 @@
 						</td>
 					</tr>
 				</table>
-			</div>
+			</div>-->
 		</xpath>
 	</template>
 	</data>
