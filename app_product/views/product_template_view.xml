@@ -45,6 +45,11 @@
 				position="attributes">
 				<attribute name="force_save">1</attribute>
 			</xpath>
+			<xpath
+				expr="//group[@name='group_standard_price']/label"
+				position="attributes">
+				<attribute name="string">Coût de revient</attribute>
+			</xpath>
             <xpath expr="//page[@name='general_information']/group" position="after">
             <separator string="Calcul des Coûts/Prix:" groups="sales_team.group_sale_manager"/>
             <group groups="sales_team.group_sale_manager">
