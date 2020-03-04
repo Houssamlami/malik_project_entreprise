@@ -10,8 +10,8 @@
 
 				<xpath expr="//field[@name='name']"
 					position="after">
-						<!-- <field name="commercial" string="Commercial" /> -->
-						<field name="vendeur" string="Vendeur" />
+						<!-- <field name="commercial" string="Commercial" /> 
+						<field name="vendeur" string="Vendeur" />-->
 				</xpath>
 				<xpath expr="//field[@name='payment_term_id']"
 					position="after">
