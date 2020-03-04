@@ -10,6 +10,10 @@ class ProductProduct(models.Model):
     _inherit = "product.product"
     
     
+    price_avg_rate = fields.Float(compute='_compute_product_margin_fields_values', string='% de remise moyen',
+        help="Pourcentage de remise moyen")
+    
+    
     def _compute_product_margin_fields_values(self, field_names=None):
         res = {}
         if field_names is None:
@@ -54,6 +58,9 @@ class ProductProduct(models.Model):
             result = self.env.cr.fetchall()[0]
             res[val.id]['turnover'] = result[2] and result[2] or 0.0
             
+            ctx = self.env.context.copy()
+            ctx['force_company'] = company_id
+            
             invoice_types = ('out_invoice', 'in_refund')
             self.env.cr.execute(sqlstr, (val.id, states, invoice_types, date_from, date_to, company_id))
             result = self.env.cr.fetchall()[0]
@@ -76,6 +83,7 @@ class ProductProduct(models.Model):
             res[val.id]['expected_margin'] = res[val.id]['sale_expected'] - res[val.id]['normal_cost']
             res[val.id]['total_margin_rate'] = res[val.id]['turnover'] and res[val.id]['total_margin'] * 100 / res[val.id]['turnover'] or 0.0
             res[val.id]['expected_margin_rate'] = res[val.id]['sale_expected'] and res[val.id]['expected_margin'] * 100 / res[val.id]['sale_expected'] or 0.0
+            res[val.id]['price_avg_rate'] = val.product_tmpl_id.list_price and (val.product_tmpl_id.list_price - res[val.id]['sale_avg_price'])* 100 / val.product_tmpl_id.list_price or 0.0
             for k, v in res[val.id].items():
                 setattr(val, k, v)
         return res
