@@ -39,6 +39,12 @@
                             </thead>
                             <tbody class="invoice_tbody">
                             <tr t-foreach="o.invoice_line_ids" t-as="l" >
+                            <t t-if="l.product_id.number_unit != 0">
+                            <t t-set="price_carte_provi" t-value="l.price_unit/l.product_id.number_unit"/>
+                            </t>
+                             <t t-else="">
+                             <t t-set="price_carte_provi" t-value="l.product_id.price_cart"/>
+                             </t>
                                 <td ><div style="margin: auto;"><span t-field="l.name"/></div></td>                             
                                 <td class="text-right">
                                    <div style="margin: auto;">
@@ -50,7 +56,7 @@
 					           <center><span t-field="l.product_id.number_unit" /></center>
 				                </td> 
                                 <td t-if="o.user_id.name != 'FATIMAZAHRA Comptabilité'" class="text-right">
-                                    <div style="margin: auto;"><center><span t-field="l.product_id.price_cart"/></center></div>
+                                    <div style="margin: auto;"><center><span t-esc="price_carte_provi"/></center></div>
                                 </td>
                                 <td class="text-right">
                                     <div style="margin: auto;"><span t-field="l.price_unit"/></div>
