@@ -170,7 +170,7 @@ class ProductTemplate(models.Model):
     cout_ttm = fields.Float(string=u"Transport Vente", track_visibility='onchange')
     price_for_buy = fields.Float(compute='_get_prix_vente_produit')
     charge_fixe = fields.Float(string=u"Charge Fixe", help=u"Ce pourcentage se base sur la somme du Prix d\'Achat, Prix de Transport, Coût AVS et Coût TTM", track_visibility='onchange')
-    cout_revient = fields.Float(compute='calcul_prix_min_vente_estime', string=u"Coût de revient", track_visibility='onchange')
+    cout_revient = fields.Float(compute='calcul_prix_min_vente_estime', string=u"Coût de revient de base", track_visibility='onchange')
     prix_min_vente = fields.Float(compute='calcul_prix_min_vente', string=u"Prix de vente Min", track_visibility='onchange')
     marge = fields.Float(string=u"Marge Commerciale", track_visibility='onchange')
     marge_securite = fields.Float(string=u"Marge de securité", track_visibility='onchange')
