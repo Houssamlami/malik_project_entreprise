@@ -30,10 +30,10 @@
                             <t t-set="kilo" t-value="any([l.uom_id.name != 'kg' for l in o.invoice_line_ids])"/>
                                 <th ><center>Description</center></th>                                                          
                                 <th class="text-right"><center>Quantité</center></th>
-                                <th t-if="kilo and o.user_id.name != 'FATIMAZAHRA Comptabilité'" class="text-right"><center>Nombre d'unités</center></th>
-                                <th class="text-right"><center>Taxes</center></th>
-                                <th t-if="o.user_id.name != 'FATIMAZAHRA Comptabilité'" class="text-right"><center>Prix de vente sur la carte</center></th>
+                                <th t-if="kilo and o.user_id.name != 'FATIMAZAHRA Comptabilité'" class="text-right"><center>U/C</center></th>
+                                <th t-if="o.user_id.name != 'FATIMAZAHRA Comptabilité'" class="text-right"><center>PU de base</center></th>
                                 <th class="text-right"><center>Prix unitaire</center></th>
+                                <th class="text-right"><center>Taxes</center></th>
                                 <th class="text-right"><center>Montant</center></th>
                             </tr>
                             </thead>
@@ -41,25 +41,23 @@
                             <tr t-foreach="o.invoice_line_ids" t-as="l" >
                                 <td ><div style="margin: auto;"><span t-field="l.name"/></div></td>                             
                                 <td class="text-right">
-                                   <div style="margin: auto;"> <span t-field="l.colis" t-if="o.fac_volaille_f and l.product_id.uom_id.name == 'kg'"/>
-                                   <span t-if="o.fac_volaille_f and l.product_id.uom_id.name == 'kg'">Colis(</span>
+                                   <div style="margin: auto;">
                                    <span t-field="l.quantity"/>
                                     <span t-field="l.uom_id"  groups="product.group_uom"/>
-                                     <span t-if="o.fac_volaille_f and l.product_id.uom_id.name == 'kg'">)</span>
                                     </div>
                                 </td>
-                                <td t-if="kilo and o.user_id.name != 'FATIMAZAHRA Comptabilité'" class="text-right">
-					           <span t-field="l.product_id.number_unit" />
+                               <td t-if="kilo and o.user_id.name != 'FATIMAZAHRA Comptabilité'" class="text-right">
+					           <center><span t-field="l.product_id.number_unit" /></center>
 				                </td> 
-				                <td class="text-right">
-                                    <span t-esc="', '.join(map(lambda x: (x.description or x.name), l.invoice_line_tax_ids))"/>
-                                </td>
                                 <td t-if="o.user_id.name != 'FATIMAZAHRA Comptabilité'" class="text-right">
-                                    <div style="margin: auto;"><span t-field="l.product_id.price_cart"/></div>
+                                    <div style="margin: auto;"><center><span t-field="l.product_id.price_cart"/></center></div>
                                 </td>
                                 <td class="text-right">
                                     <div style="margin: auto;"><span t-field="l.price_unit"/></div>
-                                </td>                                                                
+                                </td>      
+                                <td class="text-right">
+                                    <span t-esc="', '.join(map(lambda x: (x.description or x.name), l.invoice_line_tax_ids))"/>
+                                </td>                                                          
                                 <td class="text-right" id="subtotal">
                                    <div style="margin: auto;"> <span t-field="l.price_subtotal"
                                         t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></div>
