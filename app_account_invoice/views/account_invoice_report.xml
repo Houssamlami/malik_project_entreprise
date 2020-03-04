@@ -56,7 +56,7 @@
 					           <center><span t-field="l.product_id.number_unit" /></center>
 				                </td> 
                                 <td t-if="o.user_id.name != 'FATIMAZAHRA Comptabilité'" class="text-right">
-                                    <div style="margin: auto;"><center><span t-esc="price_carte_provi"/></center></div>
+                                    <div style="margin: auto;"><center><span t-esc="price_carte_provi" t-esc-options='{"widget": "float", "decimal_precision": "Product Unit of Measure"}'/></center></div>
                                 </td>
                                 <td class="text-right">
                                     <div style="margin: auto;"><center><span t-field="l.price_unit"/></center></div>
