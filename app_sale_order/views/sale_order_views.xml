@@ -167,6 +167,24 @@
              	</xpath>
 			</field>
 		 </record>  
+		 
+<record model="ir.ui.view"
+	id="sale_type_command_commercial_form">
+	<field name="name">sale.type.command.commercial.form</field>
+	<field name="model">sale.order</field>
+	<field name="inherit_id"
+		ref="app_sale_order.sale_weight_line_form" />
+	<field name="arch" type="xml">
+		<xpath expr="//field[@name='cmd_volaille']"
+			position="attributes">
+			<attribute name="attrs">{'invisible': [('cmd_charcuterie','=',False),('cmd_volaille', '=',False)], 'readonly': [('cmd_charcuterie', '=',True),('cmd_volaille', '=',False)]}</attribute>
+		</xpath>
+		<xpath expr="//field[@name='cmd_charcuterie']"
+			position="attributes">
+			<attribute name="attrs">{'invisible': [('cmd_charcuterie','=',False),('cmd_volaille', '=',False)], 'readonly': [('cmd_charcuterie', '=',False),('cmd_volaille', '=',True)]}</attribute>
+		</xpath>
+	</field>
+</record>
 		
 		<!-- ''''''''''''''''''''''''Add Commercial, Vendeur in SO ''''''''''''' --> 
 		 <record model="ir.ui.view" id="client_view__partner_vendeur_sales_form">
