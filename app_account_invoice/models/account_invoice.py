@@ -18,8 +18,8 @@ class AccountInvoice(models.Model):
     date_commande = fields.Date(string="Date Commande")
     date_livraison = fields.Date(string="Date Livraison")
     qty_livrer_colis = fields.Float(string="Colis", readonly=True, compute='get_total_colis_invoice')
-    commercial = fields.Many2one(comodel_name='hr.employee', string="Commercial")
-    vendeur = fields.Many2one(comodel_name='hr.employee', string="Vendeur")
+    commercial = fields.Many2one(comodel_name='hr.employee', string="Commercial", track_visibility='onchange')
+    vendeur = fields.Many2one(comodel_name='hr.employee', string="Vendeur", track_visibility='onchange')
     object = fields.Text(string="Objet")
     ref_livraison = fields.Many2one(comodel_name='stock.picking', string="Ref livraison", track_visibility='onchange')
     
