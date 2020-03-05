@@ -8,10 +8,9 @@
 			<field name="inherit_id" ref="account.invoice_form" />
 			<field name="arch" type="xml">
 
-				<xpath expr="//field[@name='name']"
-					position="after">
-						<!-- <field name="commercial" string="Commercial" /> 
-						<field name="vendeur" string="Vendeur" />-->
+				<xpath expr="//page[@name='other_info']/group/group[2]/field[@name='name']" position="after">
+					<field name="commercial" />
+					<field name="vendeur" />
 				</xpath>
 				<xpath expr="//field[@name='payment_term_id']"
 					position="after">
