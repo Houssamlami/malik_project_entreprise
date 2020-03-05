@@ -23,9 +23,9 @@
         <field name="inherit_id" ref="product.product_template_only_form_view"/>
         <field name="arch" type="xml">
         <xpath expr="//field[@name='barcode']" position="after">
-				<field name="price_cart" widget='monetary'/>
-				<field name="secondary_unit_qty_available"/>
-				<field name="qty_vertuel_second_unit"/>
+				<field name="price_cart" widget='monetary' string="Prix de vente par piéce à la carte"/>
+				<field name="secondary_unit_qty_available" invisible="1"/>
+				<field name="qty_vertuel_second_unit" invisible="1"/>
 				<field name="product_service_commercial"/>
 				<field name="name_uom_product" invisible="1"/>
             </xpath>
