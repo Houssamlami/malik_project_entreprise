@@ -43,13 +43,13 @@ class ProductTemplate(models.Model):
                 record.standard_price = value
                 record.price_for_buy = record.cout_revient
                 
-    @api.depends('cout_revient')
+    @api.depends('prix_vente_estime')
     def _compute_standard_price(self):
         for template in self:
             if template.number_unit:
-                template.standard_price = template.number_unit*template.cout_revient
-            elif template.cout_revient:
-                value = template.cout_revient
+                template.standard_price = template.number_unit*template.prix_vente_estime
+            elif template.prix_vente_estime:
+                value = template.prix_vente_estime
                 template.standard_price = value
             else:
                 unique_variants = self.filtered(lambda template: len(template.product_variant_ids) == 1)
