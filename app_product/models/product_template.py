@@ -163,7 +163,7 @@ class ProductTemplate(models.Model):
     Androit_preparation = fields.Many2one(comodel_name='androit.preparation', string=u"Endroit de Préparation", required=True, track_visibility='onchange')               
     number_unit = fields.Float(string="Nombre d'unité", track_visibility='onchange')
     name_uom_product = fields.Char(related='uom_id.name', string="Nom Unité de mesure")
-    price_cart = fields.Float(string="Prix de vente sur la carte", track_visibility='onchange') 
+    price_cart = fields.Float(string="Prix de vente par piéce à la carte", track_visibility='onchange') 
     prix_achat = fields.Float(string=u"Prix d\'Achat", track_visibility='onchange')
     prix_transport = fields.Float(string=u"Transport Achat", track_visibility='onchange')
     cout_avs = fields.Float(string=u"Certification", track_visibility='onchange')
