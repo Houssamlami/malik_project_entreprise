@@ -46,8 +46,9 @@ class ProductTemplate(models.Model):
     @api.depends('prix_vente_estime')
     def _compute_standard_price(self):
         for template in self:
+            precision_currency = template.currency_id or template.company_id.currency_id
             if template.number_unit:
-                template.standard_price = template.number_unit*template.prix_vente_estime
+                template.standard_price = precision_currency.round(template.number_unit*template.prix_vente_estime)
             elif template.prix_vente_estime:
                 value = template.prix_vente_estime
                 template.standard_price = value
@@ -256,9 +257,10 @@ class ProductTemplate(models.Model):
     @api.depends('charge_fixe', 'cout_ttm', 'cout_avs', 'prix_transport', 'prix_achat','provision_commission')
     def calcul_prix_min_vente_estime(self):
         for record in self:
+            precision_currency = record.currency_id or record.company_id.currency_id
             if record.prix_achat:
-                record.cout_revient = ((record.prix_achat + record.prix_transport + record.cout_avs + record.cout_ttm) * (1 +(record.charge_fixe/100) + (record.provision_commission/100)))
-            record.standard_price = record.cout_revient
+                record.cout_revient = precision_currency.round(((record.prix_achat + record.prix_transport + record.cout_avs + record.cout_ttm) * (1 +(record.charge_fixe/100) + (record.provision_commission/100))))
+            record.standard_price = record.prix_vente_estime
                 
     @api.depends('cout_revient','marge_securite')
     def calcul_prix_min_vente(self):
@@ -269,8 +271,9 @@ class ProductTemplate(models.Model):
     @api.depends('marge', 'prix_min_vente')
     def calcul_prix_vente(self):
         for record in self:
+            precision_currency = record.currency_id or record.company_id.currency_id
             if record.prix_min_vente:
-                record.prix_vente_estime = record.prix_min_vente *(1+(record.marge/100))
+                record.prix_vente_estime = precision_currency.round(record.prix_min_vente *(1+(record.marge/100)))
     
     @api.onchange('charge_fixe', 'cout_ttm', 'cout_avs', 'prix_transport', 'prix_achat')
     @api.depends('charge_fixe', 'cout_ttm', 'cout_avs', 'prix_transport', 'prix_achat')
