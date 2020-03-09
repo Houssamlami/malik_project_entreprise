@@ -15,6 +15,10 @@
 				<xpath expr="//field[@name='purchase_num_invoiced']"
 					position="after">
 				<field name="price_avg_rate" widget="progressbar"/>
+				<field name="charge_fix_margin"/>
+				<field name="amount_charge_fix"/>
+				<field name="marge_securite_margin"/>
+				<field name="amount_marge_securite"/>
 				</xpath>
 			</field>
 		</record>

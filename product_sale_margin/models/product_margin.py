@@ -12,6 +12,14 @@ class ProductProduct(models.Model):
     
     price_avg_rate = fields.Float(compute='_compute_product_margin_fields_values', string='% de remise moyen',
         help="Pourcentage de remise moyen")
+    charge_fix_margin = fields.Float(compute='_compute_product_margin_fields_values', string='% charge fixe',
+        help="% charge fixe")
+    amount_charge_fix = fields.Float(compute='_compute_product_margin_fields_values', string='Montant de % charge fixe',
+        help="Montant de % charge fixe")
+    marge_securite_margin = fields.Float(compute='_compute_product_margin_fields_values', string='% marge de securité',
+        help="% marge de securité")
+    amount_marge_securite = fields.Float(compute='_compute_product_margin_fields_values', string='Valeur de marge sécurité',
+        help="Valeur de marge sécurité")
     
     
     def _compute_product_margin_fields_values(self, field_names=None):
@@ -57,6 +65,13 @@ class ProductProduct(models.Model):
             self.env.cr.execute(sqlstr, (val.id, states, invoice_type, date_from, date_to, company_id))
             result = self.env.cr.fetchall()[0]
             res[val.id]['turnover'] = result[2] and result[2] or 0.0
+            res[val.id]['charge_fix_margin'] = val.charge_fixe
+            res[val.id]['amount_charge_fix'] = res[val.id]['turnover'] * (val.charge_fixe/100)
+            res[val.id]['marge_securite_margin'] = val.marge_securite
+            if val.uom_id.name == 'Colis':
+                res[val.id]['amount_marge_securite'] = val.cout_revient * (val.marge_securite/100) * val.number_unit
+            else:
+                res[val.id]['amount_marge_securite'] = val.cout_revient * (val.marge_securite/100)
             
             ctx = self.env.context.copy()
             ctx['force_company'] = company_id
