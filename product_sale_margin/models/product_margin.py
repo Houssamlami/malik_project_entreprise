@@ -102,7 +102,7 @@ class ProductProduct(models.Model):
                 res[val.id]['amount_marge_securite'] = res[val.id]['turnover'] * (val.marge_securite/100) * val.number_unit
             else:
                 res[val.id]['amount_marge_securite'] = res[val.id]['turnover'] * (val.marge_securite/100)
-            res[val.id]['amount_refund_rate'] = res[val.id]['amount_inv_total'] and res[val.id]['amount_refund'] * 100 / res[val.id]['amount_inv_total'] or 0.0
+            res[val.id]['amount_refund_rate'] = res[val.id]['amount_inv_total'] and res[val.id]['amount_refund'] * (-100) / res[val.id]['amount_inv_total'] or 0.0
             
             ctx = self.env.context.copy()
             ctx['force_company'] = company_id
