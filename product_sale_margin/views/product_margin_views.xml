@@ -12,6 +12,18 @@
 					position="attributes">
 					<attribute name="invisible">1</attribute>
 				</xpath>
+				<xpath expr="//field[@name='expected_margin']"
+					position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+				<xpath expr="//field[@name='expected_margin_rate']"
+					position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+				<xpath expr="//field[@name='sale_avg_price']"
+					position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
 				<xpath expr="//field[@name='purchase_num_invoiced']"
 					position="after">
 				<field name="price_avg_rate" widget="progressbar"/>
@@ -19,6 +31,15 @@
 				<field name="amount_charge_fix"/>
 				<field name="marge_securite_margin"/>
 				<field name="amount_marge_securite"/>
+				<field name="charge_fix_mag_sec"/>
+				</xpath>
+				<xpath expr="//field[@name='turnover']"
+					position="after">
+					<field name="sale_expected" string="Objectif"/>
+					<field name="amount_refund"/>
+					<field name="amount_refund_rate"/>
+					<field name="sales_gap_rate"/>
+					<field name="commercial_rate"/>
 				</xpath>
 			</field>
 		</record>
