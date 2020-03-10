@@ -20,8 +20,6 @@ class ProductProduct(models.Model):
         help="% marge de securité")
     amount_marge_securite = fields.Float(compute='_compute_product_margin_fields_values', string='Valeur de marge sécurité',
         help="Valeur de marge sécurité")
-    charge_fix_mag_sec = fields.Float(compute='_compute_product_margin_fields_values', string='∑ CF+MS',
-        help="Somme montant charge fixe et valeur de marge de sécurité")
     amount_refund = fields.Float(compute='_compute_product_margin_fields_values', string='Montant avoirs',
         help="Montant avoirs")
     amount_inv_total = fields.Float(compute='_compute_product_margin_fields_values', string='Montant factures',
@@ -32,6 +30,8 @@ class ProductProduct(models.Model):
         help="Montant avoirs")
     commercial_rate = fields.Float(compute='_compute_product_margin_fields_values', string='% Fait commerciaux',
         help="Montant avoirs")
+    number_sales = fields.Float(compute='_compute_product_margin_fields_values')
+    number_refund = fields.Float(compute='_compute_product_margin_fields_values')
     
     
     def _compute_product_margin_fields_values(self, field_names=None):
@@ -77,6 +77,7 @@ class ProductProduct(models.Model):
             self.env.cr.execute(sqlstr, (val.id, states, inv_type, date_from, date_to, company_id))
             result = self.env.cr.fetchall()[0]
             res[val.id]['amount_refund'] = result[2] and result[2] or 0.0
+            res[val.id]['number_refund'] = result[1] and result[1] or 0.0
             
             ctx = self.env.context.copy()
             ctx['force_company'] = company_id
@@ -85,6 +86,7 @@ class ProductProduct(models.Model):
             self.env.cr.execute(sqlstr, (val.id, states, invs_type, date_from, date_to, company_id))
             result = self.env.cr.fetchall()[0]
             res[val.id]['amount_inv_total'] = result[2] and result[2] or 0.0
+            res[val.id]['number_sales'] = result[1] and result[1] or 0.0
             
             ctx = self.env.context.copy()
             ctx['force_company'] = company_id
@@ -100,8 +102,7 @@ class ProductProduct(models.Model):
                 res[val.id]['amount_marge_securite'] = res[val.id]['turnover'] * (val.marge_securite/100) * val.number_unit
             else:
                 res[val.id]['amount_marge_securite'] = res[val.id]['turnover'] * (val.marge_securite/100)
-            res[val.id]['charge_fix_mag_sec'] = res[val.id]['amount_charge_fix'] + res[val.id]['amount_marge_securite']
-            res[val.id]['amount_refund_rate'] = res[val.id]['amount_inv_total'] and res[val.id]['turnover'] * 100 / res[val.id]['amount_inv_total'] or 0.0
+            res[val.id]['amount_refund_rate'] = res[val.id]['amount_inv_total'] and res[val.id]['amount_refund'] * 100 / res[val.id]['amount_inv_total'] or 0.0
             
             ctx = self.env.context.copy()
             ctx['force_company'] = company_id
@@ -110,7 +111,7 @@ class ProductProduct(models.Model):
             self.env.cr.execute(sqlstr, (val.id, states, invoice_types, date_from, date_to, company_id))
             result = self.env.cr.fetchall()[0]
             res[val.id]['sale_avg_price'] = result[0] and result[0] or 0.0
-            res[val.id]['sale_num_invoiced'] = result[1] and result[1] or 0.0
+            res[val.id]['sale_num_invoiced'] = res[val.id]['number_sales'] - res[val.id]['number_refund']
             res[val.id]['sale_expected'] = result[3] and result[3] or 0.0
             res[val.id]['sales_gap'] = res[val.id]['sale_expected'] - res[val.id]['turnover']
             res[val.id]['sales_gap_rate'] = res[val.id]['sale_expected'] and res[val.id]['sales_gap'] * 100 / res[val.id]['sale_expected'] or 0.0
