@@ -71,7 +71,7 @@ class ProductProduct(models.Model):
                 left join account_invoice i on (l.invoice_id = i.id)
                 left join product_product product on (product.id=l.product_id)
                 left join product_template pt on (pt.id = product.product_tmpl_id)
-                where l.product_id = %s and i.state in %s and i.type IN %s and (i.date_invoice IS NULL or (i.date_invoice>=%s and i.date_invoice<=%s and i.company_id=%s))
+                where l.price_unit != 0 and l.product_id = %s and i.state in %s and i.type IN %s and (i.date_invoice IS NULL or (i.date_invoice>=%s and i.date_invoice<=%s and i.company_id=%s))
                 """
             inv_type = ('out_refund','out_refund')
             self.env.cr.execute(sqlstr, (val.id, states, inv_type, date_from, date_to, company_id))
