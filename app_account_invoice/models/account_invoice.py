@@ -113,12 +113,30 @@ class AccountInvoiceReport(models.Model):
     vendeur = fields.Many2one(comodel_name='hr.employee', string="Vendeur", readonly=True)
     team_id = fields.Many2one('crm.team', string='Sales Channel')
     ref_invoice_name = fields.Char('Référence', readonly=True)
+    type_avoir = fields.Selection([
+        ('Qualité de Produit BONA', 'Qualité de Produit BONA'),
+        ('Qualité de Produit Crusvi', 'Qualité de Produit Crusvi'),
+        ('Qualité de Produit Imex', 'Qualité de Produit Imex'),
+        ('Qualité de Produit Atlas negoce', 'Qualité de Produit Atlas negoce'),
+        ('Qualité de Produit Nouvelle Atlas', 'Qualité de Produit Nouvelle Atlas'),
+        ('Qualité de Produit Tradco', 'Qualité de Produit Tradco'),
+        ('Refus de commandes', 'Refus de commandes'),
+        ('Manque de produit à la livraison', 'Manque de produit à la livraison'),
+        ('Erreur de préparation TTM', 'Erreur de préparation TTM'),
+        ('Annulation de facture et refacturation', 'Annulation de facture et refacturation'),
+        ('DLC Courte', 'DLC Courte'),
+        ('Erreur de saisie', 'Erreur de saisie'),
+        ('Gonflement par commercial', 'Gonflement par commercial'),
+        ('Erreur sur la remise', 'Erreur sur la remise'),
+        ('Erreur sur le prix', 'Erreur sur le prix'),
+        ('Geste commercial', 'Geste commercial'),
+        ],)
     
     
     def _select(self):
         select_str = """
-            SELECT sub.id, sub.date,sub.date_livraison, sub.ref_invoice_name, sub.team_id as team_id, sub.fac_volaille_f, sub.fac_charcuterie_f, sub.cli_gc, sub.cli_pc, sub.product_id, sub.partner_id, 
-                sub.country_id, sub.account_analytic_id, sub.commercial as commercial, sub.vendeur as vendeur, sub.payment_term_id, sub.uom_name, sub.currency_id, sub.journal_id,
+            SELECT sub.id, sub.date,sub.date_livraison, sub.type_avoir, sub.ref_invoice_name, sub.team_id as team_id, sub.fac_volaille_f, sub.fac_charcuterie_f, sub.cli_gc, sub.cli_pc, sub.product_id, sub.partner_id, 
+                sub.country_id, sub.account_analytic_id, sub.commercial, sub.vendeur, sub.payment_term_id, sub.uom_name, sub.currency_id, sub.journal_id,
                 sub.fiscal_position_id, sub.user_id, sub.company_id, sub.nbr, sub.type, sub.state,
                 sub.categ_id, sub.date_due, sub.account_id, sub.account_line_id, sub.partner_bank_id,
                 sub.product_qty, sub.price_total as price_total, sub.price_average as price_average,
@@ -137,6 +155,7 @@ class AccountInvoiceReport(models.Model):
                     ai.fac_volaille_f AS fac_volaille_f,
                     ai.cli_pc AS cli_pc,
                     ai.number AS ref_invoice_name,
+                    ai.type_avoir AS type_avoir,
                     ai.cli_gc AS cli_gc,
                     ai.commercial AS commercial,
                     ai.vendeur AS vendeur,
@@ -161,5 +180,5 @@ class AccountInvoiceReport(models.Model):
         return select_str
     
     def _group_by(self):
-        return super(AccountInvoiceReport, self)._group_by() + ", ai.team_id"
+        return super(AccountInvoiceReport, self)._group_by() + ", ai.team_id, ai.type_avoir"
             
