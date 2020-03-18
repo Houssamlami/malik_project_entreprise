@@ -43,7 +43,7 @@
 					<field name="amount_refund_rate" widget="progressbar"/>
 					<field name="sales_gap"/>
 					<field name="sales_gap_rate" widget="progressbar"/>
-					<field name="commercial_rate"/>
+					<field name="commercial_rate" widget="progressbar"/>
 				</xpath>
 			</field>
 		</record>

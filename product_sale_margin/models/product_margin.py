@@ -112,7 +112,7 @@ class ProductProduct(models.Model):
             result = self.env.cr.fetchall()[0]
             res[val.id]['sale_avg_price'] = result[0] and result[0] or 0.0
             res[val.id]['sale_num_invoiced'] = res[val.id]['number_sales'] - res[val.id]['number_refund']
-            res[val.id]['sale_expected'] = result[3] and result[3] or 0.0
+            res[val.id]['sale_expected'] = res[val.id]['sale_num_invoiced'] * val.product_tmpl_id.list_price
             res[val.id]['sales_gap'] = res[val.id]['sale_expected'] - res[val.id]['turnover']
             res[val.id]['sales_gap_rate'] = res[val.id]['sale_expected'] and res[val.id]['sales_gap'] * 100 / res[val.id]['sale_expected'] or 0.0
             res[val.id]['commercial_rate'] = res[val.id]['sales_gap_rate'] - res[val.id]['amount_refund_rate']
