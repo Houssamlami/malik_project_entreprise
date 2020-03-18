@@ -105,7 +105,7 @@ class ResPartner(models.Model):
             partners.date_last_commande = date_last_commande
             # partners.user_id=vendeur_commarcial
 
-
+    @api.one
     def _on_calcule_factures(self):
         for record in self:
             credit_charcuterie=0
