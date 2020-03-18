@@ -106,7 +106,6 @@ class ResPartner(models.Model):
             # partners.user_id=vendeur_commarcial
 
 
-    @api.one
     def _on_calcule_factures(self):
         for record in self:
             credit_charcuterie=0
@@ -122,7 +121,7 @@ class ResPartner(models.Model):
                     nbr_fac_ouverte_charcuterie=len(line)
                     credit_charcuterie += line.residual_company_signed
                     date_facture_charcuterie=min(line).date_invoice
-                    nbr_jours_decheance_charcuterie=abs((datetime.strptime(date_facture_charcuterie, DATETIME_FORMAT)- datetime.strptime(record.date_lyuoMa, DATETIME_FORMAT)).days)
+                    nbr_jours_decheance_charcuterie=abs((datetime.strptime(date_facture_charcuterie, DATETIME_FORMAT)- datetime.strptime(fields.Date.context_today(self), DATETIME_FORMAT)).days)
                 record.credit_charcuterie = credit_charcuterie
                 record.nbr_fac_ouverte_charcuterie=nbr_fac_ouverte_charcuterie
                 record.date_facture_charcuterie=date_facture_charcuterie
@@ -146,7 +145,7 @@ class ResPartner(models.Model):
                     nbr_fac_ouverte_charcuterie=len(line)
                     credit_charcuterie += line.residual_company_signed
                     date_facture_charcuterie=min(line).date_invoice
-                    nbr_jours_decheance_charcuterie=abs((datetime.strptime(date_facture_charcuterie, DATETIME_FORMAT)- datetime.strptime(record.date_lyuoMa, DATETIME_FORMAT)).days)
+                    nbr_jours_decheance_charcuterie=abs((datetime.strptime(date_facture_charcuterie, DATETIME_FORMAT)- datetime.strptime(fields.Date.context_today(self), DATETIME_FORMAT)).days)
                 record.credit_charcuterie = credit_charcuterie
                 record.nbr_fac_ouverte_charcuterie=nbr_fac_ouverte_charcuterie            
                 record.date_facture_charcuterie=date_facture_charcuterie
