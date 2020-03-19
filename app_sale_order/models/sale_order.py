@@ -48,7 +48,7 @@ class SaleOrder(models.Model):
     grand_compte = fields.Boolean(string='Commande Grand Compte', default= False)
     payment_term_id = fields.Many2one('account.payment.term', string='Conditions de règlement', oldname='payment_term', compute='onchange_payment_term_id_so')
     normal_cmd = fields.Boolean(string='Commande Normale', default=True, track_visibility='onchange')
-    grosiste_cmd = fields.Boolean(string='Grosiste', track_visibility='onchange')
+    grosiste_cmd = fields.Boolean(string='Grossiste', track_visibility='onchange')
     bl_not_conform = fields.Boolean(string='BL Non Conforme', default=False, track_visibility='onchange')
     reason_no_conformity = fields.Selection([('colis_moins', 'Colis en moins'),('colis_plus', 'Colis en plus')], track_visibility='onchange', string="Raison")
     precise_no_conformity = fields.Selection([('non', 'Non'),('oui', 'Oui')], track_visibility='onchange', string="Précisé")
