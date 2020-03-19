@@ -18,6 +18,7 @@ class SaleReport(models.Model):
     type_of_commande = fields.Selection([('commande_charc', 'Commande charcuterie'),('commande_valaille', 'Commande Volaille')],string="Type de commande", readonly=True)
     refused_command = fields.Boolean(string="CMD Refusée", readonly=True)
     user_id = fields.Many2one('hr.employee', 'Commercial', readonly=True)
+    grosiste = fields.Boolean(string='Grosiste', readonly=True)
     
     def _select(self):
         select_str = """
@@ -35,6 +36,7 @@ class SaleReport(models.Model):
                     sum(l.amt_invoiced / COALESCE(NULLIF(cr.rate, 0), 1.0)) as amt_invoiced,
                     count(*) as nbr,
                     s.name as name,
+                    s.grosiste_cmd as grosiste,
                     sum(l.product_uom_qty / u.factor * u2.factor)-sum(l.qty_delivered / u.factor * u2.factor) as ecart_qty,
                     sum(l.secondary_uom_qty / u.factor * u2.factor)-sum((l.qty_delivered / u.factor * u2.factor)/ u3.factor) as ecart_qtys,
                     l.secondary_uom_qty as cmd_colis,
@@ -101,6 +103,7 @@ class SaleReport(models.Model):
                     partner.country_id,
                     partner.client_gc_pc,
                     s.commande_type,
+                    s.grosiste_cmd,
                     l.secondary_uom_qty,
                     partner.commercial_partner_id
         """
