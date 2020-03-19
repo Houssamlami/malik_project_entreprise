@@ -130,12 +130,13 @@ class AccountInvoiceReport(models.Model):
         ('Erreur sur la remise', 'Erreur sur la remise'),
         ('Erreur sur le prix', 'Erreur sur le prix'),
         ('Geste commercial', 'Geste commercial'),
-        ],)
+        ], readonly=True)
+    grosiste = fields.Boolean(string='Grosiste', readonly=True)
     
     
     def _select(self):
         select_str = """
-            SELECT sub.id, sub.date,sub.date_livraison, sub.type_avoir, sub.ref_invoice_name, sub.team_id as team_id, sub.fac_volaille_f, sub.fac_charcuterie_f, sub.cli_gc, sub.cli_pc, sub.product_id, sub.partner_id, 
+            SELECT sub.id, sub.date,sub.date_livraison, sub.type_avoir, sub.grosiste, sub.ref_invoice_name, sub.team_id as team_id, sub.fac_volaille_f, sub.fac_charcuterie_f, sub.cli_gc, sub.cli_pc, sub.product_id, sub.partner_id, 
                 sub.country_id, sub.account_analytic_id, sub.commercial, sub.vendeur, sub.payment_term_id, sub.uom_name, sub.currency_id, sub.journal_id,
                 sub.fiscal_position_id, sub.user_id, sub.company_id, sub.nbr, sub.type, sub.state,
                 sub.categ_id, sub.date_due, sub.account_id, sub.account_line_id, sub.partner_bank_id,
@@ -154,6 +155,7 @@ class AccountInvoiceReport(models.Model):
                     ai.fac_charcuterie_f AS fac_charcuterie_f,
                     ai.fac_volaille_f AS fac_volaille_f,
                     ai.cli_pc AS cli_pc,
+                    ai.grosiste AS grosiste,
                     ai.number AS ref_invoice_name,
                     ai.type_avoir AS type_avoir,
                     ai.cli_gc AS cli_gc,

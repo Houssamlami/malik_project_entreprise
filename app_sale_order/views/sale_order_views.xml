@@ -164,6 +164,7 @@
              	</xpath>
              	<xpath expr="//field[@name='effective_date']" position="after">
                     <field name="normal_cmd" groups="sales_team.group_sale_manager"/>
+                    <field name="grosiste_cmd" groups="sales_team.group_sale_manager"/>
              	</xpath>
 			</field>
 		 </record>  

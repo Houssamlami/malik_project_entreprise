@@ -12,6 +12,9 @@
 					<field name="commercial" />
 					<field name="vendeur" />
 				</xpath>
+				<xpath expr="//page[@name='other_info']/group/group[1]/field[@name='fiscal_position_id']" position="before">
+					<field name="grosiste" />
+				</xpath>
 				<xpath expr="//field[@name='payment_term_id']"
 					position="after">
 					<field name="object" />
