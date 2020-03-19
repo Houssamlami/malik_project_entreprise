@@ -115,7 +115,7 @@ class PurchaseOrder(models.Model):
                 order.write({'state': 'to approve'})
         return True
     
-    '''@api.model
+    @api.model
     def _prepare_picking(self, location):
         if not self.group_id:
             self.group_id = self.group_id.create({
@@ -133,7 +133,6 @@ class PurchaseOrder(models.Model):
             'location_id': self.partner_id.property_stock_supplier.id,
             'company_id': self.company_id.id,
         }
-        '''
     
     @api.multi
     def _create_picking(self):
