@@ -21,7 +21,7 @@ class AccountInvoice(models.Model):
     commercial = fields.Many2one(comodel_name='hr.employee', string="Commercial", track_visibility='onchange')
     vendeur = fields.Many2one(comodel_name='hr.employee', string="Vendeur", track_visibility='onchange')
     object = fields.Text(string="Objet")
-    grosiste = fields.Boolean(string='Grosiste', track_visibility='onchange')
+    grosiste = fields.Boolean(string='Grossiste', track_visibility='onchange')
     ref_livraison = fields.Many2one(comodel_name='stock.picking', string="Ref livraison", track_visibility='onchange')
     
     def get_total_colis_invoice(self):
@@ -132,7 +132,7 @@ class AccountInvoiceReport(models.Model):
         ('Erreur sur le prix', 'Erreur sur le prix'),
         ('Geste commercial', 'Geste commercial'),
         ], readonly=True)
-    grosiste = fields.Boolean(string='Grosiste', readonly=True)
+    grosiste = fields.Boolean(string='Grossiste', readonly=True)
     
     
     def _select(self):

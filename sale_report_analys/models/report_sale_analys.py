@@ -18,7 +18,7 @@ class SaleReport(models.Model):
     type_of_commande = fields.Selection([('commande_charc', 'Commande charcuterie'),('commande_valaille', 'Commande Volaille')],string="Type de commande", readonly=True)
     refused_command = fields.Boolean(string="CMD Refusée", readonly=True)
     user_id = fields.Many2one('hr.employee', 'Commercial', readonly=True)
-    grosiste = fields.Boolean(string='Grosiste', readonly=True)
+    grosiste = fields.Boolean(string='Grossiste', readonly=True)
     
     def _select(self):
         select_str = """
