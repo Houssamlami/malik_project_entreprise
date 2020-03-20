@@ -24,22 +24,22 @@
 			<span t-field="o.name"/>
 			</h2>
 			<div t-if="not o.semaine and not o.abattage" class="row mt32 mb32">
-                <div t-if="o.name" class="col-xs-3">
-                </div>
-                <div t-if="o.partner_ref" class="col-xs-3">
-                </div>
                 <div t-if="o.date_approve" class="col-xs-3">
                     <strong>Date de confirmation:</strong>
                     <center><p t-field="o.date_approve"/></center>
+                </div>
+                <div t-if="o.partner_id" class="col-xs-6">
+               <strong> Destination:</strong>
+               <p t-if="not o.semaine and not o.abattage">MALIK VOLAILLES 
+					TTM RUNGIS
+28 Rue de province, Bat D9A 94150
+RUNGIS,   FRANCE</p>
                 </div>
             </div>
 				<t t-set="lines" t-value="o.order_line.mapped('location_dest_id')"/>
 				<t t-foreach="lines" t-as="location">
 				<t t-set="cmp" t-value="0" />
-					<center><strong>Destination:<strong t-if="not o.semaine and not o.abattage">MALIK VOLAILLES 
-					TTM RUNGIS
-28 Rue de province, Bat D9A 94150
-RUNGIS,   FRANCE</strong>
+					<center><strong>
 <strong t-if="o.semaine and o.abattage" t-esc="location.display_name"/></strong></center>
 					<table class="table table-bordered">
 
