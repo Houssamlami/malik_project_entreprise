@@ -39,7 +39,7 @@ RUNGIS,   FRANCE</p>
 				<t t-set="lines" t-value="o.order_line.mapped('location_dest_id')"/>
 				<t t-foreach="lines" t-as="location">
 				<t t-set="cmp" t-value="0" />
-					<center><strong>
+					<center><strong t-if="o.semaine and o.abattage">Destination:
 <strong t-if="o.semaine and o.abattage" t-esc="location.display_name"/></strong></center>
 					<table class="table table-bordered">
 
