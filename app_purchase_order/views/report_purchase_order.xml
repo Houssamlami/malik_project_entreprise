@@ -18,12 +18,29 @@
                 </div>
             </div>
         
-			<h2>Commande Semaine <span t-field="o.semaine"/>- AB <span t-field="o.abattage"/> N°#<span t-field="o.name"/></h2>
-		
-				<t t-set="lines" t-value="o.order_line.mapped('location_dest_id')" />
+			<h2>
+			<span t-if="not o.semaine and not o.abattage">Bon de Commande</span>
+			<span t-if="o.semaine and o.abattage">Commande Semaine <span t-field="o.semaine"/>- AB <span t-field="o.abattage"/></span> N°#
+			<span t-field="o.name"/>
+			</h2>
+			<div t-if="not o.semaine and not o.abattage" class="row mt32 mb32">
+                <div t-if="o.name" class="col-xs-3">
+                </div>
+                <div t-if="o.partner_ref" class="col-xs-3">
+                </div>
+                <div t-if="o.date_approve" class="col-xs-3">
+                    <strong>Date de confirmation:</strong>
+                    <center><p t-field="o.date_approve"/></center>
+                </div>
+            </div>
+				<t t-set="lines" t-value="o.order_line.mapped('location_dest_id')"/>
 				<t t-foreach="lines" t-as="location">
 				<t t-set="cmp" t-value="0" />
-					<center><strong>Destination:<strong t-esc="location.display_name"/></strong></center>
+					<center><strong>Destination:<strong t-if="not o.semaine and not o.abattage">MALIK VOLAILLES 
+					TTM RUNGIS
+28 Rue de province, Bat D9A 94150
+RUNGIS,   FRANCE</strong>
+<strong t-if="o.semaine and o.abattage" t-esc="location.display_name"/></strong></center>
 					<table class="table table-bordered">
 
 						<thead>
@@ -32,7 +49,7 @@
 									<strong>Produit</strong>
 								</th>
 								<th class="text-center">
-									<strong>Qty</strong>
+									<strong>Quantité</strong>
 								</th>
 							</tr>
 						</thead>
@@ -48,16 +65,17 @@
 								</td>
 								<td class="text-center">
 									<span t-field="line.product_qty" />
+									<span t-if="not o.semaine and not o.abattage" t-field="line.product_uom.name" groups="product.group_uom"/>
 								</td>
 							</tr>
-							<tr><td></td><td class="text-center"><b><t t-esc="cmp"/> </b></td></tr>
+							<tr><td class="text-right"><strong>Total:</strong></td><td class="text-center"><b><t t-esc="cmp"/> </b></td></tr>
 
 						</tbody>
 
 					</table>
 				</t>
 		<t t-set="product" t-value="o.order_line.mapped('product_id')" />
-					<table class="table table-bordered" style="background-color:#B0C4DE">
+					<table t-if="o.semaine and o.abattage" class="table table-bordered" style="background-color:#B0C4DE">
 						<thead>
 							<tr>
 								<th>
