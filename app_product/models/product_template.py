@@ -43,13 +43,14 @@ class ProductTemplate(models.Model):
                 record.standard_price = value
                 record.price_for_buy = record.cout_revient
                 
-    @api.depends('cout_revient')
+    @api.depends('prix_vente_estime')
     def _compute_standard_price(self):
         for template in self:
+            precision_currency = template.currency_id or template.company_id.currency_id
             if template.number_unit:
-                template.standard_price = template.number_unit*template.cout_revient
-            elif template.cout_revient:
-                value = template.cout_revient
+                template.standard_price = precision_currency.round(template.number_unit*template.prix_vente_estime)
+            elif template.prix_vente_estime:
+                value = template.prix_vente_estime
                 template.standard_price = value
             else:
                 unique_variants = self.filtered(lambda template: len(template.product_variant_ids) == 1)
@@ -163,14 +164,14 @@ class ProductTemplate(models.Model):
     Androit_preparation = fields.Many2one(comodel_name='androit.preparation', string=u"Endroit de Préparation", required=True, track_visibility='onchange')               
     number_unit = fields.Float(string="Nombre d'unité", track_visibility='onchange')
     name_uom_product = fields.Char(related='uom_id.name', string="Nom Unité de mesure")
-    price_cart = fields.Float(string="Prix de vente sur la carte", track_visibility='onchange') 
+    price_cart = fields.Float(string="Prix de vente par piéce à la carte", track_visibility='onchange') 
     prix_achat = fields.Float(string=u"Prix d\'Achat", track_visibility='onchange')
     prix_transport = fields.Float(string=u"Transport Achat", track_visibility='onchange')
     cout_avs = fields.Float(string=u"Certification", track_visibility='onchange')
     cout_ttm = fields.Float(string=u"Transport Vente", track_visibility='onchange')
     price_for_buy = fields.Float(compute='_get_prix_vente_produit')
     charge_fixe = fields.Float(string=u"Charge Fixe", help=u"Ce pourcentage se base sur la somme du Prix d\'Achat, Prix de Transport, Coût AVS et Coût TTM", track_visibility='onchange')
-    cout_revient = fields.Float(compute='calcul_prix_min_vente_estime', string=u"Coût de revient", track_visibility='onchange')
+    cout_revient = fields.Float(compute='calcul_prix_min_vente_estime', string=u"Coût de revient de base", track_visibility='onchange')
     prix_min_vente = fields.Float(compute='calcul_prix_min_vente', string=u"Prix de vente Min", track_visibility='onchange')
     marge = fields.Float(string=u"Marge Commerciale", track_visibility='onchange')
     marge_securite = fields.Float(string=u"Marge de securité", track_visibility='onchange')
@@ -256,9 +257,10 @@ class ProductTemplate(models.Model):
     @api.depends('charge_fixe', 'cout_ttm', 'cout_avs', 'prix_transport', 'prix_achat','provision_commission')
     def calcul_prix_min_vente_estime(self):
         for record in self:
+            precision_currency = record.currency_id or record.company_id.currency_id
             if record.prix_achat:
-                record.cout_revient = ((record.prix_achat + record.prix_transport + record.cout_avs + record.cout_ttm) * (1 +(record.charge_fixe/100) + (record.provision_commission/100)))
-            record.standard_price = record.cout_revient
+                record.cout_revient = precision_currency.round(((record.prix_achat + record.prix_transport + record.cout_avs + record.cout_ttm) * (1 +(record.charge_fixe/100) + (record.provision_commission/100))))
+            record.standard_price = record.prix_vente_estime
                 
     @api.depends('cout_revient','marge_securite')
     def calcul_prix_min_vente(self):
@@ -269,9 +271,9 @@ class ProductTemplate(models.Model):
     @api.depends('marge', 'prix_min_vente')
     def calcul_prix_vente(self):
         for record in self:
+            precision_currency = record.currency_id or record.company_id.currency_id
             if record.prix_min_vente:
-                record.prix_vente_estime = record.prix_min_vente *(1+(record.marge/100))
-            record.list_price = record.prix_vente_estime
+                record.prix_vente_estime = precision_currency.round(record.prix_min_vente *(1+(record.marge/100)))
     
     @api.onchange('charge_fixe', 'cout_ttm', 'cout_avs', 'prix_transport', 'prix_achat')
     @api.depends('charge_fixe', 'cout_ttm', 'cout_avs', 'prix_transport', 'prix_achat')

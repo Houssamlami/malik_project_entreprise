@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		<record model="ir.ui.view"
+			id="view_product_margin_tree_inherit">
+			<field name="name">view.product.margin.tree.inherit</field>
+			<field name="model">product.product</field>
+			<field name="inherit_id"
+				ref="product_margin.view_product_margin_tree" />
+			<field name="arch" type="xml">
+				<xpath expr="//field[@name='purchase_num_invoiced']"
+					position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+				<xpath expr="//field[@name='expected_margin']"
+					position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+				<xpath expr="//field[@name='expected_margin_rate']"
+					position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+				<xpath expr="//field[@name='sales_gap']"
+					position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+				<xpath expr="//field[@name='sale_avg_price']"
+					position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+				<xpath expr="//field[@name='purchase_num_invoiced']"
+					position="after">
+				<field name="price_avg_rate" widget="progressbar" invisible="1"/>
+				<field name="charge_fix_margin"/>
+				<field name="amount_charge_fix" sum="total_fix"/>
+				<field name="marge_securite_margin"/>
+				<field name="amount_marge_securite" sum="total_sec"/>
+				</xpath>
+				<xpath expr="//field[@name='turnover']"
+					position="after">
+					<field name="sale_expected" string="Objectif"/>
+					<field name="amount_refund"/>
+					<field name="amount_refund_rate" widget="progressbar"/>
+					<field name="sales_gap"/>
+					<field name="sales_gap_rate" widget="progressbar"/>
+					<field name="commercial_rate" widget="progressbar"/>
+				</xpath>
+			</field>
+		</record>
+		
+		<record model="ir.ui.view"
+			id="view_product_margin_form_inherit">
+			<field name="name">view.product.margin.form.inherit</field>
+			<field name="model">product.product</field>
+			<field name="inherit_id"
+				ref="product_margin.view_product_margin_form" />
+			<field name="arch" type="xml">
+				<xpath expr="//field[@name='purchase_num_invoiced']"
+					position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+			</field>
+		</record>
+	</data>
+</odoo>

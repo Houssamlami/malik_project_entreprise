@@ -17,11 +17,17 @@ class AccountInvoice(models.Model):
     cli_pc = fields.Boolean('Client petit compte', related='partner_id.Client_PC', track_visibility='onchange', store=True)
     date_commande = fields.Date(string="Date Commande")
     date_livraison = fields.Date(string="Date Livraison")
-    qty_livrer_colis = fields.Float(string="Colis", readonly=True)
-    commercial = fields.Many2one(comodel_name='hr.employee', string="Commercial")
-    vendeur = fields.Many2one(comodel_name='hr.employee', string="Vendeur")
+    qty_livrer_colis = fields.Float(string="Colis", readonly=True, compute='get_total_colis_invoice')
+    commercial = fields.Many2one(comodel_name='hr.employee', string="Commercial", track_visibility='onchange')
+    vendeur = fields.Many2one(comodel_name='hr.employee', string="Vendeur", track_visibility='onchange')
     object = fields.Text(string="Objet")
+    grosiste = fields.Boolean(string='Grossiste', track_visibility='onchange')
     ref_livraison = fields.Many2one(comodel_name='stock.picking', string="Ref livraison", track_visibility='onchange')
+    
+    def get_total_colis_invoice(self):
+        for record in self:
+            colis = sum(self.env['stock.picking'].search([('state', '=', 'done'),('picking_type_id.code', '=', 'outgoing'),('origin', 'ilike', self.origin)]).mapped('total_colis_delivered')) - self.picking_ids.filtered(lambda r: r.picking_type_id.code == 'incoming' and r.state == 'done').total_colis_delivered
+            record.qty_livrer_colis = colis
     
     
     
@@ -104,13 +110,35 @@ class AccountInvoiceReport(models.Model):
     fac_volaille_f = fields.Boolean('Volaille', readonly=True)
     cli_gc = fields.Boolean('Client Gros compte', readonly=True)
     cli_pc = fields.Boolean('Client petit compte', readonly=True)
+    commercial = fields.Many2one(comodel_name='hr.employee', string="Commercial", readonly=True)
+    vendeur = fields.Many2one(comodel_name='hr.employee', string="Vendeur", readonly=True)
     team_id = fields.Many2one('crm.team', string='Sales Channel')
+    ref_invoice_name = fields.Char('Référence', readonly=True)
+    type_avoir = fields.Selection([
+        ('Qualité de Produit BONA', 'Qualité de Produit BONA'),
+        ('Qualité de Produit Crusvi', 'Qualité de Produit Crusvi'),
+        ('Qualité de Produit Imex', 'Qualité de Produit Imex'),
+        ('Qualité de Produit Atlas negoce', 'Qualité de Produit Atlas negoce'),
+        ('Qualité de Produit Nouvelle Atlas', 'Qualité de Produit Nouvelle Atlas'),
+        ('Qualité de Produit Tradco', 'Qualité de Produit Tradco'),
+        ('Refus de commandes', 'Refus de commandes'),
+        ('Manque de produit à la livraison', 'Manque de produit à la livraison'),
+        ('Erreur de préparation TTM', 'Erreur de préparation TTM'),
+        ('Annulation de facture et refacturation', 'Annulation de facture et refacturation'),
+        ('DLC Courte', 'DLC Courte'),
+        ('Erreur de saisie', 'Erreur de saisie'),
+        ('Gonflement par commercial', 'Gonflement par commercial'),
+        ('Erreur sur la remise', 'Erreur sur la remise'),
+        ('Erreur sur le prix', 'Erreur sur le prix'),
+        ('Geste commercial', 'Geste commercial'),
+        ], readonly=True)
+    grosiste = fields.Boolean(string='Grossiste', readonly=True)
     
     
     def _select(self):
         select_str = """
-            SELECT sub.id, sub.date,sub.date_livraison, sub.team_id as team_id, sub.fac_volaille_f, sub.fac_charcuterie_f, sub.cli_gc, sub.cli_pc, sub.product_id, sub.partner_id, 
-                sub.country_id, sub.account_analytic_id, sub.payment_term_id, sub.uom_name, sub.currency_id, sub.journal_id,
+            SELECT sub.id, sub.date,sub.date_livraison, sub.type_avoir, sub.grosiste, sub.ref_invoice_name, sub.team_id as team_id, sub.fac_volaille_f, sub.fac_charcuterie_f, sub.cli_gc, sub.cli_pc, sub.product_id, sub.partner_id, 
+                sub.country_id, sub.account_analytic_id, sub.commercial, sub.vendeur, sub.payment_term_id, sub.uom_name, sub.currency_id, sub.journal_id,
                 sub.fiscal_position_id, sub.user_id, sub.company_id, sub.nbr, sub.type, sub.state,
                 sub.categ_id, sub.date_due, sub.account_id, sub.account_line_id, sub.partner_bank_id,
                 sub.product_qty, sub.price_total as price_total, sub.price_average as price_average,
@@ -128,7 +156,12 @@ class AccountInvoiceReport(models.Model):
                     ai.fac_charcuterie_f AS fac_charcuterie_f,
                     ai.fac_volaille_f AS fac_volaille_f,
                     ai.cli_pc AS cli_pc,
+                    ai.grosiste AS grosiste,
+                    ai.number AS ref_invoice_name,
+                    ai.type_avoir AS type_avoir,
                     ai.cli_gc AS cli_gc,
+                    ai.commercial AS commercial,
+                    ai.vendeur AS vendeur,
                     ail.product_id, ai.partner_id, ai.payment_term_id, ail.account_analytic_id,
                     u2.name AS uom_name,
                     ai.currency_id, ai.journal_id, ai.fiscal_position_id, ai.user_id, ai.company_id,
@@ -150,5 +183,5 @@ class AccountInvoiceReport(models.Model):
         return select_str
     
     def _group_by(self):
-        return super(AccountInvoiceReport, self)._group_by() + ", ai.team_id"
+        return super(AccountInvoiceReport, self)._group_by() + ", ai.team_id, ai.type_avoir"
             

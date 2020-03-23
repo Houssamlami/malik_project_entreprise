@@ -23,9 +23,9 @@
         <field name="inherit_id" ref="product.product_template_only_form_view"/>
         <field name="arch" type="xml">
         <xpath expr="//field[@name='barcode']" position="after">
-				<field name="price_cart" widget='monetary'/>
-				<field name="secondary_unit_qty_available"/>
-				<field name="qty_vertuel_second_unit"/>
+				<field name="price_cart" widget='monetary' string="Prix de vente par piéce à la carte"/>
+				<field name="secondary_unit_qty_available" invisible="1"/>
+				<field name="qty_vertuel_second_unit" invisible="1"/>
 				<field name="product_service_commercial"/>
 				<field name="name_uom_product" invisible="1"/>
             </xpath>
@@ -45,6 +45,11 @@
 				position="attributes">
 				<attribute name="force_save">1</attribute>
 			</xpath>
+			<xpath
+				expr="//group[@name='group_standard_price']/label"
+				position="attributes">
+				<attribute name="string">Coût de revient</attribute>
+			</xpath>
             <xpath expr="//page[@name='general_information']/group" position="after">
             <separator string="Calcul des Coûts/Prix:" groups="sales_team.group_sale_manager"/>
             <group groups="sales_team.group_sale_manager">
@@ -61,7 +66,7 @@
             <div>
             <field name="provision_commission" string="Provision de commission" class="oe_inline"/>%
             </div>
-            <field name="cout_revient" widget='monetary'/>
+            <field name="cout_revient" widget='monetary' string="Coût de revient de base"/>
             </group>
             <group name="cout_calculer">
             <label for="marge_securite" string="Marge de securité"/>

@@ -13,6 +13,7 @@ from odoo.addons import decimal_precision as dp
 from datetime import datetime, timedelta
 from datetime import datetime
 import datetime
+import dateutil.parser
 
 
 
@@ -27,6 +28,20 @@ class StockPicking(models.Model):
     total_weight_delivered = fields.Float(string='Poids Total', compute='_compute_colis_poids_total_bl', track_visibility='onchange')
     is_return_picking = fields.Boolean(string="Is Retour", compute='get_is_return_picking')
     name_provisoir = fields.Char(string="Nom Provisoir", compute='get_is_return_picking')
+    number_product_to_deliver = fields.Float(string='Produits à livrer', compute='_compute_number_product_to_deliver')
+    expediteur_in_picking = fields.Selection([('MV', 'Malik V'), ('An', 'Atlas N')], related='sale_id.Expediteur', string="Expediteur")
+    
+    @api.one      
+    def _compute_number_product_to_deliver(self):
+        for record in self:
+            pickings = self.env['stock.picking'].search([('partner_id', '=', self.partner_id.id),('picking_type_code','=','outgoing')])
+            cmpt = 0
+            for picking in pickings:
+                if dateutil.parser.parse(picking.scheduled_date).date() == dateutil.parser.parse(record.scheduled_date).date():
+                    for move in picking.move_lines:
+                        cmpt += move.secondary_uom_qty
+            record.number_product_to_deliver = cmpt
+            
     
     
     def get_is_return_picking(self):

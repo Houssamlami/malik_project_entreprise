@@ -80,14 +80,27 @@
 					<field name="volume" invisible="1"/>
 					<field name="volume_tot" string="Prix Total" invisible="1"/>
              	</xpath>
-     
+     <!-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+     <xpath expr="//field[@name='order_line']/tree/field[@name='product_id']" position="attributes">
+                	<attribute name="domain">['|',('product_service_commercial','=',product_service_commercial), ('product_service_commercial','=',second_test)]</attribute>
+					
+      </xpath>
+             	 <xpath expr="//field[@name='order_line']/form/group/group/field[@name='product_id']" position="attributes">
+                	<attribute name="domain">['|',('product_service_commercial','=',product_service_commercial), ('product_service_commercial','=',second_test)]</attribute>
+					
+             	</xpath>
+     <!-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
              	<xpath expr="//field[@name='order_line']/tree/field[@name='name']" position="after">
                 	<field name="qty_initiale" />
+                	<field name="product_service_commercial" invisible="1"/>
+					<field name="second_test" invisible="1"/>
              	</xpath>
              	<xpath expr="//field[@name='order_line']/form/group/group/field[@name='price_subtotal']" position="after">
                     <field name="weight" invisible="1"/>
 					<field name="volume" invisible="1"/>
 					<field name="volume_tot" string="Prix Total" invisible="1"/>
+					<field name="product_service_commercial" invisible="1"/>
+					<field name="second_test" invisible="1"/>
              	</xpath>
              	
              	<xpath expr="//field[@name='partner_shipping_id']"
@@ -151,9 +164,28 @@
              	</xpath>
              	<xpath expr="//field[@name='effective_date']" position="after">
                     <field name="normal_cmd" groups="sales_team.group_sale_manager"/>
+                    <field name="grosiste_cmd" groups="sales_team.group_sale_manager"/>
              	</xpath>
 			</field>
 		 </record>  
+		 
+<record model="ir.ui.view"
+	id="sale_type_command_commercial_form">
+	<field name="name">sale.type.command.commercial.form</field>
+	<field name="model">sale.order</field>
+	<field name="inherit_id"
+		ref="app_sale_order.sale_weight_line_form" />
+	<field name="arch" type="xml">
+		<xpath expr="//field[@name='cmd_volaille']"
+			position="attributes">
+			<attribute name="attrs">{'invisible': [('cmd_charcuterie','=',False),('cmd_volaille', '=',False)], 'readonly': [('cmd_charcuterie', '=',True),('cmd_volaille', '=',False)]}</attribute>
+		</xpath>
+		<xpath expr="//field[@name='cmd_charcuterie']"
+			position="attributes">
+			<attribute name="attrs">{'invisible': [('cmd_charcuterie','=',False),('cmd_volaille', '=',False)], 'readonly': [('cmd_charcuterie', '=',False),('cmd_volaille', '=',True)]}</attribute>
+		</xpath>
+	</field>
+</record>
 		
 		<!-- ''''''''''''''''''''''''Add Commercial, Vendeur in SO ''''''''''''' --> 
 		 <record model="ir.ui.view" id="client_view__partner_vendeur_sales_form">
@@ -306,23 +338,6 @@
 		</field>
 	</record>
 	
-	<record model="ir.ui.view" id="restriction_vend_user_team_commercial_externe_form">
-		<field name="name">restriction.vend.user.team.commercial.form</field>
-		<field name="model">sale.order</field>
-		<field name="inherit_id" ref="client_view__partner_vendeur_sales_form" />
-		<field name="priority">2</field>
-		<field name="groups_id" eval="[(6, 0, [ref('app_sale_order.group_to_write_create_unlink_product')])]" />
-		<field name="arch" type="xml">
-			<field name="user_id" position="attributes">	
-				<attribute name="readonly">1</attribute>
-			</field>
-			
-			<field name="vendeur" position="attributes">	
-				<attribute name="readonly">1</attribute>
-			</field>
-			
-		</field>
-	</record>  
 	
 	
 	

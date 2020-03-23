@@ -47,7 +47,7 @@ class ResPartner(models.Model):
     
     def get_manager_canal_arond(self):
         for res in self:
-            res.user_id = self.env['hr.employee'].search([('user_id', '=', res.team_id.user_id.id)])
+            res.user_id = self.env['hr.employee'].search([('user_id', '=', res.team_id.user_id.id)],limit=1)
     
       
 
@@ -88,6 +88,7 @@ class ResPartner(models.Model):
     date_lyuoM = fields.Datetime(string='today', default=datetime.today())
     echeance_charcuterie_par_jour=fields.Integer('Limite echeance charcuterie par jour')
     ref = fields.Char(string='Reference interne', track_visibility='onchange')
+    customer_cmd_ceiling = fields.Float('Plafond commande client')
     
     _sql_constraints = [
         ('ref_unique_part', 'unique(ref)', 'La reference client doit etre unique!'),
@@ -105,7 +106,6 @@ class ResPartner(models.Model):
             partners.date_last_commande = date_last_commande
             # partners.user_id=vendeur_commarcial
 
-
     @api.one
     def _on_calcule_factures(self):
         for record in self:
@@ -122,7 +122,7 @@ class ResPartner(models.Model):
                     nbr_fac_ouverte_charcuterie=len(line)
                     credit_charcuterie += line.residual_company_signed
                     date_facture_charcuterie=min(line).date_invoice
-                    nbr_jours_decheance_charcuterie=abs((datetime.strptime(date_facture_charcuterie, DATETIME_FORMAT)- datetime.strptime(record.date_lyuoMa, DATETIME_FORMAT)).days)
+                    nbr_jours_decheance_charcuterie=abs((datetime.strptime(date_facture_charcuterie, DATETIME_FORMAT)- datetime.strptime(fields.Date.context_today(self), DATETIME_FORMAT)).days)
                 record.credit_charcuterie = credit_charcuterie
                 record.nbr_fac_ouverte_charcuterie=nbr_fac_ouverte_charcuterie
                 record.date_facture_charcuterie=date_facture_charcuterie
@@ -146,7 +146,7 @@ class ResPartner(models.Model):
                     nbr_fac_ouverte_charcuterie=len(line)
                     credit_charcuterie += line.residual_company_signed
                     date_facture_charcuterie=min(line).date_invoice
-                    nbr_jours_decheance_charcuterie=abs((datetime.strptime(date_facture_charcuterie, DATETIME_FORMAT)- datetime.strptime(record.date_lyuoMa, DATETIME_FORMAT)).days)
+                    nbr_jours_decheance_charcuterie=abs((datetime.strptime(date_facture_charcuterie, DATETIME_FORMAT)- datetime.strptime(fields.Date.context_today(self), DATETIME_FORMAT)).days)
                 record.credit_charcuterie = credit_charcuterie
                 record.nbr_fac_ouverte_charcuterie=nbr_fac_ouverte_charcuterie            
                 record.date_facture_charcuterie=date_facture_charcuterie

@@ -15,3 +15,4 @@ class AccountInvoiceDraftWizard(models.TransientModel):
         sol = self.env['sale.order.line'].browse(active_ids)
         for sols in sol:
             sols.get_default_fact_qtys()
+            sols._compute_invoice_amount()

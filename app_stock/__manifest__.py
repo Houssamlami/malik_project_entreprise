@@ -13,6 +13,7 @@
         'sale_management',
         'stock',
         'sale_stock',
+        'app_sale_order',
     ],
     'data': [
         'views/stock_picking_views.xml',

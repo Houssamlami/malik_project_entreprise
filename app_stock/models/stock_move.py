@@ -27,6 +27,7 @@ class StockMove(models.Model):
     secondary_uom_qty = fields.Float(compute='get_secondary_qty', string="Box")
     secondary_uom_qty_regul = fields.Float(string="Colis", readonly=False, track_visibility='onchange')
     unite_is_kg = fields.Boolean(compute='get_unit_move')
+    expediteur_in_move = fields.Selection([('MV', 'Malik V'), ('An', 'Atlas N')], related='picking_id.expediteur_in_picking', string="Expediteur")
     
     def get_unit_move(self):
         for record in self:

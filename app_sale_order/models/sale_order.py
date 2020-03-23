@@ -14,8 +14,8 @@ class SaleOrder(models.Model):
     total_colis_livrer = fields.Float(string='Total colis livrer', compute='_compute_colis_livrer_total')
     total_volume_ht = fields.Float(string='Montant Total TTC', compute='_compute_volumeht_total')
     total_ht = fields.Float(string='Montant Total HT', compute='_compute_ht_total')
-    vendeur = fields.Many2one(comodel_name='hr.employee', string="Vendeur", compute='onchange_get_default_ven', store=True)
-    user_id = fields.Many2one(comodel_name='hr.employee', string="Commercial", default=False, compute='onchange_get_default_ven', store=True)
+    vendeur = fields.Many2one(comodel_name='hr.employee', string="Vendeur")
+    user_id = fields.Many2one(comodel_name='hr.employee', string="Commercial", default=False)
     
     Bolocagettm = fields.Integer('blo')
     Bolocagettm_id = fields.Many2one(comodel_name='blockage.blockage')
@@ -48,6 +48,7 @@ class SaleOrder(models.Model):
     grand_compte = fields.Boolean(string='Commande Grand Compte', default= False)
     payment_term_id = fields.Many2one('account.payment.term', string='Conditions de règlement', oldname='payment_term', compute='onchange_payment_term_id_so')
     normal_cmd = fields.Boolean(string='Commande Normale', default=True, track_visibility='onchange')
+    grosiste_cmd = fields.Boolean(string='Grossiste', track_visibility='onchange')
     bl_not_conform = fields.Boolean(string='BL Non Conforme', default=False, track_visibility='onchange')
     reason_no_conformity = fields.Selection([('colis_moins', 'Colis en moins'),('colis_plus', 'Colis en plus')], track_visibility='onchange', string="Raison")
     precise_no_conformity = fields.Selection([('non', 'Non'),('oui', 'Oui')], track_visibility='onchange', string="Précisé")
@@ -266,7 +267,7 @@ class SaleOrder(models.Model):
             'name': self.client_order_ref or '',
             'origin': self.name,
             'type': 'out_invoice',
-            'qty_livrer_colis': self.env['stock.picking'].search([('state', '=', 'done'),('picking_type_id.code', '=', 'outgoing'),('origin', '=', self.name)],limit=1).total_colis_delivered - self.picking_ids.filtered(lambda r: r.picking_type_id.code == 'incoming' and r.state == 'done').total_colis_delivered ,
+            #'qty_livrer_colis': self.env['stock.picking'].search([('state', '=', 'done'),('picking_type_id.code', '=', 'outgoing'),('origin', '=', self.name)],limit=1).total_colis_delivered - self.picking_ids.filtered(lambda r: r.picking_type_id.code == 'incoming' and r.state == 'done').total_colis_delivered ,
             'commercial': self.user_id.id,
             'vendeur': self.vendeur.id,
             'account_id': self.partner_invoice_id.property_account_receivable_id.id,

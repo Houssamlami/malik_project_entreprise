@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<data>
+		<!-- Module Object Form View -->
+		<record model="ir.ui.view" id="releve_client_wizard_form">
+			<field name="name">Relevé Client</field>
+			<field name="model">statment.customer.wizard</field>
+			<field name="arch" type="xml">
+				<form string="Relevé Client">
+					<group>
+						<label for="periode_from" string="Période" />
+						<div>
+
+							<field name="periode_from" class="oe_inline" />
+							--
+							<field name="periode_to" class="oe_inline" />
+						</div>
+
+					</group>
+					<group>
+						<label for="periode_from" string="Client" />
+						<div>
+							<field name="client_id" string="Client" class="oe_inline"
+								domain="[('customer','=',1),('parent_id', '=', False)]"
+								options="{'no_create':True,'no_create_edit': True}" />
+						</div>
+					</group>
+					<footer>
+
+						<button name="print_statment_customer_report"
+							string="Imprimer Relevé Client" type="object"
+							class="oe_highlight" />
+						-
+						ou
+						-
+						<button special="cancel" string="Annuler" type="action" />
+					</footer>
+				</form>
+			</field>
+		</record>
+		<record model="ir.actions.act_window"
+			id="releve_client_wizard_form_action">
+			<field name="name">Relevé Client</field>
+			<field name="res_model">statment.customer.wizard</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">form</field>
+			<field name="target">new</field>
+		</record>
+
+		<menuitem parent="sale.menu_sale_report"
+			action="releve_client_wizard_form_action"
+			id="menu_action_releve_client_form" name="Relevé Client" />
+
+	</data>
+</odoo>
