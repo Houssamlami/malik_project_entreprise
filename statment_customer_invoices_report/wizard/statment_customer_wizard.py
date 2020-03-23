@@ -20,7 +20,7 @@ class StatmentCustomerWizard(models.TransientModel):
         #
         if self.client_id and self.periode_from and self.periode_to:       
             invoice = self.env['account.invoice'].search([('partner_id', '=', self.client_id.id),('type', 'in', ['out_invoice','out_refund']),('state', 'in', ['open','paid']),
-                                                          ('date_invoice', '>=', self.periode_from),('date_invoice', '<=', self.periode_to),('user_id.name','!=','Administrator')])
+                                                          ('date_invoice', '>=', self.periode_from),('date_invoice', '<=', self.periode_to),('user_id.name','!=','FATIMAZAHRA Comptabilité')])
             return invoice
     
     #print statement customer 

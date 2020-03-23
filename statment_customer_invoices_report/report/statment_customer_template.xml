@@ -94,45 +94,45 @@
 											</td>
 
 											<t t-if="inv.type=='out_invoice'">
-											<t t-set="total_ht" t-value="total_ht+inv.total_prix_ht"/>
-											<t t-set="total_tax" t-value="total_tax+inv.total_prix_tva"/>
-											<t t-set="total_ttc" t-value="total_ttc+inv.total_prix_ttc"/>
+											<t t-set="total_ht" t-value="total_ht+inv.amount_untaxed"/>
+											<t t-set="total_tax" t-value="total_tax+inv.amount_tax"/>
+											<t t-set="total_ttc" t-value="total_ttc+inv.amount_total"/>
 												<t t-if="not inv.partner_id.parent_id">
 													<td style="border-left:solid; border-bottom:solid grey; border-width: 1px; text-align:center;">
-														<span t-field="inv.total_prix_ht" t-options='{"widget": "float", "precision": 2}'/>
+														<span t-field="inv.amount_untaxed" t-options='{"widget": "float", "precision": 2}'/>
 													</td>
 												</t>
 												<td class="text-left"
 													style="border-left:solid; border-bottom:solid grey; border-width: 1px; text-align:center;">
-													<span t-field="inv.total_prix_tva" t-options='{"widget": "float", "precision": 2}'/>
+													<span t-field="inv.amount_tax" t-options='{"widget": "float", "precision": 2}'/>
 
 												</td>
 												<td class="text-left"
 													style="border-left:solid; border-bottom:solid grey; border-right:solid; border-width: 1px; text-align:center;">
-													<span t-field="inv.total_prix_ttc" t-options='{"widget": "float", "precision": 2}'/>
+													<span t-field="inv.amount_total" t-options='{"widget": "float", "precision": 2}'/>
 
 												</td>
 											</t>
 
 											<t t-if="not inv.type=='out_invoice'">
-											<t t-set="total_ht" t-value="total_ht-inv.total_prix_ht"/>
-											<t t-set="total_tax" t-value="total_tax-inv.total_prix_tva"/>
-											<t t-set="total_ttc" t-value="total_ttc-inv.total_prix_ttc"/>
+											<t t-set="total_ht" t-value="total_ht-inv.amount_untaxed"/>
+											<t t-set="total_tax" t-value="total_tax-inv.amount_tax"/>
+											<t t-set="total_ttc" t-value="total_ttc-inv.amount_total"/>
 												<td class="text-right"
 													style="border-left:solid;  border-bottom:solid grey; border-width: 1px; text-align:center;">
 
-													<span t-esc="-1*inv.total_prix_ht" t-options='{"widget": "float", "precision": 2}'/>													
+													<span t-esc="-1*inv.amount_untaxed" t-options='{"widget": "float", "precision": 2}'/>													
 
 												</td>
 												<td class="text-right"
 													style="border-left:solid;  border-bottom:solid grey; border-width: 1px; text-align:center;">
-													<span t-esc="-1*inv.total_prix_tva" t-options='{"widget": "float", "precision": 2}'/>
+													<span t-esc="-1*inv.amount_tax" t-options='{"widget": "float", "precision": 2}'/>
 													
 												</td>
 
 												<td class="text-right"
 													style="border-left:solid;  border-bottom:solid grey; border-right:solid; border-width: 1px; text-align:center;">
-													<span t-esc="-1*inv.total_prix_ttc" t-options='{"widget": "float", "precision": 2}'/>
+													<span t-esc="-1*inv.amount_total" t-options='{"widget": "float", "precision": 2}'/>
 
 												</td>
 
