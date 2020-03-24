@@ -2,7 +2,7 @@
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 
-from odoo import api, fields, exceptions, models, _
+from odoo import api, fields, exceptions, models, _, tools
 import string
 from odoo.exceptions import ValidationError
 from odoo.exceptions import except_orm, Warning, RedirectWarning
@@ -11,12 +11,15 @@ import time
 from datetime import *
 from odoo.tools.misc import formatLang
 from odoo.addons import decimal_precision as dp
+import itertools
+import psycopg2
+from odoo.tools import pycompat
 
 
 class SimulatorPrice(models.Model):
     _name ="simulator.price"
-     
-    name = fields.Char(string=u"Nom", required=True)
+    _rec_name = 'currency_id'
+    
     prix_achat = fields.Float(string=u"Prix d\'Achat")
     prix_transport = fields.Float(string=u"Transport Achat")
     cout_avs = fields.Float(string=u"Certification")
@@ -29,7 +32,7 @@ class SimulatorPrice(models.Model):
     provision_commission = fields.Float(string="Provision de commission")
     prix_vente_estime = fields.Float(compute='calcul_prix_vente', string=u"Prix de vente Conseillé")
     currency_id = fields.Many2one(
-        'res.currency', 'Currency', compute='_compute_currency_id')
+        'res.currency', 'Currency', default=lambda self: self.env.user.company_id.currency_id)
     company_id = fields.Many2one(
         'res.company', 'Company',
         default=lambda self: self.env.user.company_id)
@@ -54,8 +57,7 @@ class SimulatorPrice(models.Model):
     @api.depends('cout_revient','marge_securite')
     def calcul_prix_min_vente(self):
         for record in self:
-            if record.marge_securite:
-                record.prix_min_vente = record.cout_revient *(1 + (record.marge_securite/100))
+            record.prix_min_vente = record.cout_revient *(1 + (record.marge_securite/100))
     
     @api.depends('marge', 'prix_min_vente')
     def calcul_prix_vente(self):
