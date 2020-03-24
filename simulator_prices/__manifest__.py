@@ -11,7 +11,7 @@
     'category': 'Product',
     'version': '1.1',
     'depends': [
-        'product',
+        'product','base'
     ],
     'data': [
         'views/simulator_price.xml',
