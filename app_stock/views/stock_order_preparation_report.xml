@@ -2200,6 +2200,8 @@
 		<xpath expr="//h2" position="replace">
 			<h2>
 				<span t-if="o.picking_type_code == 'outgoing'">Bon de livraison:</span>
+				<span t-if="o.picking_type_code == 'incoming' and not o.is_return_picking">Bon de Réception:</span>
+				<span t-if="o.picking_type_code == 'incoming' and o.is_return_picking">Bon de Retour:</span>
 				<span t-field="o.name" />
 			</h2>
 		</xpath>
