@@ -141,8 +141,7 @@
 			<field name="arch" type="xml">
 
 <xpath expr="//field[@name='trust']" position="before">
-				<field name="customer_cmd_ceiling_cha"/>
-				<field name="customer_cmd_ceiling_vol"/>
+				<field name="customer_cmd_ceiling"/>
                    <p attrs="{'invisible': [('Client_Volaille','=', False)]}" ><b><u>Blocage par Limite des credits volaille:</u></b></p>
 					  <field attrs="{'invisible': [('Client_Volaille','=', False)]}" name="blocagex_limite_credit"/>
 					   <field attrs="{'invisible': [('Client_Volaille','=', False)]}" name="credit_volaille"/>
