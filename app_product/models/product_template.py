@@ -254,12 +254,12 @@ class ProductTemplate(models.Model):
     
     #'''''''''''''''''''''''calculate costs/prices of product'''''''''''''''''''''''''''''''''''''''''''''''''''''
     
-    @api.depends('charge_fixe', 'cout_ttm', 'cout_avs', 'prix_transport', 'prix_achat','provision_commission')
+    @api.depends('charge_fixe', 'cout_ttm', 'cout_avs', 'prix_transport', 'prix_achat','provision_commission','price_cart')
     def calcul_prix_min_vente_estime(self):
         for record in self:
             precision_currency = record.currency_id or record.company_id.currency_id
             if record.prix_achat:
-                record.cout_revient = precision_currency.round(((record.prix_achat + record.prix_transport + record.cout_avs + record.cout_ttm) * (1 +(record.charge_fixe/100) + (record.provision_commission/100))))
+                record.cout_revient = precision_currency.round(((record.prix_achat + record.prix_transport + record.cout_avs + record.cout_ttm) * (1 + (record.provision_commission/100)))+((record.charge_fixe/100)*record.price_cart))
             record.standard_price = record.prix_vente_estime
                 
     @api.depends('cout_revient','marge_securite')
