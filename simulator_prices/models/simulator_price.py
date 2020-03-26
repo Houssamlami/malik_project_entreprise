@@ -52,23 +52,24 @@ class SimulatorPrice(models.Model):
         for record in self:
             precision_currency = record.currency_id or record.company_id.currency_id
             if record.prix_achat:
-                record.cout_revient = precision_currency.round(((record.prix_achat + record.prix_transport + record.cout_avs + record.cout_ttm) * (1 + (record.provision_commission/100)))+((record.charge_fixe/100)*record.price_cart))
+                record.cout_revient = precision_currency.round((record.prix_achat + record.prix_transport + record.cout_avs + record.cout_ttm) + (record.price_cart * (record.provision_commission/100))+((record.charge_fixe/100)*record.price_cart))
             record.standard_price = record.prix_vente_estime
                 
-    @api.depends('cout_revient','marge_securite')
+    @api.depends('cout_revient','marge_securite', 'price_cart')
     def calcul_prix_min_vente(self):
         for record in self:
-            record.prix_min_vente = record.cout_revient *(1 + (record.marge_securite/100))
+            precision_currency = record.currency_id or record.company_id.currency_id
+            record.prix_min_vente = precision_currency.round(record.cout_revient + (record.price_cart * (record.marge_securite/100)))
     
-    @api.depends('marge', 'prix_min_vente')
+    @api.depends('marge', 'prix_min_vente', 'price_cart')
     def calcul_prix_vente(self):
         for record in self:
             precision_currency = record.currency_id or record.company_id.currency_id
             if record.prix_min_vente:
-                record.prix_vente_estime = precision_currency.round(record.prix_min_vente *(1+(record.marge/100)))
+                record.prix_vente_estime = precision_currency.round(record.prix_min_vente + (record.price_cart * (record.marge/100)))
     
-    @api.onchange('charge_fixe', 'cout_ttm', 'cout_avs', 'prix_transport', 'prix_achat')
-    @api.depends('charge_fixe', 'cout_ttm', 'cout_avs', 'prix_transport', 'prix_achat')
+    @api.onchange('charge_fixe', 'cout_ttm', 'cout_avs', 'prix_transport', 'prix_achat','price_cart')
+    @api.depends('charge_fixe', 'cout_ttm', 'cout_avs', 'prix_transport', 'prix_achat','price_cart')
     def onchange_prix(self):
         for record in self:
             record.calcul_prix_min_vente()
