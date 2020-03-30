@@ -50,7 +50,7 @@ class ProductProduct(models.Model):
             res[val.id]['date_to'] = date_to
             res[val.id]['invoice_state'] = invoice_state
             
-            partner_id = self.env['res.partner'].search([('name', 'like', 'Atlas negoce'),('customer', '=', True)]).ids
+            partner_id = self.env['res.partner'].search([('name', 'like', 'Atlas Négoce'),('customer', '=', True)]).ids
             ids = (x.id for x in partner_id)
             print(ids)
             
