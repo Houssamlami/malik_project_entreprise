@@ -126,7 +126,7 @@ class ProductProduct(models.Model):
             inv_type = ('out_refund','out_refund')
             self.env.cr.execute(sqlstr, (val.id, states, inv_type, date_from, date_to, company_id))
             result = self.env.cr.fetchall()[0]
-            res[val.id]['amount_refund'] = result[2] and result[2] or 0.0
+            res[val.id]['amount_refund'] = (result[2] and result[2] or 0.0)*(-1)
             res[val.id]['number_refund'] = result[1] and result[1] or 0.0
             
             ctx = self.env.context.copy()
