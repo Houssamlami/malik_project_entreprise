@@ -32,6 +32,8 @@ class ProductProduct(models.Model):
         help="Montant avoirs")
     number_sales = fields.Float(compute='_compute_product_margin_fields_values')
     number_refund = fields.Float(compute='_compute_product_margin_fields_values')
+    number_sales_without_an = fields.Float(compute='_compute_product_margin_fields_values')
+    number_refund_with_ref = fields.Float(compute='_compute_product_margin_fields_values')
     
     
     def _compute_product_margin_fields_values(self, field_names=None):
@@ -47,6 +49,11 @@ class ProductProduct(models.Model):
             res[val.id]['date_from'] = date_from
             res[val.id]['date_to'] = date_to
             res[val.id]['invoice_state'] = invoice_state
+            
+            partner_id = self.env['res.partner'].search([('name', 'like', 'Atlas Négoce'),('customer', '=', True)]).ids
+            ids = (x.id for x in partner_id)
+            print(ids)
+            
             invoice_types = ()
             states = ()
             if invoice_state == 'paid':
@@ -73,10 +80,53 @@ class ProductProduct(models.Model):
                 left join product_template pt on (pt.id = product.product_tmpl_id)
                 where l.price_unit != 0 and l.product_id = %s and i.state in %s and i.type IN %s and (i.date_invoice IS NULL or (i.date_invoice>=%s and i.date_invoice<=%s and i.company_id=%s))
                 """
+                
+            sqlstrs = """
+                select
+                    sum(l.price_unit * l.quantity)/nullif(sum(l.quantity),0) as avg_unit_price,
+                    sum(l.quantity) as num_qty,
+                    sum(l.quantity * (l.price_subtotal_signed/(nullif(l.quantity,0)))) as total,
+                    sum(l.quantity * pt.list_price) as sale_expected
+                from account_invoice_line l
+                left join account_invoice i on (l.invoice_id = i.id)
+                left join product_product product on (product.id=l.product_id)
+                left join product_template pt on (pt.id = product.product_tmpl_id)
+                where i.partner_id NOT IN  %s and l.price_unit != 0 and l.product_id = %s and i.state in %s and i.type IN %s and (i.date_invoice IS NULL or (i.date_invoice>=%s and i.date_invoice<=%s and i.company_id=%s))
+                """
+                
+            sqlstrss = """
+                select
+                    sum(l.price_unit * l.quantity)/nullif(sum(l.quantity),0) as avg_unit_price,
+                    sum(l.quantity) as num_qty,
+                    sum(l.quantity * (l.price_subtotal_signed/(nullif(l.quantity,0)))) as total,
+                    sum(l.quantity * pt.list_price) as sale_expected
+                from account_invoice_line l
+                left join account_invoice i on (l.invoice_id = i.id)
+                left join product_product product on (product.id=l.product_id)
+                left join product_template pt on (pt.id = product.product_tmpl_id)
+                where i.ref_livraison IS NOT NULL and l.price_unit != 0 and l.product_id = %s and i.state in %s and i.type IN %s and (i.date_invoice IS NULL or (i.date_invoice>=%s and i.date_invoice<=%s and i.company_id=%s))
+                """
+                
+            inv_type = ('out_refund','out_refund')
+            self.env.cr.execute(sqlstrss, (val.id, states, inv_type, date_from, date_to, company_id))
+            result = self.env.cr.fetchall()[0]
+            res[val.id]['number_refund_with_ref'] = result[1] and result[1] or 0.0
+            
+            ctx = self.env.context.copy()
+            ctx['force_company'] = company_id
+            
+            in_type = ('out_invoice','out_invoice')
+            self.env.cr.execute(sqlstrs, ((tuple(partner_id),), val.id, states, in_type, date_from, date_to, company_id))
+            result = self.env.cr.fetchall()[0]
+            res[val.id]['number_sales_without_an'] = result[1] and result[1] or 0.0
+            
+            ctx = self.env.context.copy()
+            ctx['force_company'] = company_id
+            
             inv_type = ('out_refund','out_refund')
             self.env.cr.execute(sqlstr, (val.id, states, inv_type, date_from, date_to, company_id))
             result = self.env.cr.fetchall()[0]
-            res[val.id]['amount_refund'] = result[2] and result[2] or 0.0
+            res[val.id]['amount_refund'] = (result[2] and result[2] or 0.0)*(-1)
             res[val.id]['number_refund'] = result[1] and result[1] or 0.0
             
             ctx = self.env.context.copy()
@@ -102,7 +152,7 @@ class ProductProduct(models.Model):
                 res[val.id]['amount_marge_securite'] = res[val.id]['turnover'] * (val.marge_securite/100) * val.number_unit
             else:
                 res[val.id]['amount_marge_securite'] = res[val.id]['turnover'] * (val.marge_securite/100)
-            res[val.id]['amount_refund_rate'] = res[val.id]['amount_inv_total'] and res[val.id]['amount_refund'] * (-100) / res[val.id]['amount_inv_total'] or 0.0
+            res[val.id]['amount_refund_rate'] = res[val.id]['amount_inv_total'] and res[val.id]['amount_refund'] * 100 / res[val.id]['amount_inv_total'] or 0.0
             
             ctx = self.env.context.copy()
             ctx['force_company'] = company_id
@@ -111,7 +161,7 @@ class ProductProduct(models.Model):
             self.env.cr.execute(sqlstr, (val.id, states, invoice_types, date_from, date_to, company_id))
             result = self.env.cr.fetchall()[0]
             res[val.id]['sale_avg_price'] = result[0] and result[0] or 0.0
-            res[val.id]['sale_num_invoiced'] = res[val.id]['number_sales'] - res[val.id]['number_refund']
+            res[val.id]['sale_num_invoiced'] = res[val.id]['number_sales_without_an'] - res[val.id]['number_refund_with_ref']
             res[val.id]['sale_expected'] = res[val.id]['sale_num_invoiced'] * val.product_tmpl_id.list_price
             res[val.id]['sales_gap'] = res[val.id]['sale_expected'] - res[val.id]['turnover']
             res[val.id]['sales_gap_rate'] = res[val.id]['sale_expected'] and res[val.id]['sales_gap'] * 100 / res[val.id]['sale_expected'] or 0.0

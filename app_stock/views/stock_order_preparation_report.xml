@@ -132,7 +132,7 @@
 						<!-- Test SAUCIS ESSAFA -->
 						<br />
 						<!-- <t
-							t-foreach="o.move_lines.sorted(key=lambda m: m.product_id.id)"
+							t-foreach="o.move_lines.sorted(key=lambda m: m.product_id.default_code)"
 							t-as="moveinitial"
 							t-if="moveinitial.product_id.Androit_preparation.name =='1'"> -->
 							<t t-set="has_and1"
@@ -168,7 +168,7 @@
 								</thead>
 								<tbody>
 									<tr
-										t-foreach="o.move_lines.sorted(key=lambda m: m.product_id.id)"
+										t-foreach="o.move_lines.sorted(key=lambda m: m.product_id.default_code)"
 										t-as="move">
 										<t t-if="move.product_id.Androit_preparation.name =='1'">
 											<td>
@@ -249,7 +249,7 @@
 
 						<br />
 						<!--<t
-							t-foreach="o.move_lines.sorted(key=lambda m: m.product_id.id)"
+							t-foreach="o.move_lines.sorted(key=lambda m: m.product_id.default_code)"
 							t-as="moveinitial"
 							t-if="moveinitial.product_id.Androit_preparation.name =='2'">-->
 							<t t-set="has_and2"
@@ -284,7 +284,7 @@
 								</thead>
 								<tbody>
 									<tr
-										t-foreach="o.move_lines.sorted(key=lambda m: m.product_id.id)"
+										t-foreach="o.move_lines.sorted(key=lambda m: m.product_id.default_code)"
 										t-as="move">
 										<t t-if="move.product_id.Androit_preparation.name =='2'">
 											<td>
@@ -362,7 +362,7 @@
 						<!-- MINI SAUCIS CHAPELETS -->
 
 					<!--	<t
-							t-foreach="o.move_lines.sorted(key=lambda m: m.product_id.id)"
+							t-foreach="o.move_lines.sorted(key=lambda m: m.product_id.default_code)"
 							t-as="moveinitial"
 							t-if="moveinitial.product_id.Androit_preparation.name =='3'">-->
 							<t t-set="has_and3"
@@ -396,7 +396,7 @@
 								</thead>
 								<tbody>
 									<tr
-										t-foreach="o.move_lines.sorted(key=lambda m: m.product_id.id)"
+										t-foreach="o.move_lines.sorted(key=lambda m: m.product_id.default_code)"
 										t-as="move">
 										<t t-if="move.product_id.Androit_preparation.name =='3'">
 											<td>
@@ -473,7 +473,7 @@
 						<!-- Mortadelle -->
 
 					<!-- 	<t
-							t-foreach="o.move_lines.sorted(key=lambda m: m.product_id.id)"
+							t-foreach="o.move_lines.sorted(key=lambda m: m.product_id.default_code)"
 							t-as="moveinitial"
 							t-if="moveinitial.product_id.Androit_preparation.name =='4'">-->
 							<t t-set="has_and4"
@@ -507,7 +507,7 @@
 								</thead>
 								<tbody>
 									<tr
-										t-foreach="o.move_lines.sorted(key=lambda m: m.product_id.id)"
+										t-foreach="o.move_lines.sorted(key=lambda m: m.product_id.default_code)"
 										t-as="move">
 										<t t-if="move.product_id.Androit_preparation.name =='4'">
 											<td>
@@ -586,7 +586,7 @@
 						<!-- Test TRANCHES PRO -->
 						<br />
 						<!-- <t
-							t-foreach="o.move_lines.sorted(key=lambda m: m.product_id.id)"
+							t-foreach="o.move_lines.sorted(key=lambda m: m.product_id.default_code)"
 							t-as="moveinitial"
 							t-if="moveinitial.product_id.Androit_preparation.name =='5'"> -->
 							<t t-set="product" t-value="o.move_lines.mapped('product_id')" />
@@ -622,7 +622,7 @@
 								</thead>
 								<tbody>
 									<tr
-										t-foreach="o.move_lines.sorted(key=lambda m: m.product_id.id)"
+										t-foreach="o.move_lines.sorted(key=lambda m: m.product_id.default_code)"
 										t-as="move">
 										<t t-if=" move.product_id.Androit_preparation.name =='5'">
 											<td>
@@ -701,7 +701,7 @@
 						<!-- Test BLOCS -->
 						<br />
 						<!--  <t
-							t-foreach="o.move_lines.sorted(key=lambda m: m.product_id.id)"
+							t-foreach="o.move_lines.sorted(key=lambda m: m.product_id.default_code)"
 							t-as="moveinitial"
 							t-if="moveinitial.product_id.Androit_preparation.name =='6'">-->
 							<t t-set="has_and6"
@@ -736,7 +736,7 @@
 								</thead>
 								<tbody>
 									<tr
-										t-foreach="o.move_lines.sorted(key=lambda m: m.product_id.id)"
+										t-foreach="o.move_lines.sorted(key=lambda m: m.product_id.default_code)"
 										t-as="move">
 										<t t-if="move.product_id.Androit_preparation.name =='6'">
 											<td>
@@ -816,7 +816,7 @@
 						<!-- Test CH SECS -->
 						<br />
 					<!--	<t
-							t-foreach="o.move_lines.sorted(key=lambda m: m.product_id.id)"
+							t-foreach="o.move_lines.sorted(key=lambda m: m.product_id.default_code)"
 							t-as="moveinitial"
 							t-if="moveinitial.product_id.Androit_preparation.name =='7'"> -->
 							<t t-set="has_and7"
@@ -852,7 +852,7 @@
 								</thead>
 								<tbody>
 									<tr
-										t-foreach="o.move_lines.sorted(key=lambda m: m.product_id.id)"
+										t-foreach="o.move_lines.sorted(key=lambda m: m.product_id.default_code)"
 										t-as="move">
 										<t t-if="move.product_id.Androit_preparation.name =='7'">
 											<td>
@@ -932,7 +932,7 @@
 						<!-- Test FRAIS -->
 						<br />
 					<!--	<t
-							t-foreach="o.move_lines.sorted(key=lambda m: m.product_id.id)"
+							t-foreach="o.move_lines.sorted(key=lambda m: m.product_id.default_code)"
 							t-as="moveinitial"
 							t-if="moveinitial.product_id.Androit_preparation.name =='8'">-->
 							<t t-set="has_and8"
@@ -967,7 +967,7 @@
 								</thead>
 								<tbody>
 									<tr
-										t-foreach="o.move_lines.sorted(key=lambda m: m.product_id.id)"
+										t-foreach="o.move_lines.sorted(key=lambda m: m.product_id.default_code)"
 										t-as="move">
 										<t t-if="move.product_id.Androit_preparation.name =='8'">
 											<td>
@@ -1044,7 +1044,7 @@
 						<!-- Test TRANCHES -->
 						<br />
 						<!--<t
-							t-foreach="o.move_lines.sorted(key=lambda m: m.product_id.id)"
+							t-foreach="o.move_lines.sorted(key=lambda m: m.product_id.default_code)"
 							t-as="moveinitial"
 							t-if="moveinitial.product_id.Androit_preparation.name =='9'">-->
 							<t t-set="has_and9"
@@ -1079,7 +1079,7 @@
 								</thead>
 								<tbody>
 									<tr
-										t-foreach="o.move_lines.sorted(key=lambda m: m.product_id.id)"
+										t-foreach="o.move_lines.sorted(key=lambda m: m.product_id.default_code)"
 										t-as="move">
 										<t t-if="move.product_id.Androit_preparation.name =='9'">
 											<td>
@@ -1158,7 +1158,7 @@
 						<!-- Test SAUCES -->
 						<br />
 					<!--	<t
-							t-foreach="o.move_lines.sorted(key=lambda m: m.product_id.id)"
+							t-foreach="o.move_lines.sorted(key=lambda m: m.product_id.default_code)"
 							t-as="moveinitial"
 							t-if="moveinitial.product_id.Androit_preparation.name =='10'">-->
 							<t t-set="has_and10"
@@ -1193,7 +1193,7 @@
 								</thead>
 								<tbody>
 									<tr
-										t-foreach="o.move_lines.sorted(key=lambda m: m.product_id.id)"
+										t-foreach="o.move_lines.sorted(key=lambda m: m.product_id.default_code)"
 										t-as="move">
 										<t t-if="move.product_id.Androit_preparation.name =='10'">
 											<td>
@@ -1271,7 +1271,7 @@
 						<!-- Test SNACKS -->
 						<br />
 						<!--<t
-							t-foreach="o.move_lines.sorted(key=lambda m: m.product_id.id)"
+							t-foreach="o.move_lines.sorted(key=lambda m: m.product_id.default_code)"
 							t-as="moveinitial"
 							t-if="moveinitial.product_id.Androit_preparation.name =='11'">-->
 							<t t-set="has_and11"
@@ -1306,7 +1306,7 @@
 								</thead>
 								<tbody>
 									<tr
-										t-foreach="o.move_lines.sorted(key=lambda m: m.product_id.id)"
+										t-foreach="o.move_lines.sorted(key=lambda m: m.product_id.default_code)"
 										t-as="move">
 										<t t-if="move.product_id.Androit_preparation.name =='11'">
 											<td>
@@ -1495,7 +1495,7 @@
 						</table>
 						<br />
 						<!-- <t
-							t-foreach="o.move_lines.sorted(key=lambda m: m.product_id.id)"
+							t-foreach="o.move_lines.sorted(key=lambda m: m.product_id.default_code)"
 							t-as="moveinitial"
 							t-if="moveinitial.product_id.Androit_preparation.name =='16'"> -->
 							<t t-set="has_and16"
@@ -1529,7 +1529,7 @@
 								</thead>
 								<tbody>
 									<tr
-										t-foreach="o.move_lines.sorted(key=lambda m: m.product_id.id)"
+										t-foreach="o.move_lines.sorted(key=lambda m: m.product_id.default_code)"
 										t-as="move">
 										<t t-if="move.product_id.Androit_preparation.name =='16' ">
 
@@ -1721,7 +1721,7 @@
 						</table>
 						<br />
 						<!-- <t
-							t-foreach="o.move_lines.sorted(key=lambda m: m.product_id.id)"
+							t-foreach="o.move_lines.sorted(key=lambda m: m.product_id.default_code)"
 							t-as="moveinitial"
 							t-if="moveinitial.product_id.Androit_preparation.name =='12'"> -->
 							<t t-set="has_and12"
@@ -1755,7 +1755,7 @@
 								</thead>
 								<tbody>
 									<tr
-										t-foreach="o.move_lines.sorted(key=lambda m: m.product_id.id)"
+										t-foreach="o.move_lines.sorted(key=lambda m: m.product_id.default_code)"
 										t-as="move">
 										<t t-if="move.product_id.Androit_preparation.name =='12'">
 											<td style="width:40px">
@@ -1831,7 +1831,7 @@
 
 						<!--dinde -->
 						<!--<t
-							t-foreach="o.move_lines.sorted(key=lambda m: m.product_id.id)"
+							t-foreach="o.move_lines.sorted(key=lambda m: m.product_id.default_code)"
 							t-as="moveinitial"
 							t-if="moveinitial.product_id.Androit_preparation.name =='13'">-->
 							<t t-set="has_and13"
@@ -1863,7 +1863,7 @@
 								</thead>
 								<tbody>
 									<tr
-										t-foreach="o.move_lines.sorted(key=lambda m: m.product_id.id)"
+										t-foreach="o.move_lines.sorted(key=lambda m: m.product_id.default_code)"
 										t-as="move">
 										<t t-if="move.product_id.Androit_preparation.name =='13' ">
 											<td style="width:40px">
@@ -1915,7 +1915,7 @@
 						<!--lapin -->
 
 						<!--<t
-							t-foreach="o.move_lines.sorted(key=lambda m: m.product_id.id)"
+							t-foreach="o.move_lines.sorted(key=lambda m: m.product_id.default_code)"
 							t-as="moveinitial"
 							t-if="moveinitial.product_id.Androit_preparation.name =='14'">-->
 							<t t-set="has_and14"
@@ -1947,7 +1947,7 @@
 								</thead>
 								<tbody>
 									<tr
-										t-foreach="o.move_lines.sorted(key=lambda m: m.product_id.id)"
+										t-foreach="o.move_lines.sorted(key=lambda m: m.product_id.default_code)"
 										t-as="move">
 										<t t-if="move.product_id.Androit_preparation.name =='14' ">
 											<td style="width:40px">
@@ -2026,7 +2026,7 @@
 						<!--Poulet Pack -->
 
 						<!--<t
-							t-foreach="o.move_lines.sorted(key=lambda m: m.product_id.id)"
+							t-foreach="o.move_lines.sorted(key=lambda m: m.product_id.default_code)"
 							t-as="moveinitial"
 							t-if="moveinitial.product_id.Androit_preparation.name =='15'">-->
 							<t t-set="has_and15"
@@ -2058,7 +2058,7 @@
 								</thead>
 								<tbody>
 									<tr
-										t-foreach="o.move_lines.sorted(key=lambda m: m.product_id.id)"
+										t-foreach="o.move_lines.sorted(key=lambda m: m.product_id.default_code)"
 										t-as="move">
 										<t t-if="move.product_id.Androit_preparation.name =='15' ">
 											<td style="width:40px">
