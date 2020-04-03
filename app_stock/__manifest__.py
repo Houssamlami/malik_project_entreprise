@@ -22,7 +22,6 @@
         'views/stock_inventory_views.xml',
         'views/preparation_type_produit_pour_affichage.xml',
         'wizard/wizard_colis.xml',
-        'views/template_header.xml',
     ],
     
     'application': False,

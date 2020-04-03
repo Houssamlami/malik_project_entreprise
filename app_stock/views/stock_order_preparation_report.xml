@@ -7,10 +7,8 @@
 			<!-- Finds the first table with as class table table-condensed and gives 
 				the ability to modify it This will replace everything withing tr (including 
 				tr) -->
-			<xpath expr="//t[@t-foreach='docs']" position="replace">
-			<t t-foreach="docs" t-as="o">
-			<t t-call="app_stock.external_layout1">
-                        <div class="page">
+
+			<xpath expr="//div[@class='page']" position="replace">
 				<div class="row">
 					<div
 						t-if="o.total_weight_stock_frais_auto != 0 or o.total_weight_stock_sec_auto != 0 "
@@ -77,7 +75,7 @@
 								</div>
 							</div>
 						</div>
-						<br /><br /><br /><br /><br />
+						<br />
 						<img
 							t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('Code128', o.name, 600, 100)"
 							style="width:300px;height:50px" class="pull-right mb16" />
@@ -86,7 +84,42 @@
 						<h1 t-if="o.name_provisoir" class="mt0 pull-left" ><span t-field="o.name_provisoir"/></h1>
 
 						<div class="clearfix" />
-						
+						<table class="table table-condensed">
+							<thead>
+								<tr>
+									<th t-if="o.origin">
+										<strong>Order (Origin)</strong>
+									</th>
+									<th>
+										<strong>State</strong>
+									</th>
+									<th>
+										<strong>Commitment Date</strong>
+									</th>
+									<th name="td_sched_date_h">
+										<strong>Scheduled Date</strong>
+									</th>
+									<th><strong>Colis à préparer</strong></th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td t-if="o.origin">
+										<span t-field="o.origin" />
+									</td>
+									<td>
+										<span t-field="o.state" />
+									</td>
+									<td>
+										<span t-field="o.date" />
+									</td>
+									<td name="td_sched_date">
+										<span t-field="o.scheduled_date" />
+									</td>
+									<td><span t-field="o.number_product_to_deliver" /></td>
+								</tr>
+							</tbody>
+						</table>
 						<br />
 						<span style="font-size:16px;color:black">
 							<b>Produit Frais / Sec </b>
@@ -139,30 +172,25 @@
 										t-as="move">
 										<t t-if="move.product_id.Androit_preparation.name =='1'">
 											<td>
-												<div style="margin: auto;"><span t-field="move.product_id.default_code" />
-												</div>
+												<span t-field="move.product_id.default_code" />
 												<br />
 											</td>
 											<td>
-												<div style="margin: auto;"><span t-field="move.product_id.display_name" />
+												<span t-field="move.product_id.display_name" />
 												<br />
 												<span t-field="move.product_id.description_picking" />
-												</div>
 											</td>
 											<td>
-											<div style="margin: auto;">
 												<span t-if="move.product_qty"
 													t-field="move.product_qty" />
 												<span t-if="not move.product_qty"
 													t-esc="move.product_uom._compute_quantity(move.quantity_done, move.product_id.uom_id, rounding_method='HALF-UP')" />
 												<span t-field="move.product_id.uom_id"
 													groups="product.group_uom" />
-												<span t-if="move.unite_is_kg">(<span t-field="move.secondary_uom_qty"></span>)</span>
-												</div>
+												<span t-if="move.unite_is_kg">(<span t-field="move.secondary_uom_qty"></span>Colis)</span>
 											</td>
 											<td>
 												<t t-if="has_barcode">
-												<div style="margin: auto;">
 													<span
 														t-if="move.product_id and move.product_id.barcode">
 														<img
@@ -177,7 +205,6 @@
 															t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('Code128', move.product_id.barcode, 600, 100)"
 															style="width:100%;height:50px" />
 													</span>
-													</div>
 												</t>
 											</td>
 
@@ -188,7 +215,7 @@
 														t-foreach="move.move_line_ids.sorted(key=lambda ml: ml.location_id.id)"
 														t-as="ml">
 
-														<div class="col-xs-5" style="margin: auto;">
+														<div class="col-xs-5">
 															<t
 																t-if="has_serial_number and ml.product_id.tracking != 'none'">
 
@@ -198,7 +225,7 @@
 															</t>
 
 														</div>
-														<div class="col-xs-7" style="margin: auto;">
+														<div class="col-xs-7">
 															<span t-field="ml.lot_id.life_date" />
 
 
@@ -260,34 +287,26 @@
 										t-foreach="o.move_lines.sorted(key=lambda m: m.product_id.default_code)"
 										t-as="move">
 										<t t-if="move.product_id.Androit_preparation.name =='2'">
-										
 											<td>
-											<div style="margin: auto;">
 												<span t-field="move.product_id.default_code" />
-												</div>
 												<br />
 											</td>
 											<td>
-											<div style="margin: auto;">
 												<span t-field="move.product_id.display_name" />
 												<br />
 												<span t-field="move.product_id.description_picking" />
-												</div>
 											</td>
 											<td>
-											<div style="margin: auto;">
 												<span t-if="move.product_qty"
 													t-field="move.product_qty" />
 												<span t-if="not move.product_qty"
 													t-esc="move.product_uom._compute_quantity(move.quantity_done, move.product_id.uom_id, rounding_method='HALF-UP')" />
 												<span t-field="move.product_id.uom_id"
 													groups="product.group_uom" />
-												<span t-if="move.unite_is_kg">(<span t-field="move.secondary_uom_qty"></span>)</span>
-												</div>
+												<span t-if="move.unite_is_kg">(<span t-field="move.secondary_uom_qty"></span>Colis)</span>
 											</td>
 											<td>
 												<t t-if="has_barcode">
-												<div style="margin: auto;">
 													<span
 														t-if="move.product_id and move.product_id.barcode">
 														<img
@@ -302,7 +321,6 @@
 															t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('Code128', move.product_id.barcode, 600, 100)"
 															style="width:100%;height:50px" />
 													</span>
-													</div>
 												</t>
 											</td>
 											<td colspan="3">
@@ -312,7 +330,7 @@
 														t-foreach="move.move_line_ids.sorted(key=lambda ml: ml.location_id.id)"
 														t-as="ml">
 
-														<div class="col-xs-5" style="margin: auto;">
+														<div class="col-xs-5">
 															<t
 																t-if="has_serial_number and ml.product_id.tracking != 'none'">
 
@@ -322,7 +340,7 @@
 															</t>
 
 														</div>
-														<div class="col-xs-7" style="margin: auto;">
+														<div class="col-xs-7">
 															<span t-field="ml.lot_id.life_date" />
 
 
@@ -382,32 +400,25 @@
 										t-as="move">
 										<t t-if="move.product_id.Androit_preparation.name =='3'">
 											<td>
-											<div style="margin: auto;">
 												<span t-field="move.product_id.default_code" />
 												<br />
-												</div>
 											</td>
 											<td>
-											<div style="margin: auto;">
 												<span t-field="move.product_id.display_name" />
 												<br />
 												<span t-field="move.product_id.description_picking" />
-												</div>
 											</td>
 											<td>
-											<div style="margin: auto;">
 												<span t-if="move.product_qty"
 													t-field="move.product_qty" />
 												<span t-if="not move.product_qty"
 													t-esc="move.product_uom._compute_quantity(move.quantity_done, move.product_id.uom_id, rounding_method='HALF-UP')" />
 												<span t-field="move.product_id.uom_id"
 													groups="product.group_uom" />
-												<span t-if="move.unite_is_kg">(<span t-field="move.secondary_uom_qty"></span>)</span>
-												</div>
+												<span t-if="move.unite_is_kg">(<span t-field="move.secondary_uom_qty"></span>Colis)</span>
 											</td>
 											<td>
 												<t t-if="has_barcode">
-												<div style="margin: auto;">
 													<span
 														t-if="move.product_id and move.product_id.barcode">
 														<img
@@ -422,7 +433,6 @@
 															t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('Code128', move.product_id.barcode, 600, 100)"
 															style="width:100%;height:50px" />
 													</span>
-													</div>
 												</t>
 											</td>
 											<td colspan="3">
@@ -432,7 +442,7 @@
 														t-foreach="move.move_line_ids.sorted(key=lambda ml: ml.location_id.id)"
 														t-as="ml">
 
-														<div class="col-xs-5" style="margin: auto;">
+														<div class="col-xs-5">
 															<t
 																t-if="has_serial_number and ml.product_id.tracking != 'none'">
 
@@ -442,7 +452,7 @@
 															</t>
 
 														</div>
-														<div class="col-xs-7" style="margin: auto;">
+														<div class="col-xs-7">
 															<span t-field="ml.lot_id.life_date" />
 
 
@@ -501,32 +511,25 @@
 										t-as="move">
 										<t t-if="move.product_id.Androit_preparation.name =='4'">
 											<td>
-											<div style="margin: auto;">
 												<span t-field="move.product_id.default_code" />
 												<br />
-												</div>
 											</td>
 											<td>
-											<div style="margin: auto;">
 												<span t-field="move.product_id.display_name" />
 												<br />
 												<span t-field="move.product_id.description_picking" />
-												</div>
 											</td>
 											<td>
-											<div style="margin: auto;">
 												<span t-if="move.product_qty"
 													t-field="move.product_qty" />
 												<span t-if="not move.product_qty"
 													t-esc="move.product_uom._compute_quantity(move.quantity_done, move.product_id.uom_id, rounding_method='HALF-UP')" />
 												<span t-field="move.product_id.uom_id"
 													groups="product.group_uom" />
-												<span t-if="move.unite_is_kg">(<span t-field="move.secondary_uom_qty"></span>)</span>
-												</div>
+												<span t-if="move.unite_is_kg">(<span t-field="move.secondary_uom_qty"></span>Colis)</span>
 											</td>
 											<td>
 												<t t-if="has_barcode">
-												<div style="margin: auto;">
 													<span
 														t-if="move.product_id and move.product_id.barcode">
 														<img
@@ -541,7 +544,6 @@
 															t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('Code128', move.product_id.barcode, 600, 100)"
 															style="width:100%;height:50px" />
 													</span>
-													</div>
 												</t>
 											</td>
 											<td colspan="3">
@@ -551,7 +553,7 @@
 														t-foreach="move.move_line_ids.sorted(key=lambda ml: ml.location_id.id)"
 														t-as="ml">
 
-														<div class="col-xs-5" style="margin: auto;">
+														<div class="col-xs-5">
 															<t
 																t-if="has_serial_number and ml.product_id.tracking != 'none'">
 
@@ -561,7 +563,7 @@
 															</t>
 
 														</div>
-														<div class="col-xs-7" style="margin: auto;">
+														<div class="col-xs-7">
 															<span t-field="ml.lot_id.life_date" />
 
 
@@ -597,7 +599,7 @@
 							<br />
 							<br />
 
-							<table class="table table-condensed" t-if="o.move_line_ids" style="column-width: auto;">
+							<table class="table table-condensed" t-if="o.move_line_ids">
 								<t t-set="has_barcode"
 									t-value="any([move_lines.product_id and move_lines.product_id.sudo().barcode or move_lines.package_id for move_lines in o.move_line_ids])" />
 								<t t-set="has_serial_number"
@@ -624,32 +626,25 @@
 										t-as="move">
 										<t t-if=" move.product_id.Androit_preparation.name =='5'">
 											<td>
-											<div style="margin: auto;">
 												<span t-field="move.product_id.default_code" />
 												<br />
-												</div>
 											</td>
 											<td>
-											<div style="margin: auto;">
 												<span t-field="move.product_id.display_name" />
 												<br />
 												<span t-field="move.product_id.description_picking" />
-												</div>
 											</td>
 											<td>
-											<div style="margin: auto;">
 												<span t-if="move.product_qty"
 													t-field="move.product_qty" />
 												<span t-if="not move.product_qty"
 													t-esc="move.product_uom._compute_quantity(move.quantity_done, move.product_id.uom_id, rounding_method='HALF-UP')" />
 												<span t-field="move.product_id.uom_id"
 													groups="product.group_uom" />
-												<span t-if="move.unite_is_kg">(<span t-field="move.secondary_uom_qty"></span>)</span>
-												</div>
+												<span t-if="move.unite_is_kg">(<span t-field="move.secondary_uom_qty"></span>Colis)</span>
 											</td>
 											<td>
 												<t t-if="has_barcode">
-												<div style="margin: auto;">
 													<span
 														t-if="move.product_id and move.product_id.barcode">
 														<img
@@ -664,7 +659,6 @@
 															t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('Code128', move.product_id.barcode, 600, 100)"
 															style="width:100%;height:50px" />
 													</span>
-													</div>
 												</t>
 											</td>
 											<td colspan="3">
@@ -674,7 +668,7 @@
 														t-foreach="move.move_line_ids.sorted(key=lambda ml: ml.location_id.id)"
 														t-as="ml">
 
-														<div class="col-xs-5" style="margin: auto;">
+														<div class="col-xs-5">
 															<t
 																t-if="has_serial_number and ml.product_id.tracking != 'none'">
 
@@ -684,7 +678,7 @@
 															</t>
 
 														</div>
-														<div class="col-xs-7" style="margin: auto;">
+														<div class="col-xs-7">
 															<span t-field="ml.lot_id.life_date" />
 
 
@@ -746,32 +740,25 @@
 										t-as="move">
 										<t t-if="move.product_id.Androit_preparation.name =='6'">
 											<td>
-											<div style="margin: auto;">
 												<span t-field="move.product_id.default_code" />
 												<br />
-												</div>
 											</td>
 											<td>
-											<div style="margin: auto;">
 												<span t-field="move.product_id.display_name" />
 												<br />
 												<span t-field="move.product_id.description_picking" />
-												</div>
 											</td>
 											<td>
-											<div style="margin: auto;">
 												<span t-if="move.product_qty"
 													t-field="move.product_qty" />
 												<span t-if="not move.product_qty"
 													t-esc="move.product_uom._compute_quantity(move.quantity_done, move.product_id.uom_id, rounding_method='HALF-UP')" />
 												<span t-field="move.product_id.uom_id"
 													groups="product.group_uom" />
-												<span t-if="move.unite_is_kg">(<span t-field="move.secondary_uom_qty"></span>)</span>
-												</div>
+												<span t-if="move.unite_is_kg">(<span t-field="move.secondary_uom_qty"></span>Colis)</span>
 											</td>
 											<td>
 												<t t-if="has_barcode">
-												<div style="margin: auto;">
 													<span
 														t-if="move.product_id and move.product_id.barcode">
 														<img
@@ -786,7 +773,6 @@
 															t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('Code128', move.product_id.barcode, 600, 100)"
 															style="width:100%;height:50px" />
 													</span>
-													</div>
 												</t>
 											</td>
 											<td colspan="3">
@@ -796,7 +782,7 @@
 														t-foreach="move.move_line_ids.sorted(key=lambda ml: ml.location_id.id)"
 														t-as="ml">
 
-														<div class="col-xs-5" style="margin: auto;">
+														<div class="col-xs-5">
 															<t
 																t-if="has_serial_number and ml.product_id.tracking != 'none'">
 
@@ -806,7 +792,7 @@
 															</t>
 
 														</div>
-														<div class="col-xs-7" style="margin: auto;">
+														<div class="col-xs-7">
 															<span t-field="ml.lot_id.life_date" />
 
 
@@ -870,32 +856,25 @@
 										t-as="move">
 										<t t-if="move.product_id.Androit_preparation.name =='7'">
 											<td>
-											<div style="margin: auto;">
 												<span t-field="move.product_id.default_code" />
 												<br />
-												</div>
 											</td>
 											<td>
-											<div style="margin: auto;">
 												<span t-field="move.product_id.display_name" />
 												<br />
 												<span t-field="move.product_id.description_picking" />
-												</div>
 											</td>
 											<td>
-											<div style="margin: auto;">
 												<span t-if="move.product_qty"
 													t-field="move.product_qty" />
 												<span t-if="not move.product_qty"
 													t-esc="move.product_uom._compute_quantity(move.quantity_done, move.product_id.uom_id, rounding_method='HALF-UP')" />
 												<span t-field="move.product_id.uom_id"
 													groups="product.group_uom" />
-												<span t-if="move.unite_is_kg">(<span t-field="move.secondary_uom_qty"></span>)</span>
-												</div>
+												<span t-if="move.unite_is_kg">(<span t-field="move.secondary_uom_qty"></span>Colis)</span>
 											</td>
 											<td>
 												<t t-if="has_barcode">
-												<div style="margin: auto;">
 													<span
 														t-if="move.product_id and move.product_id.barcode">
 														<img
@@ -910,7 +889,6 @@
 															t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('Code128', move.product_id.barcode, 600, 100)"
 															style="width:100%;height:50px" />
 													</span>
-													</div>
 												</t>
 											</td>
 											<td colspan="3">
@@ -920,7 +898,7 @@
 														t-foreach="move.move_line_ids.sorted(key=lambda ml: ml.location_id.id)"
 														t-as="ml">
 
-														<div class="col-xs-5" style="margin: auto;">
+														<div class="col-xs-5">
 															<t
 																t-if="has_serial_number and ml.product_id.tracking != 'none'">
 
@@ -930,7 +908,7 @@
 															</t>
 
 														</div>
-														<div class="col-xs-7" style="margin: auto;">
+														<div class="col-xs-7">
 															<span t-field="ml.lot_id.life_date" />
 
 
@@ -993,32 +971,25 @@
 										t-as="move">
 										<t t-if="move.product_id.Androit_preparation.name =='8'">
 											<td>
-											<div style="margin: auto;">
 												<span t-field="move.product_id.default_code" />
 												<br />
-												</div>
 											</td>
 											<td>
-											<div style="margin: auto;">
 												<span t-field="move.product_id.display_name" />
 												<br />
 												<span t-field="move.product_id.description_picking" />
-												</div>
 											</td>
 											<td>
-											<div style="margin: auto;">
 												<span t-if="move.product_qty"
 													t-field="move.product_qty" />
 												<span t-if="not move.product_qty"
 													t-esc="move.product_uom._compute_quantity(move.quantity_done, move.product_id.uom_id, rounding_method='HALF-UP')" />
 												<span t-field="move.product_id.uom_id"
 													groups="product.group_uom" />
-												<span t-if="move.unite_is_kg">(<span t-field="move.secondary_uom_qty"></span>)</span>
-												</div>
+												<span t-if="move.unite_is_kg">(<span t-field="move.secondary_uom_qty"></span>Colis)</span>
 											</td>
 											<td>
 												<t t-if="has_barcode">
-												<div style="margin: auto;">
 													<span
 														t-if="move.product_id and move.product_id.barcode">
 														<img
@@ -1033,7 +1004,6 @@
 															t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('Code128', move.product_id.barcode, 600, 100)"
 															style="width:100%;height:50px" />
 													</span>
-													</div>
 												</t>
 											</td>
 											<td colspan="3">
@@ -1043,7 +1013,7 @@
 														t-foreach="move.move_line_ids.sorted(key=lambda ml: ml.location_id.id)"
 														t-as="ml">
 
-														<div class="col-xs-5" style="margin: auto;">
+														<div class="col-xs-5">
 															<t
 																t-if="has_serial_number and ml.product_id.tracking != 'none'">
 
@@ -1053,7 +1023,7 @@
 															</t>
 
 														</div>
-														<div class="col-xs-7" style="margin: auto;">
+														<div class="col-xs-7">
 															<span t-field="ml.lot_id.life_date" />
 
 
@@ -1113,32 +1083,25 @@
 										t-as="move">
 										<t t-if="move.product_id.Androit_preparation.name =='9'">
 											<td>
-											<div style="margin: auto;">
 												<span t-field="move.product_id.default_code" />
 												<br />
-												</div>
 											</td>
 											<td>
-											<div style="margin: auto;">
 												<span t-field="move.product_id.display_name" />
 												<br />
 												<span t-field="move.product_id.description_picking" />
-												</div>
 											</td>
 											<td>
-											<div style="margin: auto;">
 												<span t-if="move.product_qty"
 													t-field="move.product_qty" />
 												<span t-if="not move.product_qty"
 													t-esc="move.product_uom._compute_quantity(move.quantity_done, move.product_id.uom_id, rounding_method='HALF-UP')" />
 												<span t-field="move.product_id.uom_id"
 													groups="product.group_uom" />
-												<span t-if="move.unite_is_kg">(<span t-field="move.secondary_uom_qty"></span>)</span>
-												</div>
+												<span t-if="move.unite_is_kg">(<span t-field="move.secondary_uom_qty"></span>Colis)</span>
 											</td>
 											<td>
 												<t t-if="has_barcode">
-												<div style="margin: auto;">
 													<span
 														t-if="move.product_id and move.product_id.barcode">
 														<img
@@ -1153,7 +1116,6 @@
 															t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('Code128', move.product_id.barcode, 600, 100)"
 															style="width:100%;height:50px" />
 													</span>
-													</div>
 												</t>
 											</td>
 											<td colspan="3">
@@ -1163,7 +1125,7 @@
 														t-foreach="move.move_line_ids.sorted(key=lambda ml: ml.location_id.id)"
 														t-as="ml">
 
-														<div class="col-xs-5" style="margin: auto;">
+														<div class="col-xs-5">
 															<t
 																t-if="has_serial_number and ml.product_id.tracking != 'none'">
 
@@ -1173,7 +1135,7 @@
 															</t>
 
 														</div>
-														<div class="col-xs-7" style="margin: auto;">
+														<div class="col-xs-7">
 															<span t-field="ml.lot_id.life_date" />
 
 
@@ -1235,32 +1197,25 @@
 										t-as="move">
 										<t t-if="move.product_id.Androit_preparation.name =='10'">
 											<td>
-											<div style="margin: auto;">
 												<span t-field="move.product_id.default_code" />
 												<br />
-												</div>
 											</td>
 											<td>
-											<div style="margin: auto;">
 												<span t-field="move.product_id.display_name" />
 												<br />
 												<span t-field="move.product_id.description_picking" />
-												</div>
 											</td>
 											<td>
-											<div style="margin: auto;">
 												<span t-if="move.product_qty"
 													t-field="move.product_qty" />
 												<span t-if="not move.product_qty"
 													t-esc="move.product_uom._compute_quantity(move.quantity_done, move.product_id.uom_id, rounding_method='HALF-UP')" />
 												<span t-field="move.product_id.uom_id"
 													groups="product.group_uom" />
-												<span t-if="move.unite_is_kg">(<span t-field="move.secondary_uom_qty"></span>)</span>
-												</div>
+												<span t-if="move.unite_is_kg">(<span t-field="move.secondary_uom_qty"></span>Colis)</span>
 											</td>
 											<td>
 												<t t-if="has_barcode">
-												<div style="margin: auto;">
 													<span
 														t-if="move.product_id and move.product_id.barcode">
 														<img
@@ -1275,7 +1230,6 @@
 															t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('Code128', move.product_id.barcode, 600, 100)"
 															style="width:100%;height:50px" />
 													</span>
-													</div>
 												</t>
 											</td>
 											<td colspan="3">
@@ -1285,7 +1239,7 @@
 														t-foreach="move.move_line_ids.sorted(key=lambda ml: ml.location_id.id)"
 														t-as="ml">
 
-														<div class="col-xs-5" style="margin: auto;">
+														<div class="col-xs-5">
 															<t
 																t-if="has_serial_number and ml.product_id.tracking != 'none'">
 
@@ -1295,7 +1249,7 @@
 															</t>
 
 														</div>
-														<div class="col-xs-7" style="margin: auto;">
+														<div class="col-xs-7">
 															<span t-field="ml.lot_id.life_date" />
 
 
@@ -1356,32 +1310,25 @@
 										t-as="move">
 										<t t-if="move.product_id.Androit_preparation.name =='11'">
 											<td>
-											<div style="margin: auto;">
 												<span t-field="move.product_id.default_code" />
 												<br />
-												</div>
 											</td>
 											<td>
-											<div style="margin: auto;">
 												<span t-field="move.product_id.display_name" />
 												<br />
 												<span t-field="move.product_id.description_picking" />
-												</div>
 											</td>
 											<td>
-											<div style="margin: auto;">
 												<span t-if="move.product_qty"
 													t-field="move.product_qty" />
 												<span t-if="not move.product_qty"
 													t-esc="move.product_uom._compute_quantity(move.quantity_done, move.product_id.uom_id, rounding_method='HALF-UP')" />
 												<span t-field="move.product_id.uom_id"
 													groups="product.group_uom" />
-												<span t-if="move.unite_is_kg">(<span t-field="move.secondary_uom_qty"></span>)</span>
-												</div>
+												<span t-if="move.unite_is_kg">(<span t-field="move.secondary_uom_qty"></span>Colis)</span>
 											</td>
 											<td>
 												<t t-if="has_barcode">
-												<div style="margin: auto;">
 													<span
 														t-if="move.product_id and move.product_id.barcode">
 														<img
@@ -1396,7 +1343,6 @@
 															t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('Code128', move.product_id.barcode, 600, 100)"
 															style="width:100%;height:50px" />
 													</span>
-													</div>
 												</t>
 											</td>
 											<td colspan="3">
@@ -1406,7 +1352,7 @@
 														t-foreach="move.move_line_ids.sorted(key=lambda ml: ml.location_id.id)"
 														t-as="ml">
 
-														<div class="col-xs-5" style="margin: auto;">
+														<div class="col-xs-5">
 															<t
 																t-if="has_serial_number and ml.product_id.tracking != 'none'">
 
@@ -1416,7 +1362,7 @@
 															</t>
 
 														</div>
-														<div class="col-xs-7" style="margin: auto;">
+														<div class="col-xs-7">
 															<span t-field="ml.lot_id.life_date" />
 
 
@@ -1503,7 +1449,7 @@
 								</div>
 							</div>
 						</div>
-						<br /><br /><br /><br /><br />
+						<br />
 						<img
 							t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('Code128', o.name, 600, 100)"
 							style="width:300px;height:50px" class="pull-right mb16" />
@@ -1511,7 +1457,42 @@
 						<span t-if="o.picking_type_code == 'incoming'">Bon de Réception:</span><span t-field="o.name"/></h1>
 						<h1 t-if="o.name_provisoir" class="mt0 pull-left" ><span t-field="o.name_provisoir"/></h1>
 						<div class="clearfix" />
-						
+						<table class="table table-condensed">
+							<thead>
+								<tr>
+									<th t-if="o.origin">
+										<strong>Order (Origin)</strong>
+									</th>
+									<th>
+										<strong>State</strong>
+									</th>
+									<th>
+										<strong>Commitment Date</strong>
+									</th>
+									<th name="td_sched_date_h">
+										<strong>Scheduled Date</strong>
+									</th>
+									<th><strong>Colis à préparer</strong></th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td t-if="o.origin">
+										<span t-field="o.origin" />
+									</td>
+									<td>
+										<span t-field="o.state" />
+									</td>
+									<td>
+										<span t-field="o.date" />
+									</td>
+									<td name="td_sched_date">
+										<span t-field="o.scheduled_date" />
+									</td>
+									<td><span t-field="o.number_product_to_deliver" /></td>
+								</tr>
+							</tbody>
+						</table>
 						<br />
 						<!-- <t
 							t-foreach="o.move_lines.sorted(key=lambda m: m.product_id.default_code)"
@@ -1525,7 +1506,7 @@
 							</span>
 							<br />
 							<br />
-							<table class="table table-condensed" t-if="o.move_line_ids" style="column-width: auto;">
+							<table class="table table-condensed" t-if="o.move_line_ids">
 								<t t-set="has_barcode"
 									t-value="any([move_lines.product_id and move_lines.product_id.sudo().barcode or move_lines.package_id for move_lines in o.move_line_ids])" />
 								<t t-set="has_serial_number"
@@ -1553,32 +1534,26 @@
 										<t t-if="move.product_id.Androit_preparation.name =='16' ">
 
 											<td>
-											<div style="margin: auto;">
 												<span t-field="move.product_id.default_code" />
 												<br />
-</div>
+
 											</td>
 											<td>
-											<div style="margin: auto;">
 												<span t-field="move.product_id.display_name" />
 												<br />
 												<span t-field="move.product_id.description_picking" />
-												</div>
 											</td>
 											<td>
-											<div style="margin: auto;">
 												<span t-if="move.product_qty"
 													t-field="move.product_qty" />
 												<span t-if="not move.product_qty"
 													t-esc="move.product_uom._compute_quantity(move.quantity_done, move.product_id.uom_id, rounding_method='HALF-UP')" />
 												<span t-field="move.product_id.uom_id"
 													groups="product.group_uom" />
-												<span t-if="move.unite_is_kg">(<span t-field="move.secondary_uom_qty"></span>)</span>
-												</div>
+												<span t-if="move.unite_is_kg">(<span t-field="move.secondary_uom_qty"></span>Colis)</span>
 											</td>
 											<td>
 												<t t-if="has_barcode">
-												<div style="margin: auto;">
 													<span
 														t-if="move.product_id and move.product_id.barcode">
 														<img
@@ -1593,7 +1568,6 @@
 															t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('Code128', move.product_id.barcode, 600, 100)"
 															style="width:100%;height:50px" />
 													</span>
-													</div>
 												</t>
 											</td>
 											<td colspan="3">
@@ -1603,7 +1577,7 @@
 														t-foreach="move.move_line_ids.sorted(key=lambda ml: ml.location_id.id)"
 														t-as="ml">
 
-														<div class="col-xs-5" style="margin: auto;">
+														<div class="col-xs-5">
 															<t
 																t-if="has_serial_number and ml.product_id.tracking != 'none'">
 
@@ -1613,7 +1587,7 @@
 															</t>
 
 														</div>
-														<div class="col-xs-7" style="margin: auto;">
+														<div class="col-xs-7">
 															<span t-field="ml.lot_id.life_date" />
 
 
@@ -1701,7 +1675,7 @@
 								</div>
 							</div>
 						</div>
-						<br /><br /><br /><br /><br />
+						<br />
 						<img
 							t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('Code128', o.name, 600, 100)"
 							style="width:300px;height:50px" class="pull-right mb16" />
@@ -1709,7 +1683,42 @@
 						<span t-if="o.picking_type_code == 'incoming'">Bon de Réception:</span><span t-field="o.name"/></h1>
 						<h1 t-if="o.name_provisoir" class="mt0 pull-left" ><span t-field="o.name_provisoir"/></h1>
 						<div class="clearfix" />
-						
+						<table class="table table-condensed">
+							<thead>
+								<tr>
+									<th t-if="o.origin">
+										<strong>Order (Origin)</strong>
+									</th>
+									<th>
+										<strong>State</strong>
+									</th>
+									<th>
+										<strong>Commitment Date</strong>
+									</th>
+									<th name="td_sched_date_h">
+										<strong>Scheduled Date</strong>
+									</th>
+									<th><strong>Colis à préparer</strong></th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td t-if="o.origin">
+										<span t-field="o.origin" />
+									</td>
+									<td>
+										<span t-field="o.state" />
+									</td>
+									<td>
+										<span t-field="o.date" />
+									</td>
+									<td name="td_sched_date">
+										<span t-field="o.scheduled_date" />
+									</td>
+									<td><span t-field="o.number_product_to_deliver" /></td>
+								</tr>
+							</tbody>
+						</table>
 						<br />
 						<!-- <t
 							t-foreach="o.move_lines.sorted(key=lambda m: m.product_id.default_code)"
@@ -1723,7 +1732,7 @@
 							</span>
 							<br />
 							<br />
-							<table class="table table-condensed" t-if="o.move_line_ids" style="column-width: auto;">
+							<table class="table table-condensed" t-if="o.move_line_ids">
 								<t t-set="has_barcode"
 									t-value="any([move_lines.product_id and move_lines.product_id.sudo().barcode or move_lines.package_id for move_lines in o.move_line_ids])" />
 								<t t-set="has_serial_number"
@@ -1750,33 +1759,26 @@
 										t-as="move">
 										<t t-if="move.product_id.Androit_preparation.name =='12'">
 											<td style="width:40px">
-											<div style="margin: auto;">
 												<span t-field="move.product_id.default_code" />
 												<br />
-												</div>
 
 											</td>
 											<td>
-											<div style="margin: auto;">
 												<span t-field="move.product_id.display_name" />
 												<br />
 												<span t-field="move.product_id.description_picking" />
-												</div>
 											</td>
 											<td>
-											<div style="margin: auto;">
 												<span t-if="move.product_qty"
 													t-field="move.product_qty" />
 												<span t-if="not move.product_qty"
 													t-esc="move.product_uom._compute_quantity(move.quantity_done, move.product_id.uom_id, rounding_method='HALF-UP')" />
 												<span t-field="move.product_id.uom_id"
 													groups="product.group_uom" />
-												<span t-if="move.unite_is_kg">(<span t-field="move.secondary_uom_qty"></span>)</span>
-												</div>
+												<span t-if="move.unite_is_kg">(<span t-field="move.secondary_uom_qty"></span>Colis)</span>
 											</td>
 											<td>
 												<t t-if="has_barcode">
-												<div style="margin: auto;">
 													<span
 														t-if="move.product_id and move.product_id.barcode">
 														<img
@@ -1791,7 +1793,6 @@
 															t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('Code128', move.product_id.barcode, 600, 100)"
 															style="width:100%;height:50px" />
 													</span>
-													</div>
 												</t>
 											</td>
 											<td colspan="3">
@@ -1801,7 +1802,7 @@
 														t-foreach="move.move_line_ids.sorted(key=lambda ml: ml.location_id.id)"
 														t-as="ml">
 
-														<div class="col-xs-5" style="margin: auto;">
+														<div class="col-xs-5">
 															<t
 																t-if="has_serial_number and ml.product_id.tracking != 'none'">
 
@@ -1811,7 +1812,7 @@
 															</t>
 
 														</div>
-														<div class="col-xs-7" style="margin: auto;">
+														<div class="col-xs-7">
 															<span t-field="ml.lot_id.life_date" />
 
 
@@ -1866,33 +1867,26 @@
 										t-as="move">
 										<t t-if="move.product_id.Androit_preparation.name =='13' ">
 											<td style="width:40px">
-											<div style="margin: auto;">
 												<span t-field="move.product_id.default_code" />
 												<br />
-												</div>
 
 											</td>
 											<td>
-											<div style="margin: auto;">
 												<span t-field="move.product_id.display_name" />
 												<br />
 												<span t-field="move.product_id.description_picking" />
-												</div>
 											</td>
 											<td>
-											<div style="margin: auto;">
 												<span t-if="move.product_qty"
 													t-field="move.product_qty" />
 												<span t-if="not move.product_qty"
 													t-esc="move.product_uom._compute_quantity(move.quantity_done, move.product_id.uom_id, rounding_method='HALF-UP')" />
 												<span t-field="move.product_id.uom_id"
 													groups="product.group_uom" />
-												<span t-if="move.unite_is_kg">(<span t-field="move.secondary_uom_qty"></span>)</span>
-												</div>
+												<span t-if="move.unite_is_kg">(<span t-field="move.secondary_uom_qty"></span>Colis)</span>
 											</td>
 											<td>
 												<t t-if="has_barcode">
-												<div style="margin: auto;">
 													<span
 														t-if="move.product_id and move.product_id.barcode">
 														<img
@@ -1907,7 +1901,6 @@
 															t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('Code128', move.product_id.barcode, 600, 100)"
 															style="width:100%;height:50px" />
 													</span>
-													</div>
 												</t>
 											</td>
 
@@ -1958,33 +1951,26 @@
 										t-as="move">
 										<t t-if="move.product_id.Androit_preparation.name =='14' ">
 											<td style="width:40px">
-											<div style="margin: auto;">
 												<span t-field="move.product_id.default_code" />
 												<br />
-												</div>
 
 											</td>
 											<td>
-											<div style="margin: auto;">
 												<span t-field="move.product_id.display_name" />
 												<br />
 												<span t-field="move.product_id.description_picking" />
-												</div>
 											</td>
 											<td>
-											<div style="margin: auto;">
 												<span t-if="move.product_qty"
 													t-field="move.product_qty" />
 												<span t-if="not move.product_qty"
 													t-esc="move.product_uom._compute_quantity(move.quantity_done, move.product_id.uom_id, rounding_method='HALF-UP')" />
 												<span t-field="move.product_id.uom_id"
 													groups="product.group_uom" />
-												<span t-if="move.unite_is_kg">(<span t-field="move.secondary_uom_qty"></span>)</span>
-												</div>
+												<span t-if="move.unite_is_kg">(<span t-field="move.secondary_uom_qty"></span>Colis)</span>
 											</td>
 											<td>
 												<t t-if="has_barcode">
-												<div style="margin: auto;">
 													<span
 														t-if="move.product_id and move.product_id.barcode">
 														<img
@@ -1999,7 +1985,6 @@
 															t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('Code128', move.product_id.barcode, 600, 100)"
 															style="width:100%;height:50px" />
 													</span>
-													</div>
 												</t>
 											</td>
 											<td colspan="3">
@@ -2009,7 +1994,7 @@
 														t-foreach="move.move_line_ids.sorted(key=lambda ml: ml.location_id.id)"
 														t-as="ml">
 
-														<div class="col-xs-5" style="margin: auto;">
+														<div class="col-xs-5">
 															<t
 																t-if="has_serial_number and ml.product_id.tracking != 'none'">
 
@@ -2019,7 +2004,7 @@
 															</t>
 
 														</div>
-														<div class="col-xs-7" style="margin: auto;">
+														<div class="col-xs-7">
 															<span t-field="ml.lot_id.life_date" />
 
 
@@ -2077,33 +2062,26 @@
 										t-as="move">
 										<t t-if="move.product_id.Androit_preparation.name =='15' ">
 											<td style="width:40px">
-											<div style="margin: auto;">
 												<span t-field="move.product_id.default_code" />
 												<br />
-												</div>
 
 											</td>
 											<td>
-											<div style="margin: auto;">
 												<span t-field="move.product_id.display_name" />
 												<br />
 												<span t-field="move.product_id.description_picking" />
-												</div>
 											</td>
 											<td>
-											<div style="margin: auto;">
 												<span t-if="move.product_qty"
 													t-field="move.product_qty" />
 												<span t-if="not move.product_qty"
 													t-esc="move.product_uom._compute_quantity(move.quantity_done, move.product_id.uom_id, rounding_method='HALF-UP')" />
 												<span t-field="move.product_id.uom_id"
 													groups="product.group_uom" />
-												<span t-if="move.unite_is_kg">(<span t-field="move.secondary_uom_qty"></span>)</span>
-												</div>
+												<span t-if="move.unite_is_kg">(<span t-field="move.secondary_uom_qty"></span>Colis)</span>
 											</td>
 											<td>
 												<t t-if="has_barcode">
-												<div style="margin: auto;">
 													<span
 														t-if="move.product_id and move.product_id.barcode">
 														<img
@@ -2118,7 +2096,6 @@
 															t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('Code128', move.product_id.barcode, 600, 100)"
 															style="width:100%;height:50px" />
 													</span>
-													</div>
 												</t>
 											</td>
 											<td colspan="3">
@@ -2128,7 +2105,7 @@
 														t-foreach="move.move_line_ids.sorted(key=lambda ml: ml.location_id.id)"
 														t-as="ml">
 
-														<div class="col-xs-5" style="margin: auto;">
+														<div class="col-xs-5">
 															<t
 																t-if="has_serial_number and ml.product_id.tracking != 'none'">
 
@@ -2138,7 +2115,7 @@
 															</t>
 
 														</div>
-														<div class="col-xs-7" style="margin: auto;">
+														<div class="col-xs-7">
 															<span t-field="ml.lot_id.life_date" />
 
 
@@ -2202,24 +2179,22 @@
 					<p t-field="o.note" />
 
 				</div>
-</div>
-</t>
-</t>
+
 			</xpath>
 
 		</template>
-		<template id="report_deliveryslip_inherit_provisoir"
-	inherit_id="stock.report_delivery_document">
+	<template id="report_deliveryslip_inherit_provisoir"
+			inherit_id="stock.report_delivery_document">
 
-	<xpath expr="//h2" position="replace">
-		<h2>
-			<span t-if="not o.name_provisoir" t-field="o.name" />
-			<span t-if="o.name_provisoir" t-field="o.name_provisoir" />
-
-		</h2>
-	</xpath>
-</template>
-
+			<xpath expr="//h2" position="replace">
+			<h2>
+			<span t-if="not o.name_provisoir" t-field="o.name"/>
+			<span t-if="o.name_provisoir" t-field="o.name_provisoir"/>
+			
+			</h2>
+			</xpath>
+	</template>
+			
 	<template id="report_delivery_document_inherit_dlc"
 		inherit_id="stock.report_delivery_document">
 		<xpath expr="//h2" position="replace">
@@ -2317,7 +2292,6 @@
 				<tbody>
 					<tr t-foreach="o.move_line_ids" t-as="move_line">
 						<td>
-						<div style="margin: auto;">
 							<span t-field="move_line.product_id" />
 							<p t-if="o.picking_type_code == 'outgoing'">
 								<span
@@ -2327,36 +2301,31 @@
 								<span
 									t-field="move_line.product_id.sudo().description_pickingin" />
 							</p>
-							</div>
 						</td>
 						<t t-if="has_serial_number">
 							<td>
 								<table width="100%">
 									<tr>
 										<td>
-										<div style="margin: auto;">
 											<span t-field="move_line.lot_id" />
 											<t t-if="not move_line.lot_id">
 												<span t-field="move_line.lot_name" />
 											</t>
-											</div>
+											
 										</td>
 
 										<td name="lot_qty">
 											<t t-if="move_line.product_qty">
-											<div style="margin: auto;">
 												<span t-field="move_line.product_qty" />
-												</div>
 											</t>
 										</td>
 										<td
 												t-if="o.picking_type_code == 'incoming' and o.is_return_picking">
-												<div style="margin: auto;">
 												<center>
 												<span
 													t-if="o.picking_type_code == 'incoming' and o.is_return_picking"
 													class="pull-right" t-field="move_line.lot_id.life_date"
-													t-field-options='{"widget": "date"}' /></center></div>
+													t-field-options='{"widget": "date"}' /></center>
 
 						</td>
 									</tr>
@@ -2408,10 +2377,10 @@
 					</td>
 				</tr>
 			</table>
-		<!--	<br />
-			 <div align="right">
+			<!--  <br />
+			<div align="right" style="margin-bottom:4%;">
 				<table t-if="o.picking_type_id.code == 'outgoing'"
-					class="table" style="width:350px;">
+					class="table table-condensed" style="width:350px;">
 					<tr t-if="o.partner_id.Client_Charcuterie">
 						<td>
 							<span>Montant Dû Charcuterie:</span>
@@ -2429,9 +2398,10 @@
 						</td>
 					</tr>
 				</table>
-			</div> -->
+			</div>-->
 		</xpath>
 	</template>
 	</data>
 </odoo>
+
 
