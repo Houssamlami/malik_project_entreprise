@@ -14,6 +14,9 @@ class ProductProduct(models.Model):
         help="Pourcentage de remise moyen")
     charge_fix_margin = fields.Float(compute='_compute_product_margin_fields_values', string='% charge fixe',
         help="% charge fixe")
+    charge_fix_margin_max = fields.Float(compute='_compute_product_margin_fields_values', string='% charge fixe max',
+        help="% charge fixe max")
+    marge_margin = fields.Float(compute='_compute_product_margin_fields_values')
     amount_charge_fix = fields.Float(compute='_compute_product_margin_fields_values', string='Montant de % charge fixe',
         help="Montant de % charge fixe")
     marge_securite_margin = fields.Float(compute='_compute_product_margin_fields_values', string='% marge de securité',
@@ -53,10 +56,11 @@ class ProductProduct(models.Model):
             res[val.id]['date_to'] = date_to
             res[val.id]['invoice_state'] = invoice_state
             
-            partner_id = self.env['res.partner'].search([('name', 'like', 'Atlas Négoce'),('customer', '=', True)]).ids
+            partner_id = self.env['res.partner'].search([('name', 'like', 'Atlas negoce'),('customer', '=', True)]).ids
             ids = (x.id for x in partner_id)
             
             sum_prices = val.product_tmpl_id.prix_achat + val.product_tmpl_id.prix_transport + val.product_tmpl_id.cout_avs + val.product_tmpl_id.cout_ttm
+            unit_in_colis = val.product_tmpl_id.number_unit
             
             invoice_types = ()
             states = ()
@@ -150,6 +154,8 @@ class ProductProduct(models.Model):
             result = self.env.cr.fetchall()[0]
             res[val.id]['turnover'] = result[2] and result[2] or 0.0
             res[val.id]['charge_fix_margin'] = val.charge_fixe
+            res[val.id]['marge_margin'] = val.marge
+            res[val.id]['charge_fix_margin_max'] = min(val.charge_fixe,val.marge)
             res[val.id]['amount_charge_fix'] = res[val.id]['turnover'] * (val.charge_fixe/100)
             res[val.id]['marge_securite_margin'] = val.marge_securite
             if val.uom_id.name == 'Colis':
@@ -166,7 +172,7 @@ class ProductProduct(models.Model):
             result = self.env.cr.fetchall()[0]
             res[val.id]['sale_avg_price'] = result[0] and result[0] or 0.0
             res[val.id]['sale_num_invoiced'] = res[val.id]['number_sales_without_an'] - res[val.id]['number_refund_with_ref']
-            res[val.id]['price_commercial'] = res[val.id]['sale_num_invoiced'] * sum_prices
+            res[val.id]['price_commercial'] = res[val.id]['sale_num_invoiced'] * sum_prices * unit_in_colis
             res[val.id]['marge_commercial'] = res[val.id]['turnover'] - res[val.id]['price_commercial']
             res[val.id]['sale_expected'] = res[val.id]['sale_num_invoiced'] * val.product_tmpl_id.list_price
             res[val.id]['sales_gap'] = res[val.id]['sale_expected'] - res[val.id]['turnover']

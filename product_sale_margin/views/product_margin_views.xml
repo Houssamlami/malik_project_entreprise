@@ -47,7 +47,9 @@
 					
 				<xpath expr="//field[@name='purchase_num_invoiced']"
 					position="after">
+					<field name="marge_margin" invisible="1"/>
 				<field name="price_avg_rate" widget="progressbar" invisible="1"/>
+				<field name="charge_fix_margin_max" options='{"fg_color": "red:marge_margin &lt; charge_fix_margin"}'/>
 				<field name="charge_fix_margin"/>
 				<field name="amount_charge_fix" sum="total_fix"/>
 				<field name="marge_securite_margin"/>
