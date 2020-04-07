@@ -155,7 +155,6 @@ class ProductProduct(models.Model):
             res[val.id]['turnover'] = result[2] and result[2] or 0.0
             res[val.id]['charge_fix_margin'] = val.charge_fixe
             res[val.id]['marge_margin'] = val.marge
-            res[val.id]['charge_fix_margin_max'] = min(val.charge_fixe,val.marge)
             res[val.id]['amount_charge_fix'] = res[val.id]['turnover'] * (val.charge_fixe/100)
             res[val.id]['marge_securite_margin'] = val.marge_securite
             if val.uom_id.name == 'Colis':
@@ -191,6 +190,7 @@ class ProductProduct(models.Model):
             res[val.id]['purchase_gap'] = res[val.id]['normal_cost'] - res[val.id]['total_cost']
             
             res[val.id]['marge_commercial_rate'] = res[val.id]['turnover'] and res[val.id]['marge_commercial'] * 100 / res[val.id]['turnover'] or 0.0
+            res[val.id]['charge_fix_margin_max'] = min(res[val.id]['charge_fix_margin'],res[val.id]['marge_commercial_rate'])
 
             res[val.id]['total_margin'] = res[val.id]['turnover'] - res[val.id]['total_cost']
             res[val.id]['expected_margin'] = res[val.id]['sale_expected'] - res[val.id]['normal_cost']
