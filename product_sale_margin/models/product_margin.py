@@ -157,10 +157,7 @@ class ProductProduct(models.Model):
             res[val.id]['marge_margin'] = val.marge
             res[val.id]['amount_charge_fix'] = res[val.id]['turnover'] * (val.charge_fixe/100)
             res[val.id]['marge_securite_margin'] = val.marge_securite
-            if val.uom_id.name == 'Colis':
-                res[val.id]['amount_marge_securite'] = res[val.id]['turnover'] * (val.marge_securite/100) * val.number_unit
-            else:
-                res[val.id]['amount_marge_securite'] = res[val.id]['turnover'] * (val.marge_securite/100)
+            res[val.id]['amount_marge_securite'] = res[val.id]['turnover'] * (val.marge_securite/100)
             res[val.id]['amount_refund_rate'] = res[val.id]['amount_inv_total'] and res[val.id]['amount_refund'] * 100 / res[val.id]['amount_inv_total'] or 0.0
             
             ctx = self.env.context.copy()
