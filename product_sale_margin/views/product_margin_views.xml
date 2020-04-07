@@ -42,7 +42,7 @@
 					position="replace">
 					<field name="price_commercial"/>
 					<field name="marge_commercial"/>
-					<field name="marge_commercial_rate" widget="progressbar"/>
+					<field name="marge_commercial_rate"/>
 					</xpath>
 					
 				<xpath expr="//field[@name='purchase_num_invoiced']"
