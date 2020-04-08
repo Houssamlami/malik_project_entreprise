@@ -2378,7 +2378,7 @@
 				</tr>
 			</table>
 			<div class="row">
-	<div>
+	<div t-if="o.picking_type_code == 'outgoing'">
 		<div class="col-xs-6">
 			<strong>Nom du réceptionnaire:_____________________________</strong>
 		</div>
