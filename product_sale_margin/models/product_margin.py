@@ -14,6 +14,9 @@ class ProductProduct(models.Model):
         help="Pourcentage de remise moyen")
     charge_fix_margin = fields.Float(compute='_compute_product_margin_fields_values', string='% charge fixe',
         help="% charge fixe")
+    charge_fix_margin_max = fields.Float(compute='_compute_product_margin_fields_values', string='% charge fixe max',
+        help="% charge fixe max")
+    marge_margin = fields.Float(compute='_compute_product_margin_fields_values')
     amount_charge_fix = fields.Float(compute='_compute_product_margin_fields_values', string='Montant de % charge fixe',
         help="Montant de % charge fixe")
     marge_securite_margin = fields.Float(compute='_compute_product_margin_fields_values', string='% marge de securité',
@@ -25,15 +28,18 @@ class ProductProduct(models.Model):
     amount_inv_total = fields.Float(compute='_compute_product_margin_fields_values', string='Montant factures',
         help="Montant factures")
     amount_refund_rate = fields.Float(compute='_compute_product_margin_fields_values', string='% avoirs',
-        help="Montant avoirs")
+        help="% Montant avoirs")
     sales_gap_rate = fields.Float(compute='_compute_product_margin_fields_values', string='% Ecart vente',
-        help="Montant avoirs")
+        help="% Ecart vente")
     commercial_rate = fields.Float(compute='_compute_product_margin_fields_values', string='% Fait commerciaux',
-        help="Montant avoirs")
+        help="% Fait commerciaux")
     number_sales = fields.Float(compute='_compute_product_margin_fields_values')
     number_refund = fields.Float(compute='_compute_product_margin_fields_values')
     number_sales_without_an = fields.Float(compute='_compute_product_margin_fields_values')
     number_refund_with_ref = fields.Float(compute='_compute_product_margin_fields_values')
+    price_commercial = fields.Float(compute='_compute_product_margin_fields_values', string='Coût commercial')
+    marge_commercial = fields.Float(compute='_compute_product_margin_fields_values', string='Marge commerciale')
+    marge_commercial_rate = fields.Float(compute='_compute_product_margin_fields_values', string='% Marge commerciale')
     
     
     def _compute_product_margin_fields_values(self, field_names=None):
@@ -52,7 +58,9 @@ class ProductProduct(models.Model):
             
             partner_id = self.env['res.partner'].search([('name', 'like', 'Atlas Négoce'),('customer', '=', True)]).ids
             ids = (x.id for x in partner_id)
-            print(ids)
+            
+            sum_prices = val.product_tmpl_id.prix_achat + val.product_tmpl_id.prix_transport + val.product_tmpl_id.cout_avs + val.product_tmpl_id.cout_ttm
+            unit_in_colis = val.product_tmpl_id.number_unit
             
             invoice_types = ()
             states = ()
@@ -146,12 +154,10 @@ class ProductProduct(models.Model):
             result = self.env.cr.fetchall()[0]
             res[val.id]['turnover'] = result[2] and result[2] or 0.0
             res[val.id]['charge_fix_margin'] = val.charge_fixe
+            res[val.id]['marge_margin'] = val.marge
             res[val.id]['amount_charge_fix'] = res[val.id]['turnover'] * (val.charge_fixe/100)
             res[val.id]['marge_securite_margin'] = val.marge_securite
-            if val.uom_id.name == 'Colis':
-                res[val.id]['amount_marge_securite'] = res[val.id]['turnover'] * (val.marge_securite/100) * val.number_unit
-            else:
-                res[val.id]['amount_marge_securite'] = res[val.id]['turnover'] * (val.marge_securite/100)
+            res[val.id]['amount_marge_securite'] = res[val.id]['turnover'] * (val.marge_securite/100)
             res[val.id]['amount_refund_rate'] = res[val.id]['amount_inv_total'] and res[val.id]['amount_refund'] * 100 / res[val.id]['amount_inv_total'] or 0.0
             
             ctx = self.env.context.copy()
@@ -162,6 +168,8 @@ class ProductProduct(models.Model):
             result = self.env.cr.fetchall()[0]
             res[val.id]['sale_avg_price'] = result[0] and result[0] or 0.0
             res[val.id]['sale_num_invoiced'] = res[val.id]['number_sales_without_an'] - res[val.id]['number_refund_with_ref']
+            res[val.id]['price_commercial'] = res[val.id]['sale_num_invoiced'] * sum_prices * unit_in_colis
+            res[val.id]['marge_commercial'] = res[val.id]['turnover'] - res[val.id]['price_commercial']
             res[val.id]['sale_expected'] = res[val.id]['sale_num_invoiced'] * val.product_tmpl_id.list_price
             res[val.id]['sales_gap'] = res[val.id]['sale_expected'] - res[val.id]['turnover']
             res[val.id]['sales_gap_rate'] = res[val.id]['sale_expected'] and res[val.id]['sales_gap'] * 100 / res[val.id]['sale_expected'] or 0.0
@@ -177,6 +185,9 @@ class ProductProduct(models.Model):
             res[val.id]['total_cost'] = res[val.id]['sale_num_invoiced'] * standard_price
             res[val.id]['normal_cost'] = val.standard_price * res[val.id]['sale_num_invoiced']
             res[val.id]['purchase_gap'] = res[val.id]['normal_cost'] - res[val.id]['total_cost']
+            
+            res[val.id]['marge_commercial_rate'] = res[val.id]['turnover'] and res[val.id]['marge_commercial'] * 100 / res[val.id]['turnover'] or 0.0
+            res[val.id]['charge_fix_margin_max'] = min(res[val.id]['charge_fix_margin'],res[val.id]['marge_commercial_rate'])
 
             res[val.id]['total_margin'] = res[val.id]['turnover'] - res[val.id]['total_cost']
             res[val.id]['expected_margin'] = res[val.id]['sale_expected'] - res[val.id]['normal_cost']

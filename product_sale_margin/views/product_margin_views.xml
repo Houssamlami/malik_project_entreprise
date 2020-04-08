@@ -28,13 +28,33 @@
 					position="attributes">
 					<attribute name="invisible">1</attribute>
 				</xpath>
+				
+				<xpath expr="//field[@name='total_margin']"
+					position="attributes">
+					<attribute name="string">Marge Nette</attribute>
+				</xpath>
+				<xpath expr="//field[@name='total_margin_rate']"
+					position="attributes">
+					<attribute name="string">Taux Marge Nette</attribute>
+				</xpath>
+				
+				<xpath expr="//field[@name='total_cost']"
+					position="replace">
+					<field name="price_commercial"/>
+					<field name="marge_commercial"/>
+					<field name="marge_commercial_rate"/>
+					</xpath>
+					
 				<xpath expr="//field[@name='purchase_num_invoiced']"
 					position="after">
+					<field name="marge_margin" invisible="1"/>
 				<field name="price_avg_rate" widget="progressbar" invisible="1"/>
+				<field name="charge_fix_margin_max" options='{"fg_color": "red:marge_commercial_rate &lt; charge_fix_margin"}'/>
 				<field name="charge_fix_margin"/>
 				<field name="amount_charge_fix" sum="total_fix"/>
 				<field name="marge_securite_margin"/>
 				<field name="amount_marge_securite" sum="total_sec"/>
+				<field name="total_cost"/>
 				</xpath>
 				<xpath expr="//field[@name='turnover']"
 					position="after">
@@ -44,7 +64,9 @@
 					<field name="sales_gap"/>
 					<field name="sales_gap_rate" widget="progressbar"/>
 					<field name="commercial_rate" widget="progressbar"/>
+					
 				</xpath>
+				
 			</field>
 		</record>
 		
