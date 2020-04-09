@@ -19,6 +19,7 @@ class SaleReport(models.Model):
     refused_command = fields.Boolean(string="CMD Refusée", readonly=True)
     user_id = fields.Many2one('hr.employee', 'Commercial', readonly=True)
     grosiste = fields.Boolean(string='Grossiste', readonly=True)
+    product_at_zero = fields.Boolean(string=u"Article à zéro AN", readonly=True)
     
     def _select(self):
         select_str = """
@@ -26,6 +27,7 @@ class SaleReport(models.Model):
              SELECT min(l.id) as id,
                     l.product_id as product_id,
                     t.uom_id as product_uom,
+                    t.product_at_zero as product_at_zero,
                     sum(l.product_uom_qty / u.factor * u2.factor) as product_uom_qty,
                     sum(l.qty_delivered / u.factor * u2.factor) as qty_delivered,
                     sum(l.qty_invoiced / u.factor * u2.factor) as qty_invoiced,
@@ -86,6 +88,7 @@ class SaleReport(models.Model):
             GROUP BY l.product_id,
                     l.order_id,
                     t.uom_id,
+                    t.product_at_zero,
                     t.categ_id,
                     s.name,
                     s.date_order,

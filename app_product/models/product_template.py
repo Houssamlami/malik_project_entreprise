@@ -193,6 +193,7 @@ class ProductTemplate(models.Model):
     qty_vertuel_second_unit = fields.Float(string="Qty in second unit", compute='get_qty_vertuel_second_unit')
     secondary_unit_qty_available = fields.Float(string='Second', readonly=True)
     product_service_commercial = fields.Boolean(string='Disponibilté Service Commercial')
+    product_at_zero = fields.Boolean(string=u"Article à zéro AN", track_visibility='onchange')
     
 
     def get_qty_vertuel_second_unit(self):
