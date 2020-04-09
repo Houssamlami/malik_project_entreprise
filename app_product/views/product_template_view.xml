@@ -124,6 +124,7 @@
                    
 					  <field  name="Androit_stockage"/>
 					  <field  name="Androit_preparation"/>
+					  <field name="product_at_zero"/>
              	</xpath>
                
             </field>
