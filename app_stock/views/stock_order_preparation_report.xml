@@ -2197,18 +2197,16 @@
 			
 	<template id="report_delivery_document_inherit_dlc"
 		inherit_id="stock.report_delivery_document">
-		<xpath expr="//h2" position="replace">
-			<h2>
-				<span t-if="o.picking_type_code == 'outgoing'">Bon de livraison:</span>
-				<span t-if="o.picking_type_code == 'incoming' and not o.is_return_picking">Bon de Réception:</span>
-				<span t-if="o.picking_type_code == 'incoming' and o.is_return_picking">Bon de Retour:</span>
-				<span t-field="o.name" />
-			</h2>
-		</xpath>
-		<xpath expr="//table[@class='table table-condensed mt48'][1]"
+		<xpath expr="//t[@t-call='web.external_layout']"
 			position="replace">
+			
+		<t t-call="app_stock.external_layout1">
+			<t t-set="o" t-value="o.with_context(lang=o.partner_id.lang)" />
+                <div class="page">
+                <t t-set="company" t-value="o.company_id.sudo()"/>
+	
 			<table class="table table-condensed mt48"
-				t-if="o.state!='done'">
+				t-if="o.state!='done'" style="margin-top:120px;">
 				<thead>
 					<tr>
 						<th>
@@ -2259,9 +2257,7 @@
 					</tr>
 				</tbody>
 			</table>
-		</xpath>
-		<xpath expr="//table[@class='table table-condensed mt48'][2]"
-			position="replace">
+
 			<table class="table table-condensed mt48"
 				t-if="o.move_line_ids and o.state=='done'" style="table-layout: auto;">
 				<t t-set="has_serial_number"
@@ -2292,6 +2288,7 @@
 				<tbody>
 					<tr t-foreach="o.move_line_ids" t-as="move_line">
 						<td>
+						<div style="margin: auto;">
 							<span t-field="move_line.product_id" />
 							<p t-if="o.picking_type_code == 'outgoing'">
 								<span
@@ -2301,31 +2298,36 @@
 								<span
 									t-field="move_line.product_id.sudo().description_pickingin" />
 							</p>
+							</div>
 						</td>
 						<t t-if="has_serial_number">
 							<td>
 								<table width="100%">
 									<tr>
 										<td>
+										<div style="margin: auto;">
 											<span t-field="move_line.lot_id" />
 											<t t-if="not move_line.lot_id">
 												<span t-field="move_line.lot_name" />
 											</t>
-											
+											</div>
 										</td>
 
 										<td name="lot_qty">
 											<t t-if="move_line.product_qty">
+											<div style="margin: auto;">
 												<span t-field="move_line.product_qty" />
+												</div>
 											</t>
 										</td>
 										<td
 												t-if="o.picking_type_code == 'incoming' and o.is_return_picking">
+												<div style="margin: auto;">
 												<center>
 												<span
 													t-if="o.picking_type_code == 'incoming' and o.is_return_picking"
 													class="pull-right" t-field="move_line.lot_id.life_date"
-													t-field-options='{"widget": "date"}' /></center>
+													t-field-options='{"widget": "date"}' /></center></div>
 
 						</td>
 									</tr>
@@ -2359,7 +2361,7 @@
 					</tr>
 				</tbody>
 			</table>
-			<table class="table" style="width:350px;">
+			<table class="table table-condensed mt48" style="width:350px;">
 				<tr>
 					<td>
 						<span>Total Colis:</span>
@@ -2377,7 +2379,8 @@
 					</td>
 				</tr>
 			</table>
-			<div class="row">
+
+<div class="row">
 	<div t-if="o.picking_type_code == 'outgoing'">
 		<div class="col-xs-6">
 			<strong>Nom du réceptionnaire:_____________________________</strong>
@@ -2394,10 +2397,11 @@
 		</div>
 	</div>
 </div>
-			<!--  <br />
-			<div align="right" style="margin-bottom:4%;">
+    			
+		<!--	<br />
+			 <div align="right">
 				<table t-if="o.picking_type_id.code == 'outgoing'"
-					class="table table-condensed" style="width:350px;">
+					class="table" style="width:350px;">
 					<tr t-if="o.partner_id.Client_Charcuterie">
 						<td>
 							<span>Montant Dû Charcuterie:</span>
@@ -2415,7 +2419,11 @@
 						</td>
 					</tr>
 				</table>
-			</div>-->
+			</div> -->
+			
+			</div>
+		
+		</t>
 		</xpath>
 	</template>
 	</data>
