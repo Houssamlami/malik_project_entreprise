@@ -2377,6 +2377,23 @@
 					</td>
 				</tr>
 			</table>
+			<div class="row">
+	<div t-if="o.picking_type_code == 'outgoing'">
+		<div class="col-xs-6">
+			<strong>Nom du réceptionnaire:_____________________________</strong>
+		</div>
+		<div class="col-xs-6">
+			<strong>Signature du réceptionnaire:</strong>
+		</div>
+	</div>
+
+	<div style="padding-top:20px; margin-top:20px;">
+		<div class="col-xs-6">
+			<strong>Date et heure de réception:____________________________
+			</strong>
+		</div>
+	</div>
+</div>
 			<!--  <br />
 			<div align="right" style="margin-bottom:4%;">
 				<table t-if="o.picking_type_id.code == 'outgoing'"
