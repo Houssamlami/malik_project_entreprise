@@ -93,6 +93,15 @@ class PurchaseOrder(models.Model):
     palette = fields.Float(string="Nombre de palette par camion", default=32)
     #purchase_order_id = fields.Many2one(comodel_name='purchase.order', string=u'BC Achat', domain=[('partner_id.name', 'in', ('IMEX','BONA'))])
     
+    @api.model
+    def default_get(self, fields):
+        res = super(PurchaseOrder, self).default_get(fields)
+        if self.env.user.has_group('app_purchase_order.group_achat_logistique'):
+            res.update({'logistic': True})
+        else:
+            res.update({'logistic': False})
+        return res
+    
     @api.multi
     def button_confirm(self):
         for order in self:
