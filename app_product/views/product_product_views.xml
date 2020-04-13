@@ -18,6 +18,7 @@
                    
 					  <field  name="Androit_stockage"/>
 					  <field  name="Androit_preparation"/>
+					  <field name="product_at_zero"/>
 					  <!-- ////////////////////////for domain///////////////////////// -->
 					  <field  name="name_uom_product" invisible="1"/>
              	</xpath>
