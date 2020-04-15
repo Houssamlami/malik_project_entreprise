@@ -39,8 +39,8 @@ class PurchaseOrderLine(models.Model):
         
             record.km = seller.nbr_km
         
-    @api.onchange('km','product_id','price_unit','price_subtotal')
-    @api.depends('km','product_id','price_unit','price_subtotal')
+    @api.onchange('product_id','price_unit','price_subtotal')
+    @api.depends('product_id','price_unit','price_subtotal')
     def _prix_du_kilometre(self):
         for record in self:
             if record.product_id and record.km and record.price_subtotal != 0.0:
@@ -58,7 +58,7 @@ class PurchaseOrderLine(models.Model):
     price_kg = fields.Float(string="Prix KG", compute='_prix_du_kilogramme', store=True)
     price_km = fields.Float(string="Prix KM", compute='_prix_du_kilometre', store=True)
     image_small = fields.Binary('Image', related='product_id.image_small')
-    km = fields.Integer(string="KM", compute='_get_km_purchase_line')
+    km = fields.Integer(string="KM", compute='_get_km_purchase_line', store=True)
     location_dest_id = fields.Many2one(comodel_name='stock.location', string='Destination')
     logistic = fields.Boolean(related='order_id.logistic', default=True, readonly=True)
     
