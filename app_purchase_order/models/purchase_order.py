@@ -86,7 +86,7 @@ class PurchaseOrder(models.Model):
     logistic = fields.Boolean(string="Logistic")
     data_file_cmr = fields.Binary(string='Fichier CMR')
     nbr_camions = fields.Float(string='Nombre de Camions')
-    tonnage = fields.Float(string="Tonnage par camion", default=20000)
+    tonnage = fields.Float(string="Tonnage par camion", default=21000)
     palette = fields.Float(string="Nombre de palette par camion", default=32)
     #purchase_order_id = fields.Many2one(comodel_name='purchase.order', string=u'BC Achat', domain=[('partner_id.name', 'in', ('IMEX','BONA'))])
     

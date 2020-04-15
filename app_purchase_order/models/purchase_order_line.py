@@ -39,12 +39,12 @@ class PurchaseOrderLine(models.Model):
         
             record.km = seller.nbr_km
         
-    @api.onchange('km','product_id','price_unit','price_subtotal')
-    @api.depends('km','product_id','price_unit','price_subtotal')
+    @api.onchange('product_id','price_unit','price_subtotal')
+    @api.depends('product_id','price_unit','price_subtotal')
     def _prix_du_kilometre(self):
         for record in self:
             if record.product_id and record.km and record.price_subtotal != 0.0:
-                record.price_km = record.km/record.price_subtotal
+                record.price_km = record.price_unit/record.km
         
     @api.onchange('account_analytic_id','qty_in_kg','qty_per_camion')
     @api.depends('account_analytic_id','qty_in_kg','qty_per_camion')
