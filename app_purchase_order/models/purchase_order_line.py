@@ -14,12 +14,20 @@ class PurchaseOrderLine(models.Model):
     _inherit = "purchase.order.line"
     
     
-    @api.onchange('qty_in_kg','qty_per_camion')
-    @api.depends('qty_in_kg','qty_per_camion')
+    @api.onchange('qty_in_kg','qty_per_camion','product_id','price_unit')
+    @api.depends('qty_in_kg','qty_per_camion','product_id','price_unit')
     def _prix_du_kilogramme(self):
         for record in self:
             if record.qty_in_kg and record.qty_in_kg !=0.0 and record.qty_per_camion != 0.0:
                 record.price_kg = record.price_subtotal/record.qty_in_kg
+                
+    
+    @api.onchange('km','product_id','price_unit','price_subtotal')
+    @api.depends('km','product_id','price_unit','price_subtotal')
+    def _prix_du_kilometre(self):
+        for record in self:
+            if record.product_id and record.km and record.price_subtotal != 0.0:
+                record.price_km = record.km/record.price_subtotal
             
     @api.depends('product_id')
     def _get_km_purchase_line(self):
@@ -44,6 +52,7 @@ class PurchaseOrderLine(models.Model):
     qty_in_kg = fields.Float(string="QTY en KG")
     qty_per_camion = fields.Float(string="QTY par camion")
     price_kg = fields.Float(string="Prix KG", compute='_prix_du_kilogramme', store=True)
+    price_km = fields.Float(string="Prix KM", compute='_prix_du_kilometre', store=True)
     image_small = fields.Binary('Image', related='product_id.image_small')
     km = fields.Integer(string="KM", compute='_get_km_purchase_line')
     location_dest_id = fields.Many2one(comodel_name='stock.location', string='Destination')
