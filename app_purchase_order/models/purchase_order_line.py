@@ -29,6 +29,7 @@ class PurchaseOrderLine(models.Model):
             if record.product_id and record.km and record.price_subtotal != 0.0:
                 record.price_km = record.km/record.price_subtotal
             
+    @api.onchange('product_id')
     @api.depends('product_id')
     def _get_km_purchase_line(self):
         if not self.product_id:
