@@ -49,6 +49,8 @@
 					position="before">
 					<field name="price_kg" widget="monetary"
 						attrs="{'invisible': [('account_analytic_id', '=', False)]}" />
+					<field name="price_km" widget="monetary"
+						attrs="{'invisible': [('account_analytic_id', '=', False)]}" />
 				</xpath>
 
 				<xpath

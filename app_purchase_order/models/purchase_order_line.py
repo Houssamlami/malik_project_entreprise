@@ -26,16 +26,18 @@ class PurchaseOrderLine(models.Model):
     @api.onchange('product_id')
     @api.depends('product_id')
     def _get_km_purchase_line(self):
-        if not self.product_id:
-            return
+        for record in self:
+            
+            if not record.product_id:
+                return
          
-        seller = self.product_id._select_seller(
-            partner_id=self.partner_id,
-            quantity=self.product_qty,
-            date=self.order_id.date_order and self.order_id.date_order[:10],
-            uom_id=self.product_uom)
+            seller = record.product_id._select_seller(
+                partner_id=record.partner_id,
+                quantity=record.product_qty,
+                date=record.order_id.date_order and record.order_id.date_order[:10],
+                uom_id=record.product_uom)
         
-        self.km = seller.nbr_km
+            record.km = seller.nbr_km
         
     @api.onchange('km','product_id','price_unit','price_subtotal')
     @api.depends('km','product_id','price_unit','price_subtotal')
