@@ -17,7 +17,7 @@ class PurchaseOrder(models.Model):
     _inherit = 'purchase.order'
 
              
-             
+    '''         
     @api.depends('order_line.price_subtotal')
     def _get_prix_transport(self):
         for record in self:
@@ -46,6 +46,7 @@ class PurchaseOrder(models.Model):
             obj = self.env['purchase.order.line'].search([('order_id', '=', record.id)], limit=1)
             if len(obj) != 0:            
                 record.kilometre = obj.km
+    
              
         
     @api.multi
@@ -59,7 +60,7 @@ class PurchaseOrder(models.Model):
                     if lines.product_id:
                         cmpt += lines.product_qty
             record.qty_totals = cmpt
-        
+    '''   
         
     @api.onchange('order_line.price_unit')
     def _on_change_orderline(self):
@@ -81,12 +82,8 @@ class PurchaseOrder(models.Model):
         ], string='Status', readonly=True, index=True, copy=False, default='draft', track_visibility='onchange')
     semaine = fields.Char(string="Semaine")
     abattage = fields.Char(string="Abattage", track_visibility='always')
-    qty_totals = fields.Float(string=u"Quantité Transportée(KG)", track_visibility='always')
+    qty_totals = fields.Float(string=u"Quantité Transportée(KG)", track_visibility='onchange')
     logistic = fields.Boolean(string="Logistic")
-    #kilometre = fields.Float(string=u"Kilométrage(KM)", compute='_get_km', store=True)
-    #prix_transp = fields.Float(string=u"Coût Transport", compute='_get_prix_transport', store=True)
-    #prix_par_km = fields.Float(string=u"Prix par KM", compute='_get_prix_par_km', store=True ,readonly=True)
-    #prix_par_kg = fields.Float(string=u"Prix par KG", compute='_get_prix_par_kg', store=True, readonly=True)
     data_file_cmr = fields.Binary(string='Fichier CMR')
     nbr_camions = fields.Float(string='Nombre de Camions')
     tonnage = fields.Float(string="Tonnage par camion", default=20000)
