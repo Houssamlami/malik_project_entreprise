@@ -32,6 +32,7 @@ class PurchaseOrderLine(models.Model):
     @api.onchange('product_id')
     @api.depends('product_id')
     def _get_km_purchase_line(self):
+        self.ensure_one()
         if not self.product_id:
             return
          
