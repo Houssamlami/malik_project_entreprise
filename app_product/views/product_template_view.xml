@@ -54,6 +54,7 @@
             <separator string="Calcul des Coûts/Prix:" groups="sales_team.group_sale_manager"/>
             <group groups="sales_team.group_sale_manager">
             <group name="charges">
+            <field name="price_for_calcul" widget='monetary' string="Prix de vente pour calcul"/>
             <field name="prix_achat" widget='monetary'/>
             <field name="prix_transport" widget='monetary'/>
             <field name="cout_avs" widget='monetary'/>

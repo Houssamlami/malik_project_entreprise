@@ -164,7 +164,8 @@ class ProductTemplate(models.Model):
     Androit_preparation = fields.Many2one(comodel_name='androit.preparation', string=u"Endroit de Préparation", required=True, track_visibility='onchange')               
     number_unit = fields.Float(string="Nombre d'unité", track_visibility='onchange')
     name_uom_product = fields.Char(related='uom_id.name', string="Nom Unité de mesure")
-    price_cart = fields.Float(string="Prix de vente par piéce à la carte", track_visibility='onchange') 
+    price_cart = fields.Float(string="Prix de vente par piéce à la carte", track_visibility='onchange')
+    price_for_calcul = fields.Float(string="Prix de vente pour calcul", track_visibility='onchange')
     prix_achat = fields.Float(string=u"Prix d\'Achat", track_visibility='onchange')
     prix_transport = fields.Float(string=u"Transport Achat", track_visibility='onchange')
     cout_avs = fields.Float(string=u"Certification", track_visibility='onchange')
@@ -255,29 +256,29 @@ class ProductTemplate(models.Model):
     
     #'''''''''''''''''''''''calculate costs/prices of product'''''''''''''''''''''''''''''''''''''''''''''''''''''
     
-    @api.depends('charge_fixe', 'cout_ttm', 'cout_avs', 'prix_transport', 'prix_achat','provision_commission','price_cart')
+    @api.depends('charge_fixe', 'cout_ttm', 'cout_avs', 'prix_transport', 'prix_achat','provision_commission','price_for_calcul')
     def calcul_prix_min_vente_estime(self):
         for record in self:
             precision_currency = record.currency_id or record.company_id.currency_id
             if record.prix_achat:
-                record.cout_revient = precision_currency.round((record.prix_achat + record.prix_transport + record.cout_avs + record.cout_ttm) + (record.price_cart * (record.provision_commission/100))+((record.charge_fixe/100)*record.price_cart))
+                record.cout_revient = precision_currency.round((record.prix_achat + record.prix_transport + record.cout_avs + record.cout_ttm) + (record.price_for_calcul * (record.provision_commission/100))+((record.charge_fixe/100)*record.price_for_calcul))
             record.standard_price = record.prix_vente_estime
                 
-    @api.depends('cout_revient','marge_securite', 'price_cart')
+    @api.depends('cout_revient','marge_securite', 'price_for_calcul')
     def calcul_prix_min_vente(self):
         for record in self:
             precision_currency = record.currency_id or record.company_id.currency_id
-            record.prix_min_vente = precision_currency.round(record.cout_revient + (record.price_cart * (record.marge_securite/100)))
+            record.prix_min_vente = precision_currency.round(record.cout_revient + (record.price_for_calcul * (record.marge_securite/100)))
     
-    @api.depends('marge', 'prix_min_vente', 'price_cart')
+    @api.depends('marge', 'prix_min_vente', 'price_for_calcul')
     def calcul_prix_vente(self):
         for record in self:
             precision_currency = record.currency_id or record.company_id.currency_id
             if record.prix_min_vente:
-                record.prix_vente_estime = precision_currency.round(record.prix_min_vente + (record.price_cart * (record.marge/100)))
+                record.prix_vente_estime = precision_currency.round(record.prix_min_vente + (record.price_for_calcul * (record.marge/100)))
     
-    @api.onchange('charge_fixe', 'cout_ttm', 'cout_avs', 'prix_transport', 'prix_achat','price_cart')
-    @api.depends('charge_fixe', 'cout_ttm', 'cout_avs', 'prix_transport', 'prix_achat','price_cart')
+    @api.onchange('charge_fixe', 'cout_ttm', 'cout_avs', 'prix_transport', 'prix_achat','price_for_calcul')
+    @api.depends('charge_fixe', 'cout_ttm', 'cout_avs', 'prix_transport', 'prix_achat','price_for_calcul')
     def onchange_prix(self):
         for record in self:
             record.calcul_prix_min_vente()
