@@ -25,6 +25,48 @@ class Preparation(models.Model):
 
 
     name = fields.Char(string='Position de prepration')
+  
+    
+class ProductTag(models.Model):
+    _description = 'Product Tags'
+    _name = "product.tag"
+
+    name = fields.Char('Nom Tag', required=True, translate=True)
+    active = fields.Boolean(help='The active field allows you to hide the tag without removing it.', default=True)
+    parent_id = fields.Many2one(string='Tag Parent', comodel_name='product.tag', index=True, ondelete='cascade')
+    child_ids = fields.One2many(string='Tags fils', comodel_name='product.tag', inverse_name='parent_id')
+    parent_left = fields.Integer('Parent gauche', index=True)
+    parent_right = fields.Integer('Parent droite', index=True)
+
+    image = fields.Binary('Image')
+
+    # _parent_store = True
+    # _parent_order = 'name'
+    # _order = 'parent_left'
+
+    @api.multi
+    def name_get(self):
+        """ Return the tags' display name, including their direct parent. """
+        res = {}
+        for record in self:
+            current = record
+            name = current.name
+            while current.parent_id:
+                name = '%s / %s' % (current.parent_id.name, name)
+                current = current.parent_id
+            res[record.id] = name
+
+        return  [(record.id,  record.name) for record in self]
+
+    @api.model
+    def name_search(self, name, args=None, operator='ilike', limit=100):
+        args = args or []
+        if name:
+            # Be sure name_search is symetric to name_get
+            name = name.split(' / ')[-1]
+            args = [('name', operator, name)] + args
+        tags = self.search(args, limit=limit)
+        return tags.name_get()
 
 class ProductTemplate(models.Model):
     _inherit = 'product.template'
