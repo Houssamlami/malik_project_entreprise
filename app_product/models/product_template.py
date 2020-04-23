@@ -159,7 +159,15 @@ class ProductTemplate(models.Model):
                     record.test_on_product_vertuel_jours_suivant2 = max_id
                     record.total_commande_jour_suivant = total_commande_jour_suivant
                     record.stock_virtuel_jour_suivant = record.test_on_product_vertuel_jours_suivant2 - record.total_commande_jour_suivant
-    
+                    
+    @api.multi
+    @api.depends('tag_ids')
+    def _compute_first_tag_id(self):
+        for record in self:
+            record.first_tag_id = record.tag_ids and record.tag_ids[0] or False
+
+
+    first_tag_id = fields.Many2one('product.tag', compute=_compute_first_tag_id, store=True)
     Androit_stockage = fields.Many2one(comodel_name='androit.stockage', string="Endroit de stockage", required=True, track_visibility='onchange')
     Androit_preparation = fields.Many2one(comodel_name='androit.preparation', string=u"Endroit de Préparation", required=True, track_visibility='onchange')               
     number_unit = fields.Float(string="Nombre d'unité", track_visibility='onchange')
@@ -195,6 +203,11 @@ class ProductTemplate(models.Model):
     secondary_unit_qty_available = fields.Float(string='Second', readonly=True)
     product_service_commercial = fields.Boolean(string='Disponibilté Service Commercial')
     product_at_zero = fields.Boolean(string=u"Article à zéro AN", track_visibility='onchange')
+    tag_ids = fields.Many2many(string='Tags',
+                               comodel_name='product.tag',
+                               relation='product_product_tag_rel',
+                               column1='tag_id',
+                               column2='product_id')
     
 
     def get_qty_vertuel_second_unit(self):

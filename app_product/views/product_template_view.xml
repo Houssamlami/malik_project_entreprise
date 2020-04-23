@@ -40,6 +40,10 @@
         <xpath expr="//field[@name='company_id']" position="before">
 				<field name="number_unit"/>
             </xpath>
+        
+        <xpath expr="//h1" position="after">
+                    <field name="tag_ids" widget="many2many_tags" placeholder="Tags..."/>
+                </xpath>
         <xpath
 				expr="//field[@name='standard_price']"
 				position="attributes">
@@ -86,6 +90,18 @@
             </xpath>
             </field>
          </record>
+         
+         <!-- ''''''''''''''''''''''''''''''search by tag_ids''''''''''''''''''''''''''''''''''''''''''' -->
+         <record id="product_template_tag_search_inherit" model="ir.ui.view">
+            <field name="name">product.template.tag.view.search</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_search_view"/>
+            <field name="arch" type="xml">
+                <field name="name" position="after">
+                    <field name="tag_ids" string="Tags" filter_domain="['|',('tag_ids','ilike',self),('tag_ids','child_of',self)]"/>
+                </field>
+            </field>
+        </record>
          
          <!-- ''''''''''''''''''''''''''''''Vente du jour & adding endroit stockage/preparation''''''''''''''''''''''''''''''''''''''''''' -->
         <!--  <record model="ir.ui.view" id="product_template_form_view_sale_order_button2">
@@ -184,6 +200,12 @@
 				<field name="type"/>
             </xpath>
             
+            <div name="tags" position="inside">
+                    <ul>
+                        <li><field name="tag_ids"/></li>
+                    </ul>
+            </div>
+                
             <xpath expr="//div[@class='oe_kanban_global_click']" position="replace">
                 <div t-if="record.test_on_product_ver.value &gt; '0,00'" class="oe_kanban_global_click" style="background-color: #f55959">
                             <div class="o_kanban_image">
