@@ -104,22 +104,24 @@
         <!-- Display table headers for lines -->
         <div class="act_as_thead">
             <div class="act_as_row labels">
+            	<!--## secteur-->
+                <div class="act_as_cell" style="width: 9.64%;">Secteur</div>
                 <!--## partner-->
                 <div class="act_as_cell" style="width: 32.52%;">Partner</div>
                 <!--## amount_residual-->
                 <div class="act_as_cell" style="width: 9.64%;">Residual</div>
                 <!--## current-->
-                <div class="act_as_cell" style="width: 9.64%;">Not due</div>
+                <div class="act_as_cell" style="width: 9.64%;">Non due</div>
                 <!--## age_30_days-->
-                <div class="act_as_cell" style="width: 9.64%;">1 - 15 d.</div>
+                <div class="act_as_cell" style="width: 9.64%;">1 - 15 J.</div>
                 <!--## age_60_days-->
-                <div class="act_as_cell" style="width: 9.64%;">15 - 30 d.</div>
+                <div class="act_as_cell" style="width: 9.64%;">15 - 30 J.</div>
                 <!--## age_90_days-->
-                <div class="act_as_cell" style="width: 9.64%;">30 - 45 d.</div>
+                <div class="act_as_cell" style="width: 9.64%;">30 - 45 J.</div>
                 <!--## age_120_days-->
-                <div class="act_as_cell" style="width: 9.64%;">45 - 60 d.</div>
+                <div class="act_as_cell" style="width: 9.64%;">45 - 60 J.</div>
                 <!--## older-->
-                <div class="act_as_cell" style="width: 9.64%;"> > 60 d.</div>
+                <div class="act_as_cell" style="width: 9.64%;"> > 60 J.</div>
             </div>
         </div>
     </template>
@@ -129,6 +131,10 @@
         <t t-foreach="partner.line_ids" t-as="line">
             <!-- # lines -->
             <div class="act_as_row lines">
+            	<!--## Secteur-->
+                <div class="act_as_cell amount">
+                   <center> <span t-field="line.team_id.name"/></center>
+                </div>
                 <!--## partner-->
                 <div class="act_as_cell left">
                     <span t-field="line.partner"/>

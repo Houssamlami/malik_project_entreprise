@@ -40,7 +40,7 @@ RUNGIS,   FRANCE</p>
 				<t t-foreach="lines" t-as="location">
 				<t t-set="cmp" t-value="0" />
 					<center><strong t-if="o.semaine and o.abattage">Destination:
-<strong t-if="o.semaine and o.abattage" t-esc="location.display_name"/></strong></center>
+<strong t-if="o.semaine and o.abattage" t-esc="location.display_name"/><span t-if="location.usage == 'internal'">(Malikvolailles)</span></strong></center>
 					<table class="table table-bordered">
 
 						<thead>
@@ -110,7 +110,45 @@ RUNGIS,   FRANCE</p>
 								<td>Total:<b class="text-center"><t t-esc="total"/> </b></td>
 								</tr>
 					</table>
-				
+	<!-- #########################################Products by family ######################################################## -->
+	<t t-set="articles"
+           t-value="o.order_line.mapped('product_id')"/>
+				<t t-set="familys" t-value="articles.mapped('first_tag_id')" />
+					<table t-if="o.semaine and o.abattage" class="table table-bordered" style="background-color:#B0C4DE">
+						<thead>
+							<tr>
+								<th>
+									<strong>Famille</strong>
+								</th>
+								<th class="text-center">
+									<strong>Qty Total</strong>
+								</th>
+							</tr>
+						</thead>
+						<t t-set="total" t-value="0" />
+						<t t-foreach="familys" t-as="family">
+						<tbody>
+						<t t-set="cmpt" t-value="0" />
+							<t t-foreach="o.order_line.filtered(lambda line: line.product_id.first_tag_id.id == family.id)"
+								t-as="line" style="border: 1px solid black;">
+								<t t-set="cmpt" t-value="cmpt+line.product_qty" />
+								<t t-set="total" t-value="total+line.product_qty" />
+								</t>
+								<tr>
+								<td>
+									<span t-field="family.name" />
+								</td>
+								<td class="text-center">
+									<b><t t-esc="cmpt"/> </b>
+								</td>
+								</tr>
+								
+						</tbody>
+						</t>
+						<tr><td></td>
+								<td>Total:<b class="text-center"><t t-esc="total"/> </b></td>
+								</tr>
+					</table>
 <p t-field="o.notes"/>
             <div class="oe_structure"/>
 			</div>
@@ -209,7 +247,7 @@ RUNGIS,   FRANCE</p>
 		<report id="purchase_order_report_bona" model="purchase.order"
 			string="Commande " report_type="qweb-pdf"
 			name="app_purchase_order.report_bona"
-			file="app_purchase_order.report_bona" />
+			file="app_purchase_order.report_bona"/>
 
 	</data>
 </odoo>

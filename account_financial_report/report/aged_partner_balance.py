@@ -101,6 +101,11 @@ class AgedPartnerBalanceReportPartner(models.TransientModel):
 
     # Data fields, used for report display
     name = fields.Char()
+    team_id = fields.Many2one(
+        'crm.team',
+        index=True
+    )
+    team_name = fields.Char()
 
     # Data fields, used to browse report data
     move_line_ids = fields.One2many(
@@ -139,6 +144,11 @@ class AgedPartnerBalanceReportLine(models.TransientModel):
 
     # Data fields, used for report display
     partner = fields.Char()
+    team_id = fields.Many2one(
+        'crm.team',
+        index=True
+    )
+    team_name = fields.Char()
     amount_residual = fields.Float(digits=(16, 2))
     current = fields.Float(digits=(16, 2))
     age_30_days = fields.Float(digits=(16, 2))
@@ -291,14 +301,18 @@ INSERT INTO
     create_uid,
     create_date,
     partner_id,
-    name
+    name,
+    team_id,
+    team_name
     )
 SELECT
     ra.id AS report_account_id,
     %s AS create_uid,
     NOW() AS create_date,
     rpo.partner_id,
-    rpo.name
+    rpo.name,
+    rpo.team_id,
+    rpo.team_name
 FROM
     report_open_items_partner rpo
 INNER JOIN
@@ -340,6 +354,8 @@ INSERT INTO
         create_uid,
         create_date,
         partner,
+        team_id,
+        team_name,
         amount_residual,
         current,
         age_30_days,
@@ -353,6 +369,8 @@ SELECT
     %s AS create_uid,
     NOW() AS create_date,
     rp.name,
+    rp.team_id,
+    rp.team_name,
     SUM(rlo.amount_residual) AS amount_residual,
     SUM(
         CASE

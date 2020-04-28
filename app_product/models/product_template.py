@@ -25,6 +25,48 @@ class Preparation(models.Model):
 
 
     name = fields.Char(string='Position de prepration')
+  
+    
+class ProductTag(models.Model):
+    _description = 'Product Tags'
+    _name = "product.tag"
+
+    name = fields.Char('Nom Tag', required=True, translate=True)
+    active = fields.Boolean(help='The active field allows you to hide the tag without removing it.', default=True)
+    parent_id = fields.Many2one(string='Tag Parent', comodel_name='product.tag', index=True, ondelete='cascade')
+    child_ids = fields.One2many(string='Tags fils', comodel_name='product.tag', inverse_name='parent_id')
+    parent_left = fields.Integer('Parent gauche', index=True)
+    parent_right = fields.Integer('Parent droite', index=True)
+
+    image = fields.Binary('Image')
+
+    # _parent_store = True
+    # _parent_order = 'name'
+    # _order = 'parent_left'
+
+    @api.multi
+    def name_get(self):
+        """ Return the tags' display name, including their direct parent. """
+        res = {}
+        for record in self:
+            current = record
+            name = current.name
+            while current.parent_id:
+                name = '%s / %s' % (current.parent_id.name, name)
+                current = current.parent_id
+            res[record.id] = name
+
+        return  [(record.id,  record.name) for record in self]
+
+    @api.model
+    def name_search(self, name, args=None, operator='ilike', limit=100):
+        args = args or []
+        if name:
+            # Be sure name_search is symetric to name_get
+            name = name.split(' / ')[-1]
+            args = [('name', operator, name)] + args
+        tags = self.search(args, limit=limit)
+        return tags.name_get()
 
 class ProductTemplate(models.Model):
     _inherit = 'product.template'
@@ -159,7 +201,15 @@ class ProductTemplate(models.Model):
                     record.test_on_product_vertuel_jours_suivant2 = max_id
                     record.total_commande_jour_suivant = total_commande_jour_suivant
                     record.stock_virtuel_jour_suivant = record.test_on_product_vertuel_jours_suivant2 - record.total_commande_jour_suivant
-    
+                    
+    @api.multi
+    @api.depends('tag_ids')
+    def _compute_first_tag_id(self):
+        for record in self:
+            record.first_tag_id = record.tag_ids and record.tag_ids[0] or False
+
+
+    first_tag_id = fields.Many2one('product.tag', compute=_compute_first_tag_id, store=True)
     Androit_stockage = fields.Many2one(comodel_name='androit.stockage', string="Endroit de stockage", required=True, track_visibility='onchange')
     Androit_preparation = fields.Many2one(comodel_name='androit.preparation', string=u"Endroit de Préparation", required=True, track_visibility='onchange')               
     number_unit = fields.Float(string="Nombre d'unité", track_visibility='onchange')
@@ -195,6 +245,11 @@ class ProductTemplate(models.Model):
     secondary_unit_qty_available = fields.Float(string='Second', readonly=True)
     product_service_commercial = fields.Boolean(string='Disponibilté Service Commercial')
     product_at_zero = fields.Boolean(string=u"Article à zéro AN", track_visibility='onchange')
+    tag_ids = fields.Many2many(string='Tags',
+                               comodel_name='product.tag',
+                               relation='product_product_tag_rel',
+                               column1='tag_id',
+                               column2='product_id')
     
 
     def get_qty_vertuel_second_unit(self):
