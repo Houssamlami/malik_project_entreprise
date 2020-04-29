@@ -18,6 +18,14 @@ class StockInventoryLine(models.Model):
     date_refer = fields.Datetime(string=u"DLC", related='prod_lot_id.date_refer')
     qty_colis_stock = fields.Float(related='product_id.secondary_unit_qty_available', string=u"Qty théorique Colis")
     qty_colis_stock_real = fields.Float(string=u"Qty Réelle Colis")
+    difference_qty = fields.Float(string=u"Ecart")
+    
+    
+    @api.onchange('product_qty')
+    @api.depends('product_qty')
+    def onchange_quantity_product_real(self):
+        if self.product_id:
+            self.difference_qty = self.theoretical_qty - self.product_qty
     
     
     @api.onchange('product_id', 'location_id', 'product_uom_id', 'prod_lot_id', 'package_id')

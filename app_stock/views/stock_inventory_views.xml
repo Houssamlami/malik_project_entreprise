@@ -52,6 +52,16 @@
 					<field name="qty_colis_stock" />
 					<field name="qty_colis_stock_real" />
 				</xpath>
+				<xpath
+					expr="//field[@name='line_ids']/tree/field[@name='product_qty']"
+					position="after">
+					<field name="difference_qty" />
+				</xpath>
+				<xpath
+					expr="//field[@name='line_ids']/kanban/field[@name='product_qty']"
+					position="after">
+					<field name="difference_qty" />
+				</xpath>
 			</field>
 		</record>
 	</data>
