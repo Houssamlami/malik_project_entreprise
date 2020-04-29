@@ -11,3 +11,8 @@ class AccountAccount(models.Model):
         help="If flagged, no details will be displayed in "
              "the General Ledger report (the webkit one only), "
              "only centralized amounts per period.")
+    
+class ResPartner(models.Model):
+    _inherit = 'res.partner'
+    
+    team_name = fields.Char(related='team_id.name', store=True)

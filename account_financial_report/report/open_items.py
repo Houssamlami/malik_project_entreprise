@@ -90,6 +90,11 @@ class OpenItemsReportPartner(models.TransientModel):
 
     # Data fields, used for report display
     name = fields.Char()
+    team_id = fields.Many2one(
+        'crm.team',
+        index=True
+    )
+    team_name = fields.Char()
     currency_id = fields.Many2one('res.currency')
     final_amount_residual = fields.Float(digits=(16, 2))
     final_amount_total_due = fields.Float(digits=(16, 2))
@@ -314,7 +319,9 @@ WITH
                         ELSE p.name
                     END,
                     '""" + _('No partner allocated') + """'
-                ) AS partner_name
+                ) AS partner_name,
+                p.team_id AS team_id,
+                p.team_name AS team_name
             FROM
                 report_open_items_account ra
             INNER JOIN
@@ -359,14 +366,18 @@ INSERT INTO
     create_uid,
     create_date,
     partner_id,
-    name
+    name,
+    team_id,
+    team_name
     )
 SELECT
     ap.report_account_id,
     %s AS create_uid,
     NOW() AS create_date,
     ap.partner_id,
-    ap.partner_name
+    ap.partner_name,
+    ap.team_id,
+    ap.team_name
 FROM
     accounts_partners ap
         """
