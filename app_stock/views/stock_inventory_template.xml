@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		
+		<template id="report_inventory_inherit_fhs"
+			inherit_id="stock.report_inventory">
+		
+			<xpath expr="//table[@class='table table-condensed'][2]/thead/tr/th[@class='text-right']" position="replace">
+			<th class="text-right"><strong>Quantité théorique</strong></th>
+			<th class="text-right"><strong>Quantité réelle</strong></th>
+			<th class="text-right"><strong>Ecart</strong></th>
+			</xpath>
+			
+			<xpath expr="//table[@class='table table-condensed'][2]/tbody/t/tr[2]/td[@class='text-right']" position="replace">
+			<td class="text-right"><span t-field="line.theoretical_qty"/> <span t-field="line.product_uom_id" groups="product.group_uom"/></td>
+			<td class="text-right"><span t-field="line.product_qty"/> <span t-field="line.product_uom_id" groups="product.group_uom"/></td>
+			<td class="text-right"><span t-field="line.difference_qty"/> <span t-field="line.product_uom_id" groups="product.group_uom"/></td>
+			</xpath>
+			
+		</template>
+	</data>
+</odoo>
