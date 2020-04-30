@@ -21,6 +21,7 @@
         'views/report_br_stock_empty.xml',
         'views/stock_inventory_views.xml',
         'views/preparation_type_produit_pour_affichage.xml',
+        'views/stock_inventory_template.xml',
         'wizard/wizard_colis.xml',
     ],
     
