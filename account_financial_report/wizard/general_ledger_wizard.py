@@ -100,9 +100,9 @@ class GeneralLedgerReportWizard(models.TransientModel):
                 ('company_id', '=', self.company_id.id)
             ])
         self.not_only_one_unaffected_earnings_account = count != 1
-        if self.company_id and self.date_range_id.company_id and \
+        '''if self.company_id and self.date_range_id.company_id and \
                 self.date_range_id.company_id != self.company_id:
-            self.date_range_id = False
+            self.date_range_id = False'''
         if self.company_id and self.account_journal_ids:
             self.account_journal_ids = self.account_journal_ids.filtered(
                 lambda p: p.company_id == self.company_id or
