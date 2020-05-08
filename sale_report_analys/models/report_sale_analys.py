@@ -20,6 +20,7 @@ class SaleReport(models.Model):
     user_id = fields.Many2one('hr.employee', 'Commercial', readonly=True)
     grosiste = fields.Boolean(string='Grossiste', readonly=True)
     product_at_zero = fields.Boolean(string=u"Article à zéro AN", readonly=True)
+    number_unit = fields.Float('Nombre d\'unité par colis', readonly=True)
     
     def _select(self):
         select_str = """
@@ -28,6 +29,7 @@ class SaleReport(models.Model):
                     l.product_id as product_id,
                     t.uom_id as product_uom,
                     t.product_at_zero as product_at_zero,
+                    t.number_unit as number_unit,
                     sum(l.product_uom_qty / u.factor * u2.factor) as product_uom_qty,
                     sum(l.qty_delivered / u.factor * u2.factor) as qty_delivered,
                     sum(l.qty_invoiced / u.factor * u2.factor) as qty_invoiced,
@@ -90,6 +92,7 @@ class SaleReport(models.Model):
                     t.uom_id,
                     t.product_at_zero,
                     t.categ_id,
+                    t.number_unit,
                     s.name,
                     s.date_order,
                     s.confirmation_date,
