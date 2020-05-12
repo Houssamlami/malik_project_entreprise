@@ -107,7 +107,7 @@
 					position="after">
 
 					<field name="Bolocagettm" invisible="1" />
-					<field name="Bolocagettm_id" string="Transport" />
+					<field name="bolocagettm_id" string="Transport" />
 					<field name="Expediteur" />
 					<field name="observation" string="Observation pour TTM" />
 					<field name="total_weight_stock_char" invisible="1" />
@@ -243,7 +243,7 @@
 				<field name="produitalivrer" />
 				<field name="observation" />
 				<field name="Bolocagettm" invisible="1" />
-				<field name="Bolocagettm_id" string="Transport" />
+				<field name="bolocagettm_id" string="Transport" />
 				<field name="total_weight_stock_char" invisible="1" />
 				<field name="total_weight_stock_srg" invisible="1" />
 				<field name="total_weight_stock_vv" invisible="1" />
