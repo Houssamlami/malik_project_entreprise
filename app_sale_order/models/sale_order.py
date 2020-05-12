@@ -19,6 +19,7 @@ class SaleOrder(models.Model):
     
     Bolocagettm = fields.Integer('blo')
     Bolocagettm_id = fields.Many2one(comodel_name='blockage.blockage')
+    transport_id = fields.Many2one(comodel_name='blockage.blockage', related='Bolocagettm_id', store=True)
     total_weight_stock_char = fields.Float(string='Total charcuterie)', compute='_compute_weight_total_stock_char')
     total_weight_stock_srg = fields.Float(string='Total surgele)', compute='_compute_weight_total_stock_srg')
     total_weight_stock_vv = fields.Float(string='Total volaille)', compute='_compute_weight_total_stock_vv')
