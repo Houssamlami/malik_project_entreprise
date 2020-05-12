@@ -111,7 +111,7 @@ class SaleReport(models.Model):
                     partner.client_gc_pc,
                     s.commande_type,
                     s.grosiste_cmd,
-                    s.Bolocagettm_id,
+                    s.transport_id,
                     s.partner_shipping_id,
                     l.secondary_uom_qty,
                     partner.commercial_partner_id
