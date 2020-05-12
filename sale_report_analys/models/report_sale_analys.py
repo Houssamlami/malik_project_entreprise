@@ -21,7 +21,7 @@ class SaleReport(models.Model):
     grosiste = fields.Boolean(string='Grossiste', readonly=True)
     product_at_zero = fields.Boolean(string=u"Article à zéro AN", readonly=True)
     partner_shipping_id = fields.Many2one('res.partner', 'Adresse de livraison', readonly=True)
-    bolocagettm_id = fields.Many2one('blockage.blockage', 'Transport', readonly=True)
+    transport_id = fields.Many2one('blockage.blockage', 'Transport', readonly=True)
     
     def _select(self):
         select_str = """
@@ -31,7 +31,7 @@ class SaleReport(models.Model):
                     t.uom_id as product_uom,
                     t.product_at_zero as product_at_zero,
                     s.partner_shipping_id as partner_shipping_id,
-                    s.bolocagettm_id as bolocagettm_id,
+                    s.Bolocagettm_id as transport_id,
                     sum(l.product_uom_qty / u.factor * u2.factor) as product_uom_qty,
                     sum(l.qty_delivered / u.factor * u2.factor) as qty_delivered,
                     sum(l.qty_invoiced / u.factor * u2.factor) as qty_invoiced,
@@ -111,7 +111,7 @@ class SaleReport(models.Model):
                     partner.client_gc_pc,
                     s.commande_type,
                     s.grosiste_cmd,
-                    s.bolocagettm_id,
+                    s.Bolocagettm_id,
                     s.partner_shipping_id,
                     l.secondary_uom_qty,
                     partner.commercial_partner_id
