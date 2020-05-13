@@ -474,6 +474,113 @@
 
 									</t>
 
+<!-- Endroit de préparation = 18 Agneau -->
+					
+
+					<!-- 	-->
+							<t t-set="has_and18"
+									t-value="any([move_lines.product_id and move_lines.product_id.Androit_preparation.name =='18' for move_lines in o.move_lines])" />
+							<t	t-if="has_and18">	
+							<span style="font-size:16px;color:black">
+								<b>Groupe : Agneau </b>
+							</span>
+							<br />
+							<br />
+							<table class="table table-condensed" t-if="o.move_line_ids">
+								<t t-set="has_barcode"
+									t-value="any([move_lines.product_id and move_lines.product_id.sudo().barcode or move_lines.package_id for move_lines in o.move_line_ids])" />
+								<t t-set="has_serial_number"
+									t-value="o.move_line_ids.filtered(lambda ml: ml.lot_id or ml.lot_name)"
+									groups="stock.group_production_lot" />
+								<thead>
+									<tr>
+										<th width="15%">Code</th>
+										<th width="20%">Product</th>
+										<th width="10%">Quantity</th>
+										<th width="25%" class="text-center">
+											<t t-if="has_barcode">Barcode</t>
+										</th>
+										<!--th width="15%"> <t t-if="o.picking_type_id.code != 'incoming'" 
+											align="left">Source</t> </th -->
+										<th width="30%">
+											<t t-if="has_serial_number">Numero Lot / DLC</t>
+										</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr
+										t-foreach="o.move_lines.sorted(key=lambda m: m.product_id.default_code)"
+										t-as="move">
+										<t t-if="move.product_id.Androit_preparation.name =='18'">
+											<td>
+												<span t-field="move.product_id.default_code" />
+												<br />
+											</td>
+											<td>
+												<span t-field="move.product_id.display_name" />
+												<br />
+												<span t-field="move.product_id.description_picking" />
+											</td>
+											<td>
+												<span t-if="move.product_qty"
+													t-field="move.product_qty" />
+												<span t-if="not move.product_qty"
+													t-esc="move.product_uom._compute_quantity(move.quantity_done, move.product_id.uom_id, rounding_method='HALF-UP')" />
+												<span t-field="move.product_id.uom_id"
+													groups="product.group_uom" />
+												<span t-if="move.unite_is_kg">(<span t-field="move.secondary_uom_qty"></span>Colis)</span>
+											</td>
+											<td>
+												<t t-if="has_barcode">
+													<span
+														t-if="move.product_id and move.product_id.barcode">
+														<img
+															t-if="move.product_id.barcode and len(move.product_id.barcode) == 13"
+															t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('EAN13', move.product_id.barcode, 600, 100)"
+															style="width:100%;height:50px" />
+														<img
+															t-elif="move.product_id.barcode and len(move.product_id.barcode) == 8"
+															t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('EAN8', move.product_id.barcode, 600, 100)"
+															style="width:100%;height:50px" />
+														<img t-else=""
+															t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('Code128', move.product_id.barcode, 600, 100)"
+															style="width:100%;height:50px" />
+													</span>
+												</t>
+											</td>
+											<td colspan="3">
+												<t t-if="move.move_line_ids">
+
+													<t
+														t-foreach="move.move_line_ids.sorted(key=lambda ml: ml.location_id.id)"
+														t-as="ml">
+
+														<div class="col-xs-5">
+															<t
+																t-if="has_serial_number and ml.product_id.tracking != 'none'">
+
+																<span t-field="ml.lot_id" />
+																<span t-if="not ml.lot_id" t-field="ml.lot_name" />
+
+															</t>
+
+														</div>
+														<div class="col-xs-7">
+															<span t-field="ml.lot_id.life_date" />
+
+
+														</div>
+													</t>
+
+												</t>
+
+											</td>
+										</t>
+									</tr>
+								</tbody>
+							</table>
+
+					</t>
 									<!-- MINI SAUCIS CHAPELETS -->
 									<!-- Mortadelle -->
 
