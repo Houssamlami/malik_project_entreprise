@@ -23,6 +23,7 @@ class AccountInvoice(models.Model):
     object = fields.Text(string="Objet")
     grosiste = fields.Boolean(string='Grossiste', track_visibility='onchange')
     ref_livraison = fields.Many2one(comodel_name='stock.picking', string="Ref livraison", track_visibility='onchange')
+    under_responsiblilty = fields.Selection([('ttm', 'TTM'),('mv', 'MV'),('an', 'AN'), ('other', 'Autre')], track_visibility='onchange', string=u"Sous responsabilité de")
     
     def get_total_colis_invoice(self):
         for record in self:
