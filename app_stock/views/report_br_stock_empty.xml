@@ -486,7 +486,7 @@
 							</span>
 							<br />
 							<br />
-							<table class="table table-condensed" t-if="o.move_line_ids">
+							<table class="table table-condensed">
 								<t t-set="has_barcode"
 									t-value="any([move_lines.product_id and move_lines.product_id.sudo().barcode or move_lines.package_id for move_lines in o.move_line_ids])" />
 								<t t-set="has_serial_number"
