@@ -136,11 +136,12 @@ class AccountInvoiceReport(models.Model):
     grosiste = fields.Boolean(string='Grossiste', readonly=True)
     product_at_zero = fields.Boolean(string=u"Article à zéro AN", readonly=True)
     number_unit = fields.Float('Nombre d\'unité par colis', readonly=True)
+    under_responsiblilty = fields.Selection([('ttm', 'TTM'),('mv', 'MV'),('an', 'AN'), ('other', 'Autre')], string=u"Sous responsabilité de", readonly=True)
     
     
     def _select(self):
         select_str = """
-            SELECT sub.id, sub.date,sub.date_livraison, sub.type_avoir, sub.grosiste, sub.product_at_zero, sub.number_unit, sub.ref_invoice_name, sub.team_id as team_id, sub.fac_volaille_f, sub.fac_charcuterie_f, sub.cli_gc, sub.cli_pc, sub.product_id, sub.partner_id, 
+            SELECT sub.id, sub.date,sub.date_livraison, sub.type_avoir, sub.grosiste, sub.under_responsiblilty, sub.product_at_zero, sub.number_unit, sub.ref_invoice_name, sub.team_id as team_id, sub.fac_volaille_f, sub.fac_charcuterie_f, sub.cli_gc, sub.cli_pc, sub.product_id, sub.partner_id, 
                 sub.country_id, sub.account_analytic_id, sub.commercial, sub.vendeur, sub.payment_term_id, sub.uom_name, sub.currency_id, sub.journal_id,
                 sub.fiscal_position_id, sub.user_id, sub.company_id, sub.nbr, sub.type, sub.state,
                 sub.categ_id, sub.date_due, sub.account_id, sub.account_line_id, sub.partner_bank_id,
@@ -160,6 +161,7 @@ class AccountInvoiceReport(models.Model):
                     ai.fac_volaille_f AS fac_volaille_f,
                     ai.cli_pc AS cli_pc,
                     ai.grosiste AS grosiste,
+                    ai.under_responsiblilty AS under_responsiblilty,
                     pt.product_at_zero AS product_at_zero,
                     pt.number_unit AS number_unit,
                     ai.number AS ref_invoice_name,
@@ -188,5 +190,5 @@ class AccountInvoiceReport(models.Model):
         return select_str
     
     def _group_by(self):
-        return super(AccountInvoiceReport, self)._group_by() + ", ai.team_id, ai.type_avoir, pt.product_at_zero, pt.number_unit"
+        return super(AccountInvoiceReport, self)._group_by() + ", ai.team_id, ai.type_avoir, pt.product_at_zero, pt.number_unit, ai.under_responsiblilty"
             
