@@ -20,14 +20,15 @@ class AccountInvoiceLine(models.Model):
         for line in self:
             print('iiiiiiiiiiiii')
             if line.invoice_id.ref_livraison.state == 'done' and line.invoice_id.type not in ('in_invoice','in_refund'):
-                move = line.invoice_id.ref_livraison
+                move = line.invoice_id.picking_ids.filtered(lambda s: s.picking_type_code == 'outgoing' and s.state =='done')
+                print(move)
                 move_return = self.env['stock.picking'].search([('state', '=', 'done'),('group_id','=',line.invoice_id.ref_livraison.group_id.id),('picking_type_id.code', '=', 'incoming')])
                 cmpt = 0
                 cmt = 0   
-                move_lines = move.move_lines.filtered(lambda s: s.product_id.id == line.product_id.id)
+                move_lines = (move_out.move_lines.filtered(lambda s: s.product_id.id == line.product_id.id) for move_out in move)
                 moves_lines_return = (moves_in.move_lines.filtered(lambda s: s.product_id.id == line.product_id.id) for moves_in in move_return)
                 for lines in move_lines:
-                    cmpt = lines.secondary_uom_qty
+                    cmpt += lines.secondary_uom_qty
                     print(cmpt)
                 for lines_return in moves_lines_return:
                     cmt = lines_return.secondary_uom_qty
