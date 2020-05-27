@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+
+ 	
+
+		<!-- Add the total weight in sale form and net weight to the order line subform -->
+ 	    <record model="ir.ui.view" id="stock_ligne_preparation_ttm_form">
+			<field name="name">stock.ligne.preparation.ttm.form</field>
+			<field name="model">stock.move</field>
+			
+			<field name="arch" type="xml">
+				<tree string="Move stocks article ttm" create="0" default_order="date">
+                <field name="date"/>
+				<field name="partner_id"/>
+                <field name="reference" string="Reference"/>
+				<field name="origin"/>
+                <field name="product_id"/>
+				<field name="picking_id"/>
+                <field name="location_id"/>
+                <field name="location_dest_id"/>
+                <field name="product_uom_qty" sum="Total qté"/>
+                <field name="state"/>
+            </tree>
+        
+             	
+			</field>
+		 </record>  
+		 <!--record id="stock_ligne_preparation_search" model="ir.ui.view">
+<field name="name">stock.ligne.preparation.select</field>
+<field name="model">stock.move.line</field>
+<field name="arch" type="xml">
+<search string="Stock Moves">
+                <field name="picking_id" string="Reference"/>
+                <field name="product_id"/>
+                <field name="location_id" groups="stock.group_stock_multi_locations"/>
+                <field name="location_dest_id" groups="stock.group_stock_multi_locations"/>
+                <separator/>
+                <filter string="To Do" name="todo" domain="[('state','not in', ['done', 'draft'])]"/>
+                <filter string="Done" name="done" domain="[('state','=','done')]"/>
+                <separator/>
+                <filter string="Receptions" name="incoming" domain="[('picking_id.picking_type_id.code','=','incoming')]"/>
+                <filter string="Deliveries" name="outgoing" domain="[('picking_id.picking_type_id.code','=','outgoing')]"/>
+                <filter string="Internal" name="internal" domain="[('picking_id.picking_type_id.code','=','internal')]"/>
+                <filter string="Manufacturing" name="manufacturing" domain="[('picking_id.picking_type_id.code','=','mrp_operation')]"/>
+               <filter string="Today" domain="[('date', '&gt;=', datetime.datetime.now().strftime('%Y-%m-%d 00:00:00')),('date', '&lt;=',datetime.datetime.now().strftime('%Y-%m-%d 23:23:59'))]"/>
+            
+			 <separator/>
+                 <filter string="Today" domain="[('date_move', '&gt;=', datetime.datetime.now().strftime('%Y-%m-%d 00:00:00')),('date_move', '&lt;=',datetime.datetime.now().strftime('%Y-%m-%d 23:23:59'))]"/>
+            
+             
+			
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter string="Status" name="by_state" domain="[]" context="{'group_by':'state'}"/>
+                </group>
+            </search>
+
+</field>
+</record-->
+
+		 	<record id="action_stock_ligne_preparation_ttm_form" model="ir.actions.act_window">
+            <field name="name">Articles livrés TTM</field>
+            <field name="res_model">stock.move.line</field>
+            <field name="view_type">form</field>
+			<field name="context">{'group_by':'product_id'}</field>
+			 <!-- <field name="domain">[('date','&gt;=', ((context_today()+datetime.timedelta()).strftime('%Y-%m-%d'))), ('date','&lt;=', ((context_today()+datetime.timedelta()).strftime('%Y-%m-%d')))]</field> -->
+            <field name="view_mode">pivot,tree,form,graph</field>
+            <!--<field name="view_id" ref="view_retard_graphss"/>-->
+        </record>
+
+		<menuitem action="action_stock_ligne_preparation_ttm_form"  id="stock.action_stock_ligne_preparation_ttm_form" parent="stock.menu_stock_warehouse_mgmt"/>
+		 
+	</data>
+</odoo>

@@ -31,7 +31,7 @@ class SaleReport(models.Model):
                     t.uom_id as product_uom,
                     t.product_at_zero as product_at_zero,
                     s.partner_shipping_id as partner_shipping_id,
-                    s.Bolocagettm_id as transport_id,
+                    s.transport_id as transport_id,
                     sum(l.product_uom_qty / u.factor * u2.factor) as product_uom_qty,
                     sum(l.qty_delivered / u.factor * u2.factor) as qty_delivered,
                     sum(l.qty_invoiced / u.factor * u2.factor) as qty_invoiced,
@@ -111,7 +111,7 @@ class SaleReport(models.Model):
                     partner.client_gc_pc,
                     s.commande_type,
                     s.grosiste_cmd,
-                    s.Bolocagettm_id,
+                    s.transport_id,
                     s.partner_shipping_id,
                     l.secondary_uom_qty,
                     partner.commercial_partner_id
