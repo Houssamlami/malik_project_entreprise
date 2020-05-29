@@ -28,7 +28,7 @@ class AccountInvoiceLine(models.Model):
                 move_lines = (move_out.move_lines.filtered(lambda s: s.product_id.id == line.product_id.id) for move_out in move)
                 moves_lines_return = (moves_in.move_lines.filtered(lambda s: s.product_id.id == line.product_id.id) for moves_in in move_return)
                 for lines in move_lines:
-                    cmpt += lines.secondary_uom_qty
+                    cmpt += (lin.secondary_uom_qty for lin in lines)
                     print(cmpt)
                 for lines_return in moves_lines_return:
                     cmt = lines_return.secondary_uom_qty
