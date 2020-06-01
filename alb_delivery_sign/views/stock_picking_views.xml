@@ -1,0 +1,53 @@
+<odoo>
+        <record id="view_picking_form_inherit_alb" model="ir.ui.view">
+            <field name="name">stock.picking.form.alb</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field name="arch" type="xml">
+                <header position="inside">
+                    <button string="Customer Reception" type="object"
+                            name="customer_reception"
+                            attrs="{'invisible': [ ('state', '!=', 'done')]}"
+                    />
+                </header>
+                <xpath expr="//notebook//page[@name='note']" position="before">
+                    <page string="Customer Reception"  attrs="{'invisible': [('state', '!=', 'emarge')]}">
+                        <group>
+                        <group>
+                            <field name="nbr_colis" readonly="1"/>
+                            <field name="custumer_note" readonly="1"/>
+                            <field name="signature" widget="signature" width="400" height="100" readonly="1"/>
+                        </group>
+
+                    </group>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+    <record id="stock_barcode.stock_picking_action_kanban" model="ir.actions.act_window">
+        <field name="name">Operations</field>
+        <field name="res_model">stock.picking</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="context">{
+            'form_view_initial_mode': 'edit',
+            'search_default_picking_type_id': [active_id],
+            'default_picking_type_id': active_id,
+            'contact_display': 'partner_address',
+            'force_detailed_view': True,
+        }</field>
+    </record>
+
+    <record id="view_picking_internal_search_inherit_stock_picking_emarge" model="ir.ui.view">
+        <field name="name">stock.picking.search</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_internal_search"/>
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='done']" position="after">
+                <filter name="emarge" string="Émargé" domain="[('state','=','emarge')]" help="Pickings already processed"/>
+            </xpath>
+        </field>
+    </record>
+
+
+</odoo>
