@@ -1,0 +1,143 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* alb_delivery_sign
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 11.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-05-24 14:41+0000\n"
+"PO-Revision-Date: 2020-05-24 14:41+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: alb_delivery_sign
+#: model:ir.ui.view,arch_db:alb_delivery_sign.custumer_reception_wizard
+msgid "Cancel"
+msgstr "Annuler"
+
+#. module: alb_delivery_sign
+#: model:ir.model,name:alb_delivery_sign.model_res_partner
+msgid "Contact"
+msgstr "Contact"
+
+#. module: alb_delivery_sign
+#: model:ir.model.fields,field_description:alb_delivery_sign.field_customer_reception_wizard_create_uid
+msgid "Created by"
+msgstr "Créé par"
+
+#. module: alb_delivery_sign
+#: model:ir.model.fields,field_description:alb_delivery_sign.field_customer_reception_wizard_create_date
+msgid "Created on"
+msgstr "Créé le"
+
+#. module: alb_delivery_sign
+#: model:ir.ui.view,arch_db:alb_delivery_sign.view_picking_form_inherit_alb
+msgid "Customer Reception"
+msgstr "Réception client"
+
+#. module: alb_delivery_sign
+#: model:ir.model.fields,field_description:alb_delivery_sign.field_customer_reception_wizard_display_name
+msgid "Display Name"
+msgstr "Nom à afficher"
+
+#. module: alb_delivery_sign
+#: model:ir.model.fields,field_description:alb_delivery_sign.field_customer_reception_wizard_id
+msgid "ID"
+msgstr "ID"
+
+#. module: alb_delivery_sign
+#: model:ir.model.fields,field_description:alb_delivery_sign.field_customer_reception_wizard___last_update
+msgid "Last Modified on"
+msgstr "Dernière modification le"
+
+#. module: alb_delivery_sign
+#: model:ir.model.fields,field_description:alb_delivery_sign.field_customer_reception_wizard_write_uid
+msgid "Last Updated by"
+msgstr "Dernière mise à jour par"
+
+#. module: alb_delivery_sign
+#: model:ir.model.fields,field_description:alb_delivery_sign.field_customer_reception_wizard_write_date
+msgid "Last Updated on"
+msgstr "Dernière mise à jour le"
+
+#. module: alb_delivery_sign
+#: model:ir.model.fields,field_description:alb_delivery_sign.field_customer_reception_wizard_nbr_colis
+#: model:ir.model.fields,field_description:alb_delivery_sign.field_stock_picking_nbr_colis
+msgid "Nbr of colis"
+msgstr "Nbr de colis"
+
+#. module: alb_delivery_sign
+#: model:ir.model.fields,field_description:alb_delivery_sign.field_customer_reception_wizard_custumer_note
+#: model:ir.model.fields,field_description:alb_delivery_sign.field_stock_picking_custumer_note
+msgid "Note"
+msgstr "Remarque"
+
+#. module: alb_delivery_sign
+#: model:ir.model.fields,field_description:alb_delivery_sign.field_customer_reception_wizard_picking_id
+msgid "Operation"
+msgstr "Opération"
+
+#. module: alb_delivery_sign
+#: model:ir.model.fields,field_description:alb_delivery_sign.field_customer_reception_wizard_pin
+#: model:ir.model.fields,field_description:alb_delivery_sign.field_res_partner_pin
+#: model:ir.model.fields,field_description:alb_delivery_sign.field_res_users_pin
+msgid "PIN"
+msgstr "PIN"
+
+#. module: alb_delivery_sign
+#: model:ir.model.fields,field_description:alb_delivery_sign.field_customer_reception_wizard_partner_id
+msgid "Partner"
+msgstr "Partenaire"
+
+#. module: alb_delivery_sign
+#: model:ir.ui.view,arch_db:alb_delivery_sign.view_picking_internal_search_inherit_stock_picking_emarge
+msgid "Pickings already processed"
+msgstr "Bons de préparation déjà traités"
+
+#. module: alb_delivery_sign
+#: model:ir.model.fields,field_description:alb_delivery_sign.field_customer_reception_wizard_signature
+#: model:ir.model.fields,field_description:alb_delivery_sign.field_stock_picking_signature
+msgid "Signature"
+msgstr "Signature"
+
+#. module: alb_delivery_sign
+#: code:addons/alb_delivery_sign/models/customer_reception.py:24
+#, python-format
+msgid "The pin is incorrect"
+msgstr "The pin is incorrect"
+
+#. module: alb_delivery_sign
+#: model:ir.model,name:alb_delivery_sign.model_stock_picking
+msgid "Transfer"
+msgstr "Transfert"
+
+#. module: alb_delivery_sign
+#: model:ir.ui.view,arch_db:alb_delivery_sign.custumer_reception_wizard
+msgid "Validate"
+msgstr "Valider"
+
+#. module: alb_delivery_sign
+#: model:ir.ui.view,arch_db:alb_delivery_sign.custumer_reception_wizard
+msgid "Wizard"
+msgstr "Wizard"
+
+#. module: alb_delivery_sign
+#: model:ir.actions.act_window,name:alb_delivery_sign.action_custumer_reception
+msgid "customer.reception"
+msgstr "customer.reception"
+
+#. module: alb_delivery_sign
+#: model:ir.model,name:alb_delivery_sign.model_customer_reception_wizard
+msgid "customer.reception.wizard"
+msgstr "customer.reception.wizard"
+
+#. module: alb_delivery_sign
+#: model:ir.ui.view,arch_db:alb_delivery_sign.view_picking_internal_search_inherit_stock_picking_emarge
+msgid "Émargé"
+msgstr "Émargé"
+
