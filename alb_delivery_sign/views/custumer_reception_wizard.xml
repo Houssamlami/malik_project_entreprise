@@ -1,0 +1,36 @@
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="custumer_reception_wizard">
+            <field name="name">Custumer Reception</field>
+            <field name="model">customer.reception.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Wizard">
+                    <group>
+                        <group>
+                            <field name="picking_id" invisible="1"/>
+                            <field name="partner_id" invisible="1"/>
+                            <field name="pin" required="1" password="True"/>
+                            <field name="nbr_colis" required="1"/>
+                            <field name="custumer_note" required="1"/>
+                            <field name="signature" widget="signature" width="400" height="100" required="1"/>
+                        </group>
+
+                    </group>
+                    <footer>
+                        <button type="object" name="validate" string="Validate" class="btn btn-primary"/>
+                        <button type="object" special="cancel" string="Cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+
+        <record id="action_custumer_reception" model="ir.actions.act_window">
+            <field name="name">customer.reception</field>
+            <field name="res_model">customer.reception.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+    </data>
+</odoo>

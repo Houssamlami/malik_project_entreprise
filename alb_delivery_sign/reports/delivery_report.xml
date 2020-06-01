@@ -1,0 +1,7 @@
+<odoo>
+    <template id="report_delivery_barcode_document" inherit_id="stock.report_delivery_document">
+        <xpath expr="//table[1]" position="before">
+            <img t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('Code128', o.name, 600, 100)" style="width:300px;height:50px" class="pull-right mb16"/>
+        </xpath>
+    </template>
+</odoo>
