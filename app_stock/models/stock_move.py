@@ -45,7 +45,7 @@ class StockMove(models.Model):
 
     
     @api.multi
-    @api.depends('picking_id.origin','quantity_done')
+    @api.depends('picking_id.origin')
     def get_secondary_qty(self):
         for record in self:
             so = self.env['sale.order'].search([('name', '=', record.picking_id.origin)])
@@ -62,7 +62,7 @@ class StockMove(models.Model):
             
                     #else:
                         #   record.secondary_uom_qty = 0.0
-            if record.quantity_done != 0:
+            '''if record.quantity_done != 0:
                 if abs(float_compare(record.sale_line_id.product_uom_qty, record.quantity_done, precision_rounding=record.product_uom.rounding))>= 0:
                     unite = record.product_id
                     unit = unite.sale_secondary_uom_id
@@ -82,7 +82,7 @@ class StockMove(models.Model):
                 if unite.uom_id.name !='kg' and abs(record.sale_line_id.secondary_uom_qty-record.quantity_done) >= 0:
                     record.secondary_uom_qty = record.quantity_done
                 if record.quantity_done != 0 and record.secondary_uom_qty_regul != 0.0:
-                        record.secondary_uom_qty = record.secondary_uom_qty_regul
+                        record.secondary_uom_qty = record.secondary_uom_qty_regul'''
                         
     def action_modify_colis(self):
        
