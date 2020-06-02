@@ -30,6 +30,7 @@ class StockPicking(models.Model):
     name_provisoir = fields.Char(string="Nom Provisoir", compute='get_is_return_picking')
     number_product_to_deliver = fields.Float(string='Produits à livrer', compute='_compute_number_product_to_deliver')
     expediteur_in_picking = fields.Selection([('MV', 'Malik V'), ('An', 'Atlas N')], related='sale_id.Expediteur', string="Expediteur")
+    bl_supplier = fields.Char(string="Bl de livraison fournisseur")
     
     @api.one      
     def _compute_number_product_to_deliver(self):
