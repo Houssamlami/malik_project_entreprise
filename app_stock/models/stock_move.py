@@ -87,7 +87,7 @@ class StockMove(models.Model):
     def action_modify_colis(self):
        
         self.ensure_one()
-        if self.picking_id.picking_type_id.code == 'outgoing' or self.picking_id.picking_type_id.code == 'incoming':
+        if self.picking_id.picking_type_id.code == 'outgoing' or self.picking_id.picking_type_id.code == 'incoming' or self.picking_id.picking_type_id.code == 'internal':
             view = self.env.ref('app_stock.view_stock_move_change_colis')
         return {
             'name': _('Change colis'),
