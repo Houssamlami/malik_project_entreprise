@@ -26,6 +26,7 @@
         'views/partner.xml',
         'views/custumer_reception_wizard.xml',
         'views/stock_picking_views.xml',
+        'views/config_motif_view.xml',
         'reports/delivery_report.xml',
     ],
     # only loaded in demonstration mode

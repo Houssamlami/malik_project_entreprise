@@ -8,6 +8,7 @@
             <field name="arch" type="xml">
                 <field name="category_id" position="after">
                     <field name="pin"/>
+                    <field name="pin_livreur"/>
                 </field>
             </field>
         </record>

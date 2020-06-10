@@ -86,8 +86,8 @@ msgstr "Opération"
 #: model:ir.model.fields,field_description:alb_delivery_sign.field_customer_reception_wizard_pin
 #: model:ir.model.fields,field_description:alb_delivery_sign.field_res_partner_pin
 #: model:ir.model.fields,field_description:alb_delivery_sign.field_res_users_pin
-msgid "PIN"
-msgstr "PIN"
+msgid "PIN Client"
+msgstr "PIN Client"
 
 #. module: alb_delivery_sign
 #: model:ir.model.fields,field_description:alb_delivery_sign.field_customer_reception_wizard_partner_id
@@ -109,7 +109,7 @@ msgstr "Signature"
 #: code:addons/alb_delivery_sign/models/customer_reception.py:24
 #, python-format
 msgid "The pin is incorrect"
-msgstr "The pin is incorrect"
+msgstr "Le pin du client est incorrect"
 
 #. module: alb_delivery_sign
 #: model:ir.model,name:alb_delivery_sign.model_stock_picking
