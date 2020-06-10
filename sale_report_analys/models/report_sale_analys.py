@@ -22,6 +22,7 @@ class SaleReport(models.Model):
     product_at_zero = fields.Boolean(string=u"Article à zéro AN", readonly=True)
     partner_shipping_id = fields.Many2one('res.partner', 'Adresse de livraison', readonly=True)
     transport_id = fields.Many2one('blockage.blockage', 'Transport', readonly=True)
+    normal_cmd = fields.Boolean(string='Commande Normale', readonly=True)
     
     def _select(self):
         select_str = """
@@ -43,6 +44,7 @@ class SaleReport(models.Model):
                     count(*) as nbr,
                     s.name as name,
                     s.grosiste_cmd as grosiste,
+                    s.normal_cmd as normal_cmd,
                     sum(l.product_uom_qty / u.factor * u2.factor)-sum(l.qty_delivered / u.factor * u2.factor) as ecart_qty,
                     sum(l.secondary_uom_qty / u.factor * u2.factor)-sum((l.qty_delivered / u.factor * u2.factor)/ u3.factor) as ecart_qtys,
                     l.secondary_uom_qty as cmd_colis,
@@ -111,6 +113,7 @@ class SaleReport(models.Model):
                     partner.client_gc_pc,
                     s.commande_type,
                     s.grosiste_cmd,
+                    s.normal_cmd,
                     s.transport_id,
                     s.partner_shipping_id,
                     l.secondary_uom_qty,

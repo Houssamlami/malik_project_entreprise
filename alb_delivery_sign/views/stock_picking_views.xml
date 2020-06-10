@@ -11,14 +11,21 @@
                     />
                 </header>
                 <xpath expr="//notebook//page[@name='note']" position="before">
-                    <page string="Customer Reception"  attrs="{'invisible': [('state', '!=', 'emarge')]}">
+                    <page string="Customer Reception"  attrs="{'invisible': [('state', 'not in', ['emarge', 'retour'])]}">
                         <group>
-                        <group>
-                            <field name="nbr_colis" readonly="1"/>
-                            <field name="custumer_note" readonly="1"/>
-                            <field name="signature" widget="signature" width="400" height="100" readonly="1"/>
-                        </group>
-
+                            <group>
+                                <field name="nbr_colis" readonly="1"/>
+                                <field name="custumer_note" readonly="1"/>
+                                <field name="signature" widget="signature" width="400" height="100" readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="reception_type" readonly="1" required="1"/>
+                                <field name="motif" readonly="1" attrs="{'invisible':[('reception_type', '=', 'complete')],
+                                                            'required': [('reception_type', '!=', 'complete')]}"/>
+                                <field name="action" readonly="1" attrs="{'invisible':[('reception_type', '=', 'complete')],
+                                                            'required': [('reception_type', '!=', 'complete')]}"/>
+                                <field name="livreur" readonly="1" required="1"/>
+                            </group>
                     </group>
                     </page>
                 </xpath>
