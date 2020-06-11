@@ -11,6 +11,7 @@ class ResPartner(models.Model):
         lettersAndDigits = string.ascii_letters + string.digits
         return ''.join((random.choice(lettersAndDigits).lower() for i in range(stringLength)))
 
-    pin = fields.Char(string="PIN", default=get_random_pin)
+    pin = fields.Char(string="PIN Client", default=get_random_pin)
+    pin_livreur = fields.Char(string="PIN Livreur", default=get_random_pin)
 
 

@@ -1,0 +1,40 @@
+<odoo>
+    <data>
+        <!--     MOTIFS D'ABANDONS-->
+
+
+    <record id="alb_motif_search_filter" model="ir.ui.view">
+        <field name="name">alb.motif.search</field>
+        <field name="model">alb.motif</field>
+        <field name="arch" type="xml">
+            <search string="Motif">
+                <field name="name"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="alb_motif_tree_view" model="ir.ui.view">
+        <field name="name">alb.motif.tree</field>
+        <field name="model">alb.motif</field>
+        <field name="arch" type="xml">
+            <tree editable="top" string="Motif">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+
+
+    <record model="ir.actions.act_window" id="alb_motif_action">
+        <field name="name">Motif</field>
+        <field name="res_model">alb.motif</field>
+        <field name="view_mode">tree</field>
+        <field name="search_view_id" ref="alb_delivery_sign.alb_motif_search_filter"/>
+    </record>
+
+    <menuitem id="motif_menu" name="Motif"
+              parent="stock.menu_stock_config_settings" action="alb_motif_action" />
+
+
+    </data>
+</odoo>
