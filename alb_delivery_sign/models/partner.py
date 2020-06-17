@@ -14,4 +14,9 @@ class ResPartner(models.Model):
     pin = fields.Char(string="PIN Client", default=get_random_pin)
     pin_livreur = fields.Char(string="PIN Livreur", default=get_random_pin)
 
+    _sql_constraints = [
+        ('pin_client_unique', 'unique(pin)', 'Le pin du client doit être unique'),
+        ('pin_livreur_unique', 'unique(pin_livreur)', 'Le pin du livreur doit être unique'),
+    ]
+
 
