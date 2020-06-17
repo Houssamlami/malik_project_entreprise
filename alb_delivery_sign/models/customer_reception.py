@@ -67,9 +67,9 @@ class CustomerReception(models.TransientModel):
                                         'res_model_id': self.env.ref('stock.model_stock_picking').id,
                                     })
                 else:
-                    raise ValidationError(_('The pin is incorrect'))
+                    raise ValidationError(_('Le PIN du client est incorrect'))
             else:
-                raise ValidationError(_('Pin livreur invalide'))
+                raise ValidationError(_('Le PIN du livreur est incorrect'))
 
 class AlbMotif(models.Model):
     _name = 'alb.motif'
