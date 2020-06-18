@@ -60,7 +60,22 @@ class PurchaseOrder(models.Model):
                     if lines.product_id:
                         cmpt += lines.product_qty
             record.qty_totals = cmpt
-    '''   
+    ''' 
+    
+    @api.depends('state', 'order_line.qty_invoiced', 'order_line.qty_received', 'order_line.product_qty','invoice_ids')
+    def _get_stat_invoice(self):
+        precision = self.env['decimal.precision'].precision_get('Product Unit of Measure')
+        for order in self:
+            if order.state not in ('purchase', 'done'):
+                order.invoice_statu = 'no'
+                continue
+
+            if any(float_compare(line.qty_invoiced, line.product_qty if line.product_id.purchase_method == 'purchase' else line.qty_received, precision_digits=precision) >= 0 for line in order.order_line) and order.invoice_ids and order.invoice_ids[0].state not in ('paid'):
+                order.invoice_statu = 'to invoice'
+            elif all(float_compare(line.qty_invoiced, line.product_qty if line.product_id.purchase_method == 'purchase' else line.qty_received, precision_digits=precision) >= 0 for line in order.order_line) and order.invoice_ids and order.invoice_ids[0].state in ('paid'):
+                order.invoice_statu = 'invoiced'
+            else:
+                order.invoice_statu = 'no'  
         
     @api.onchange('order_line.price_unit')
     def _on_change_orderline(self):
@@ -80,6 +95,11 @@ class PurchaseOrder(models.Model):
         ('done', u'Bloqué'),
         ('cancel', u'Annulée')
         ], string='Status', readonly=True, index=True, copy=False, default='draft', track_visibility='onchange')
+    invoice_statu = fields.Selection([
+        ('no', 'A facturer'),
+        ('to invoice', 'Non payée'),
+        ('invoiced', 'Payée'),
+        ], string='État de facture', compute='_get_stat_invoice', store=True, readonly=True, copy=False, default='no')
     semaine = fields.Char(string="Semaine")
     abattage = fields.Char(string="Abattage", track_visibility='always')
     qty_totals = fields.Float(string=u"Quantité Transportée(KG)", track_visibility='onchange')

@@ -25,7 +25,7 @@ class CustomerReception(models.TransientModel):
     motif = fields.Many2one('alb.motif', string='Raison')
     action = fields.Selection(
         [
-            ('rw,', 'Retour à l’entrepôt'),
+            ('rw', 'Retour à l’entrepôt'),
             ('rwd', 'Retour à l’entrepôt et re-livraison'),
         ],
         string='Action'
@@ -48,10 +48,28 @@ class CustomerReception(models.TransientModel):
                         r.picking_id.state = 'emarge'
                     else:
                         r.picking_id.state = 'retour'
+                        user_ids = self.env["res.users"].search([])
+                        for u in user_ids:
+                            if u.has_group('stock.group_stock_manager'):
+                                if r.action == 'rw':
+                                    activity = r.env['mail.activity'].sudo(u.id).create({
+                                        'activity_type_id': r.env.ref('alb_delivery_sign.mail_act_reception_partiel').id,
+                                        'note': 'Retour',
+                                        'res_id': r.picking_id.id,
+                                        'res_model_id': self.env.ref('stock.model_stock_picking').id,
+                                    })
+                                else:
+                                    activity = r.env['mail.activity'].sudo(u.id).create({
+                                        'activity_type_id': r.env.ref(
+                                            'alb_delivery_sign.mail_act_reception_partiel2').id,
+                                        'note': 'Retour',
+                                        'res_id': r.picking_id.id,
+                                        'res_model_id': self.env.ref('stock.model_stock_picking').id,
+                                    })
                 else:
-                    raise ValidationError(_('The pin is incorrect'))
+                    raise ValidationError(_('Le PIN du client est incorrect'))
             else:
-                raise ValidationError(_('Pin livreur invalide'))
+                raise ValidationError(_('Le PIN du livreur est incorrect'))
 
 class AlbMotif(models.Model):
     _name = 'alb.motif'
