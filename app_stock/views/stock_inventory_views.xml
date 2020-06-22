@@ -64,5 +64,63 @@
 				</xpath>
 			</field>
 		</record>
+		
+	<!-- ############################################# Stock Scrap Views#################################################### -->	
+	
+	 <record model="ir.ui.view" id="scrap_stock_hinerit_form">
+		<field name="name">scrap.stock.hinerit.form</field>
+		<field name="model">stock.scrap</field>
+		<field name="inherit_id" ref="stock.stock_scrap_form_view" />
+		<field name="arch" type="xml">
+    			<xpath expr="//group/group"
+					position="inside">
+					<newline/>
+					<field name="scrap_local" />
+					<field name="scrap_reason_id" options="{'no_create': True, 'no_open':True}"/>
+					<field name="comment" />
+				</xpath>
+				
+	</field>
+	</record>
+	
+	<record id="view_scrap_reason_form" model="ir.ui.view">
+            <field name="name">view.scrap.reason.form</field>
+            <field name="model">reason.scrap</field>
+            <field name="arch" type="xml">
+                <form string="Raisons de rebut">
+                   <group> 
+                   <field name="name"/>
+                   </group>
+                </form>
+            </field>
+        </record>
+	<record id="view_scrap_reason_tree" model="ir.ui.view">
+            <field name="name">view.scrap.reason.tree</field>
+            <field name="model">reason.scrap</field>
+            <field name="arch" type="xml">
+                <tree string="Raisons de rebut">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+        
+        <record id="action_scrap_reason" model="ir.actions.act_window">
+            <field name="name">Raisons de rebut</field>
+            <field name="res_model">reason.scrap</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field eval="False" name="view_id"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to record a new scrap reason.
+              </p>
+            </field>
+        </record>
+	
+	<menuitem id="menu_scrap_config" name="Rebut" parent="stock.menu_stock_config_settings" groups="stock.group_stock_manager" sequence="7"/>
+	<menuitem
+        action="action_scrap_reason" id="menu_scrap_form_action"
+        name="Raisons de rebut"
+        parent="menu_scrap_config" sequence="9"/>
 	</data>
 </odoo>
