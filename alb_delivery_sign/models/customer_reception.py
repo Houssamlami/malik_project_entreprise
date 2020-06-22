@@ -22,11 +22,20 @@ class CustomerReception(models.TransientModel):
         required=True, default='complete',
         string='Type de réception'
     )
+    confirmite = fields.Selection(
+        [
+            ('conforme', 'Conforme'),
+            ('nnconforme', 'Non Conforme'),
+        ],
+        
+        string='Confirmité'
+    )
     motif = fields.Many2one('alb.motif', string='Raison')
     action = fields.Selection(
         [
             ('rw', 'Retour à l’entrepôt'),
             ('rwd', 'Retour à l’entrepôt et re-livraison'),
+            ('rwdr','Retour à l’entrepôt et remise en stock'),
         ],
         string='Action'
     )
@@ -40,6 +49,7 @@ class CustomerReception(models.TransientModel):
                     r.picking_id.nbr_colis = r.nbr_colis
                     r.picking_id.custumer_note = r.custumer_note
                     r.picking_id.reception_type = r.reception_type
+                    r.picking_id.confirmite = r.confirmite
                     r.picking_id.motif = r.motif
                     r.picking_id.action = r.action
                     r.picking_id.signature = r.signature
