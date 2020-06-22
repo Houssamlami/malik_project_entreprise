@@ -29,12 +29,14 @@
                             <group>
                                 <field name="nbr_colis" readonly="1"/>
                                 <field name="custumer_note" readonly="1"/>
+								<field name="confirmite" readonly="1"/>
                                 <field name="signature" widget="signature" width="400" height="100" readonly="1"/>
+								
                             </group>
                             <group>
-                                <field name="reception_type" readonly="1"/>
-                                <field name="motif" readonly="1" attrs="{'invisible':[('reception_type', '=', 'complete')]}"/>
-                                <field name="action" readonly="1" attrs="{'invisible':[('reception_type', '=', 'complete')]}"/>
+                                <field name="reception_type" />
+                                <field name="motif" readonly="1" attrs="{'invisible':[('confirmite', '=', 'conforme')]}"/>
+                                <field name="action"  attrs="{'invisible':[('confirmite', '=', 'conforme')]}"/>
                                 <field name="livreur" readonly="1"/>
                             </group>
                     </group>

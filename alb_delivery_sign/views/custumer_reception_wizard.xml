@@ -11,13 +11,14 @@
                             <field name="partner_id" invisible="1"/>
                             <field name="pin_livreur" required="1" password="True"/>
                             <field name="pin" required="1" password="True"/>
+							<field name="confirmite" required="1"/>
                             <field name="nbr_colis" required="1"/>
                             <field name="custumer_note" required="1"/>
-                            <field name="reception_type" required="1"/>
-                            <field name="motif" attrs="{'invisible':[('reception_type', '=', 'complete')],
-                                                            'required': [('reception_type', '!=', 'complete')]}"/>
-                            <field name="action" attrs="{'invisible':[('reception_type', '=', 'complete')],
-                                                            'required': [('reception_type', '!=', 'complete')]}"/>
+                            <field name="reception_type" />
+                            <field name="motif" attrs="{'invisible':[('confirmite', '=', 'conforme')],
+                                                            'required': [('confirmite', '!=', 'conforme')]}"/>
+                            <field name="action" attrs="{'invisible':[('confirmite', '=', 'conforme')],
+                                                            'required': [('confirmite', '!=', 'conforme')]}"/>
                             <field name="signature" widget="signature" width="400" height="100" required="1"/>
                         </group>
 

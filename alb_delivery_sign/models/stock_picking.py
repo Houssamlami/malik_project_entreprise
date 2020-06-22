@@ -24,11 +24,20 @@ class StockPicking(models.Model):
         
         string='Type de réception'
     )
+    confirmite = fields.Selection(
+        [
+            ('conforme', 'Conforme'),
+            ('nnconforme', 'Non Conforme'),
+        ],
+        
+        string='Confirmité'
+    )
     motif = fields.Many2one('alb.motif', string='Raison')
     action = fields.Selection(
         [
             ('rw,', 'Retour à l’entrepôt'),
             ('rwd', 'Retour à l’entrepôt et re-livraison'),
+            ('rwdr','Retour à l’entrepôt et remise en stock'),
         ],
         string='Action'
     )
