@@ -19,7 +19,7 @@ class CustomerReception(models.TransientModel):
             ('partielle', 'Partielle'),
             ('refus', 'Refus'),
         ],
-        required=True, default='complete',
+        default='complete',
         string='Type de réception'
     )
     confirmite = fields.Selection(
@@ -54,7 +54,7 @@ class CustomerReception(models.TransientModel):
                     r.picking_id.action = r.action
                     r.picking_id.signature = r.signature
                     r.picking_id.livreur = livreur.id
-                    if r.picking_id.reception_type == 'complete':
+                    if r.picking_id.reception_type == 'conforme':
                         r.picking_id.state = 'emarge'
                     else:
                         r.picking_id.state = 'retour'
@@ -85,4 +85,4 @@ class AlbMotif(models.Model):
     _name = 'alb.motif'
     _description = "Motif"
 
-    name = fields.Char(string="Raison", required=True)
+    name = fields.Char(string="Raison")

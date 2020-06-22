@@ -162,7 +162,7 @@ class AccountInvoiceReport(models.Model):
                     ai.fac_volaille_f AS fac_volaille_f,
                     ai.cli_pc AS cli_pc,
                     ai.grosiste AS grosiste,
-                    SUM(ail.price_total) AS amount_total,
+                    SUM(ail.price_total * invoice_type.sign_qty) AS amount_total,
                     ai.under_responsiblilty AS under_responsiblilty,
                     pt.product_at_zero AS product_at_zero,
                     pt.number_unit AS number_unit,
