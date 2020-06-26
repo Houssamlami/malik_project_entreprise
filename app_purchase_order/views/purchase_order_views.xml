@@ -95,6 +95,13 @@
 				</xpath>
 				<!-- <field name="date_order" position="after"> <field name="purchase_order_id" 
 					attrs="{'invisible': [('logistic', '=', False)]}" /> </field> -->
+					
+				<xpath
+					expr="///field[@name='date_approve']"
+					position="after">					
+                          <field name="po_invoiced"/>
+                          <field name="po_to_invoice"/>
+				</xpath>
 			</field>
 		</record>
 		<record id="group_achat_purchase" model="res.groups">

@@ -108,6 +108,8 @@ class PurchaseOrder(models.Model):
     nbr_camions = fields.Float(string='Nombre de Camions')
     tonnage = fields.Float(string="Tonnage par camion", default=21000)
     palette = fields.Float(string="Nombre de palette par camion", default=32)
+    po_invoiced = fields.Boolean(string="Facturée", track_visibility='onchange')
+    po_to_invoice = fields.Boolean(string="A facturer", track_visibility='onchange')
     #purchase_order_id = fields.Many2one(comodel_name='purchase.order', string=u'BC Achat', domain=[('partner_id.name', 'in', ('IMEX','BONA'))])
     
     @api.model
