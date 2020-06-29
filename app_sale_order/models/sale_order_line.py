@@ -89,7 +89,7 @@ class SaleOrderLine(models.Model):
                 record.test_on_change = record.product_id.qty_available
                 vouchers = self.env['sale.order'].search([('requested_date', '>', today)])
                 productbl = self.env['sale.order.line'].search([
-                ('product_id', '=', self.product_id.id),('order_id', 'in', vouchers.ids)])
+                ('product_id', '=', self.product_id.id),('qty_delivered', '=', 0),('order_id', 'in', vouchers.ids)])
                 for rec in productbl:
                     test_on_change_version2 += rec.product_uom_qty
                     record.test_on_change_version2 = test_on_change_version2
