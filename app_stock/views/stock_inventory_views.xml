@@ -117,7 +117,7 @@
             </field>
         </record>
 	
-	<menuitem id="menu_scrap_config" name="Rebut" parent="stock.menu_stock_config_settings" groups="stock.group_stock_manager" sequence="7"/>
+	<menuitem id="menu_scrap_config" name="Rebut" parent="stock.menu_stock_config_settings" sequence="7"/>
 	<menuitem
         action="action_scrap_reason" id="menu_scrap_form_action"
         name="Raisons de rebut"

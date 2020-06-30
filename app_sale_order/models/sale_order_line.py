@@ -79,7 +79,7 @@ class SaleOrderLine(models.Model):
                 'message': _("Prix unitaire est inférieur au prix de vente minimum")
                 }
             }
-            
+       
     @api.onchange('product_id')
     def on_change_state2(self):
         today = str(datetime.now().date())

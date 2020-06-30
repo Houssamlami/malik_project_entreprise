@@ -90,6 +90,9 @@
 									<th t-if="o.origin">
 										<strong>Order (Origin)</strong>
 									</th>
+									<th t-if="o.origin_command and o.is_return_picking">
+										<strong>Commande d'origine</strong>
+									</th>
 									<th>
 										<strong>State</strong>
 									</th>
@@ -106,6 +109,9 @@
 								<tr>
 									<td t-if="o.origin">
 										<span t-field="o.origin" />
+									</td>
+									<td t-if="o.origin_command and o.is_return_picking">
+										<span t-field="o.origin_command" />
 									</td>
 									<td>
 										<span t-field="o.state" />

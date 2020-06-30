@@ -18,8 +18,10 @@
 					</group>
 				</xpath>
 				<xpath expr="//field[@name='owner_id']" position="after">
+						<field name="is_return_picking" invisible="1"/>
 						<field name="expediteur_in_picking" attrs="{'invisible': [('picking_type_code','=','incoming')]}"/>
-						<field name="bl_supplier" attrs="{'invisible': [('picking_type_code','=','outgoing')]}"/>
+						<field name="bl_supplier" attrs="{'invisible': ['|',('picking_type_code','in',('outgoing','internal'))]}"/>
+						<field name="origin_command" attrs="{'invisible': [('is_return_picking','=',False)]}"/>
 				</xpath>
 				<xpath expr="//h1" position="replace">
 					<h1 class="hidden-xs">
