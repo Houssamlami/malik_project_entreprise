@@ -49,10 +49,11 @@ class StockPicking(models.Model):
     def get_is_return_picking(self):
         for record in self:
             SO = 'SO'
+            PO = 'PO'
             char = ''
             char = record.group_id.name
             if char != False:
-                if char.find(SO) != -1 and record.picking_type_id.code == 'incoming':
+                if (char.find(SO) != -1 and record.picking_type_id.code == 'incoming') or (char.find(PO) != -1 and record.picking_type_id.code == 'outgoing'):
                     record.is_return_picking = True
                     string = ''
                     string = record.name
