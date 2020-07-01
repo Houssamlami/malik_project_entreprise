@@ -58,7 +58,7 @@ class StockPicking(models.Model):
                     string = ''
                     string = record.name
                     print(string)
-                    record.name_provisoir = string.replace('Bon de Réception','Bon de Retour')
+                    record.name_provisoir = string.replace('Bon de Réception','BRT')
                     print(record.name_provisoir)
                 else:
                     record.is_return_picking = False
