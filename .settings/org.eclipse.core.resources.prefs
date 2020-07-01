@@ -24,6 +24,7 @@ encoding//app_stock/models/stock_inventory.py=utf-8
 encoding//app_stock/models/stock_move.py=utf-8
 encoding//app_stock/models/stock_move_line.py=utf-8
 encoding//app_stock/models/stock_order.py=utf-8
+encoding//app_stock/models/stock_return_picking.py=utf-8
 encoding//app_stock/models/stock_scrap.py=utf-8
 encoding//app_stock/wizard/stock_picking_modify_loc.py=utf-8
 encoding//product_sale_margin/models/product_margin.py=utf-8

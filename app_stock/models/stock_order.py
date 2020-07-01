@@ -31,6 +31,7 @@ class StockPicking(models.Model):
     number_product_to_deliver = fields.Float(string='Produits à livrer', compute='_compute_number_product_to_deliver')
     expediteur_in_picking = fields.Selection([('MV', 'Malik V'), ('An', 'Atlas N')], related='sale_id.Expediteur', string="Expediteur")
     bl_supplier = fields.Char(string="N° BL fournisseur")
+    origin_command = fields.Char(string="La commande origine", index=True, states={'done': [('readonly', True)], 'cancel': [('readonly', True)]})
     
     @api.one      
     def _compute_number_product_to_deliver(self):
@@ -48,15 +49,16 @@ class StockPicking(models.Model):
     def get_is_return_picking(self):
         for record in self:
             SO = 'SO'
+            PO = 'PO'
             char = ''
             char = record.group_id.name
             if char != False:
-                if char.find(SO) != -1 and record.picking_type_id.code == 'incoming':
+                if (char.find(SO) != -1 and record.picking_type_id.code == 'incoming') or (char.find(PO) != -1 and record.picking_type_id.code == 'outgoing'):
                     record.is_return_picking = True
                     string = ''
                     string = record.name
                     print(string)
-                    record.name_provisoir = string.replace('Bon de Réception','Bon de Retour')
+                    record.name_provisoir = string.replace('Bon de Réception','BRT')
                     print(record.name_provisoir)
                 else:
                     record.is_return_picking = False

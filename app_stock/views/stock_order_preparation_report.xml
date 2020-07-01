@@ -79,8 +79,8 @@
 						<img
 							t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('Code128', o.name, 600, 100)"
 							style="width:300px;height:50px" class="pull-right mb16" />
-						<h1 t-if="not o.name_provisoir" class="mt0 pull-left" ><span t-if="o.picking_type_code == 'outgoing'">Bon de Préparation:</span>
-						<span t-if="o.picking_type_code == 'incoming'">Bon de Réception:</span><span t-field="o.name"/></h1>
+						<h1 t-if="not o.name_provisoir" class="mt0 pull-left" ><span t-if="o.picking_type_code == 'outgoing'">BP:</span>
+						<span t-if="o.picking_type_code == 'incoming'">BRC:</span><span t-field="o.name"/></h1>
 						<h1 t-if="o.name_provisoir" class="mt0 pull-left" ><span t-field="o.name_provisoir"/></h1>
 
 						<div class="clearfix" />
@@ -89,6 +89,9 @@
 								<tr>
 									<th t-if="o.origin">
 										<strong>Order (Origin)</strong>
+									</th>
+									<th t-if="o.origin_command and o.is_return_picking">
+										<strong>Commande d'origine</strong>
 									</th>
 									<th>
 										<strong>State</strong>
@@ -106,6 +109,9 @@
 								<tr>
 									<td t-if="o.origin">
 										<span t-field="o.origin" />
+									</td>
+									<td t-if="o.origin_command and o.is_return_picking">
+										<span t-field="o.origin_command" />
 									</td>
 									<td>
 										<span t-field="o.state" />
@@ -1560,8 +1566,8 @@
 						<img
 							t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('Code128', o.name, 600, 100)"
 							style="width:300px;height:50px" class="pull-right mb16" />
-						<h1 t-if="not o.name_provisoir" class="mt0 pull-left" ><span t-if="o.picking_type_code == 'outgoing'">Bon de Préparation:</span>
-						<span t-if="o.picking_type_code == 'incoming'">Bon de Réception:</span><span t-field="o.name"/></h1>
+						<h1 t-if="not o.name_provisoir" class="mt0 pull-left" ><span t-if="o.picking_type_code == 'outgoing'">BP:</span>
+						<span t-if="o.picking_type_code == 'incoming'">BRC:</span><span t-field="o.name"/></h1>
 						<h1 t-if="o.name_provisoir" class="mt0 pull-left" ><span t-field="o.name_provisoir"/></h1>
 						<div class="clearfix" />
 						<table class="table table-condensed">
@@ -1786,8 +1792,8 @@
 						<img
 							t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('Code128', o.name, 600, 100)"
 							style="width:300px;height:50px" class="pull-right mb16" />
-						<h1 t-if="not o.name_provisoir" class="mt0 pull-left" ><span t-if="o.picking_type_code == 'outgoing'">Bon de Préparation:</span>
-						<span t-if="o.picking_type_code == 'incoming'">Bon de Réception:</span><span t-field="o.name"/></h1>
+						<h1 t-if="not o.name_provisoir" class="mt0 pull-left" ><span t-if="o.picking_type_code == 'outgoing'">BP:</span>
+						<span t-if="o.picking_type_code == 'incoming'">BRC:</span><span t-field="o.name"/></h1>
 						<h1 t-if="o.name_provisoir" class="mt0 pull-left" ><span t-field="o.name_provisoir"/></h1>
 						<div class="clearfix" />
 						<table class="table table-condensed">
@@ -2308,9 +2314,9 @@
 		<br/>
 		<img t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('Code128', o.name, 600, 100)" style="width:300px;height:50px" class="pull-right mb16"/>
 			<h2>
-				<span t-if="o.picking_type_code == 'outgoing'">Bon de livraison:</span>
-				<span t-if="o.picking_type_code == 'incoming' and not o.is_return_picking">Bon de Réception:</span>
-				<span t-if="o.picking_type_code == 'incoming' and o.is_return_picking">Bon de Retour:</span>
+				<span t-if="o.picking_type_code == 'outgoing'">BL:</span>
+				<span t-if="o.picking_type_code == 'incoming' and not o.is_return_picking">BRC:</span>
+				<span t-if="o.picking_type_code == 'incoming' and o.is_return_picking">BRT:</span>
 				<span t-field="o.name" />
 			</h2>
 		</xpath>
