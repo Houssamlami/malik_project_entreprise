@@ -25,7 +25,7 @@ class StockMoveLine(models.Model):
     date_move = fields.Datetime(related='picking_id.scheduled_date', store=True)
     partner_picking_id = fields.Many2one(comodel_name='res.partner', string="Partenaire", related='picking_id.partner_id', store=True)
     picking_code_sol = fields.Selection(related='move_id.picking_code', readonly=True)
-    expediteur_in_move_line = fields.Selection([('MV', 'Malik V'), ('An', 'Atlas N')], related='move_id.expediteur_in_move', string="Expediteur")
+    expediteur_in_move_line = fields.Selection([('MV', 'Malik V'), ('An', 'Atlas N')], related='picking_id.expediteur_in_picking', store=True, string="Expediteur")
     
     
     
