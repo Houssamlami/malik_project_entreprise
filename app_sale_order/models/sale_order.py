@@ -65,7 +65,7 @@ class SaleOrder(models.Model):
         for sales in self:
             weight_stock_agn = 0
             for line in sales.order_line:
-                if "AGNEAU FRAIS" in line.product_id.categ_id.parent_id.name or "AGNEAU" in line.product_id.categ_id.parent_id.name:
+                if "AGNEAU FRAIS" in line.product_id.categ_id.complete_name or "AGNEAU" in line.product_id.categ_id.complete_name:
                     weight_stock_agn += line.product_uom_qty  or 0.0
             sales.total_weight_stock_agn = weight_stock_agn
             
@@ -457,7 +457,7 @@ class SaleOrder(models.Model):
         for sales in self:
             weight_stock_srg = 0
             for line in sales.order_line:
-                if "Surgeles" in line.product_id.categ_id.parent_id.name or "IQF" in line.product_id.categ_id.parent_id.name or "Surgelé Non Carné" in line.product_id.categ_id.parent_id.name or "Galette Surgele" in line.product_id.categ_id.parent_id.name:
+                if "Surgeles" in line.product_id.categ_id.complete_name or "IQF" in line.product_id.categ_id.complete_name or "Surgelé Non Carné" in line.product_id.categ_id.complete_name or "Galette Surgele" in line.product_id.categ_id.complete_name:
                     weight_stock_srg += line.secondary_uom_qty  or 0.0
             sales.total_weight_stock_srg = weight_stock_srg
             
@@ -465,7 +465,7 @@ class SaleOrder(models.Model):
         for sales in self:
             weight_stock_vv = 0
             for line in sales.order_line:
-                if "Volaille" in line.product_id.categ_id.parent_id.name or "V-Nouvelle atlas" in line.product_id.categ_id.parent_id.name or "UVESA" in line.product_id.categ_id.parent_id.name or "Volaille Frais" in line.product_id.categ_id.parent_id.name or "Volaille Promo" in line.product_id.categ_id.parent_id.name:
+                if "Volaille" in line.product_id.categ_id.complete_name or "V-Nouvelle atlas" in line.product_id.categ_id.complete_name or "UVESA" in line.product_id.categ_id.complete_name or "Volaille Frais" in line.product_id.categ_id.complete_name or "Volaille Promo" in line.product_id.categ_id.complete_name:
                     weight_stock_vv += line.product_uom_qty  or 0.0
             sales.total_weight_stock_vv = weight_stock_vv
     
