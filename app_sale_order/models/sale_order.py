@@ -23,6 +23,8 @@ class SaleOrder(models.Model):
     total_weight_stock_char = fields.Float(string='Total charcuterie)', compute='_compute_weight_total_stock_char')
     total_weight_stock_srg = fields.Float(string='Total surgele)', compute='_compute_weight_total_stock_srg')
     total_weight_stock_vv = fields.Float(string='Total volaille)', compute='_compute_weight_total_stock_vv')
+    total_weight_stock_agn = fields.Float(string='Total Agneaux', compute='_compute_weight_total_stock_agn')
+    total_weight_stock_epc = fields.Float(string='Total epecerie', compute='_compute_weight_total_stock_epc')
     produitalivrer = fields.Char('Produit a livrer', compute='get_product_ttm')
     commercial_id = fields.Many2one(comodel_name='hr.employee', string="Commercial", related='user_id', store=True)
     Expediteur =  fields.Selection([('MV', 'Malik V'), ('An', 'Atlas N')])    
@@ -58,6 +60,24 @@ class SaleOrder(models.Model):
     delivery_noconform_treated = fields.Boolean(string='Livraison non conforme traitée', default=False, track_visibility='onchange')
     confirm_accounting = fields.Boolean(string='Confirmation Comptabilité', default=False, track_visibility='onchange')
     
+    
+    def _compute_weight_total_stock_agn(self):
+        for sales in self:
+            weight_stock_agn = 0
+            for line in sales.order_line:
+                if line.product_id.categ_id.parent_id.name in ("AGNEAU FRAIS","AGNEAU"):
+                    weight_stock_agn += line.product_uom_qty  or 0.0
+            sales.total_weight_stock_agn = weight_stock_agn
+            
+    def _compute_weight_total_stock_epc(self):
+        for sales in self:
+            weight_stock_epc = 0
+            for line in sales.order_line:
+                if line.product_id.categ_id.parent_id.name in ("Épicerie","Aides cuisines","BOISSONS","BOUILLONS","CONSERVES","FRUITS SECS","FÉCULANTS","HUILE","Soupe","INFUSIONS","Légumes secs","Produits frais","Riz","SALADES","SALÉES","SUCRES","Sauces","THÉ","VINAIGRE","Épices"):
+                    weight_stock_epc += line.product_uom_qty  or 0.0
+            sales.total_weight_stock_epc = weight_stock_epc
+            
+            
     @api.model
     def fields_get(self, fields=None):
         fields_to_hide = ['user_id']
@@ -428,7 +448,7 @@ class SaleOrder(models.Model):
         for sales in self:
             weight_stock_char = 0
             for line in sales.order_line:
-                if line.product_id.Androit_stockage.id == self.env['androit.stockage'].search([('name', '=', 'Sec')]) or self.env['androit.stockage'].search([('name', '=', 'Frais')]):
+                if line.product_id.categ_id.parent_id.name in ("Chips","Saucissons","Chapelet","Mortadelle","Blocs","Panes","Tranches","Charcuterie Promo"):
                     weight_stock_char += line.secondary_uom_qty  or 0.0
             sales.total_weight_stock_char = weight_stock_char
             
@@ -436,7 +456,7 @@ class SaleOrder(models.Model):
         for sales in self:
             weight_stock_srg = 0
             for line in sales.order_line:
-                if line.product_id.Androit_stockage.id == self.env['androit.stockage'].search([('name', '=', 'Surgelé')]).id:
+                if line.product_id.categ_id.parent_id.name in ("Surgeles","IQF","Surgelé Non Carné","Galette Surgele"):
                     weight_stock_srg += line.secondary_uom_qty  or 0.0
             sales.total_weight_stock_srg = weight_stock_srg
             
@@ -444,7 +464,7 @@ class SaleOrder(models.Model):
         for sales in self:
             weight_stock_vv = 0
             for line in sales.order_line:
-                if line.product_id.Androit_stockage.id == self.env['androit.stockage'].search([('name', '=', 'Volailles')]).id:
+                if line.product_id.categ_id.parent_id.name in ("Volaille","UVESA","Volaille Frais","Volaille Promo"):
                     weight_stock_vv += line.product_uom_qty  or 0.0
             sales.total_weight_stock_vv = weight_stock_vv
     
@@ -456,24 +476,51 @@ class SaleOrder(models.Model):
             record._compute_weight_total_stock_char()
             record.get_product_ttm()
                     
-    @api.onchange('total_weight_stock_char','total_weight_stock_srg','total_weight_stock_vv')
     @api.depends('total_weight_stock_char','total_weight_stock_srg','total_weight_stock_vv')
     def get_product_ttm(self):
         for sales in self:
-            if  sales.total_weight_stock_vv == 0 and sales.total_weight_stock_char != 0 and sales.total_weight_stock_srg != 0:
+            if  sales.total_weight_stock_vv == 0 and sales.total_weight_stock_agn == 0 and sales.total_weight_stock_epc == 0 and sales.total_weight_stock_char != 0 and sales.total_weight_stock_srg != 0:
                 sales.produitalivrer="Charc + Surg"
-            if  sales.total_weight_stock_vv == sales.total_weight_stock_char == 0 and sales.total_weight_stock_srg != 0:
+            if  sales.total_weight_stock_vv == 0 and sales.total_weight_stock_agn == 0 and sales.total_weight_stock_epc == 0 and sales.total_weight_stock_char == 0 and sales.total_weight_stock_srg != 0:
                 sales.produitalivrer=" Surg"
-            if sales.total_weight_stock_srg == 0 and sales.total_weight_stock_char != 0 and sales.total_weight_stock_vv != 0:
+            if sales.total_weight_stock_srg == 0 and sales.total_weight_stock_agn == 0 and sales.total_weight_stock_epc == 0 and sales.total_weight_stock_char != 0 and sales.total_weight_stock_vv != 0:
                 sales.produitalivrer="Charc + VV"
-            if  sales.total_weight_stock_srg == sales.total_weight_stock_char == 0 and sales.total_weight_stock_vv != 0:
+            if  sales.total_weight_stock_srg == 0 and sales.total_weight_stock_agn == 0 and sales.total_weight_stock_epc == 0 and sales.total_weight_stock_char == 0 and sales.total_weight_stock_vv != 0:
                 sales.produitalivrer=" VV"
-            if sales.total_weight_stock_char == 0 and sales.total_weight_stock_srg != 0 and sales.total_weight_stock_vv != 0:
+            if sales.total_weight_stock_char == 0 and sales.total_weight_stock_agn == 0 and sales.total_weight_stock_epc == 0 and sales.total_weight_stock_srg != 0 and sales.total_weight_stock_vv != 0:
                 sales.produitalivrer="VV + Surg"
-            if  sales.total_weight_stock_srg == sales.total_weight_stock_vv == 0 and sales.total_weight_stock_char != 0:
+            if  sales.total_weight_stock_srg == 0 and sales.total_weight_stock_agn == 0 and sales.total_weight_stock_epc == 0 and sales.total_weight_stock_vv == 0 and sales.total_weight_stock_char != 0:
                 sales.produitalivrer=" Charc"
-            if sales.total_weight_stock_char != 0 and sales.total_weight_stock_srg != 0 and sales.total_weight_stock_vv != 0:
+            if sales.total_weight_stock_char != 0 and sales.total_weight_stock_agn == 0 and sales.total_weight_stock_epc == 0 and sales.total_weight_stock_srg != 0 and sales.total_weight_stock_vv != 0:
                 sales.produitalivrer="Charc + Surg + VV"
+            if  sales.total_weight_stock_srg == 0 and sales.total_weight_stock_agn != 0 and sales.total_weight_stock_epc == 0 and sales.total_weight_stock_vv == 0 and sales.total_weight_stock_char == 0:
+                sales.produitalivrer="AGN"
+            if  sales.total_weight_stock_srg != 0 and sales.total_weight_stock_agn != 0 and sales.total_weight_stock_epc == 0 and sales.total_weight_stock_vv == 0 and sales.total_weight_stock_char == 0:
+                sales.produitalivrer="Surg + AGN"
+            if  sales.total_weight_stock_srg != 0 and sales.total_weight_stock_agn != 0 and sales.total_weight_stock_epc == 0 and sales.total_weight_stock_vv != 0 and sales.total_weight_stock_char == 0:
+                sales.produitalivrer="Surg + AGN + VV"
+            if  sales.total_weight_stock_srg == 0 and sales.total_weight_stock_agn != 0 and sales.total_weight_stock_epc == 0 and sales.total_weight_stock_vv != 0 and sales.total_weight_stock_char == 0:
+                sales.produitalivrer="AGN + VV"
+            if  sales.total_weight_stock_srg == 0 and sales.total_weight_stock_agn != 0 and sales.total_weight_stock_epc == 0 and sales.total_weight_stock_vv == 0 and sales.total_weight_stock_char != 0:
+                sales.produitalivrer="AGN + Charc"
+            if  sales.total_weight_stock_srg == 0 and sales.total_weight_stock_agn == 0 and sales.total_weight_stock_epc != 0 and sales.total_weight_stock_vv == 0 and sales.total_weight_stock_char == 0:
+                sales.produitalivrer="EPC"
+            if  sales.total_weight_stock_srg == 0 and sales.total_weight_stock_agn != 0 and sales.total_weight_stock_epc != 0 and sales.total_weight_stock_vv == 0 and sales.total_weight_stock_char == 0:
+                sales.produitalivrer="EPC+ AGN"
+            if  sales.total_weight_stock_srg != 0 and sales.total_weight_stock_agn != 0 and sales.total_weight_stock_epc != 0 and sales.total_weight_stock_vv == 0 and sales.total_weight_stock_char == 0:
+                sales.produitalivrer="Surg + EPC+ AGN"
+            if  sales.total_weight_stock_srg != 0 and sales.total_weight_stock_agn != 0 and sales.total_weight_stock_epc != 0 and sales.total_weight_stock_vv != 0 and sales.total_weight_stock_char == 0:
+                sales.produitalivrer="Surg + EPC+ AGN + VV"
+            if  sales.total_weight_stock_srg != 0 and sales.total_weight_stock_agn != 0 and sales.total_weight_stock_epc != 0 and sales.total_weight_stock_vv == 0 and sales.total_weight_stock_char != 0:
+                sales.produitalivrer="Surg + EPC+ AGN + Charc"
+            if  sales.total_weight_stock_srg != 0 and sales.total_weight_stock_agn == 0 and sales.total_weight_stock_epc != 0 and sales.total_weight_stock_vv == 0 and sales.total_weight_stock_char != 0:
+                sales.produitalivrer="Surg + EPC + Charc"
+            if  sales.total_weight_stock_srg == 0 and sales.total_weight_stock_agn == 0 and sales.total_weight_stock_epc != 0 and sales.total_weight_stock_vv == 0 and sales.total_weight_stock_char != 0:
+                sales.produitalivrer="EPC + Charc"
+            if  sales.total_weight_stock_srg != 0 and sales.total_weight_stock_agn == 0 and sales.total_weight_stock_epc != 0 and sales.total_weight_stock_vv == 0 and sales.total_weight_stock_char == 0:
+                sales.produitalivrer="EPC + Surg "
+            if  sales.total_weight_stock_srg == 0 and sales.total_weight_stock_agn == 0 and sales.total_weight_stock_epc != 0 and sales.total_weight_stock_vv != 0 and sales.total_weight_stock_char == 0:
+                sales.produitalivrer="EPC + VV "
                 
     @api.model
     def create(self, vals):
