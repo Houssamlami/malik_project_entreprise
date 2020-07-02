@@ -65,7 +65,7 @@ class SaleOrder(models.Model):
         for sales in self:
             weight_stock_agn = 0
             for line in sales.order_line:
-                if line.product_id.categ_id.parent_id.name in ("AGNEAU FRAIS","AGNEAU"):
+                if "AGNEAU FRAIS" in line.product_id.categ_id.parent_id.name or "AGNEAU" in line.product_id.categ_id.parent_id.name:
                     weight_stock_agn += line.product_uom_qty  or 0.0
             sales.total_weight_stock_agn = weight_stock_agn
             
@@ -73,7 +73,7 @@ class SaleOrder(models.Model):
         for sales in self:
             weight_stock_epc = 0
             for line in sales.order_line:
-                if line.product_id.categ_id.parent_id.name in ("Épicerie","Aides cuisines","BOISSONS","BOUILLONS","CONSERVES","FRUITS SECS","FÉCULANTS","HUILE","Soupe","INFUSIONS","Légumes secs","Produits frais","Riz","SALADES","SALÉES","SUCRES","Sauces","THÉ","VINAIGRE","Épices"):
+                if "Épicerie" in line.product_id.categ_id.complete_name or "Aides cuisines" in line.product_id.categ_id.complete_name or "BOISSONS" in line.product_id.categ_id.complete_name or "BOUILLONS" in line.product_id.categ_id.complete_name or "CONSERVES" in line.product_id.categ_id.complete_name or "FRUITS SECS" in line.product_id.categ_id.complete_name or "FÉCULANTS" in line.product_id.categ_id.complete_name or "HUILE" in line.product_id.categ_id.complete_name or "Soupe" in line.product_id.categ_id.complete_name or "INFUSIONS" in line.product_id.categ_id.complete_name or "Légumes secs" in line.product_id.categ_id.complete_name or "Produits frais" in line.product_id.categ_id.complete_name or "Riz" in line.product_id.categ_id.complete_name or "SALADES" in line.product_id.categ_id.complete_name or  "SALÉES" in line.product_id.categ_id.complete_name or "SUCRES" in line.product_id.categ_id.complete_name or "Sauces" in line.product_id.categ_id.complete_name or "THÉ" in line.product_id.categ_id.complete_name or "VINAIGRE" in line.product_id.categ_id.complete_name or  "Épices" in line.product_id.categ_id.complete_name:
                     weight_stock_epc += line.product_uom_qty  or 0.0
             sales.total_weight_stock_epc = weight_stock_epc
             
@@ -448,7 +448,8 @@ class SaleOrder(models.Model):
         for sales in self:
             weight_stock_char = 0
             for line in sales.order_line:
-                if line.product_id.categ_id.parent_id.name in ("Chips","Saucissons","Chapelet","Mortadelle","Blocs","Panes","Tranches","Charcuterie Promo"):
+#                if line.product_id.categ_id.complete_name in ("Chips","Saucissons","Chapelet","Mortadelle","Blocs","Panes","Tranches","Charcuterie Promo"):
+                if "Chips" in line.product_id.categ_id.complete_name or "Saucissons" in line.product_id.categ_id.complete_name or "Chapelet" in line.product_id.categ_id.complete_name or "Mortadelle" in line.product_id.categ_id.complete_name or "Blocs" in line.product_id.categ_id.complete_name or "Panes" in line.product_id.categ_id.complete_name or "Tranches" in line.product_id.categ_id.complete_name or "Charcuterie Promo" in line.product_id.categ_id.complete_name:
                     weight_stock_char += line.secondary_uom_qty  or 0.0
             sales.total_weight_stock_char = weight_stock_char
             
@@ -456,7 +457,7 @@ class SaleOrder(models.Model):
         for sales in self:
             weight_stock_srg = 0
             for line in sales.order_line:
-                if line.product_id.categ_id.parent_id.name in ("Surgeles","IQF","Surgelé Non Carné","Galette Surgele"):
+                if "Surgeles" in line.product_id.categ_id.parent_id.name or "IQF" in line.product_id.categ_id.parent_id.name or "Surgelé Non Carné" in line.product_id.categ_id.parent_id.name or "Galette Surgele" in line.product_id.categ_id.parent_id.name:
                     weight_stock_srg += line.secondary_uom_qty  or 0.0
             sales.total_weight_stock_srg = weight_stock_srg
             
@@ -464,7 +465,7 @@ class SaleOrder(models.Model):
         for sales in self:
             weight_stock_vv = 0
             for line in sales.order_line:
-                if line.product_id.categ_id.parent_id.name in ("Volaille","UVESA","Volaille Frais","Volaille Promo"):
+                if "Volaille" in line.product_id.categ_id.parent_id.name or "V-Nouvelle atlas" in line.product_id.categ_id.parent_id.name or "UVESA" in line.product_id.categ_id.parent_id.name or "Volaille Frais" in line.product_id.categ_id.parent_id.name or "Volaille Promo" in line.product_id.categ_id.parent_id.name:
                     weight_stock_vv += line.product_uom_qty  or 0.0
             sales.total_weight_stock_vv = weight_stock_vv
     
