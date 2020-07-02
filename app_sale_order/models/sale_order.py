@@ -73,7 +73,7 @@ class SaleOrder(models.Model):
         for sales in self:
             weight_stock_epc = 0
             for line in sales.order_line:
-                if "Épicerie" in line.product_id.categ_id.complete_name or "Aides cuisines" in line.product_id.categ_id.complete_name or "BOISSONS" in line.product_id.categ_id.complete_name or "BOUILLONS" in line.product_id.categ_id.complete_name or "CONSERVES" in line.product_id.categ_id.complete_name or "FRUITS SECS" in line.product_id.categ_id.complete_name or "FÉCULANTS" in line.product_id.categ_id.complete_name or "HUILE" in line.product_id.categ_id.complete_name or "Soupe" in line.product_id.categ_id.complete_name or "INFUSIONS" in line.product_id.categ_id.complete_name or "Légumes secs" in line.product_id.categ_id.complete_name or "Produits frais" in line.product_id.categ_id.complete_name or "Riz" in line.product_id.categ_id.complete_name or "SALADES" in line.product_id.categ_id.complete_name or  "SALÉES" in line.product_id.categ_id.complete_name or "SUCRES" in line.product_id.categ_id.complete_name or "Sauces" in line.product_id.categ_id.complete_name or "THÉ" in line.product_id.categ_id.complete_name or "VINAIGRE" in line.product_id.categ_id.complete_name or  "Épices" in line.product_id.categ_id.complete_name:
+                if "Aides cuisines" in line.product_id.categ_id.complete_name or "BOISSONS" in line.product_id.categ_id.complete_name or "BOUILLONS" in line.product_id.categ_id.complete_name or "CONSERVES" in line.product_id.categ_id.complete_name or "FRUITS SECS" in line.product_id.categ_id.complete_name or "FÉCULANTS" in line.product_id.categ_id.complete_name or "HUILE" in line.product_id.categ_id.complete_name or "Soupe" in line.product_id.categ_id.complete_name or "INFUSIONS" in line.product_id.categ_id.complete_name or "Légumes secs" in line.product_id.categ_id.complete_name or "Produits frais" in line.product_id.categ_id.complete_name or "Riz" in line.product_id.categ_id.complete_name or "SALADES" in line.product_id.categ_id.complete_name or  "SALÉES" in line.product_id.categ_id.complete_name or "SUCRES" in line.product_id.categ_id.complete_name or "Sauces" in line.product_id.categ_id.complete_name or "THÉ" in line.product_id.categ_id.complete_name or "VINAIGRE" in line.product_id.categ_id.complete_name or  "Épices" in line.product_id.categ_id.complete_name:
                     weight_stock_epc += line.product_uom_qty  or 0.0
             sales.total_weight_stock_epc = weight_stock_epc
             
@@ -457,7 +457,7 @@ class SaleOrder(models.Model):
         for sales in self:
             weight_stock_srg = 0
             for line in sales.order_line:
-                if "Surgeles" in line.product_id.categ_id.complete_name or "IQF" in line.product_id.categ_id.complete_name or "Surgelé Non Carné" in line.product_id.categ_id.complete_name or "Galette Surgele" in line.product_id.categ_id.complete_name:
+                if "Surgeles" in line.product_id.categ_id.complete_name or "Galette Surgele" in line.product_id.categ_id.complete_name or "IQF" in line.product_id.categ_id.complete_name or "Surgelé Non Carné" in line.product_id.categ_id.complete_name or "Galette Surgele" in line.product_id.categ_id.complete_name:
                     weight_stock_srg += line.secondary_uom_qty  or 0.0
             sales.total_weight_stock_srg = weight_stock_srg
             
