@@ -57,7 +57,7 @@ class AccountInvoice(models.Model):
                         dict += lines.quantity
                 object_create = object.create({
                 'product_id': productorigine.id,
-                'quantity': dict,
+                'quantity': 1,
                 'product_uom': product.uom_id.id,
                 'account_id': self.env['account.account'].search([('code', '=', '706003')]).id,
                 'invoice_id':line.id,
@@ -72,7 +72,7 @@ class AccountInvoice(models.Model):
                         dict += lines.quantity
                 object_create = product_already_exist.write({
                 'product_id': productorigine.id,
-                'quantity': dict,
+                'quantity': 1,
                 'product_uom': product.uom_id.id,
                 'invoice_id':line.id,
                 'account_id': self.env['account.account'].search([('code', '=', '706003')]).id,
