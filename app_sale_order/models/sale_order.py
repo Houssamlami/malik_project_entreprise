@@ -131,14 +131,14 @@ class SaleOrder(models.Model):
                         dict += lines.secondary_uom_qty
                 object_create = object.create({
                 'product_id': productorigine.id,
-                'product_uom_qty': dict,
-                'secondary_uom_qty': dict,
-                'qty_delivered':dict,
+                'product_uom_qty': 1,
+                'secondary_uom_qty': 1,
+                'qty_delivered':1,
                 'product_uom': product.uom_id.id,
                 'order_id':line.id,
                 'name':product.name,
                 'price_unit':product.list_price,
-                'volume_tot':dict*productorigine.list_price
+                'volume_tot':productorigine.list_price
                 })
             else:
                 dict = 0
@@ -148,14 +148,14 @@ class SaleOrder(models.Model):
                         dict += lines.secondary_uom_qty
                 object_create = product_already_exist.write({
                 'product_id': productorigine.id,
-                'product_uom_qty': dict,
-                'secondary_uom_qty': dict,
-                'qty_delivered':dict,
+                'product_uom_qty': 1,
+                'secondary_uom_qty': 1,
+                'qty_delivered':1,
                 'product_uom': product.uom_id.id,
                 'order_id':line.id,
                 'name': product.name,
                 'price_unit':product.list_price,
-                'volume_tot':dict*productorigine.list_price
+                'volume_tot':productorigine.list_price
                 })
     
     
