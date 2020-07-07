@@ -29,5 +29,6 @@ class AccountInvoice(models.Model):
         ('Erreur sur la remise', 'Erreur sur la remise'),
         ('Erreur sur le prix', 'Erreur sur le prix'),
         ('Geste commercial', 'Geste commercial'),
+        ('Mauvaise qualité de produit UVESA', 'Mauvaise qualité de produit UVESA'),
         ('Mauvaise qualité produit Sodem', 'Mauvaise qualité produit Sodem'),
         ],)
