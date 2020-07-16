@@ -115,7 +115,7 @@ class AccountInvoiceReport(models.Model):
     vendeur = fields.Many2one(comodel_name='hr.employee', string="Vendeur", readonly=True)
     team_id = fields.Many2one('crm.team', string='Sales Channel')
     ref_invoice_name = fields.Char('Référence', readonly=True)
-    type_avoir = fields.Selection([
+    type_avoir = type_avoir = fields.Selection([
         ('Qualité de Produit BONA', 'Qualité de Produit BONA'),
         ('Qualité de Produit Crusvi', 'Qualité de Produit Crusvi'),
         ('Qualité de Produit Imex', 'Qualité de Produit Imex'),
@@ -132,6 +132,8 @@ class AccountInvoiceReport(models.Model):
         ('Erreur sur la remise', 'Erreur sur la remise'),
         ('Erreur sur le prix', 'Erreur sur le prix'),
         ('Geste commercial', 'Geste commercial'),
+        ('Mauvaise qualité de produit UVESA', 'Mauvaise qualité de produit UVESA'),
+        ('Mauvaise qualité produit Sodem', 'Mauvaise qualité produit Sodem'),
         ], readonly=True)
     grosiste = fields.Boolean(string='Grossiste', readonly=True)
     product_at_zero = fields.Boolean(string=u"Article à zéro AN", readonly=True)
