@@ -44,11 +44,11 @@
         <xpath expr="//h1" position="after">
                     <field name="tag_ids" widget="many2many_tags" placeholder="Tags..."/>
                 </xpath>
-        <!--  <xpath
+        <xpath
 				expr="//field[@name='standard_price']"
 				position="attributes">
 				<attribute name="force_save">1</attribute>
-			</xpath>-->
+			</xpath>
 			<xpath
 				expr="//group[@name='group_standard_price']/label"
 				position="attributes">
