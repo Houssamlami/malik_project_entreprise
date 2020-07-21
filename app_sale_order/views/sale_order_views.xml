@@ -251,6 +251,7 @@
 				<field name="total_weight_stock_vv" invisible="1" />
 				<field name="total_weight_stock_agn" invisible="1"/>
 				<field name="total_weight_stock_epc" invisible="1"/>
+				<field name="total_weight" string="Poids en Kg"/>
 			</tree>
 			</field>
 		</record>
