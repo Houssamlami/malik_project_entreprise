@@ -54,7 +54,7 @@ class CustomerReception(models.TransientModel):
                     r.picking_id.action = r.action
                     r.picking_id.signature = r.signature
                     r.picking_id.livreur = livreur.id
-                    if r.picking_id.reception_type == 'conforme':
+                    if r.picking_id.confirmite == 'conforme':
                         r.picking_id.state = 'emarge'
                     else:
                         r.picking_id.state = 'retour'
