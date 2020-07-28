@@ -21,3 +21,8 @@ class StockScrap(models.Model):
     scrap_local = state = fields.Selection([('internal', 'Interne'),('external', 'Externe')], string='Lieu de rebut', default="internal")
     scrap_reason_id = fields.Many2one('reason.scrap', string="Raison de rebut")
     comment = fields.Text(string="Commentaire")
+    
+class BarcodeRule(models.Model):
+    _inherit = "barcode.rule"
+    
+    pattern = fields.Char(string='Barcode Pattern', size=64, help="The barcode matching pattern", required=True, default='.*')

@@ -67,8 +67,8 @@ class ResPartner(models.Model):
     limite_nbr_fac=fields.Integer('limite Nombre de facture', track_visibility='onchange')
     nbr_fac_ouverte=fields.Integer('Nombre de facture ouvertes',compute='_on_calcule_factures')
     blocagex_limite_credit=fields.Boolean('Blocage par limite de credit', track_visibility='onchange')
-    bloque_vo=fields.Boolean('bloque',compute='_on_change_credit',store=True)
-    bloque_ch=fields.Boolean('bloque',compute='_on_change_credit',store=True)
+    bloque_vo = fields.Boolean(string='Blocage volaille', compute='_on_change_credit',store=True)
+    bloque_ch = fields.Boolean(string='Blocage charcuterie', compute='_on_change_credit',store=True)
     bloque=fields.Boolean('bloque',compute='_on_change_credit',store=True)
     blocagex_limite_credit_charcuterie=fields.Boolean('Blocage par limite de credit charcuterie', track_visibility='onchange')
     blocagex_echeance_facture_charcuterie=fields.Boolean('Blocage par echeance charcuterie', track_visibility='onchange')
@@ -171,15 +171,19 @@ class ResPartner(models.Model):
         for record in self:
             if record.blocagex_limite_credit:
                 if record.credit_volaille > record.credit_limit:
+                    record.bloque_vo=True
                     record.bloque=True
             if record.blocagex_limite_nbr_fac:
                 if record.nbr_fac_ouverte >= record.limite_nbr_fac:
+                    record.bloque_vo=True
                     record.bloque=True
             if record.blocagex_limite_credit_charcuterie:
                 if record.credit_charcuterie > record.limite_credit_charcuterie:
+                    record.bloque_ch=True
                     record.bloque=True
             if record.blocagex_echeance_facture_charcuterie:
                 if record.nbr_jours_decheance_charcuterie > record.echeance_charcuterie_par_jour:
+                    record.bloque_ch=True
                     record.bloque=True
     
     

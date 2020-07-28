@@ -154,6 +154,7 @@
 					  <field attrs="{'invisible': [('Client_Volaille','=', False)]}"  name="blocagex_limite_nbr_fac"/>
 					   <field attrs="{'invisible': [('Client_Volaille','=', False)]}"  name="limite_nbr_fac"/>
 					   <field attrs="{'invisible': [('Client_Volaille','=', False)]}"  name="nbr_fac_ouverte"/>
+					   <field attrs="{'invisible': [('Client_Volaille','=', False)]}"  name="bloque_vo"/>
 					  
 					<p><b><u>Etat Client :</u></b></p>
 					 <field name="bloque"/>
@@ -171,6 +172,7 @@
 					  <field attrs="{'invisible': [('Client_Charcuterie','=', False)]}" name="date_facture_charcuterie"  invisible="1"/>
 					  <field attrs="{'invisible': [('Client_Charcuterie','=', False)]}" name="nbr_jours_decheance_charcuterie"/>
 					  <field attrs="{'invisible': [('Client_Charcuterie','=', False)]}" name="date_lyuoMa" invisible="1"/> 
+					  <field attrs="{'invisible': [('Client_Charcuterie','=', False)]}" name="bloque_ch"/>
              	</xpath>
 			</field>
 		</record>
