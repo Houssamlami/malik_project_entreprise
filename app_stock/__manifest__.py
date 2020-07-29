@@ -14,6 +14,7 @@
         'stock',
         'sale_stock',
         'app_sale_order',
+        'barcodes',
     ],
     'data': [
         'views/stock_picking_views.xml',

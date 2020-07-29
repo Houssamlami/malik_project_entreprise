@@ -239,6 +239,7 @@
 				<field name="state" invisible="1" />
 				<field name="Expediteur" />
 				<field name="partner_id" />
+				<field name="partner_shipping_id" string="Client livraison"/>
 				<field name="adresse_liv" />
 				<field name="zip_df" />
 				<field name="city" />
