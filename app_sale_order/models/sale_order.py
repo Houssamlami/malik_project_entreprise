@@ -428,15 +428,15 @@ class SaleOrder(models.Model):
             
             
     @api.one    
-    @api.depends('partner_id')
+    @api.depends('partner_shipping_id')
     def get_default_zip(self):
         for sales in self:
             zip_df = ""
             adresse_liv = ""
             city = ""
-            if sales.partner_id :
+            if sales.partner_shipping_id :
                 productblzip = self.env['res.partner'].search([
-                ('id', '=', sales.partner_id.id)])
+                ('id', '=', sales.partner_shipping_id.id)])
                 zip_df = productblzip.zip
                 adresse_liv = productblzip.street
                 city = productblzip.city
