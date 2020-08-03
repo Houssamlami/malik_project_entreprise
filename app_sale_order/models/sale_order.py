@@ -212,7 +212,7 @@ class SaleOrder(models.Model):
 
                 
 
-    @api.onchange('partner_id','cmd_charcuterie','cmd_volaille')
+    '''@api.onchange('partner_id','cmd_charcuterie','cmd_volaille')
     def on_change_statecr(self):
         for record in self:
             if record.cmd_charcuterie==True:
@@ -263,7 +263,7 @@ class SaleOrder(models.Model):
                             raise exceptions.ValidationError(_('Votre Client est bloqué , merci de  procéder au réglement de vos factures volailles!'))
                             return {
                                 'warning': {'title': _('Error'), 'message': _('Error message'),},
-                            } 
+                            } '''
     
 
     @api.onchange('product_id')
