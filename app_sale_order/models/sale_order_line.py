@@ -176,3 +176,7 @@ class SaleOrderLine(models.Model):
                     line.qty_invoiced = qty_invoiced
                 else:
                     line.qty_invoiced = 0
+                    
+                    
+    def _update_line_quantity(self, values):
+        return True
