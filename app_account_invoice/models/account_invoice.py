@@ -27,7 +27,7 @@ class AccountInvoice(models.Model):
     
     def get_total_colis_invoice(self):
         for record in self:
-            colis = sum(self.env['stock.picking'].search([('state', '=', 'done'),('picking_type_id.code', '=', 'outgoing'),('origin', 'ilike', self.origin)]).mapped('total_colis_delivered')) - sum(self.picking_ids.filtered(lambda r: r.picking_type_id.code == 'incoming' and r.state == 'done').mapped('total_colis_delivered'))
+            colis = sum(self.env['stock.picking'].search([('state', 'in', ('done','emarge')),('picking_type_id.code', '=', 'outgoing'),('origin', 'ilike', self.origin)]).mapped('total_colis_delivered')) - sum(self.picking_ids.filtered(lambda r: r.picking_type_id.code == 'incoming' and r.state == 'done').mapped('total_colis_delivered'))
             record.qty_livrer_colis = colis
     
     
