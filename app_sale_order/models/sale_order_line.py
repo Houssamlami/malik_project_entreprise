@@ -176,3 +176,23 @@ class SaleOrderLine(models.Model):
                     line.qty_invoiced = qty_invoiced
                 else:
                     line.qty_invoiced = 0
+                    
+    def _update_line_quantity(self, values):
+        orders = self.mapped('order_id')
+        for order in orders:
+            order_lines = self.filtered(lambda x: x.order_id == order)
+            msg = "<b>The ordered quantity has been updated.</b><ul>"
+            for line in order_lines:
+                msg += "<li> %s:" % (line.product_id.display_name,)
+                msg += "<br/>" + _("Ordered Quantity") + ": %s -> %s <br/>" % (
+                line.product_uom_qty, float(values['product_uom_qty']),)
+                if line.product_id.type in ('consu', 'product'):
+                    msg += _("Delivered Quantity") + ": %s <br/>" % (line.qty_delivered,)
+                msg += _("Invoiced Quantity") + ": %s <br/>" % (line.qty_invoiced,)
+            msg += "</ul>"
+            order.message_post(body=msg)
+        for line in self:
+            pickings = line.order_id.picking_ids.filtered(lambda p: p.state not in ('done', 'cancel'))
+            for picking in pickings:
+                picking.message_post("The quantity of %s has been updated from %d to %d in %s" %
+                                      (line.product_id.display_name, line.product_uom_qty, values['product_uom_qty'], line.order_id.name))

@@ -263,7 +263,7 @@ class SaleOrder(models.Model):
                             raise exceptions.ValidationError(_('Votre Client est bloqué , merci de  procéder au réglement de vos factures volailles!'))
                             return {
                                 'warning': {'title': _('Error'), 'message': _('Error message'),},
-                            } 
+                            }
     
 
     @api.onchange('product_id')
