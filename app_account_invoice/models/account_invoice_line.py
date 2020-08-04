@@ -19,7 +19,7 @@ class AccountInvoiceLine(models.Model):
     def get_colis_invoice_line(self):
         for line in self:
             print('iiiiiiiiiiiii')
-            if line.invoice_id.ref_livraison.state == 'done' and line.invoice_id.type not in ('in_invoice','in_refund'):
+            if line.invoice_id.ref_livraison.state in ('done','emarge') and line.invoice_id.type not in ('in_invoice','in_refund'):
                 move = line.invoice_id.picking_ids.filtered(lambda s: s.picking_type_code == 'outgoing' and s.state in ('done','emarge'))
                 print(move)
                 move_return = self.env['stock.picking'].search([('state', '=', 'done'),('group_id','=',line.invoice_id.ref_livraison.group_id.id),('picking_type_id.code', '=', 'incoming')])
