@@ -20,7 +20,7 @@ class AccountInvoiceLine(models.Model):
         for line in self:
             print('iiiiiiiiiiiii')
             if line.invoice_id.ref_livraison.state == 'done' and line.invoice_id.type not in ('in_invoice','in_refund'):
-                move = line.invoice_id.picking_ids.filtered(lambda s: s.picking_type_code == 'outgoing' and s.state =='done')
+                move = line.invoice_id.picking_ids.filtered(lambda s: s.picking_type_code == 'outgoing' and s.state in ('done','emarge'))
                 print(move)
                 move_return = self.env['stock.picking'].search([('state', '=', 'done'),('group_id','=',line.invoice_id.ref_livraison.group_id.id),('picking_type_id.code', '=', 'incoming')])
                 cmpt = 0
