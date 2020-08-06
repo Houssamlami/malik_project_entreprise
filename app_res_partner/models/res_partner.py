@@ -81,6 +81,9 @@ class ResPartner(models.Model):
     credit_charcuterie=fields.Float('Credit charcuterie',compute='_on_calcule_factures')
     credit_volaille=fields.Float('Credit volaille',compute='_on_calcule_factures')
     date_lyuoMa = fields.Date(string='today', default=date.today())
+    debloque_exce_ch = fields.Boolean(string=u"Déblocage exceptionnel charcuterie", compute='onchange_debloque_exce')
+    debloque_exce_vo = fields.Boolean(string=u"Déblocage exceptionnel volaille", compute='onchange_debloque_exce')
+    date_reblockage = fields.Date(string='Date de reblocage')
 #     champs inactive est un champs rempli par l utilisateur c est le nobre des jours qui controle l etat de client si actif ou pas par exemple si le champs inactive st 30 jours cv si le champs diff_time est moins que 30 jours le client est en etat active sinon le client est en etat non actif
     Inactive = fields.Integer('Nbr de jours d inactivité')
 # champs diff_time est le nombre de jours entre la date de system (to_day) et la date de la dernier commande (date_last_commande)
