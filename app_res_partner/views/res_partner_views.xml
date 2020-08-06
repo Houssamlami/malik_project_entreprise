@@ -158,6 +158,9 @@
 					  
 					<p><b><u>Etat Client :</u></b></p>
 					 <field name="bloque"/>
+					 <p><b><u>déblocage exceptionnel:</u></b></p>
+					  <field attrs="{'invisible': [('Client_Volaille','=', False)]}"  name="debloque_exce_ch"/>
+                     <field attrs="{'invisible': [('Client_Charcuterie','=', False)]}"  name="debloque_exce_vo"/>
              	</xpath>
 				<xpath expr="//field[@name='property_supplier_payment_term_id']" position="after">
                    <p attrs="{'invisible': [('Client_Charcuterie','=', False)]}"><b><u>Blocage par Limite des credits charcuterie:</u></b></p>

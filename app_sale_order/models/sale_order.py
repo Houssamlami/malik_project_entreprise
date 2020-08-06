@@ -230,26 +230,54 @@ class SaleOrder(models.Model):
             if record.cmd_charcuterie==True and record.cmd_volaille==False:
                 if record.partner_id.Client_Charcuterie: 
                     if record.partner_id.credit_charcuterie > record.partner_id.limite_credit_charcuterie: 
-                        if record.partner_id.bloque:
+                        if record.partner_id.bloque_ch  and record.partner_id.debloque_exce_ch==False:
                             record.test_bloque="bloquer"
                             raise exceptions.ValidationError(_('Votre Client est bloqué , merci de  procéder au réglement de vos factures charcuteries!'))
                             return {
                                 'warning': {'title': _('Error'), 'message': _('Error message'),},
                             }
+                        
+            if record.cmd_charcuterie==True and record.cmd_volaille==False:
+                if record.partner_id.Client_Charcuterie: 
+                    if record.partner_id.credit_charcuterie > record.partner_id.limite_credit_charcuterie: 
+                        if record.partner_id.bloque_ch and record.partner_id.debloque_exce_ch==True:
+                            record.test_bloque=""
 
             if record.cmd_charcuterie==True and record.cmd_volaille==False:
                 if record.partner_id.Client_Charcuterie: 
                     if record.partner_id.nbr_jours_decheance_charcuterie > record.partner_id.echeance_charcuterie_par_jour: 
-                        if record.partner_id.bloque:
+                        if record.partner_id.bloque_ch and record.partner_id.debloque_exce_ch==False:
                             record.test_bloque="bloquer"
                             raise exceptions.ValidationError(_('Votre Client est bloqué , merci de  procéder au réglement de vos factures charcuteries!'))
+                            return {
+                                'warning': {'title': _('Error'), 'message': _('Error message'),},
+                            }
+            if record.cmd_charcuterie==True and record.cmd_volaille==False:
+                if record.partner_id.Client_Charcuterie: 
+                    if record.partner_id.nbr_jours_decheance_charcuterie > record.partner_id.echeance_charcuterie_par_jour: 
+                        if record.partner_id.bloque_ch and record.partner_id.debloque_exce_ch==True:
+                            record.test_bloque=""                      
+                        
+                        
+            if record.cmd_charcuterie==False and record.cmd_volaille==True: 
+                if record.partner_id.Client_Volaille: 
+                    if record.partner_id.credit_volaille > record.partner_id.credit_limit: 
+                        if record.partner_id.bloque_vo and record.partner_id.debloque_exce_vo==False:
+                            record.test_bloque="bloquer"
+                            raise exceptions.ValidationError(_('Votre Client est bloqué , merci de  procéder au réglement de vos factures volailles!'))
                             return {
                                 'warning': {'title': _('Error'), 'message': _('Error message'),},
                             }
             if record.cmd_charcuterie==False and record.cmd_volaille==True: 
                 if record.partner_id.Client_Volaille: 
                     if record.partner_id.credit_volaille > record.partner_id.credit_limit: 
-                        if record.partner_id.bloque:
+                        if record.partner_id.bloque_vo and record.partner_id.debloque_exce_vo==True:
+                            record.test_bloque=""
+                            
+            if record.cmd_charcuterie==False and record.cmd_volaille==True:
+                if record.partner_id.Client_Volaille: 
+                    if record.partner_id.nbr_fac_ouverte >= record.partner_id.limite_nbr_fac: 
+                        if record.partner_id.bloque_vo and record.partner_id.debloque_exce_vo==False:
                             record.test_bloque="bloquer"
                             raise exceptions.ValidationError(_('Votre Client est bloqué , merci de  procéder au réglement de vos factures volailles!'))
                             return {
@@ -258,12 +286,8 @@ class SaleOrder(models.Model):
             if record.cmd_charcuterie==False and record.cmd_volaille==True:
                 if record.partner_id.Client_Volaille: 
                     if record.partner_id.nbr_fac_ouverte >= record.partner_id.limite_nbr_fac: 
-                        if record.partner_id.bloque:
-                            record.test_bloque="bloquer"
-                            raise exceptions.ValidationError(_('Votre Client est bloqué , merci de  procéder au réglement de vos factures volailles!'))
-                            return {
-                                'warning': {'title': _('Error'), 'message': _('Error message'),},
-                            }
+                        if record.partner_id.bloque_vo and record.partner_id.debloque_exce_vo==True:
+                            record.test_bloque=""
     
 
     @api.onchange('product_id')
