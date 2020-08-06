@@ -97,6 +97,16 @@ class ResPartner(models.Model):
     customer_cmd_ceiling_cha = fields.Float('Plafond commande charcuterie', track_visibility='onchange')
     customer_cmd_ceiling_vol = fields.Float('Plafond commande volaille', track_visibility='onchange')
     
+    @api.onchange('debloque_exce_ch','debloque_exce_vo')
+    def onchange_debloque_exce(self):
+        for record in self:
+            if record.debloque_exce_ch ==True:
+                record.bloque_ch=False
+                record.bloque=False
+            if record.debloque_exce_vo ==True:
+                record.bloque_vo=False
+                record.bloque=False 
+    
     _sql_constraints = [
         ('ref_unique_part', 'unique(ref)', 'La reference client doit etre unique!'),
     ]
