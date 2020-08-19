@@ -46,10 +46,6 @@
                             <strong>Due Date:</strong>
                             <p t-field="o.date_due"/>
                         </div>
-                        <div class="col-xs-2" t-if="o.origin">
-                            <strong>Source:</strong>
-                            <p t-field="o.origin"/>
-                        </div>
                         <div class="col-xs-2" t-if="o.partner_id.ref">
                             <strong>Code Client:</strong>
                             <p t-field="o.partner_id.ref"/>
