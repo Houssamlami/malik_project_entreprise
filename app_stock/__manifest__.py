@@ -25,6 +25,7 @@
         'views/preparation_type_produit_pour_affichage.xml',
         'views/stock_inventory_template.xml',
         'wizard/wizard_colis.xml',
+        'views/report_delivery_batch.xml',
     ],
     
     'application': False,

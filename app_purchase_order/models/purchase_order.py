@@ -86,6 +86,13 @@ class PurchaseOrder(models.Model):
     def _on_change_purchaseorderid(self):
         for record in self:
             record._get_totals_qty()
+            
+    @api.onchange('date_planned')
+    def _on_change_planned_date(self):
+        for record in self:
+            if not record.logistic:
+                for line in record.order_line:
+                    line.date_planned = record.date_planned
     
     state = fields.Selection([
         ('draft', u'Commande Brouillon'),
