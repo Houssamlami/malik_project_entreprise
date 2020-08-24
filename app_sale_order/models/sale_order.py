@@ -384,7 +384,7 @@ class SaleOrder(models.Model):
                             self.test_bloque=""
         if self.cmd_charcuterie==False  and self.debloque_exce_vopp==False and self.cmd_volaille==True: 
             if self.partner_id.Client_Volaille: 
-                if self.partner_id.credit_volaille > record.partner_id.credit_limit: 
+                if self.partner_id.credit_volaille > self.partner_id.credit_limit: 
                     if self.partner_id.bloque_vo==True:
                         self.test_bloque="bloquer"
                         raise exceptions.ValidationError(_('Votre Client est bloqué , son credit et depassé, merci de  procéder au réglement de vos factures volailles!'))
