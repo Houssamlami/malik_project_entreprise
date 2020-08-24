@@ -62,7 +62,7 @@
                             </tr>
                         </tbody>
                     </table>
-                     <t t-foreach="docs" t-as="o">
+                     
                     <table class="table table-condensed mt48" t-if="o.state!='done'">
                         <thead>
                             <tr>
@@ -70,6 +70,7 @@
                                 <th><strong>Quantity</strong></th>
                             </tr>
                         </thead>
+                        <t t-foreach="docs" t-as="o">
                         <tbody>
                             <t t-set="lines" t-value="o.move_lines.filtered(lambda x: x.product_uom_qty)"/>
                             <tr t-foreach="lines" t-as="move">
@@ -88,6 +89,7 @@
                                 </td>
                             </tr>
                         </tbody>
+                        </t>
                     </table>
                     <table class="table table-condensed mt48" t-if="o.move_line_ids and o.state=='done'">
                         <t t-set="has_serial_number" t-value="o.move_line_ids.mapped('lot_id')" groups="stock.group_production_lot"/>
@@ -100,6 +102,7 @@
                                 <th class="text-center"><strong>Quantity</strong></th>
                             </tr>
                         </thead>
+                        <t t-foreach="docs" t-as="o">
                         <tbody>
                             <tr t-foreach="o.move_line_ids" t-as="move_line">
                                 <td>
@@ -136,6 +139,7 @@
                                 </td>
                             </tr>
                         </tbody>
+                        </t>
                     </table>
                     
                     <p t-if="o.backorder_id">
@@ -146,7 +150,7 @@
                             All items couldn't be shipped, the remaining ones will be shipped as soon as they become available.
                         </t>
                     </p>
-                    </t>
+                    
                 </div>
             </t>
          </t>
