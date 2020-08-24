@@ -237,7 +237,7 @@ class SaleOrder(models.Model):
                                 'warning': {'title': _('Error'), 'message': _('Error message'),},
                             }
                         
-            if record.cmd_charcuterie==True and record.cmd_volaille==False:
+            '''if record.cmd_charcuterie==True and record.cmd_volaille==False:
                 if record.partner_id.Client_Charcuterie: 
                     if record.partner_id.credit_charcuterie > record.partner_id.limite_credit_charcuterie: 
                         if record.partner_id.bloque_ch and record.partner_id.debloque_exce_ch==True:
@@ -287,7 +287,7 @@ class SaleOrder(models.Model):
                 if record.partner_id.Client_Volaille: 
                     if record.partner_id.nbr_fac_ouverte >= record.partner_id.limite_nbr_fac: 
                         if record.partner_id.bloque_vo and record.partner_id.debloque_exce_vo==True:
-                            record.test_bloque=""
+                            record.test_bloque=""'''
     
 
     @api.onchange('product_id')
@@ -356,6 +356,52 @@ class SaleOrder(models.Model):
             return {
                     'warning': {'title': _('Error'), 'message': _('Error message'),},
             }
+            
+        if self.cmd_charcuterie==True and self.cmd_volaille==False:
+            if self.partner_id.Client_Charcuterie: 
+                if self.partner_id.credit_charcuterie > self.partner_id.limite_credit_charcuterie: 
+                    if self.partner_id.bloque_ch:
+                        if self.partner_id.debloque_exce_ch==False:
+                            self.test_bloque="bloquer"
+                            raise exceptions.ValidationError(_('Votre Client est bloqué , merci de  procéder au réglement de vos factures charcuteries!'))
+                            return {
+                                'warning': {'title': _('Error'), 'message': _('Error message'),},
+                            }
+                        if self.partner_id.debloque_exce_ch==True:
+                            self.test_bloque=""
+        if self.cmd_charcuterie==True and self.cmd_volaille==False:
+            if self.partner_id.Client_Charcuterie: 
+                if self.partner_id.nbr_jours_decheance_charcuterie > self.partner_id.echeance_charcuterie_par_jour: 
+                    if self.partner_id.bloque_ch:
+                        if self.partner_id.debloque_exce_ch==False:
+                            self.test_bloque="bloquer"
+                            raise exceptions.ValidationError(_('Votre Client est bloqué , merci de  procéder au réglement de vos factures charcuteries!'))
+                            return {
+                                'warning': {'title': _('Error'), 'message': _('Error message'),},
+                            }
+                        if self.partner_id.debloque_exce_ch==True:
+                            self.test_bloque=""
+        if self.cmd_charcuterie==False  and self.debloque_exce_vopp==False and self.cmd_volaille==True: 
+            if self.partner_id.Client_Volaille: 
+                if self.partner_id.credit_volaille > record.partner_id.credit_limit: 
+                    if self.partner_id.bloque_vo==True:
+                        self.test_bloque="bloquer"
+                        raise exceptions.ValidationError(_('Votre Client est bloqué , son credit et depassé, merci de  procéder au réglement de vos factures volailles!'))
+                        return {
+                                'warning': {'title': _('Error'), 'message': _('Error message'),},
+                        }
+
+                            
+        if self.cmd_charcuterie==False and self.cmd_volaille==True and self.debloque_exce_vopp==False:
+            if self.partner_id.Client_Volaille: 
+                if self.partner_id.nbr_fac_ouverte >= self.partner_id.limite_nbr_fac: 
+                    if self.partner_id.bloque_vo==True:
+                        self.test_bloque=="bloquer"
+                           # record.cmd_excep=self.env['res.partner'].search([('id', '=', sales.partner_id.id)]).bloque_vo
+                        raise exceptions.ValidationError(_('Votre Client est bloqué , nombre de factures ouvertes depasse les limites, merci de  procéder au réglement de vos factures volailles!'))
+                        return {
+                                'warning': {'title': _('Error'), 'message': _('Error message'),},
+                        }
             
         if self._get_forbidden_state_confirm() & set(self.mapped('state')):
             raise UserError(_(
