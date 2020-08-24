@@ -37,6 +37,7 @@ class SaleOrder(models.Model):
     cmd_volaille = fields.Boolean(string="Volaille")
     fac_charcuterie_volaille = fields.Selection([('charcuterie', 'Charcuterie'),('volaille', 'Volaille')],string="Type commande")
     client_gc_pc = fields.Selection('Type Client', related='partner_id.client_gc_pc', store=True)
+    debloque_exce_vopp = fields.Boolean(string="Deblocage Exceptionnel")
     commande_type = fields.Selection([('commande_charc', 'Commande charcuterie'),('commande_volaille', 'Commande Volaille')], string="Type de commande")
     #ecart_qty_kg = fields.Float(string='Ecart qty (KG)', compute='_get_ecart_qty', readonly=True, store=True)
     #ecart_qty_colis = fields.Float('Ecart qty (Colis)', compute=_get_ecart_qty, store=True)

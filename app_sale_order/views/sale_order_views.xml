@@ -161,6 +161,7 @@
 					
 						<field  name="cmd_volaille"/>
 						<field  name="cmd_charcuterie"/>
+						<field  name="debloque_exce_vopp" invisible="1"/>
 						<field  name="commande_type" widget="radio" invisible="1"/>
 						
              	</xpath>
