@@ -14,6 +14,7 @@ class PurchaseReport(models.Model):
     
     
     received_quantity = fields.Float(u"Quantité reçue", readonly=True)
+    date_delivery = fields.Datetime("Date de livraison", readonly=True)
     
     @api.model_cr
     def init(self):
@@ -26,6 +27,7 @@ class PurchaseReport(models.Model):
                     s.date_order as date_order,
                     s.state,
                     s.date_approve,
+                    s.date_planned as date_delivery,
                     s.dest_address_id,
                     spt.warehouse_id as picking_type_id,
                     s.partner_id as partner_id,
@@ -81,6 +83,7 @@ class PurchaseReport(models.Model):
                     p.product_tmpl_id,
                     t.categ_id,
                     s.date_order,
+                    s.date_planned,
                     s.state,
                     spt.warehouse_id,
                     u.uom_type,

@@ -21,6 +21,8 @@
                             <strong>Date de livraison:</strong>
                             <p t-field="o.date_livraison"/>
                         </div>
+			</xpath>
+			<xpath expr="//div[@class='row mt32 mb32']/div[5]" position="replace">
 			</xpath>		
 				<xpath expr="//table[@class='table table-condensed']"
 				position="replace">

@@ -13,6 +13,7 @@ encoding//app_purchase_order/__manifest__.py=utf-8
 encoding//app_purchase_order/models/__init__.py=utf-8
 encoding//app_purchase_order/models/purchase_order.py=utf-8
 encoding//app_purchase_order/models/purchase_order_line.py=utf-8
+encoding//app_purchase_order/models/purchase_report.py=utf-8
 encoding//app_res_partner/__manifest__.py=utf-8
 encoding//app_res_partner/models/res_partner.py=utf-8
 encoding//app_sale_order/__manifest__.py=utf-8
