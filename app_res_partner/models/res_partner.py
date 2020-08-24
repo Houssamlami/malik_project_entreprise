@@ -170,25 +170,40 @@ class ResPartner(models.Model):
         return res   
 
 
-    @api.depends('credit','credit_limit','credit_charcuterie','limite_nbr_fac','limite_credit_charcuterie','nbr_fac_ouverte','limite_nbr_fac_charcuterie','nbr_fac_ouverte_charcuterie','nbr_jours_decheance_charcuterie','echeance_charcuterie_par_jour')
+    @api.depends('credit','credit_limit','credit_charcuterie','limite_nbr_fac','limite_credit_charcuterie','nbr_fac_ouverte','limite_nbr_fac_charcuterie','nbr_fac_ouverte_charcuterie','nbr_jours_decheance_charcuterie','echeance_charcuterie_par_jour','blocagex_limite_credit','blocagex_limite_nbr_fac','blocagex_limite_credit_charcuterie','blocagex_echeance_facture_charcuterie')
     def _on_change_credit(self):
         for record in self:
             if record.blocagex_limite_credit:
                 if record.credit_volaille > record.credit_limit:
                     record.bloque_vo=True
                     record.bloque=True
+            else:
+                record.bloque_vo=False
+                record.bloque=False
+                
             if record.blocagex_limite_nbr_fac:
                 if record.nbr_fac_ouverte >= record.limite_nbr_fac:
                     record.bloque_vo=True
                     record.bloque=True
+            else:
+                record.bloque_vo=False
+                record.bloque=False
+                
             if record.blocagex_limite_credit_charcuterie:
                 if record.credit_charcuterie > record.limite_credit_charcuterie:
                     record.bloque_ch=True
                     record.bloque=True
+            else:
+                record.bloque_ch=False
+                record.bloque=False
+                
             if record.blocagex_echeance_facture_charcuterie:
                 if record.nbr_jours_decheance_charcuterie > record.echeance_charcuterie_par_jour:
                     record.bloque_ch=True
                     record.bloque=True
+            else:
+                record.bloque_ch=False
+                record.bloque=False
     
     
     @api.onchange('Client_GC','Client_PC')
