@@ -227,7 +227,7 @@ class SaleOrder(models.Model):
                     return {
                         'warning': {'title': _('Error'), 'message': _('Error message'),},
                         }
-            if record.cmd_charcuterie==True and record.cmd_volaille==False:
+            '''if record.cmd_charcuterie==True and record.cmd_volaille==False:
                 if record.partner_id.Client_Charcuterie: 
                     if record.partner_id.credit_charcuterie > record.partner_id.limite_credit_charcuterie: 
                         if record.partner_id.bloque_ch  and record.partner_id.debloque_exce_ch==False:
@@ -237,7 +237,7 @@ class SaleOrder(models.Model):
                                 'warning': {'title': _('Error'), 'message': _('Error message'),},
                             }
                         
-            '''if record.cmd_charcuterie==True and record.cmd_volaille==False:
+            if record.cmd_charcuterie==True and record.cmd_volaille==False:
                 if record.partner_id.Client_Charcuterie: 
                     if record.partner_id.credit_charcuterie > record.partner_id.limite_credit_charcuterie: 
                         if record.partner_id.bloque_ch and record.partner_id.debloque_exce_ch==True:
