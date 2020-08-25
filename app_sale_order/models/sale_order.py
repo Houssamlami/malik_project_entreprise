@@ -597,11 +597,11 @@ class SaleOrder(models.Model):
     @api.model
     def create(self, vals):
         sale = super(SaleOrder,self).create(vals)
-        if any(line.secondary_uom_qty == 0.0 for line in sale.order_line):
+        '''if any(line.secondary_uom_qty == 0.0 for line in sale.order_line):
             raise exceptions.ValidationError(_('Remplir les QTY !'))
             return {
                         'warning': {'title': _('Error'), 'message': _('Error message'),},
-                        }  
+                        }  '''
         if sale.cmd_volaille:
                 sale.commande_type = 'commande_volaille'
         else:
