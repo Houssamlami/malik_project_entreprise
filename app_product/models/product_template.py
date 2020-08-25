@@ -174,7 +174,8 @@ class ProductTemplate(models.Model):
                 if len(productbl1)>0:
                     for rec1 in productbl1:
                         nombre_colis += rec1.secondary_uom_qty
-                    record.nombre_colis_a_livre = nombre_colis or 0.00                        
+                    record.nombre_colis_a_livre = nombre_colis or 0.00
+                    record.qty_verti_rest = record.qty_available_colis_real_stock-record.nombre_colis_a_livre or 0.00                      
 #Cette fonction permet de calculer les qte a livrer j+1 (les commande saisie de la jour j) et la qte qui doit rester en stock le jour j                 
                         
     def on_product_vertuel_jours_suivant(self):
@@ -241,6 +242,7 @@ class ProductTemplate(models.Model):
     stock_virtuel_actuel = fields.Float('Qty virtuel actuel' , compute='calcule_stock_virtuel_actuel')
     qty_available_colis_real_stock = fields.Float(string=u"Quantité en stock" , compute='calcule_stock_virtuel_actuel')
     nombre_colis_a_livre = fields.Float('nobre colis a livrer' , compute='calcule_nombre_colis_a_livre')
+    qty_verti_rest = fields.Float('nobre colis a livrer' , compute='calcule_nombre_colis_a_livre')
     qty_vertuel_second_unit = fields.Float(string="Qty in second unit", compute='get_qty_vertuel_second_unit')
     secondary_unit_qty_available = fields.Float(string='Second', readonly=True)
     product_service_commercial = fields.Boolean(string='Disponibilté Service Commercial')
