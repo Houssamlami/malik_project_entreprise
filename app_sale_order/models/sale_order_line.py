@@ -96,7 +96,7 @@ class SaleOrderLine(models.Model):
                     
                 if record.product_id.secondary_uom_ids and record.product_id.uom_id.name == "kg":
                     if record.product_id.secondary_uom_ids[0].factor != 0:
-                        record.test_on_change_ver = (record.test_on_change-record.test_on_change_version2)/record.product_id.secondary_uom_ids[0].factor
+                        record.test_on_change_ver = int((record.test_on_change-record.test_on_change_version2)/record.product_id.secondary_uom_ids[0].factor)
                 else:
                     record.test_on_change_ver = record.test_on_change-record.test_on_change_version2
     # @api.onchange('product_id')
