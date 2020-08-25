@@ -618,11 +618,11 @@ class SaleOrder(models.Model):
     @api.multi
     def write(self, vals):
         sale = super(SaleOrder,self).write(vals)
-        if any(line.secondary_uom_qty == 0.0 for line in self.order_line):
+        '''if any(line.secondary_uom_qty == 0.0 for line in self.order_line):
             raise exceptions.ValidationError(_('Remplir les QTY !'))
             return {
                         'warning': {'title': _('Error'), 'message': _('Error message'),},
-                        }  
+                        }  '''
         if (self.cmd_charcuterie and self.cmd_volaille) or (not self.cmd_charcuterie and not self.cmd_volaille):
             raise exceptions.ValidationError(_('Merci de specifier le type de la commande !'))
             return {
