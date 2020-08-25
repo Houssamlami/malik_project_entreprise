@@ -242,7 +242,7 @@ class ProductTemplate(models.Model):
     stock_virtuel_actuel = fields.Float('Qty virtuel actuel' , compute='calcule_stock_virtuel_actuel')
     qty_available_colis_real_stock = fields.Float(string=u"Quantité en stock" , compute='calcule_stock_virtuel_actuel')
     nombre_colis_a_livre = fields.Float('nobre colis a livrer' , compute='calcule_nombre_colis_a_livre')
-    qty_verti_rest = fields.Float('nobre colis a livrer' , compute='calcule_nombre_colis_a_livre')
+    qty_verti_rest = fields.Float('Qté Vir Res' , compute='calcule_nombre_colis_a_livre')
     qty_vertuel_second_unit = fields.Float(string="Qty in second unit", compute='get_qty_vertuel_second_unit')
     secondary_unit_qty_available = fields.Float(string='Second', readonly=True)
     product_service_commercial = fields.Boolean(string='Disponibilté Service Commercial')
