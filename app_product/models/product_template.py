@@ -135,7 +135,7 @@ class ProductTemplate(models.Model):
         qty_virtuelle_des_comandes=0
         for record in self:
             if record.id:
-                vouchers = self.env['sale.order'].search([('requested_date', '>', today),('state','in',['sale'])])
+                vouchers = self.env['sale.order'].search([('requested_date', '>', today),('state','in',['sale','draft'])])
                 productbl = self.env['sale.order.line'].search([
                 ('product_id', '=', self.env['product.product'].search([('product_tmpl_id', '=', record.id)]).id),('order_id', 'in', vouchers.ids)])
                 for rec in productbl:
@@ -168,7 +168,7 @@ class ProductTemplate(models.Model):
         for record in self:
             if record.id:
                 article= self.env['product.product'].search([('product_tmpl_id', '=', record.id)])
-                vouchers1 = self.env['sale.order'].search([('state','in',['sale']),('requested_date', '>', (todayy + timedelta(days=1)).strftime('%Y-%m-%d 00:00:00')), ('requested_date', '<', (todayy + timedelta(days=1)).strftime('%Y-%m-%d 23:59:59'))])
+                vouchers1 = self.env['sale.order'].search([('state','in',['sale','draft']),('requested_date', '>', (todayy + timedelta(days=1)).strftime('%Y-%m-%d 00:00:00')), ('requested_date', '<', (todayy + timedelta(days=1)).strftime('%Y-%m-%d 23:59:59'))])
                 productbl1 = self.env['sale.order.line'].search([
                 ('product_id', '=', article.id),('order_id', 'in', vouchers1.ids)])
                 if len(productbl1)>0:
