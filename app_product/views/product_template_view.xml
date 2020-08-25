@@ -160,7 +160,8 @@
 		
 			<field name="name"/>
 			<field name="qty_available_colis_real_stock"/>	  
-			<field name="stock_virtuel_actuel"/>	
+			<field name="stock_virtuel_actuel" invisible="1"/>	
+            <field name="qty_verti_rest"/>	
 			<field name="nombre_colis_a_livre"/>		  
 					  </tree>	  
              	</field>
