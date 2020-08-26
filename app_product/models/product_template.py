@@ -136,9 +136,9 @@ class ProductTemplate(models.Model):
         for record in self:
             if record.id:
                 #vouchers = self.env['sale.order'].search([('requested_date', '>', today),('state','in',['sale','draft'])])
-                vouchers = self.env['sale.order'].search([('requested_date', '>', today),('state','in',['draft'])])
+                vouchers = self.env['sale.order'].search([('requested_date', '>', today),('state','in',['sale', 'draft'])])
                 productbl = self.env['sale.order.line'].search([
-                ('product_id', '=', self.env['product.product'].search([('product_tmpl_id', '=', record.id)]).id),('order_id', 'in', vouchers.ids)])
+                ('product_id', '=', self.env['product.product'].search([('product_tmpl_id', '=', record.id)]).id),('qty_delivered', '=', 0),('order_id', 'in', vouchers.ids)])
                 for rec in productbl:
                     # if record.qty_available:
                     qty_virtuelle_des_comandes += rec.secondary_uom_qty
@@ -172,9 +172,9 @@ class ProductTemplate(models.Model):
             if record.id:
                 article= self.env['product.product'].search([('product_tmpl_id', '=', record.id)])
                 #vouchers1 = self.env['sale.order'].search([('state','in',['sale','draft']),('requested_date', '>', (todayy + timedelta(days=1)).strftime('%Y-%m-%d 00:00:00')), ('requested_date', '<', (todayy + timedelta(days=1)).strftime('%Y-%m-%d 23:59:59'))])
-                vouchers1 = self.env['sale.order'].search([('requested_date', '>', today),('state','in',['draft'])])
+                vouchers1 = self.env['sale.order'].search([('requested_date', '>', today),('state','in',['sale', 'draft'])])
                 productbl1 = self.env['sale.order.line'].search([
-                ('product_id', '=', article.id),('order_id', 'in', vouchers1.ids)])
+                ('product_id', '=', article.id),('qty_delivered', '=', 0),('order_id', 'in', vouchers1.ids)])
                 if len(productbl1)>0:
                     for rec1 in productbl1:
                         nombre_colis += rec1.secondary_uom_qty
@@ -244,6 +244,7 @@ class ProductTemplate(models.Model):
     total_commande_jour_suivant= fields.Float('Qte a livre le jour j+1',compute='on_product_vertuel_jours_suivant')
     stock_virtuel_jour_suivant= fields.Float('Qte en tock virtuel le jour j+1',compute='on_product_vertuel_jours_suivant')
     stock_virtuel_actuel = fields.Float('Qty virtuel actuel' , compute='calcule_stock_virtuel_actuel')
+    qty_virtuelle_des_comandes = fields.Float(string="Quantité v des cmd" , compute='calcule_stock_virtuel_actuel')
     qty_available_colis_real_stock = fields.Float(string=u"Quantité en stock" , compute='calcule_stock_virtuel_actuel')
     nombre_colis_a_livre = fields.Float('nobre colis a livrer' , compute='calcule_nombre_colis_a_livre')
     qty_verti_rest = fields.Float('Qté Vir Res' , compute='calcule_nombre_colis_a_livre')
