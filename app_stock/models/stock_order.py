@@ -199,17 +199,17 @@ class StockPicking(models.Model):
         for mov_lines in self.move_lines:
             if self.location_dest_id.usage == 'internal' and self.location_id.usage != 'internal':
                 print('stock move internal')
-                qty = mov_lines.product_id.with_context({'location' : self.location_dest_id.id}).secondary_unit_qty_available
+                qty = mov_lines.product_id.secondary_unit_qty_available
             #res.qty_available = qty
-                mov_lines.product_id.with_context({'location' : self.location_dest_id.id}).secondary_unit_qty_available += mov_lines.secondary_uom_qty
+                mov_lines.product_id.secondary_unit_qty_available += mov_lines.secondary_uom_qty
             
             elif self.location_dest_id.usage == 'customer' or self.location_dest_id.scrap_location:
                 print('stock move customer')
-                qty = mov_lines.product_id.with_context({'location' : self.location_id.id}).secondary_unit_qty_available
+                qty = mov_lines.product_id.secondary_unit_qty_available
                 print(qty)
                 #res.qty_available = qty
-                mov_lines.product_id.with_context({'location' : self.location_id.id}).secondary_unit_qty_available -= mov_lines.secondary_uom_qty
-                print(mov_lines.product_id.with_context({'location' : self.location_id.id}).secondary_unit_qty_available)
+                mov_lines.product_id.secondary_unit_qty_available -= mov_lines.secondary_uom_qty
+                print(mov_lines.product_id.secondary_unit_qty_available)
                 print(mov_lines.secondary_uom_qty)
             
             else:
