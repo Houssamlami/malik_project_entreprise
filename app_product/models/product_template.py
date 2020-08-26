@@ -161,7 +161,8 @@ class ProductTemplate(models.Model):
                     # record.stock_virtuel_actuel = round(((record.qty_available-record.qty_virtuelle_des_comandes)/record.weight)) or 0.00
                 # else:
                     # record.stock_virtuel_actuel = round((record.qty_available-record.qty_virtuelle_des_comandes))
-    # @api.depends('id')
+    #' @api.depends('id)
+    @api.multi
     def calcule_nombre_colis_a_livre(self):
         #todayy = datetime.today()
         today = str(datetime.now().date())
