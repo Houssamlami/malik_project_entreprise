@@ -162,9 +162,8 @@ class ProductTemplate(models.Model):
                 # else:
                     # record.stock_virtuel_actuel = round((record.qty_available-record.qty_virtuelle_des_comandes))
     #' @api.depends('id)
-    def calcule_nombre_colis_a_livre(self):
+    def calcule_nombre_colis_a_livre(self, field_names=None):
         #todayy = datetime.today()
-        date = datetime.now()
         today = str(datetime.now().date())
         nombre_colis=0
         article=0
@@ -172,7 +171,7 @@ class ProductTemplate(models.Model):
             if record.id:
                 article= self.env['product.product'].search([('product_tmpl_id', '=', record.id)])
                 #vouchers1 = self.env['sale.order'].search([('state','in',['sale','draft']),('requested_date', '>', (todayy + timedelta(days=1)).strftime('%Y-%m-%d 00:00:00')), ('requested_date', '<', (todayy + timedelta(days=1)).strftime('%Y-%m-%d 23:59:59'))])
-                vouchers1 = self.env['sale.order'].search([('requested_date', '>', date),('state','in',['sale', 'draft'])])
+                vouchers1 = self.env['sale.order'].search([('requested_date', '>', today),('state','in',['sale', 'draft'])])
                 productbl1 = self.env['sale.order.line'].search([
                 ('product_id', '=', article.id),('qty_delivered', '=', 0),('order_id', 'in', vouchers1.ids)])
                 if len(productbl1)>0:
