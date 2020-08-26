@@ -171,14 +171,14 @@ class ProductTemplate(models.Model):
             if record.id:
                 article= self.env['product.product'].search([('product_tmpl_id', '=', record.id)])
                 #vouchers1 = self.env['sale.order'].search([('state','in',['sale','draft']),('requested_date', '>', (todayy + timedelta(days=1)).strftime('%Y-%m-%d 00:00:00')), ('requested_date', '<', (todayy + timedelta(days=1)).strftime('%Y-%m-%d 23:59:59'))])
-                vouchers1 = self.env['sale.order'].search([('requested_date', '>', today),('state','in',['sale', 'draft'])])
+                vouchers1 = self.env['sale.order'].search([('requested_date', '>', datetime.now()),('state','in',['sale', 'draft'])])
                 productbl1 = self.env['sale.order.line'].search([
                 ('product_id', '=', article.id),('qty_delivered', '=', 0),('order_id', 'in', vouchers1.ids)])
                 if len(productbl1)>0:
                     for rec1 in productbl1:
                         nombre_colis += rec1.secondary_uom_qty
-                record.nombre_colis_a_livre = nombre_colis or 0.00
-                record.qty_verti_rest = record.qty_available_colis_real_stock-record.nombre_colis_a_livre or 0.00                      
+                    record.nombre_colis_a_livre = nombre_colis or 0.00
+                    record.qty_verti_rest = record.qty_available_colis_real_stock-record.nombre_colis_a_livre or 0.00                      
 #Cette fonction permet de calculer les qte a livrer j+1 (les commande saisie de la jour j) et la qte qui doit rester en stock le jour j                 
                         
     def on_product_vertuel_jours_suivant(self):
