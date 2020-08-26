@@ -162,7 +162,6 @@ class ProductTemplate(models.Model):
                 # else:
                     # record.stock_virtuel_actuel = round((record.qty_available-record.qty_virtuelle_des_comandes))
     #' @api.depends('id)
-    @api.multi
     def calcule_nombre_colis_a_livre(self):
         #todayy = datetime.today()
         today = str(datetime.now().date())
@@ -178,8 +177,8 @@ class ProductTemplate(models.Model):
                 if len(productbl1)>0:
                     for rec1 in productbl1:
                         nombre_colis += rec1.secondary_uom_qty
-                    record.nombre_colis_a_livre = nombre_colis or 0.00
-                    record.qty_verti_rest = record.qty_available_colis_real_stock-record.nombre_colis_a_livre or 0.00                      
+                record.nombre_colis_a_livre = nombre_colis or 0.00
+                record.qty_verti_rest = record.qty_available_colis_real_stock-record.nombre_colis_a_livre or 0.00                      
 #Cette fonction permet de calculer les qte a livrer j+1 (les commande saisie de la jour j) et la qte qui doit rester en stock le jour j                 
                         
     def on_product_vertuel_jours_suivant(self):
