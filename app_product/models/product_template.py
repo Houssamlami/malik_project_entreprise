@@ -135,7 +135,8 @@ class ProductTemplate(models.Model):
         qty_virtuelle_des_comandes=0
         for record in self:
             if record.id:
-                vouchers = self.env['sale.order'].search([('requested_date', '>', today),('state','in',['sale','draft'])])
+                #vouchers = self.env['sale.order'].search([('requested_date', '>', today),('state','in',['sale','draft'])])
+                vouchers = self.env['sale.order'].search([('requested_date', '>', today),('state','in',['draft'])])
                 productbl = self.env['sale.order.line'].search([
                 ('product_id', '=', self.env['product.product'].search([('product_tmpl_id', '=', record.id)]).id),('order_id', 'in', vouchers.ids)])
                 for rec in productbl:
@@ -162,13 +163,15 @@ class ProductTemplate(models.Model):
                     # record.stock_virtuel_actuel = round((record.qty_available-record.qty_virtuelle_des_comandes))
     # @api.depends('id')
     def calcule_nombre_colis_a_livre(self):
-        todayy = datetime.today()
+        #todayy = datetime.today()
+        today = str(datetime.now().date())
         nombre_colis=0
         article=0
         for record in self:
             if record.id:
                 article= self.env['product.product'].search([('product_tmpl_id', '=', record.id)])
-                vouchers1 = self.env['sale.order'].search([('state','in',['sale','draft']),('requested_date', '>', (todayy + timedelta(days=1)).strftime('%Y-%m-%d 00:00:00')), ('requested_date', '<', (todayy + timedelta(days=1)).strftime('%Y-%m-%d 23:59:59'))])
+                #vouchers1 = self.env['sale.order'].search([('state','in',['sale','draft']),('requested_date', '>', (todayy + timedelta(days=1)).strftime('%Y-%m-%d 00:00:00')), ('requested_date', '<', (todayy + timedelta(days=1)).strftime('%Y-%m-%d 23:59:59'))])
+                vouchers1 = self.env['sale.order'].search([('requested_date', '>', today),('state','in',['draft'])])
                 productbl1 = self.env['sale.order.line'].search([
                 ('product_id', '=', article.id),('order_id', 'in', vouchers1.ids)])
                 if len(productbl1)>0:
