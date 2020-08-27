@@ -128,6 +128,7 @@ class ProductTemplate(models.Model):
             factor = self.sale_secondary_uom_id.factor
             if factor != 0:
                 self.test_on_product_ver_colis_for_kg = round((self.test_on_product_ver/(factor)))
+                self.test_on_product_version2 = round((self.test_on_product_version2/(factor)))
         
 #les deux methodes qui fonctionnent pour catalogur --> le stock virtuel :                       
     def calcule_stock_virtuel_actuel(self):
