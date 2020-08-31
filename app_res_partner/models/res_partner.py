@@ -121,7 +121,7 @@ class ResPartner(models.Model):
                 
                 record.debloque_exce_vo = False
             else:
-                record.debloque_exce_vo = True
+                record.debloque_exce_vo = True if record.debloque_exce_vo else False
                 
     @api.one
     def last_command(self):
