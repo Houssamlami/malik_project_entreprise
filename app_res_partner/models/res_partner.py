@@ -118,10 +118,10 @@ class ResPartner(models.Model):
             d = (datetime.strptime(record.date_reblockage, '%Y-%m-%d'))
             dd = (datetime.strptime(record.date_actualy2, '%Y-%m-%d'))
             if d <= dd:
-                
-                record.debloque_exce_vo = False
-            else:
-                record.debloque_exce_vo = True if record.debloque_exce_vo else False
+                if record.debloque_exce_vo:
+                    record.debloque_exce_vo = False
+            elif d > dd:
+                record.debloque_exce_vo = True
                 
     @api.one
     def last_command(self):
