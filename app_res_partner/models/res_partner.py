@@ -96,13 +96,33 @@ class ResPartner(models.Model):
     customer_cmd_ceiling = fields.Float('Plafond commande client', track_visibility='onchange')
     customer_cmd_ceiling_cha = fields.Float('Plafond commande charcuterie', track_visibility='onchange')
     customer_cmd_ceiling_vol = fields.Float('Plafond commande volaille', track_visibility='onchange')
+    debloque_exce_vo = fields.Boolean(string=u"Déblocage exceptionnel volaille" , compute='get_reblocage', store=True)
+    date_reblockage = fields.Date(string='Date de reblocage')
+    date_actualy2 = fields.Date(string='today actualy2', compute='get_date')
     
     
     _sql_constraints = [
         ('ref_unique_part', 'unique(ref)', 'La reference client doit etre unique!'),
     ]
     
-    
+    def get_date(self):
+        for record in self:
+            mydate = fields.Date.context_today(self)
+            record.date_actualy2=mydate
+            
+    @api.onchange('date_reblockage','date_actualy2')       
+    @api.depends('date_reblockage','date_actualy2')
+    def get_reblocage(self):
+        for record in self:
+            
+            d = (datetime.strptime(record.date_reblockage, '%Y-%m-%d'))
+            dd = (datetime.strptime(record.date_actualy2, '%Y-%m-%d'))
+            if d <= dd:
+                
+                record.debloque_exce_vo = False
+            else:
+                record.debloque_exce_vo = True
+                
     @api.one
     def last_command(self):
         for partners in self:
