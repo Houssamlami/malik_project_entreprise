@@ -4,6 +4,8 @@
 from odoo.exceptions import UserError, ValidationError
 from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT, float_compare, float_round
 from odoo import api, fields, exceptions, models, _
+import datetime
+from datetime import *
 
 
 class SaleOrder(models.Model):
