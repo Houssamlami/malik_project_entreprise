@@ -114,14 +114,13 @@ class ResPartner(models.Model):
     @api.depends('date_reblockage','date_actualy2')
     def get_reblocage(self):
         for record in self:
-            
-            d = (datetime.strptime(record.date_reblockage, '%Y-%m-%d'))
-            dd = (datetime.strptime(record.date_actualy2, '%Y-%m-%d'))
-            if d <= dd:
-                if record.debloque_exce_ch:
+            if record.date_reblockage:
+                d = (datetime.strptime(record.date_reblockage, '%Y-%m-%d'))
+                dd = (datetime.strptime(record.date_actualy2, '%Y-%m-%d'))
+                if d <= dd:
                     record.debloque_exce_ch = False
-            elif d > dd:
-                record.debloque_exce_ch = True
+                elif d > dd:
+                    record.debloque_exce_ch = True
                 
     @api.one
     def last_command(self):
