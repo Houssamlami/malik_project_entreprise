@@ -114,13 +114,6 @@ class SaleOrder(models.Model):
     @api.onchange('partner_id')
     def _get_type_cmd(self):
         for sale in self:
-            if sale.partner_id.date_reblockage:
-                d = (datetime.strptime(sale.partner_id.date_reblockage, '%Y-%m-%d'))
-                dd = (datetime.strptime(sale.partner_id.date_actualy2, '%Y-%m-%d'))
-                if d <= dd:
-                    sale.partner_id.write({'debloque_exce_ch': False})
-                elif d > dd:
-                    sale.partner_id.write({'debloque_exce_ch': True})
             if sale.partner_id.Client_Charcuterie:
                 sale.cmd_charcuterie = True
             if sale.partner_id.Client_Volaille:
