@@ -112,6 +112,7 @@ class SaleOrder(models.Model):
     @api.onchange('partner_id')
     def _get_type_cmd(self):
         for sale in self:
+            sale.partner_id.get_reblocage()
             if sale.partner_id.Client_Charcuterie:
                 sale.cmd_charcuterie = True
             if sale.partner_id.Client_Volaille:

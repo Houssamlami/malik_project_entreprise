@@ -96,7 +96,7 @@ class ResPartner(models.Model):
     customer_cmd_ceiling = fields.Float('Plafond commande client', track_visibility='onchange')
     customer_cmd_ceiling_cha = fields.Float('Plafond commande charcuterie', track_visibility='onchange')
     customer_cmd_ceiling_vol = fields.Float('Plafond commande volaille', track_visibility='onchange')
-    debloque_exce_vo = fields.Boolean(string=u"Déblocage exceptionnel volaille" , compute='get_reblocage', store=True)
+    debloque_exce_ch = fields.Boolean(string=u"Déblocage exceptionnel charcuterie" , compute='get_reblocage', store=True)
     date_reblockage = fields.Date(string='Date de reblocage')
     date_actualy2 = fields.Date(string='today actualy2', compute='get_date')
     
@@ -118,10 +118,10 @@ class ResPartner(models.Model):
             d = (datetime.strptime(record.date_reblockage, '%Y-%m-%d'))
             dd = (datetime.strptime(record.date_actualy2, '%Y-%m-%d'))
             if d <= dd:
-                if record.debloque_exce_vo:
-                    record.debloque_exce_vo = False
+                if record.debloque_exce_ch:
+                    record.debloque_exce_ch = False
             elif d > dd:
-                record.debloque_exce_vo = True
+                record.debloque_exce_ch = True
                 
     @api.one
     def last_command(self):
