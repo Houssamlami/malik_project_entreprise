@@ -23,6 +23,7 @@ class SaleReport(models.Model):
     partner_shipping_id = fields.Many2one('res.partner', 'Adresse de livraison', readonly=True)
     transport_id = fields.Many2one('blockage.blockage', 'Transport', readonly=True)
     normal_cmd = fields.Boolean(string='Commande Normale', readonly=True)
+    qty_initiale = fields.Float(string="Qty initiale", readonly=True)
     
     def _select(self):
         select_str = """
@@ -45,6 +46,7 @@ class SaleReport(models.Model):
                     s.name as name,
                     s.grosiste_cmd as grosiste,
                     s.normal_cmd as normal_cmd,
+                    sum(l.qty_initiale / u.factor * u2.factor) as qty_initiale,
                     sum(l.product_uom_qty / u.factor * u2.factor)-sum(l.qty_delivered / u.factor * u2.factor) as ecart_qty,
                     sum(l.secondary_uom_qty / u.factor * u2.factor)-sum((l.qty_delivered / u.factor * u2.factor)/ u3.factor) as ecart_qtys,
                     l.secondary_uom_qty as cmd_colis,
@@ -117,6 +119,7 @@ class SaleReport(models.Model):
                     s.transport_id,
                     s.partner_shipping_id,
                     l.secondary_uom_qty,
+                    l.qty_initiale,
                     partner.commercial_partner_id
         """
         return group_by_str

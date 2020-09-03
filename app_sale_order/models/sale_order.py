@@ -4,6 +4,8 @@
 from odoo.exceptions import UserError, ValidationError
 from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT, float_compare, float_round
 from odoo import api, fields, exceptions, models, _
+import datetime
+from datetime import *
 
 
 class SaleOrder(models.Model):
@@ -597,11 +599,11 @@ class SaleOrder(models.Model):
     @api.model
     def create(self, vals):
         sale = super(SaleOrder,self).create(vals)
-        if any(line.secondary_uom_qty == 0.0 for line in sale.order_line):
+        '''if any(line.secondary_uom_qty == 0.0 for line in sale.order_line):
             raise exceptions.ValidationError(_('Remplir les QTY !'))
             return {
                         'warning': {'title': _('Error'), 'message': _('Error message'),},
-                        }  
+                        }  '''
         if sale.cmd_volaille:
                 sale.commande_type = 'commande_volaille'
         else:
@@ -618,11 +620,11 @@ class SaleOrder(models.Model):
     @api.multi
     def write(self, vals):
         sale = super(SaleOrder,self).write(vals)
-        if any(line.secondary_uom_qty == 0.0 for line in self.order_line):
+        '''if any(line.secondary_uom_qty == 0.0 for line in self.order_line):
             raise exceptions.ValidationError(_('Remplir les QTY !'))
             return {
                         'warning': {'title': _('Error'), 'message': _('Error message'),},
-                        }  
+                        }  '''
         if (self.cmd_charcuterie and self.cmd_volaille) or (not self.cmd_charcuterie and not self.cmd_volaille):
             raise exceptions.ValidationError(_('Merci de specifier le type de la commande !'))
             return {

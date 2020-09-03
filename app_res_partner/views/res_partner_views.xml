@@ -159,7 +159,10 @@
 					<p><b><u>Etat Client :</u></b></p>
 					 <field name="bloque"/>
 					 <p><b><u>déblocage exceptionnel:</u></b></p>
-					  <field name="debloque_exce_ch"/>
+					  <field name="debloque_exce_ch" readonly="0"/>
+					  <field name="debloque_exce_vo" invisible="1"/>
+                     <field name="date_reblockage"/>
+                     <field name="date_actualy2" invisible="1"/>
                      <!--  <field attrs="{'invisible': [('Client_Charcuterie','=', False)]}"  name="debloque_exce_vo"/>-->
              	</xpath>
 				<xpath expr="//field[@name='property_supplier_payment_term_id']" position="after">
