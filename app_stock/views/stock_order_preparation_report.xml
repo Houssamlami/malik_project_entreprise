@@ -2389,8 +2389,7 @@
 						</th>
 						<th name="lot_serial" t-if="has_serial_number">
 							Numéro Lot
-							<span
-								t-if="o.picking_type_code == 'incoming' and o.is_return_picking">
+							<span>
 								<t
 									t-if="any([move_lines.lot_id.life_date for move_lines in o.move_line_ids])">
 									<span style="margin-left: 170px;">DLC</span>
