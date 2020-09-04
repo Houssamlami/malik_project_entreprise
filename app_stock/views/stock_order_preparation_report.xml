@@ -2437,7 +2437,6 @@
 												t-if="o.picking_type_code == 'incoming' and o.is_return_picking">
 												<center>
 												<span
-													t-if="o.picking_type_code == 'incoming' and o.is_return_picking"
 													class="pull-right" t-field="move_line.lot_id.life_date"
 													t-field-options='{"widget": "date"}' /></center>
 
