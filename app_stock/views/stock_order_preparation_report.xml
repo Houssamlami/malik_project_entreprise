@@ -2433,8 +2433,7 @@
 												<span t-field="move_line.product_qty" />
 											</t>
 										</td>
-										<td
-												t-if="o.picking_type_code == 'incoming' and o.is_return_picking">
+										<td>
 												<center>
 												<span
 													class="pull-right" t-field="move_line.lot_id.life_date"
