@@ -118,7 +118,8 @@ class SaleOrder(models.Model):
                 sale.cmd_charcuterie = True
             if sale.partner_id.Client_Volaille:
                 sale.cmd_volaille = True
-                
+            if sale.partner_id.debloque_exce_ch:
+                sale.debloque_exce_vopp = True
     
     @api.multi
     def compute_qty_transport(self):
@@ -360,7 +361,7 @@ class SaleOrder(models.Model):
                     'warning': {'title': _('Error'), 'message': _('Error message'),},
             }
             
-        if self.cmd_charcuterie==True and self.cmd_volaille==False:
+        if self.cmd_charcuterie==True and self.debloque_exce_vopp==False and self.cmd_volaille==False:
             if self.partner_id.Client_Charcuterie: 
                 if self.partner_id.credit_charcuterie > self.partner_id.limite_credit_charcuterie: 
                     if self.partner_id.bloque_ch:
@@ -372,7 +373,7 @@ class SaleOrder(models.Model):
                             }
                         if self.partner_id.debloque_exce_ch==True:
                             self.test_bloque=""
-        if self.cmd_charcuterie==True and self.cmd_volaille==False:
+        if self.cmd_charcuterie==True and self.debloque_exce_vopp==False and self.cmd_volaille==False:
             if self.partner_id.Client_Charcuterie: 
                 if self.partner_id.nbr_jours_decheance_charcuterie > self.partner_id.echeance_charcuterie_par_jour: 
                     if self.partner_id.bloque_ch:
