@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		<template id="portal_view_fhs_inherit"
+			inherit_id="portal.portal_contact">
+
+		
+		<xpath expr="//p[1]" position="replace">
+		
+		<p><a t-att-href="'mailto:'+sales_user.user_id.email" t-esc="sales_user.user_id.email"/></p>
+		</xpath>
+		<xpath expr="//p[2]" position="replace">
+		
+		<p t-esc="sales_user.user_id.phone"/>
+		</xpath>
+		<xpath expr="//p[3]" position="replace">
+		
+		<p t-esc="sales_user.user_id.city"/>
+		</xpath>
+		</template>
+	</data>
+</odoo>
