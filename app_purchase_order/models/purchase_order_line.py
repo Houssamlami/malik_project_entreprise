@@ -7,6 +7,7 @@ import logging
 from itertools import groupby
 from odoo import models, api, fields, _
 from odoo.exceptions import UserError, AccessError
+from odoo.tools.float_utils import float_is_zero, float_compare
 
 _logger = logging.getLogger(__name__)
 
