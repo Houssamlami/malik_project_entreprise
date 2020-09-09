@@ -523,7 +523,7 @@ class SaleOrder(models.Model):
             weight_stock_char = 0
             for line in sales.order_line:
 #                if line.product_id.categ_id.complete_name in ("Chips","Saucissons","Chapelet","Mortadelle","Blocs","Panes","Tranches","Charcuterie Promo"):
-                if "Chips" in line.product_id.categ_id.complete_name or "Saucissons" in line.product_id.categ_id.complete_name or "Chapelet" in line.product_id.categ_id.complete_name or "Mortadelle" in line.product_id.categ_id.complete_name or "Blocs" in line.product_id.categ_id.complete_name or "Panes" in line.product_id.categ_id.complete_name or "Tranches" in line.product_id.categ_id.complete_name or "Tranches Promo" in line.product_id.categ_id.complete_name or "Saucissons Promo" in line.product_id.categ_id.complete_name or "Panes Promo" in line.product_id.categ_id.complete_name:
+                if "Chips" in line.product_id.categ_id.complete_name or "Saucissons" in line.product_id.categ_id.complete_name or "Chapelet" in line.product_id.categ_id.complete_name or "Mortadelle" in line.product_id.categ_id.complete_name or "Blocs" in line.product_id.categ_id.complete_name or "Panes Charcuterie" in line.product_id.categ_id.complete_name or "Tranches" in line.product_id.categ_id.complete_name or "Tranches Promo" in line.product_id.categ_id.complete_name or "Saucissons Promo" in line.product_id.categ_id.complete_name or "Panes Charcuterie Promo" in line.product_id.categ_id.complete_name:
                     weight_stock_char += line.secondary_uom_qty  or 0.0
             sales.total_weight_stock_char = weight_stock_char
             
@@ -539,7 +539,7 @@ class SaleOrder(models.Model):
         for sales in self:
             weight_stock_vv = 0
             for line in sales.order_line:
-                if "V-Nouvelle atlas" in line.product_id.categ_id.complete_name or "UVESA" in line.product_id.categ_id.complete_name or "DAJAJ" in line.product_id.categ_id.complete_name or "Volaille Frais" in line.product_id.categ_id.complete_name or "Volaille Promo" in line.product_id.categ_id.complete_name or "Produit élaboré" in line.product_id.categ_id.complete_name:
+                if "V-Nouvelle atlas" in line.product_id.categ_id.complete_name or "UVESA" in line.product_id.categ_id.complete_name or "DAJAJ" in line.product_id.categ_id.complete_name or "Volaille Frais" in line.product_id.categ_id.complete_name or "Panes Volaille" in line.product_id.categ_id.complete_name or "Panes Volaille Promo" in line.product_id.categ_id.complete_name or "Volaille Promo" in line.product_id.categ_id.complete_name or "Produit élaboré" in line.product_id.categ_id.complete_name:
                     weight_stock_vv += line.product_uom_qty  or 0.0
             sales.total_weight_stock_vv = weight_stock_vv
     
