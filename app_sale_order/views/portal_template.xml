@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 	<data>
-		<template id="portal_view_fhs_inherit"
+		<!-- <template id="portal_view_fhs_inherit"
 			inherit_id="portal.portal_contact">
 
 		
@@ -17,6 +17,8 @@
 		
 		<p t-esc="sales_user.user_id.city"/>
 		</xpath>
-		</template>
+		</template> -->
+		
+		
 	</data>
 </odoo>
