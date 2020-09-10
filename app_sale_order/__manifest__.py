@@ -20,6 +20,7 @@
         'security/ir.model.access.csv',
         'views/sale_order_views.xml',
         'views/sale_order_line_views.xml',
+        'views/portal_template.xml'
         
         
     ],

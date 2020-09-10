@@ -7,6 +7,7 @@ import logging
 from itertools import groupby
 from odoo import models, api, fields, _
 from odoo.exceptions import UserError, AccessError
+from odoo.tools.float_utils import float_is_zero, float_compare
 
 _logger = logging.getLogger(__name__)
 
@@ -14,6 +15,39 @@ class PurchaseOrderLine(models.Model):
     _inherit = "purchase.order.line"
     
     
+    @api.multi
+    def _create_or_update_picking(self):
+        for line in self:
+            if line.product_id.type in ('product', 'consu'):
+                # Prevent decreasing below received quantity
+                if float_compare(line.product_qty, line.qty_received, line.product_uom.rounding) < 0:
+                    raise UserError('You cannot decrease the ordered quantity below the received quantity.\n'
+                                    'Create a return first.')
+
+                if float_compare(line.product_qty, line.qty_invoiced, line.product_uom.rounding) == -1:
+                    # If the quantity is now below the invoiced quantity, create an activity on the vendor bill
+                    # inviting the user to create a refund.
+                    activity = self.env['mail.activity'].sudo().create({
+                        'activity_type_id': self.env.ref('mail.mail_activity_data_todo').id,
+                        'note': _('The quantities on your purchase order indicate less than billed. You should ask for a refund. '),
+                        'res_id': line.invoice_lines[0].invoice_id.id,
+                        'res_model_id': self.env.ref('account.model_account_invoice').id,
+                    })
+                    activity._onchange_activity_type_id()
+
+                # If the user increased quantity of existing line or created a new line
+                pickings = line.order_id.picking_ids.filtered(lambda x: x.state not in ('done', 'cancel') and x.location_dest_id.usage in ('internal', 'transit'))
+                picking = pickings and pickings[0] or False
+                if not picking:
+                    res = line.order_id._prepare_picking(self.location_dest_id)
+                    picking = self.env['stock.picking'].create(res)
+                move_vals = line._prepare_stock_moves(picking)
+                for move_val in move_vals:
+                    self.env['stock.move']\
+                        .create(move_val)\
+                        ._action_confirm()\
+                        ._action_assign()
+                        
     @api.onchange('qty_in_kg','qty_per_camion','product_id','price_unit')
     @api.depends('qty_in_kg','qty_per_camion','product_id','price_unit')
     def _prix_du_kilogramme(self):

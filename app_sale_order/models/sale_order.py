@@ -118,7 +118,8 @@ class SaleOrder(models.Model):
                 sale.cmd_charcuterie = True
             if sale.partner_id.Client_Volaille:
                 sale.cmd_volaille = True
-                
+            if sale.partner_id.debloque_exce_ch:
+                sale.debloque_exce_vopp = True
     
     @api.multi
     def compute_qty_transport(self):
@@ -360,7 +361,7 @@ class SaleOrder(models.Model):
                     'warning': {'title': _('Error'), 'message': _('Error message'),},
             }
             
-        if self.cmd_charcuterie==True and self.cmd_volaille==False:
+        if self.cmd_charcuterie==True and self.debloque_exce_vopp==False and self.cmd_volaille==False:
             if self.partner_id.Client_Charcuterie: 
                 if self.partner_id.credit_charcuterie > self.partner_id.limite_credit_charcuterie: 
                     if self.partner_id.bloque_ch:
@@ -372,7 +373,7 @@ class SaleOrder(models.Model):
                             }
                         if self.partner_id.debloque_exce_ch==True:
                             self.test_bloque=""
-        if self.cmd_charcuterie==True and self.cmd_volaille==False:
+        if self.cmd_charcuterie==True and self.debloque_exce_vopp==False and self.cmd_volaille==False:
             if self.partner_id.Client_Charcuterie: 
                 if self.partner_id.nbr_jours_decheance_charcuterie > self.partner_id.echeance_charcuterie_par_jour: 
                     if self.partner_id.bloque_ch:
@@ -522,7 +523,7 @@ class SaleOrder(models.Model):
             weight_stock_char = 0
             for line in sales.order_line:
 #                if line.product_id.categ_id.complete_name in ("Chips","Saucissons","Chapelet","Mortadelle","Blocs","Panes","Tranches","Charcuterie Promo"):
-                if "Chips" in line.product_id.categ_id.complete_name or "Saucissons" in line.product_id.categ_id.complete_name or "Chapelet" in line.product_id.categ_id.complete_name or "Mortadelle" in line.product_id.categ_id.complete_name or "Blocs" in line.product_id.categ_id.complete_name or "Panes" in line.product_id.categ_id.complete_name or "Tranches" in line.product_id.categ_id.complete_name or "Tranches Promo" in line.product_id.categ_id.complete_name or "Saucissons Promo" in line.product_id.categ_id.complete_name or "Panes Promo" in line.product_id.categ_id.complete_name:
+                if "Chips" in line.product_id.categ_id.complete_name or "Saucissons" in line.product_id.categ_id.complete_name or "Chapelet" in line.product_id.categ_id.complete_name or "Mortadelle" in line.product_id.categ_id.complete_name or "Blocs" in line.product_id.categ_id.complete_name or "Panes Charcuterie" in line.product_id.categ_id.complete_name or "Tranches" in line.product_id.categ_id.complete_name or "Tranches Promo" in line.product_id.categ_id.complete_name or "Saucissons Promo" in line.product_id.categ_id.complete_name or "Panes Charcuterie Promo" in line.product_id.categ_id.complete_name:
                     weight_stock_char += line.secondary_uom_qty  or 0.0
             sales.total_weight_stock_char = weight_stock_char
             
@@ -538,7 +539,7 @@ class SaleOrder(models.Model):
         for sales in self:
             weight_stock_vv = 0
             for line in sales.order_line:
-                if "V-Nouvelle atlas" in line.product_id.categ_id.complete_name or "UVESA" in line.product_id.categ_id.complete_name or "Volaille Frais" in line.product_id.categ_id.complete_name or "Volaille Promo" in line.product_id.categ_id.complete_name or "Produit élaboré" in line.product_id.categ_id.complete_name:
+                if "V-Nouvelle atlas" in line.product_id.categ_id.complete_name or "UVESA" in line.product_id.categ_id.complete_name or "DAJAJ" in line.product_id.categ_id.complete_name or "Volaille Frais" in line.product_id.categ_id.complete_name or "Panes Volaille" in line.product_id.categ_id.complete_name or "Panes Volaille Promo" in line.product_id.categ_id.complete_name or "Volaille Promo" in line.product_id.categ_id.complete_name or "Produit élaboré" in line.product_id.categ_id.complete_name:
                     weight_stock_vv += line.product_uom_qty  or 0.0
             sales.total_weight_stock_vv = weight_stock_vv
     
