@@ -14,7 +14,7 @@ class FCustomerPortal(CustomerPortal):
         # get customer sales rep
         sales_user = False
         partner = request.env.user.partner_id
-        if partner.user_id and not partner.user_id.user_id._is_public():
+        if partner.user_id:
             sales_user = partner.user_id.user_id
             
         return {
