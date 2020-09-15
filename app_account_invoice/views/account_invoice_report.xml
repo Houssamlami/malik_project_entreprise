@@ -1,7 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-
+	<template id="account_invoice_inherit_portal_fhs"
+			inherit_id="account.portal_my_home_invoice">
+			<xpath expr="//li[hasclass('list-group-item')]" position="replace">
+            <li class="list-group-item">
+                <span class="badge" t-esc="invoice_count"/>
+                <a href="/my/invoices">Invoices</a>
+            </li>
+        </xpath>
+			
+			</template>
 		  <template id="report_account_invoice_inherit_unit_fhs"
 			inherit_id="account.report_invoice_document">
 			
