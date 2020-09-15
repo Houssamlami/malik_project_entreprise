@@ -197,13 +197,13 @@ class StockPicking(models.Model):
         self.action_done()
         #//////////////////////////////////////////////////////////////
         for mov_lines in self.move_lines:
-            if self.location_dest_id.usage == 'internal' and self.location_id.usage != 'internal':
+            if self.picking_type_code == 'outgoing':
                 print('stock move internal')
                 qty = mov_lines.product_id.secondary_unit_qty_available
             #res.qty_available = qty
                 mov_lines.product_id.secondary_unit_qty_available += mov_lines.secondary_uom_qty
             
-            elif self.location_dest_id.usage == 'customer' or self.location_dest_id.scrap_location:
+            elif self.picking_type_code == 'incoming':
                 print('stock move customer')
                 qty = mov_lines.product_id.secondary_unit_qty_available
                 print(qty)
@@ -213,8 +213,7 @@ class StockPicking(models.Model):
                 print(mov_lines.secondary_uom_qty)
             
             else:
-                print('stock move any')
-                return True
+                mov_lines.product_id.secondary_unit_qty_available -= 0
         #//////////////////////////////////////////////////////////////
         return
             
