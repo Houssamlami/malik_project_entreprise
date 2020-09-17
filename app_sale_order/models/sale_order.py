@@ -34,7 +34,7 @@ class SaleOrder(models.Model):
     adresse_liv =  fields.Char(string='Adresse livraison', compute='get_default_zip')
     city =  fields.Char(string='Ville', compute='get_default_zip')    
     observation =  fields.Char(string='Observation')
-    test_bloque = fields.Char('Test bloque')
+    test_bloque = fields.Char('Information blockage')
     cmd_charcuterie = fields.Boolean(string="Charcuterie")
     cmd_volaille = fields.Boolean(string="Volaille")
     fac_charcuterie_volaille = fields.Selection([('charcuterie', 'Charcuterie'),('volaille', 'Volaille')],string="Type commande")
@@ -231,6 +231,12 @@ class SaleOrder(models.Model):
                     return {
                         'warning': {'title': _('Error'), 'message': _('Error message'),},
                         }
+            if record.partner_id.bloque_ch:
+                record.test_bloque="Votre Client est bloqué"
+            if record.partner_id.bloque_vo:
+                record.test_bloque="Votre Client est bloqué"
+            if record.partner_id.bloque_ch and record.partner_id.bloque_vo:
+                record.test_bloque="Votre Client est bloqué"
             '''if record.cmd_charcuterie==True and record.cmd_volaille==False:
                 if record.partner_id.Client_Charcuterie: 
                     if record.partner_id.credit_charcuterie > record.partner_id.limite_credit_charcuterie: 
