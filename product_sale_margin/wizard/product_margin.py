@@ -10,7 +10,7 @@ class ProductMargin(models.TransientModel):
     _inherit = 'product.margin'
     _description = 'Product Margin'
 
-    products_an = fields.Boolean('Produits AN', default=False)
+    products_an = fields.Boolean('Ventes AN', default=False)
     
     @api.multi
     def action_open_window(self):
