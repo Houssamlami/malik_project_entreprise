@@ -129,7 +129,7 @@ class ProductProduct(models.Model):
                 ctx['force_company'] = company_id
             
                 in_type = ('out_invoice','out_invoice')
-                self.env.cr.execute(sqlstrs, ((tuple(partner_id),), val.id, states, in_type, date_from, date_to, company_id))
+                self.env.cr.execute(sqlstrs, (partner_id, val.id, states, in_type, date_from, date_to, company_id))
                 result = self.env.cr.fetchall()[0]
                 res[val.id]['number_sales_without_an'] = result[1] and result[1] or 0.0
             
@@ -250,7 +250,7 @@ class ProductProduct(models.Model):
                 ctx['force_company'] = company_id
             
                 in_type = ('out_invoice','out_invoice')
-                self.env.cr.execute(sqlstrs, ((tuple(partner_id),), val.id, states, in_type, date_from, date_to, company_id))
+                self.env.cr.execute(sqlstrs, (partner_id, val.id, states, in_type, date_from, date_to, company_id))
                 result = self.env.cr.fetchall()[0]
                 res[val.id]['number_sales_without_an'] = result[1] and result[1] or 0.0
             
