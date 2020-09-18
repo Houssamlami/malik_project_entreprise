@@ -96,7 +96,7 @@ class ResPartner(models.Model):
     customer_cmd_ceiling = fields.Float('Plafond commande client', track_visibility='onchange')
     customer_cmd_ceiling_cha = fields.Float('Plafond commande charcuterie', track_visibility='onchange')
     customer_cmd_ceiling_vol = fields.Float('Plafond commande volaille', track_visibility='onchange')
-    debloque_exce_ch = fields.Boolean(string=u"Déblocage exceptionnel charcuterie" , compute='get_reblocage', store=True)
+    debloque_exce_ch = fields.Boolean(string=u"Déblocage exceptionnel charcuterie" , compute='get_reblocage')
     date_reblockage = fields.Date(string='Date de reblocage')
     date_actualy2 = fields.Date(string='today actualy2', compute='get_date')
     
