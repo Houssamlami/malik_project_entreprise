@@ -54,11 +54,11 @@ class ProductProduct(models.Model):
             invoice_state = self.env.context.get('invoice_state', 'open_paid')
             res[val.id]['date_from'] = date_from
             res[val.id]['date_to'] = date_to
-            products_an = self.env.context.get('products_an')
-            res[val.id]['products_an'] = products_an
+            type_compte = self.env.context.get('type_compte')
+            res[val.id]['type_compte'] = type_compte
             res[val.id]['invoice_state'] = invoice_state
             
-            partner_id = self.env['res.partner'].search([('name', 'in', ['Atlas Négoce','ATLAS NEGOCE','Atlas Négoce GC']),('customer', '=', True)]).ids
+            partner_id = False
             ids = (x.id for x in partner_id)
             
             sum_prices = val.product_tmpl_id.prix_achat + val.product_tmpl_id.prix_transport + val.product_tmpl_id.cout_avs + val.product_tmpl_id.cout_ttm
@@ -78,7 +78,8 @@ class ProductProduct(models.Model):
                 company_id = self.env.user.company_id.id
                 
             #############################################
-            if not products_an:
+            if type_compte == 'pc':
+                partner_id = self.env['res.partner'].search([('Client_PC', '=', True),('customer', '=', True)]).ids
 
             #Cost price is calculated afterwards as it is a property
                 sqlstr = """
@@ -104,7 +105,7 @@ class ProductProduct(models.Model):
                 left join account_invoice i on (l.invoice_id = i.id)
                 left join product_product product on (product.id=l.product_id)
                 left join product_template pt on (pt.id = product.product_tmpl_id)
-                where i.partner_id.id NOT IN  %s and l.price_unit != 0 and l.product_id = %s and i.state in %s and i.type IN %s and (i.date_invoice IS NULL or (i.date_invoice>=%s and i.date_invoice<=%s and i.company_id=%s))
+                where i.partner_id IN  %s and l.price_unit != 0 and l.product_id = %s and i.state in %s and i.type IN %s and (i.date_invoice IS NULL or (i.date_invoice>=%s and i.date_invoice<=%s and i.company_id=%s))
                 """
                 
                 sqlstrss = """
@@ -129,7 +130,129 @@ class ProductProduct(models.Model):
                 ctx['force_company'] = company_id
             
                 in_type = ('out_invoice','out_invoice')
-                self.env.cr.execute(sqlstrs, (partner_id, val.id, states, in_type, date_from, date_to, company_id))
+                self.env.cr.execute(sqlstrs, ((tuple(partner_id),), val.id, states, in_type, date_from, date_to, company_id))
+                result = self.env.cr.fetchall()[0]
+                res[val.id]['number_sales_without_an'] = result[1] and result[1] or 0.0
+            
+                ctx = self.env.context.copy()
+                ctx['force_company'] = company_id
+            
+                inv_type = ('out_refund','out_refund')
+                self.env.cr.execute(sqlstr, (val.id, states, inv_type, date_from, date_to, company_id))
+                result = self.env.cr.fetchall()[0]
+                res[val.id]['amount_refund'] = (result[2] and result[2] or 0.0)*(-1)
+                res[val.id]['number_refund'] = result[1] and result[1] or 0.0
+            
+                ctx = self.env.context.copy()
+                ctx['force_company'] = company_id
+            
+                invs_type = ('out_invoice','out_invoice')
+                self.env.cr.execute(sqlstr, (val.id, states, invs_type, date_from, date_to, company_id))
+                result = self.env.cr.fetchall()[0]
+                res[val.id]['amount_inv_total'] = result[2] and result[2] or 0.0
+                res[val.id]['number_sales'] = result[1] and result[1] or 0.0
+            
+                ctx = self.env.context.copy()
+                ctx['force_company'] = company_id
+            
+                invoice_type = ('out_invoice', 'out_refund')
+                self.env.cr.execute(sqlstr, (val.id, states, invoice_type, date_from, date_to, company_id))
+                result = self.env.cr.fetchall()[0]
+                res[val.id]['turnover'] = result[2] and result[2] or 0.0
+                res[val.id]['charge_fix_margin'] = val.charge_fixe
+                res[val.id]['marge_margin'] = val.marge
+                res[val.id]['amount_charge_fix'] = res[val.id]['turnover'] * (val.charge_fixe/100)
+                res[val.id]['marge_securite_margin'] = val.marge_securite
+                res[val.id]['amount_marge_securite'] = res[val.id]['turnover'] * (val.marge_securite/100)
+                res[val.id]['amount_refund_rate'] = res[val.id]['amount_inv_total'] and res[val.id]['amount_refund'] * 100 / res[val.id]['amount_inv_total'] or 0.0
+            
+                ctx = self.env.context.copy()
+                ctx['force_company'] = company_id
+            
+                invoice_types = ('out_invoice', 'in_refund')
+                self.env.cr.execute(sqlstr, (val.id, states, invoice_types, date_from, date_to, company_id))
+                result = self.env.cr.fetchall()[0]
+                res[val.id]['sale_avg_price'] = result[0] and result[0] or 0.0
+                res[val.id]['sale_num_invoiced'] = res[val.id]['number_sales_without_an'] - res[val.id]['number_refund_with_ref']
+                res[val.id]['price_commercial'] = res[val.id]['sale_num_invoiced'] * sum_prices * unit_in_colis
+                res[val.id]['marge_commercial'] = res[val.id]['turnover'] - res[val.id]['price_commercial']
+                res[val.id]['sale_expected'] = res[val.id]['sale_num_invoiced'] * val.product_tmpl_id.list_price
+                res[val.id]['sales_gap'] = res[val.id]['sale_expected'] - res[val.id]['turnover']
+                res[val.id]['sales_gap_rate'] = res[val.id]['sale_expected'] and res[val.id]['sales_gap'] * 100 / res[val.id]['sale_expected'] or 0.0
+                res[val.id]['commercial_rate'] = res[val.id]['sales_gap_rate'] - res[val.id]['amount_refund_rate']
+            
+                ctx = self.env.context.copy()
+                ctx['force_company'] = company_id
+                invoice_types = ('in_invoice', 'out_refund')
+                self.env.cr.execute(sqlstr, (val.id, states, invoice_types, date_from, date_to, company_id))
+                result = self.env.cr.fetchall()[0]
+                res[val.id]['purchase_avg_price'] = result[0] and result[0] or 0.0
+                res[val.id]['purchase_num_invoiced'] = result[1] and result[1] or 0.0
+                res[val.id]['total_cost'] = res[val.id]['sale_num_invoiced'] * standard_price
+                res[val.id]['normal_cost'] = val.standard_price * res[val.id]['sale_num_invoiced']
+                res[val.id]['purchase_gap'] = res[val.id]['normal_cost'] - res[val.id]['total_cost']
+            
+                res[val.id]['marge_commercial_rate'] = res[val.id]['turnover'] and res[val.id]['marge_commercial'] * 100 / res[val.id]['turnover'] or 0.0
+                res[val.id]['charge_fix_margin_max'] = min(res[val.id]['charge_fix_margin'],res[val.id]['marge_commercial_rate'])
+
+                res[val.id]['total_margin'] = res[val.id]['turnover'] - res[val.id]['total_cost']
+                res[val.id]['expected_margin'] = res[val.id]['sale_expected'] - res[val.id]['normal_cost']
+                res[val.id]['total_margin_rate'] = res[val.id]['turnover'] and res[val.id]['total_margin'] * 100 / res[val.id]['turnover'] or 0.0
+                res[val.id]['expected_margin_rate'] = res[val.id]['sale_expected'] and res[val.id]['expected_margin'] * 100 / res[val.id]['sale_expected'] or 0.0
+                res[val.id]['price_avg_rate'] = val.product_tmpl_id.list_price and (val.product_tmpl_id.list_price - res[val.id]['sale_avg_price'])* 100 / val.product_tmpl_id.list_price or 0.0
+                for k, v in res[val.id].items():
+                    setattr(val, k, v)
+            elif type_compte == 'gc':
+                partner_id = self.env['res.partner'].search([('Client_GC', '=', True),('customer', '=', True)]).ids
+                sqlstr = """
+                select
+                    sum(l.price_unit * l.quantity)/nullif(sum(l.quantity),0) as avg_unit_price,
+                    sum(l.quantity) as num_qty,
+                    sum(l.quantity * (l.price_subtotal_signed/(nullif(l.quantity,0)))) as total,
+                    sum(l.quantity * pt.list_price) as sale_expected
+                from account_invoice_line l
+                left join account_invoice i on (l.invoice_id = i.id)
+                left join product_product product on (product.id=l.product_id)
+                left join product_template pt on (pt.id = product.product_tmpl_id)
+                where l.price_unit != 0 and l.product_id = %s and i.state in %s and i.type IN %s and (i.date_invoice IS NULL or (i.date_invoice>=%s and i.date_invoice<=%s and i.company_id=%s))
+                """
+                
+                sqlstrs = """
+                select
+                    sum(l.price_unit * l.quantity)/nullif(sum(l.quantity),0) as avg_unit_price,
+                    sum(l.quantity) as num_qty,
+                    sum(l.quantity * (l.price_subtotal_signed/(nullif(l.quantity,0)))) as total,
+                    sum(l.quantity * pt.list_price) as sale_expected
+                from account_invoice_line l
+                left join account_invoice i on (l.invoice_id = i.id)
+                left join product_product product on (product.id=l.product_id)
+                left join product_template pt on (pt.id = product.product_tmpl_id)
+                where i.partner_id IN  %s and l.price_unit != 0 and l.product_id = %s and i.state in %s and i.type IN %s and (i.date_invoice IS NULL or (i.date_invoice>=%s and i.date_invoice<=%s and i.company_id=%s))
+                """
+                
+                sqlstrss = """
+                select
+                    sum(l.price_unit * l.quantity)/nullif(sum(l.quantity),0) as avg_unit_price,
+                    sum(l.quantity) as num_qty,
+                    sum(l.quantity * (l.price_subtotal_signed/(nullif(l.quantity,0)))) as total,
+                    sum(l.quantity * pt.list_price) as sale_expected
+                from account_invoice_line l
+                left join account_invoice i on (l.invoice_id = i.id)
+                left join product_product product on (product.id=l.product_id)
+                left join product_template pt on (pt.id = product.product_tmpl_id)
+                where i.ref_livraison IS NOT NULL and l.price_unit != 0 and l.product_id = %s and i.state in %s and i.type IN %s and (i.date_invoice IS NULL or (i.date_invoice>=%s and i.date_invoice<=%s and i.company_id=%s))
+                """
+                
+                inv_type = ('out_refund','out_refund')
+                self.env.cr.execute(sqlstrss, (val.id, states, inv_type, date_from, date_to, company_id))
+                result = self.env.cr.fetchall()[0]
+                res[val.id]['number_refund_with_ref'] = result[1] and result[1] or 0.0
+            
+                ctx = self.env.context.copy()
+                ctx['force_company'] = company_id
+            
+                in_type = ('out_invoice','out_invoice')
+                self.env.cr.execute(sqlstrs, ((tuple(partner_id),), val.id, states, in_type, date_from, date_to, company_id))
                 result = self.env.cr.fetchall()[0]
                 res[val.id]['number_sales_without_an'] = result[1] and result[1] or 0.0
             
@@ -202,6 +325,7 @@ class ProductProduct(models.Model):
                 for k, v in res[val.id].items():
                     setattr(val, k, v)
             else:
+                partner_id = self.env['res.partner'].search([('Client_GC', '=', True),('customer', '=', True)]).ids
                 sqlstr = """
                 select
                     sum(l.price_unit * l.quantity)/nullif(sum(l.quantity),0) as avg_unit_price,
@@ -225,7 +349,7 @@ class ProductProduct(models.Model):
                 left join account_invoice i on (l.invoice_id = i.id)
                 left join product_product product on (product.id=l.product_id)
                 left join product_template pt on (pt.id = product.product_tmpl_id)
-                where i.partner_id.id IN  %s and l.price_unit != 0 and l.product_id = %s and i.state in %s and i.type IN %s and (i.date_invoice IS NULL or (i.date_invoice>=%s and i.date_invoice<=%s and i.company_id=%s))
+                where i.grosiste =  %s and l.price_unit != 0 and l.product_id = %s and i.state in %s and i.type IN %s and (i.date_invoice IS NULL or (i.date_invoice>=%s and i.date_invoice<=%s and i.company_id=%s))
                 """
                 
                 sqlstrss = """
@@ -250,7 +374,7 @@ class ProductProduct(models.Model):
                 ctx['force_company'] = company_id
             
                 in_type = ('out_invoice','out_invoice')
-                self.env.cr.execute(sqlstrs, (partner_id, val.id, states, in_type, date_from, date_to, company_id))
+                self.env.cr.execute(sqlstrs, (True, val.id, states, in_type, date_from, date_to, company_id))
                 result = self.env.cr.fetchall()[0]
                 res[val.id]['number_sales_without_an'] = result[1] and result[1] or 0.0
             

@@ -10,7 +10,7 @@
              <field name="arch" type="xml">
 				<xpath expr="//field[@name='invoice_state']"
 					position="after">
-					<field name="products_an"/>
+					<field name="type_compte"/>
 				</xpath>
             </field>
         </record>
