@@ -105,7 +105,7 @@ class ProductProduct(models.Model):
                 left join account_invoice i on (l.invoice_id = i.id)
                 left join product_product product on (product.id=l.product_id)
                 left join product_template pt on (pt.id = product.product_tmpl_id)
-                where i.partner_id IN  %s and l.price_unit != 0 and l.product_id = %s and i.state in %s and i.type IN %s and (i.date_invoice IS NULL or (i.date_invoice>=%s and i.date_invoice<=%s and i.company_id=%s))
+                where i.partner_id.Client_PC =  %s and l.price_unit != 0 and l.product_id = %s and i.state in %s and i.type IN %s and (i.date_invoice IS NULL or (i.date_invoice>=%s and i.date_invoice<=%s and i.company_id=%s))
                 """
                 
                 sqlstrss = """
@@ -130,7 +130,7 @@ class ProductProduct(models.Model):
                 ctx['force_company'] = company_id
             
                 in_type = ('out_invoice','out_invoice')
-                self.env.cr.execute(sqlstrs, ((tuple(partner_id),), val.id, states, in_type, date_from, date_to, company_id))
+                self.env.cr.execute(sqlstrs, (True, val.id, states, in_type, date_from, date_to, company_id))
                 result = self.env.cr.fetchall()[0]
                 res[val.id]['number_sales_without_an'] = result[1] and result[1] or 0.0
             
@@ -227,7 +227,7 @@ class ProductProduct(models.Model):
                 left join account_invoice i on (l.invoice_id = i.id)
                 left join product_product product on (product.id=l.product_id)
                 left join product_template pt on (pt.id = product.product_tmpl_id)
-                where i.partner_id IN  %s and l.price_unit != 0 and l.product_id = %s and i.state in %s and i.type IN %s and (i.date_invoice IS NULL or (i.date_invoice>=%s and i.date_invoice<=%s and i.company_id=%s))
+                where i.partner_id.Client_GC =  %s and l.price_unit != 0 and l.product_id = %s and i.state in %s and i.type IN %s and (i.date_invoice IS NULL or (i.date_invoice>=%s and i.date_invoice<=%s and i.company_id=%s))
                 """
                 
                 sqlstrss = """
@@ -252,7 +252,7 @@ class ProductProduct(models.Model):
                 ctx['force_company'] = company_id
             
                 in_type = ('out_invoice','out_invoice')
-                self.env.cr.execute(sqlstrs, ((tuple(partner_id),), val.id, states, in_type, date_from, date_to, company_id))
+                self.env.cr.execute(sqlstrs, (True, val.id, states, in_type, date_from, date_to, company_id))
                 result = self.env.cr.fetchall()[0]
                 res[val.id]['number_sales_without_an'] = result[1] and result[1] or 0.0
             
