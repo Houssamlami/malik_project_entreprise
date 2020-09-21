@@ -122,6 +122,7 @@ class AccountInvoiceReport(models.Model):
         ('Qualité de Produit Atlas negoce', 'Qualité de Produit Atlas negoce'),
         ('Qualité de Produit Nouvelle Atlas', 'Qualité de Produit Nouvelle Atlas'),
         ('Qualité de Produit Tradco', 'Qualité de Produit Tradco'),
+        ('Qualité produit', 'Qualité produit'),
         ('Refus de commandes', 'Refus de commandes'),
         ('Manque de produit à la livraison', 'Manque de produit à la livraison'),
         ('Erreur de préparation TTM', 'Erreur de préparation TTM'),
@@ -134,6 +135,8 @@ class AccountInvoiceReport(models.Model):
         ('Geste commercial', 'Geste commercial'),
         ('Mauvaise qualité de produit UVESA', 'Mauvaise qualité de produit UVESA'),
         ('Mauvaise qualité produit Sodem', 'Mauvaise qualité produit Sodem'),
+        ('Conformité de produit', 'Conformité de produit'),
+        ('Erreur de livraison TTM', 'Erreur de livraison TTM'),
         ], readonly=True)
     grosiste = fields.Boolean(string='Grossiste', readonly=True)
     product_at_zero = fields.Boolean(string=u"Article à zéro AN", readonly=True)

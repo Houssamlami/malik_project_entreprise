@@ -14,7 +14,8 @@
     'author' : 'FHS Solutions',
     'depends' : ['product','product_margin'],
     'data': [
-        'views/product_margin_views.xml'
+        'views/product_margin_views.xml',
+        'wizard/product_margin_view_wizard.xml'
     ],
     'demo': [
     ],

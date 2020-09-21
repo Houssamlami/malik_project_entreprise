@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+         <record model="ir.ui.view"
+			id="view_product_margin_form_inherit_wizard">
+			<field name="name">view.product.margin.form.inherit.wizard</field>
+			<field name="model">product.margin</field>
+			<field name="inherit_id"
+				ref="product_margin.product_margin_form_view" />
+                        
+             <field name="arch" type="xml">
+				<xpath expr="//field[@name='invoice_state']"
+					position="after">
+					<field name="type_compte"/>
+				</xpath>
+            </field>
+        </record>
+
+
+</odoo>

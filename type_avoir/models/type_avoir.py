@@ -12,13 +12,14 @@ class AccountInvoice(models.Model):
 	
 
 
-    type_avoir = fields.Selection([
+    type_avoir = type_avoir = fields.Selection([
         ('Qualité de Produit BONA', 'Qualité de Produit BONA'),
         ('Qualité de Produit Crusvi', 'Qualité de Produit Crusvi'),
         ('Qualité de Produit Imex', 'Qualité de Produit Imex'),
         ('Qualité de Produit Atlas negoce', 'Qualité de Produit Atlas negoce'),
         ('Qualité de Produit Nouvelle Atlas', 'Qualité de Produit Nouvelle Atlas'),
         ('Qualité de Produit Tradco', 'Qualité de Produit Tradco'),
+        ('Qualité produit', 'Qualité produit'),
         ('Refus de commandes', 'Refus de commandes'),
         ('Manque de produit à la livraison', 'Manque de produit à la livraison'),
         ('Erreur de préparation TTM', 'Erreur de préparation TTM'),
@@ -31,4 +32,6 @@ class AccountInvoice(models.Model):
         ('Geste commercial', 'Geste commercial'),
         ('Mauvaise qualité de produit UVESA', 'Mauvaise qualité de produit UVESA'),
         ('Mauvaise qualité produit Sodem', 'Mauvaise qualité produit Sodem'),
-        ],)
+        ('Conformité de produit', 'Conformité de produit'),
+        ('Erreur de livraison TTM', 'Erreur de livraison TTM'),
+        ])
