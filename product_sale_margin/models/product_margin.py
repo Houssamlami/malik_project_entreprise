@@ -59,7 +59,7 @@ class ProductProduct(models.Model):
             res[val.id]['invoice_state'] = invoice_state
             
             partner_id = False
-            ids = (x.id for x in partner_id)
+            #ids = (x.id for x in partner_id)
             
             sum_prices = val.product_tmpl_id.prix_achat + val.product_tmpl_id.prix_transport + val.product_tmpl_id.cout_avs + val.product_tmpl_id.cout_ttm
             unit_in_colis = val.product_tmpl_id.number_unit
