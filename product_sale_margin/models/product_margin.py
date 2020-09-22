@@ -105,7 +105,7 @@ class ProductProduct(models.Model):
                 left join account_invoice i on (l.invoice_id = i.id)
                 left join product_product product on (product.id=l.product_id)
                 left join product_template pt on (pt.id = product.product_tmpl_id)
-                where i.partner_id.Client_PC =  %s and l.price_unit != 0 and l.product_id = %s and i.state in %s and i.type IN %s and (i.date_invoice IS NULL or (i.date_invoice>=%s and i.date_invoice<=%s and i.company_id=%s))
+                where i.cli_pc =  %s and l.price_unit != 0 and l.product_id = %s and i.state in %s and i.type IN %s and (i.date_invoice IS NULL or (i.date_invoice>=%s and i.date_invoice<=%s and i.company_id=%s))
                 """
                 
                 sqlstrss = """
@@ -227,7 +227,7 @@ class ProductProduct(models.Model):
                 left join account_invoice i on (l.invoice_id = i.id)
                 left join product_product product on (product.id=l.product_id)
                 left join product_template pt on (pt.id = product.product_tmpl_id)
-                where i.partner_id.Client_GC =  %s and l.price_unit != 0 and l.product_id = %s and i.state in %s and i.type IN %s and (i.date_invoice IS NULL or (i.date_invoice>=%s and i.date_invoice<=%s and i.company_id=%s))
+                where i.cli_gc =  %s and l.price_unit != 0 and l.product_id = %s and i.state in %s and i.type IN %s and (i.date_invoice IS NULL or (i.date_invoice>=%s and i.date_invoice<=%s and i.company_id=%s))
                 """
                 
                 sqlstrss = """
