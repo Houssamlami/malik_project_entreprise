@@ -10,7 +10,7 @@ class ProductMargin(models.TransientModel):
     _inherit = 'product.margin'
     _description = 'Product Margin'
 
-    products_an = fields.Boolean('Ventes AN', default=False)
+    type_compte = fields.Selection([('pc', 'Petit compte'), ('gc', 'Gros compte'), ('gst', 'Grossiste')], string="Type de vente")
     
     @api.multi
     def action_open_window(self):
@@ -27,7 +27,7 @@ class ProductMargin(models.TransientModel):
         model, tree_view_id = ref('product_margin', 'view_product_margin_tree')
 
         context.update(invoice_state=self.invoice_state)
-        context.update(products_an=self.products_an)
+        context.update(type_compte=self.type_compte)
 
         if self.from_date:
             context.update(date_from=self.from_date)
