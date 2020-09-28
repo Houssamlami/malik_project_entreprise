@@ -545,7 +545,7 @@ class SaleOrder(models.Model):
         for sales in self:
             weight_stock_vv = 0
             for line in sales.order_line:
-                if "V-Nouvelle atlas" in line.product_id.categ_id.complete_name or "UVESA" in line.product_id.categ_id.complete_name or "DAJAJ" in line.product_id.categ_id.complete_name or "Volaille Frais" in line.product_id.categ_id.complete_name or "Panes Volaille" in line.product_id.categ_id.complete_name or "Panes Volaille Promo" in line.product_id.categ_id.complete_name or "Volaille Promo" in line.product_id.categ_id.complete_name or "Produit élaboré" in line.product_id.categ_id.complete_name:
+                if "V-Nouvelle atlas" in line.product_id.categ_id.complete_name or "UVESA" in line.product_id.categ_id.complete_name or "DAJAJ" in line.product_id.categ_id.complete_name or "Volaille Frais" in line.product_id.categ_id.complete_name or "Panes VV" in line.product_id.categ_id.complete_name or "Panes Volaille" in line.product_id.categ_id.complete_name or "Panes Volaille Promo" in line.product_id.categ_id.complete_name or "Volaille Promo" in line.product_id.categ_id.complete_name or "Produit élaboré" in line.product_id.categ_id.complete_name:
                     weight_stock_vv += line.product_uom_qty  or 0.0
             sales.total_weight_stock_vv = weight_stock_vv
     
