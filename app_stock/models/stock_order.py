@@ -33,6 +33,7 @@ class StockPicking(models.Model):
     bl_supplier = fields.Char(string="N° BL fournisseur")
     origin_command = fields.Char(string="La commande origine", index=True, states={'done': [('readonly', True)], 'cancel': [('readonly', True)]})
     
+    
     @api.one      
     def _compute_number_product_to_deliver(self):
         for record in self:
