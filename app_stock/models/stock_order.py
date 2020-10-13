@@ -24,7 +24,7 @@ class StockPicking(models.Model):
     total_weight_stock_frais_auto = fields.Float(string='Total frais)', compute='_compute_weight_total_stock_frais')
     total_weight_stock_surg_auto = fields.Float(string='Total surg)', compute='_compute_weight_total_stock_surg')
     total_weight_stock_volailles_auto = fields.Float(string='Total volailles)', compute='_compute_weight_total_stock_volailles')
-    total_colis_delivered = fields.Float(string='Total Colis', compute='_compute_colis_poids_total_bl', track_visibility='onchange')
+    total_colis_delivered = fields.Float(string='Total Colis', compute='_compute_colis_poids_total_bl')
     total_weight_delivered = fields.Float(string='Poids Total', compute='_compute_colis_poids_total_bl', track_visibility='onchange')
     is_return_picking = fields.Boolean(string="Is Retour", compute='get_is_return_picking')
     name_provisoir = fields.Char(string="Nom Provisoir", compute='get_is_return_picking')
