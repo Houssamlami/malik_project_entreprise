@@ -72,7 +72,7 @@ class StockPicking(models.Model):
                 if line.product_id and line.product_id.uom_id.name != 'kg':
                     total_poids += (line.quantity_done or 0.0)*line.product_id.weight
                     if line.quantity_done != 0.0:
-                        total_colis += (line.secondary_uom_qty or 0.0)
+                        total_colis += (line.secondary_uom_qty)
                 if line.product_id and line.product_id.uom_id.name == 'kg':
                     total_poids += (line.quantity_done or 0.0)
                     if line.quantity_done != 0.0:
