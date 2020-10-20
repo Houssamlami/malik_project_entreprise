@@ -40,6 +40,24 @@
                     <table class="table table-condensed">
                         <thead>
                             <tr>
+                                 <th><strong>Nbr Colis Vol</strong></th>
+                                 <th><strong>Nbr Colis Charc</strong></th>
+                                 <th><strong>Nbr Colis Sec</strong></th>
+                                 <th><strong>Nbr Colis Surg</strong></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                 <td> <span t-esc="oo.total_weight_stock_volailles_auto"/> </td>
+                                 <td> <span t-esc="oo.total_weight_stock_frais_auto"/> </td>
+                                 <td> <span t-esc="oo.total_weight_stock_sec_auto"/> </td>
+                                 <td> <span t-esc="oo.total_weight_stock_surg_auto"/> </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table class="table table-condensed">
+                        <thead>
+                            <tr>
                                 <th t-if="oo.origin"><strong>Order (Origin)</strong></th>
                                 <th name="td_sched_date_h">
                                     <strong>Date</strong>
