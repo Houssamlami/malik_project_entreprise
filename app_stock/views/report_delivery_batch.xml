@@ -18,7 +18,15 @@
                <t t-set="oo" t-value="o[0]"/>
                <t t-set="name" t-value="''"/>
                <t t-set="origin" t-value="''"/>
+               <t t-set="total_weight_stock_volailles_auto_tot" t-value="0"/>
+               <t t-set="total_weight_stock_frais_auto_tot" t-value="0"/>
+               <t t-set="total_weight_stock_sec_auto_tot" t-value="0"/>
+               <t t-set="total_weight_stock_surg_auto_tot" t-value="0"/>
                <t t-foreach="docs" t-as="o">
+               <t t-set="total_weight_stock_volailles_auto_tot" t-value="total_weight_stock_volailles_auto_tot+oo.total_weight_stock_volailles_auto"/>
+               <t t-set="total_weight_stock_frais_auto_tot" t-value="total_weight_stock_frais_auto_tot+oo.total_weight_stock_frais_auto"/>
+               <t t-set="total_weight_stock_sec_auto_tot" t-value="total_weight_stock_sec_auto_tot+oo.total_weight_stock_sec_auto"/>
+               <t t-set="total_weight_stock_surg_auto_tot" t-value="total_weight_stock_surg_auto_tot+oo.total_weight_stock_surg_auto"/>
                <t t-set="name" t-value="name+'/'+o.name"/>
                <t t-set="origin" t-value="origin+'/'+o.origin"/>
                </t>
@@ -35,7 +43,8 @@
                         </div>
                     </div>
                     <h2>
-                        <span t-esc="name"/>
+                        Synthése de Livraison N°: 000001
+                        <!--span t-esc="name"/-->
                     </h2>
                     <table class="table table-condensed">
                         <thead>
@@ -48,10 +57,10 @@
                         </thead>
                         <tbody>
                             <tr>
-                                 <td> <span t-esc="oo.total_weight_stock_volailles_auto"/> </td>
-                                 <td> <span t-esc="oo.total_weight_stock_frais_auto"/> </td>
-                                 <td> <span t-esc="oo.total_weight_stock_sec_auto"/> </td>
-                                 <td> <span t-esc="oo.total_weight_stock_surg_auto"/> </td>
+                                 <td> <span t-esc="oo.total_weight_stock_volailles_auto_tot"/> </td>
+                                 <td> <span t-esc="oo.total_weight_stock_frais_auto_tot"/> </td>
+                                 <td> <span t-esc="oo.total_weight_stock_sec_auto_tot"/> </td>
+                                 <td> <span t-esc="oo.total_weight_stock_surg_auto_tot"/> </td>
                             </tr>
                         </tbody>
                     </table>
@@ -62,6 +71,7 @@
                                 <th name="td_sched_date_h">
                                     <strong>Date</strong>
                                 </th>
+                                <th t-if="oo.name"><strong>BL (Origin)</strong></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -76,6 +86,9 @@
                                    <t t-if="oo.state != 'done'">
                                         <span t-field="oo.scheduled_date"/>
                                    </t>
+                                </td>
+                                <td t-if="oo.name">
+                                    <span t-esc="name"/>
                                 </td>
                             </tr>
                         </tbody>
