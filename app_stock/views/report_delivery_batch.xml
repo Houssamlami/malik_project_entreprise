@@ -23,10 +23,10 @@
                <t t-set="total_weight_stock_sec_auto_tot" t-value="0"/>
                <t t-set="total_weight_stock_surg_auto_tot" t-value="0"/>
                <t t-foreach="docs" t-as="o">
-               <t t-set="total_weight_stock_volailles_auto_tot" t-value="total_weight_stock_volailles_auto_tot+oo.total_weight_stock_volailles_auto"/>
-               <t t-set="total_weight_stock_frais_auto_tot" t-value="total_weight_stock_frais_auto_tot+oo.total_weight_stock_frais_auto"/>
-               <t t-set="total_weight_stock_sec_auto_tot" t-value="total_weight_stock_sec_auto_tot+oo.total_weight_stock_sec_auto"/>
-               <t t-set="total_weight_stock_surg_auto_tot" t-value="total_weight_stock_surg_auto_tot+oo.total_weight_stock_surg_auto"/>
+               <t t-set="total_weight_stock_volailles_auto_tot" t-value="total_weight_stock_volailles_auto_tot+o.total_weight_stock_volailles_auto"/>
+               <t t-set="total_weight_stock_frais_auto_tot" t-value="total_weight_stock_frais_auto_tot+o.total_weight_stock_frais_auto"/>
+               <t t-set="total_weight_stock_sec_auto_tot" t-value="total_weight_stock_sec_auto_tot+o.total_weight_stock_sec_auto"/>
+               <t t-set="total_weight_stock_surg_auto_tot" t-value="total_weight_stock_surg_auto_tot+o.total_weight_stock_surg_auto"/>
                <t t-set="name" t-value="name+'/'+o.name"/>
                <t t-set="origin" t-value="origin+'/'+o.origin"/>
                </t>
