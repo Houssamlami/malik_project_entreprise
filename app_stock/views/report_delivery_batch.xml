@@ -57,10 +57,10 @@
                         </thead>
                         <tbody>
                             <tr>
-                                 <td> <span t-esc="oo.total_weight_stock_volailles_auto_tot"/> </td>
-                                 <td> <span t-esc="oo.total_weight_stock_frais_auto_tot"/> </td>
-                                 <td> <span t-esc="oo.total_weight_stock_sec_auto_tot"/> </td>
-                                 <td> <span t-esc="oo.total_weight_stock_surg_auto_tot"/> </td>
+                                 <td> <span t-esc="total_weight_stock_volailles_auto_tot"/> </td>
+                                 <td> <span t-esc="total_weight_stock_frais_auto_tot"/> </td>
+                                 <td> <span t-esc="total_weight_stock_sec_auto_tot"/> </td>
+                                 <td> <span t-esc="total_weight_stock_surg_auto_tot"/> </td>
                             </tr>
                         </tbody>
                     </table>
