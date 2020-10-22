@@ -46,7 +46,6 @@ class StockPicking(models.Model):
                         cmpt += move.secondary_uom_qty
             record.number_product_to_deliver = cmpt
             
-    @api.one
     def get_nature_prod(self):
         typeprodt=''
         for record in self:

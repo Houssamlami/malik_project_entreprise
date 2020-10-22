@@ -33,7 +33,7 @@
                     <div class="row" name="customer_address">
                         <div class="col-xs-4 pull-right">
                             <div>
-                                <span><strong>Customer Address:</strong></span>
+                                <span><strong>Adresse Client:</strong></span>
                             </div>
                             <t t-set="partner" t-value="oo.partner_id or (oo.move_lines and oo.move_lines[0].partner_id) or False"/>
                             <div t-if="partner" name="partner_header">
