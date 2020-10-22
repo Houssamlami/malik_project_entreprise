@@ -76,7 +76,7 @@ class SaleOrder(models.Model):
         for sales in self:
             weight_stock_epc = 0
             for line in sales.order_line:
-                if "Aides cuisines" in line.product_id.categ_id.complete_name or "BOISSONS" in line.product_id.categ_id.complete_name or "BOUILLONS" in line.product_id.categ_id.complete_name or "CONSERVES" in line.product_id.categ_id.complete_name or "FRUITS SECS" in line.product_id.categ_id.complete_name or "FÉCULANTS" in line.product_id.categ_id.complete_name or "HUILE" in line.product_id.categ_id.complete_name or "Soupe" in line.product_id.categ_id.complete_name or "INFUSIONS" in line.product_id.categ_id.complete_name or "Légumes secs" in line.product_id.categ_id.complete_name or "Produits frais" in line.product_id.categ_id.complete_name or "Riz" in line.product_id.categ_id.complete_name or "SALADES" in line.product_id.categ_id.complete_name or  "SALÉES" in line.product_id.categ_id.complete_name or "SUCRES" in line.product_id.categ_id.complete_name or "Sauces" in line.product_id.categ_id.complete_name or "Sauces Promo" in line.product_id.categ_id.complete_name or "THÉ" in line.product_id.categ_id.complete_name or "VINAIGRE" in line.product_id.categ_id.complete_name or  "Épices" in line.product_id.categ_id.complete_name:
+                if "Aides cuisines" in line.product_id.categ_id.complete_name or "BOISSONS" in line.product_id.categ_id.complete_name or "BOUILLONS" in line.product_id.categ_id.complete_name or "CONSERVES" in line.product_id.categ_id.complete_name or "FRUITS SECS" in line.product_id.categ_id.complete_name or "FÉCULANTS" in line.product_id.categ_id.complete_name or "HUILE" in line.product_id.categ_id.complete_name or "Soupe" in line.product_id.categ_id.complete_name or "INFUSIONS" in line.product_id.categ_id.complete_name or "Légumes secs" in line.product_id.categ_id.complete_name or "Produits frais" in line.product_id.categ_id.complete_name or "Riz" in line.product_id.categ_id.complete_name or "SALADES" in line.product_id.categ_id.complete_name or  "SALÉES" in line.product_id.categ_id.complete_name or "SUCRES" in line.product_id.categ_id.complete_name or "Sauces" in line.product_id.categ_id.complete_name or "Sauces Promo" in line.product_id.categ_id.complete_name or "THÉ" in line.product_id.categ_id.complete_name or "VINAIGRE" in line.product_id.categ_id.complete_name or "Épices" in line.product_id.categ_id.complete_name or "Pot de bébé" in line.product_id.categ_id.complete_name:
                     weight_stock_epc += line.product_uom_qty  or 0.0
             sales.total_weight_stock_epc = weight_stock_epc
             
@@ -549,7 +549,7 @@ class SaleOrder(models.Model):
                     weight_stock_vv += line.product_uom_qty  or 0.0
             sales.total_weight_stock_vv = weight_stock_vv
     
-    @api.onchange('order_line','order_line.product_id')
+    @api.onchange('order_line','order_line.product_id','order_line.product_uom_qty')
     def onchange_order_line_livre(self):
         for record in self:
             record._compute_weight_total_stock_vv()
