@@ -24,13 +24,35 @@ class AccountInvoice(models.Model):
     grosiste = fields.Boolean(string='Grossiste', track_visibility='onchange')
     ref_livraison = fields.Many2one(comodel_name='stock.picking', string="Ref livraison", track_visibility='onchange')
     under_responsiblilty = fields.Selection([('ttm', 'TTM'),('mv', 'MV'),('an', 'AN'), ('other', 'Autre')], track_visibility='onchange', string=u"Sous responsabilité de")
+    binef_brut = fields.Float(string="bénéfice" , compute='_compute_benif')
+    binef = fields.Float(string="binef" , compute='_compute_benif')
+    cp = fields.Char(string="cp" , compute='_compute_benif')
     
     def get_total_colis_invoice(self):
         for record in self:
             colis = sum(self.env['stock.picking'].search([('state', 'in', ('done','emarge')),('picking_type_id.code', '=', 'outgoing'),('origin', 'ilike', self.origin)]).mapped('total_colis_delivered')) - sum(self.picking_ids.filtered(lambda r: r.picking_type_id.code == 'incoming' and r.state == 'done').mapped('total_colis_delivered'))
             record.qty_livrer_colis = colis
     
-    
+    def _compute_benif(self):
+        for line in self:
+            cp=0
+            binef = 0
+            for lines in line.invoice_line_ids:
+                binef +=((lines.product_id.prix_achat+lines.product_id.prix_transport+lines.product_id.cout_avs)*lines.product_id.number_unit)*lines.quantity    
+            line.binef = binef
+            #line.binef_brut= (line.amount_untaxed - line.binef)-35
+            line.cp = line.partner_id.zip[0:2]
+            #line.cp=line.cp[0:3]
+            if line.cp=='45':
+                line.binef_brut= (line.amount_untaxed - line.binef)-68.5
+            if line.cp=='27' or line.cp=='28':
+                line.binef_brut= (line.amount_untaxed - line.binef)-80
+            if line.cp=='60':
+                line.binef_brut= (line.amount_untaxed - line.binef)-48
+            if line.cp=='51' or line.cp=='52':
+                line.binef_brut= (line.amount_untaxed - line.binef)-35
+            if line.cp=='75' or line.cp=='77' or line.cp=='78' or line.cp=='91' or line.cp=='92' or line.cp=='93' or  line.cp=='94' or line.cp=='95':
+                line.binef_brut= (line.amount_untaxed - line.binef)-35
     
     '''@api.onchange('fac_charcuterie_f','fac_volaille_f')
     def onchange_fac_volaille_volaille(self):

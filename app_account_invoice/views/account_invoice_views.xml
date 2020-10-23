@@ -34,6 +34,9 @@
 					<field name="fac_volaille_f" />
 					<field name="cli_gc" />
 					<field name="cli_pc" />
+					<field name="binef" invisible="1"/>
+                    <field name="binef_brut" />
+                    <field name="cp" />
 				</xpath>
 				<xpath expr="//group[@class='oe_subtotal_footer oe_right']"
 					position="after">
