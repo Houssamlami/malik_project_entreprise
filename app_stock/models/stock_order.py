@@ -32,7 +32,8 @@ class StockPicking(models.Model):
     expediteur_in_picking = fields.Selection([('MV', 'Malik V'), ('An', 'Atlas N')], related='sale_id.Expediteur', string="Expediteur")
     bl_supplier = fields.Char(string="N° BL fournisseur")
     origin_command = fields.Char(string="La commande origine", index=True, states={'done': [('readonly', True)], 'cancel': [('readonly', True)]})
-    typeprod = fields.Char(string="Nature prod", compute='get_nature_prod', store='true')
+    #typeprod = fields.Char(string="Nature prod", compute='get_nature_prod', store='true')
+    typeproduit = fields.Char(related='sale_id.produitalivrer' ,string="Nature produit")
     
     
     @api.one      
@@ -46,14 +47,14 @@ class StockPicking(models.Model):
                         cmpt += move.secondary_uom_qty
             record.number_product_to_deliver = cmpt
             
-    def get_nature_prod(self):
+    '''def get_nature_prod(self):
         typeprodt=''
         for record in self:
             if record.origin:
                 sale = self.env['sale.order'].search([('name', '=', record.origin)])
                 for info in sale:
                     typeprodt=info.produitalivrer
-                record.typeprod = typeprodt
+                record.typeprod = typeprodt'''
             
     
     
