@@ -26,6 +26,7 @@ class AccountInvoice(models.Model):
     under_responsiblilty = fields.Selection([('ttm', 'TTM'),('mv', 'MV'),('an', 'AN'), ('other', 'Autre')], track_visibility='onchange', string=u"Sous responsabilité de")
     binef_brut = fields.Float(string="bénéfice" , compute='_compute_benif')
     binef = fields.Float(string="binef" , compute='_compute_benif')
+    binef_report = fields.Float(string="binef" , related='benif', store=True)
     cp = fields.Char(string="cp" , compute='_compute_benif')
     
     def get_total_colis_invoice(self):
@@ -133,6 +134,7 @@ class AccountInvoiceReport(models.Model):
     fac_volaille_f = fields.Boolean('Volaille', readonly=True)
     cli_gc = fields.Boolean('Client Gros compte', readonly=True)
     cli_pc = fields.Boolean('Client petit compte', readonly=True)
+    binef_report = fields.Float('Benefice', readonly=True)
     commercial = fields.Many2one(comodel_name='hr.employee', string="Commercial", readonly=True)
     vendeur = fields.Many2one(comodel_name='hr.employee', string="Vendeur", readonly=True)
     team_id = fields.Many2one('crm.team', string='Sales Channel')
@@ -169,7 +171,7 @@ class AccountInvoiceReport(models.Model):
     
     def _select(self):
         select_str = """
-            SELECT sub.id, sub.date,sub.date_livraison, sub.type_avoir, sub.grosiste, sub.amount_total, sub.under_responsiblilty, sub.product_at_zero, sub.number_unit, sub.ref_invoice_name, sub.team_id as team_id, sub.fac_volaille_f, sub.fac_charcuterie_f, sub.cli_gc, sub.cli_pc, sub.product_id, sub.partner_id, 
+            SELECT sub.id, sub.date,sub.date_livraison, sub.type_avoir, sub.grosiste, sub.binef_report, sub.amount_total, sub.under_responsiblilty, sub.product_at_zero, sub.number_unit, sub.ref_invoice_name, sub.team_id as team_id, sub.fac_volaille_f, sub.fac_charcuterie_f, sub.cli_gc, sub.cli_pc, sub.product_id, sub.partner_id, 
                 sub.country_id, sub.account_analytic_id, sub.commercial, sub.vendeur, sub.payment_term_id, sub.uom_name, sub.currency_id, sub.journal_id,
                 sub.fiscal_position_id, sub.user_id, sub.company_id, sub.nbr, sub.type, sub.state,
                 sub.categ_id, sub.date_due, sub.account_id, sub.account_line_id, sub.partner_bank_id,
@@ -188,6 +190,7 @@ class AccountInvoiceReport(models.Model):
                     ai.fac_charcuterie_f AS fac_charcuterie_f,
                     ai.fac_volaille_f AS fac_volaille_f,
                     ai.cli_pc AS cli_pc,
+                    ai.binef_report AS binef_report,
                     ai.grosiste AS grosiste,
                     SUM(ail.price_total * invoice_type.sign_qty) AS amount_total,
                     ai.under_responsiblilty AS under_responsiblilty,
@@ -219,5 +222,5 @@ class AccountInvoiceReport(models.Model):
         return select_str
     
     def _group_by(self):
-        return super(AccountInvoiceReport, self)._group_by() + ", ai.team_id, ai.type_avoir, pt.product_at_zero, pt.number_unit, ai.under_responsiblilty, ai.amount_total"
+        return super(AccountInvoiceReport, self)._group_by() + ", ai.team_id, ai.type_avoir, pt.product_at_zero, pt.number_unit, ai.under_responsiblilty, ai.amount_total, ai.binef_report"
             
