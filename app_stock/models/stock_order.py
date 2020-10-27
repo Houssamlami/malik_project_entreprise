@@ -33,7 +33,7 @@ class StockPicking(models.Model):
     bl_supplier = fields.Char(string="N° BL fournisseur")
     origin_command = fields.Char(string="La commande origine", index=True, states={'done': [('readonly', True)], 'cancel': [('readonly', True)]})
     #typeprod = fields.Char(string="Nature prod", compute='get_nature_prod', store='true')
-    typeproduit = fields.Char(related='sale_id.produitalivrer' ,string="Nature produit")
+    typeproduit = fields.Char(related='sale_id.produitalivrer' ,string="Nature produit", store=True)
     
     
     @api.one      
