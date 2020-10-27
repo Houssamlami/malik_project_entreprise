@@ -26,7 +26,7 @@ class AccountInvoice(models.Model):
     under_responsiblilty = fields.Selection([('ttm', 'TTM'),('mv', 'MV'),('an', 'AN'), ('other', 'Autre')], track_visibility='onchange', string=u"Sous responsabilité de")
     binef_brut = fields.Float(string="bénéfice" , compute='_compute_benif')
     binef = fields.Float(string="binef" , compute='_compute_benif')
-    binef_report = fields.Float(string="Benefice" , related='binef', store=True)
+    binef_report = fields.Float(string="Benefice" , related='binef_brut', store=True)
     cp = fields.Char(string="cp" , compute='_compute_benif')
     
     def get_total_colis_invoice(self):
