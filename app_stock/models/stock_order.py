@@ -74,7 +74,7 @@ class StockPicking(models.Model):
                     print(record.name_provisoir)
                 else:
                     record.is_return_picking = False
-    @api.multi
+
     @api.depends('move_lines.quantity_done','move_lines.secondary_uom_qty')          
     def _compute_colis_poids_total_bl(self):
         self.ensure_one()
