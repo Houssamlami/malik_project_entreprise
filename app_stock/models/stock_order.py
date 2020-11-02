@@ -77,7 +77,6 @@ class StockPicking(models.Model):
 
     @api.depends('move_lines.quantity_done','move_lines.secondary_uom_qty')          
     def _compute_colis_poids_total_bl(self):
-        self.ensure_one()
         total_colis = 0
         total_poids = 0
         for picking in self:
@@ -95,8 +94,8 @@ class StockPicking(models.Model):
                     total_poids += (line.quantity_done or 0.0)*line.product_id.weight
                     if line.quantity_done != 0.0:
                         total_colis += (line.secondary_uom_qty)
-        self.total_weight_delivered = total_poids
-        self.total_colis_delivered = total_colis
+            picking.total_weight_delivered = total_poids
+            picking.total_colis_delivered = total_colis
             
     @api.multi
     def print_br_stock_empty(self):
