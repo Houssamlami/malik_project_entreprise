@@ -24,13 +24,36 @@ class AccountInvoice(models.Model):
     grosiste = fields.Boolean(string='Grossiste', track_visibility='onchange')
     ref_livraison = fields.Many2one(comodel_name='stock.picking', string="Ref livraison", track_visibility='onchange')
     under_responsiblilty = fields.Selection([('ttm', 'TTM'),('mv', 'MV'),('an', 'AN'), ('other', 'Autre')], track_visibility='onchange', string=u"Sous responsabilité de")
+    binef_brut = fields.Float(string="bénéfice" , compute='_compute_benif')
+    binef = fields.Float(string="binef" , compute='_compute_benif')
+    binef_report = fields.Float(related='binef_brut', store=True, readonly=True)
+    cp = fields.Char(string="cp" , compute='_compute_benif')
     
     def get_total_colis_invoice(self):
         for record in self:
             colis = sum(self.env['stock.picking'].search([('state', 'in', ('done','emarge')),('picking_type_id.code', '=', 'outgoing'),('origin', 'ilike', self.origin)]).mapped('total_colis_delivered')) - sum(self.picking_ids.filtered(lambda r: r.picking_type_id.code == 'incoming' and r.state == 'done').mapped('total_colis_delivered'))
             record.qty_livrer_colis = colis
     
-    
+    def _compute_benif(self):
+        for line in self:
+            cp=0
+            binef = 0
+            for lines in line.invoice_line_ids:
+                binef +=((lines.product_id.prix_achat+lines.product_id.prix_transport+lines.product_id.cout_avs)*lines.product_id.number_unit)*lines.quantity    
+            line.binef = binef
+            #line.binef_brut= (line.amount_untaxed - line.binef)-35
+            line.cp = line.partner_id.zip[0:2]
+            #line.cp=line.cp[0:3]
+            if line.cp=='45':
+                line.binef_brut= (line.amount_untaxed - line.binef)-68.5
+            if line.cp=='27' or line.cp=='28':
+                line.binef_brut= (line.amount_untaxed - line.binef)-80
+            if line.cp=='60':
+                line.binef_brut= (line.amount_untaxed - line.binef)-48
+            if line.cp=='51' or line.cp=='52':
+                line.binef_brut= (line.amount_untaxed - line.binef)-35
+            if line.cp=='75' or line.cp=='77' or line.cp=='78' or line.cp=='91' or line.cp=='92' or line.cp=='93' or  line.cp=='94' or line.cp=='95':
+                line.binef_brut= (line.amount_untaxed - line.binef)-35
     
     '''@api.onchange('fac_charcuterie_f','fac_volaille_f')
     def onchange_fac_volaille_volaille(self):
@@ -109,6 +132,7 @@ class AccountInvoiceReport(models.Model):
     date_livraison = fields.Date(string='Date Livraison', readonly=True)
     fac_charcuterie_f = fields.Boolean('Charcuterie', readonly=True)
     fac_volaille_f = fields.Boolean('Volaille', readonly=True)
+    binef_report = fields.Float('Benefice', readonly=True)
     cli_gc = fields.Boolean('Client Gros compte', readonly=True)
     cli_pc = fields.Boolean('Client petit compte', readonly=True)
     commercial = fields.Many2one(comodel_name='hr.employee', string="Commercial", readonly=True)
@@ -147,7 +171,7 @@ class AccountInvoiceReport(models.Model):
     
     def _select(self):
         select_str = """
-            SELECT sub.id, sub.date,sub.date_livraison, sub.type_avoir, sub.grosiste, sub.amount_total, sub.under_responsiblilty, sub.product_at_zero, sub.number_unit, sub.ref_invoice_name, sub.team_id as team_id, sub.fac_volaille_f, sub.fac_charcuterie_f, sub.cli_gc, sub.cli_pc, sub.product_id, sub.partner_id, 
+            SELECT sub.id, sub.date,sub.date_livraison, sub.type_avoir, sub.grosiste, sub.binef_report, sub.amount_total, sub.under_responsiblilty, sub.product_at_zero, sub.number_unit, sub.ref_invoice_name, sub.team_id as team_id, sub.fac_volaille_f, sub.fac_charcuterie_f, sub.cli_gc, sub.cli_pc, sub.product_id, sub.partner_id, 
                 sub.country_id, sub.account_analytic_id, sub.commercial, sub.vendeur, sub.payment_term_id, sub.uom_name, sub.currency_id, sub.journal_id,
                 sub.fiscal_position_id, sub.user_id, sub.company_id, sub.nbr, sub.type, sub.state,
                 sub.categ_id, sub.date_due, sub.account_id, sub.account_line_id, sub.partner_bank_id,
@@ -166,6 +190,7 @@ class AccountInvoiceReport(models.Model):
                     ai.fac_charcuterie_f AS fac_charcuterie_f,
                     ai.fac_volaille_f AS fac_volaille_f,
                     ai.cli_pc AS cli_pc,
+                    ai.binef_report AS binef_report,
                     ai.grosiste AS grosiste,
                     SUM(ail.price_total * invoice_type.sign_qty) AS amount_total,
                     ai.under_responsiblilty AS under_responsiblilty,
@@ -197,5 +222,5 @@ class AccountInvoiceReport(models.Model):
         return select_str
     
     def _group_by(self):
-        return super(AccountInvoiceReport, self)._group_by() + ", ai.team_id, ai.type_avoir, pt.product_at_zero, pt.number_unit, ai.under_responsiblilty, ai.amount_total"
+        return super(AccountInvoiceReport, self)._group_by() + ", ai.team_id, ai.type_avoir, pt.product_at_zero, pt.number_unit, ai.under_responsiblilty, ai.amount_total, ai.binef_report"
             

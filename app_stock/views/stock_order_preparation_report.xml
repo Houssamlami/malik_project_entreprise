@@ -19,7 +19,7 @@
 								<div
 									t-if="o.move_lines and o.move_lines[0].partner_id and o.move_lines[0].partner_id.id != o.partner_id.id">
 									<span>
-										<strong>Delivery Address:</strong>
+										<strong>Adresse de livraison:</strong>
 									</span>
 									<div t-field="o.move_lines[0].partner_id"
 										t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;, &quot;phone&quot;], &quot;no_marker&quot;: True, &quot;phone_icons&quot;: True}" />
@@ -49,7 +49,7 @@
 								<div
 									t-if="o.picking_type_id.code=='outgoing' and o.partner_id">
 									<span>
-										<strong>Customer Address:</strong>
+										<strong>Adresse Client:</strong>
 									</span>
 								</div>
 								<div t-if="o.partner_id" name="partner_header">
@@ -1536,7 +1536,7 @@
 								<div
 									t-if="o.picking_type_id.code=='outgoing' and o.partner_id">
 									<span>
-										<strong>Customer Address:</strong>
+										<strong>Adresse Client:</strong>
 									</span>
 								</div>
 								<div t-if="o.partner_id" name="partner_header">
@@ -1762,7 +1762,7 @@
 								<div
 									t-if="o.picking_type_id.code=='outgoing' and o.partner_id">
 									<span>
-										<strong>Customer Address:</strong>
+										<strong>Adresse Client:</strong>
 									</span>
 								</div>
 								<div t-if="o.partner_id" name="partner_header">

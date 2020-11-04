@@ -24,7 +24,7 @@ class StockPicking(models.Model):
     total_weight_stock_frais_auto = fields.Float(string='Total frais)', compute='_compute_weight_total_stock_frais')
     total_weight_stock_surg_auto = fields.Float(string='Total surg)', compute='_compute_weight_total_stock_surg')
     total_weight_stock_volailles_auto = fields.Float(string='Total volailles)', compute='_compute_weight_total_stock_volailles')
-    total_colis_delivered = fields.Float(string='Total Colis', compute='_compute_colis_poids_total_bl', track_visibility='onchange')
+    total_colis_delivered = fields.Float(string='Total Colis', compute='_compute_colis_poids_total_bl')
     total_weight_delivered = fields.Float(string='Poids Total', compute='_compute_colis_poids_total_bl', track_visibility='onchange')
     is_return_picking = fields.Boolean(string="Is Retour", compute='get_is_return_picking')
     name_provisoir = fields.Char(string="Nom Provisoir", compute='get_is_return_picking')
@@ -32,17 +32,29 @@ class StockPicking(models.Model):
     expediteur_in_picking = fields.Selection([('MV', 'Malik V'), ('An', 'Atlas N')], related='sale_id.Expediteur', string="Expediteur")
     bl_supplier = fields.Char(string="N° BL fournisseur")
     origin_command = fields.Char(string="La commande origine", index=True, states={'done': [('readonly', True)], 'cancel': [('readonly', True)]})
+    #typeprod = fields.Char(string="Nature prod", compute='get_nature_prod', store='true')
+    typeproduit = fields.Char(related='sale_id.produitalivrer' ,string="Nature produit", store=True)
+    
     
     @api.one      
     def _compute_number_product_to_deliver(self):
         for record in self:
-            pickings = self.env['stock.picking'].search([('partner_id', '=', self.partner_id.id),('picking_type_code','=','outgoing')])
+            pickings = self.env['stock.picking'].search([('partner_id', '=', self.partner_id.id),('picking_type_code','=','outgoing'),('state','!=','cancel')])
             cmpt = 0
             for picking in pickings:
                 if dateutil.parser.parse(picking.scheduled_date).date() == dateutil.parser.parse(record.scheduled_date).date():
                     for move in picking.move_lines:
                         cmpt += move.secondary_uom_qty
             record.number_product_to_deliver = cmpt
+            
+    '''def get_nature_prod(self):
+        typeprodt=''
+        for record in self:
+            if record.origin:
+                sale = self.env['sale.order'].search([('name', '=', record.origin)])
+                for info in sale:
+                    typeprodt=info.produitalivrer
+                record.typeprod = typeprodt'''
             
     
     
@@ -62,7 +74,7 @@ class StockPicking(models.Model):
                     print(record.name_provisoir)
                 else:
                     record.is_return_picking = False
-                
+
     def _compute_colis_poids_total_bl(self):
         for picking in self:
             total_colis = 0
@@ -71,7 +83,7 @@ class StockPicking(models.Model):
                 if line.product_id and line.product_id.uom_id.name != 'kg':
                     total_poids += (line.quantity_done or 0.0)*line.product_id.weight
                     if line.quantity_done != 0.0:
-                        total_colis += (line.secondary_uom_qty or 0.0)
+                        total_colis += (line.secondary_uom_qty)
                 if line.product_id and line.product_id.uom_id.name == 'kg':
                     total_poids += (line.quantity_done or 0.0)
                     if line.quantity_done != 0.0:
