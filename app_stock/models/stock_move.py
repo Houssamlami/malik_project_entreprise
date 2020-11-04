@@ -78,9 +78,9 @@ class StockMove(models.Model):
                 unite = record.product_id
                 unit = unite.sale_secondary_uom_id
                 '''if unit.factor != 0 and unite.uom_id.name =='kg' :
-                    record.secondary_uom_qty = int((record.quantity_done)/unit.factor)
-                if unite.uom_id.name !='kg' and abs(record.sale_line_id.secondary_uom_qty-record.quantity_done) >= 0:
-                    record.secondary_uom_qty = record.quantity_done'''
+                    record.secondary_uom_qty = int((record.quantity_done)/unit.factor)'''
+                if unite.uom_id.name =='Colis' or unite.uom_id.name =='Unité(s)':
+                    record.secondary_uom_qty = record.quantity_done
                 if record.quantity_done != 0 and record.secondary_uom_qty_regul != 0.0:
                         record.secondary_uom_qty = record.secondary_uom_qty_regul
                         
