@@ -62,7 +62,8 @@ class SaleOrder(models.Model):
     confirm_service_commercial = fields.Boolean(string='Confirmation Service Commercial', default=False, track_visibility='onchange')
     delivery_noconform_treated = fields.Boolean(string='Livraison non conforme traitée', default=False, track_visibility='onchange')
     confirm_accounting = fields.Boolean(string='Confirmation Comptabilité', default=False, track_visibility='onchange')
-    
+    bl_conform = fields.Boolean(string='BL Conforme', default=False, track_visibility='onchange')
+    bl_emarge = fields.Boolean(string='BL Emargé', default=False, track_visibility='onchange')  
     
     def _compute_weight_total_stock_agn(self):
         for sales in self:
