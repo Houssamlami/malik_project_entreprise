@@ -126,6 +126,12 @@
 				<field name="refused_command" />
 				<field name="reason_refuse" attrs="{'invisible': [('refused_command', '=', False)]}"/>
 				</group>
+				<group string="BL Conforme">
+				<field name="bl_conform" />
+				</group>
+				<group string="BL Emargé">
+				<field name="bl_emarge" />
+				</group>
 				<group string="BL non conforme">
 				<field name="bl_not_conform" />
 				<field name="reason_no_conformity" attrs="{'invisible': [('bl_not_conform', '=', False)]}"/>
