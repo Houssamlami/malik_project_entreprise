@@ -98,7 +98,7 @@
 					position="after">
 					<div attrs="{'invisible': [('supplier','=', True)]}">
 					<group string="Etat Client" name="Etat Client">
-					              
+
                                      <field name="Etat"/>
                                    <field name="Inactive"/>
                                    <field name="date_last_commande"/>

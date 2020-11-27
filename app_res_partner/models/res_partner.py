@@ -98,7 +98,9 @@ class ResPartner(models.Model):
     customer_cmd_ceiling_vol = fields.Float('Plafond commande volaille', track_visibility='onchange')
     debloque_exce_ch = fields.Boolean(string=u"Déblocage exceptionnel charcuterie" , compute='get_reblocage')
     date_reblockage = fields.Date(string='Date de reblocage')
+
     date_actualy2 = fields.Date(string='today actualy2', compute='get_date')  
+
     
     _sql_constraints = [
         ('ref_unique_part', 'unique(ref)', 'La reference client doit etre unique!'),
