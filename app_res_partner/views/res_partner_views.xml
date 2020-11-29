@@ -87,9 +87,6 @@
 					 <field name="user_id" string="Commercial" attrs="{'invisible': [('supplier','=', True)], 'required': [('customer', '=', True)]}"/>
              	</xpath>
              	<xpath expr="//field[@name='user_id']" position="before">
-             	<p attrs="{'invisible': [('supplier','=', True)]}">
-             	<field name="client_avs" string="Client AVS" attrs="{'invisible': [('supplier','=', True)]}"/>
-             	</p>
                    <p attrs="{'invisible': [('supplier','=', True)]}">
                    <b><u>Vendeur commercial :</u></b></p>
 					 <field name="team_id" string="Arrondissement/Secteur" attrs="{'invisible': [('supplier','=', True)]}"/>
