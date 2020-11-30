@@ -102,6 +102,7 @@ class ResPartner(models.Model):
     client_avs = fields.Boolean(string=u"Client AVS")
 
     
+    
     _sql_constraints = [
         ('ref_unique_part', 'unique(ref)', 'La reference client doit etre unique!'),
     ]
