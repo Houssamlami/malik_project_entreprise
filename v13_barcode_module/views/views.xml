@@ -1,0 +1,53 @@
+<odoo>
+    <data>
+
+        <record id="inherit_stock_form_1" model="ir.ui.view">
+            <field name="name">stock.picking.form</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field name="arch" type="xml">
+                <field name="date_expected" position="after">
+                    <field name="manufacturing_date"/>
+                </field>
+                <field name="origin" position="after">
+                    <field name="barcode_scan1"/>
+                </field>
+                <field name="move_line_ids_without_package" position="replace">
+                    <field name="move_line_ids_without_package"
+                           attrs="{'readonly': ['|', '|', ('show_operations', '=', False), ('state', '=', 'cancel'), '&amp;', ('state', '=', 'done'), ('is_locked', '=', True)]}"
+                           context="{'tree_view_ref': 'stock.view_stock_move_line_detailed_operation_tree', 'default_picking_id': id, 'default_location_id': location_id, 'default_location_dest_id': location_dest_id, 'default_company_id': company_id}">
+                        <tree>
+                            <field name="product_id"/>
+                            <field name="lot_id"/>
+                            <field name="manufacturing_date"/>
+                            <field name="qty_done"/>
+                        </tree>
+                    </field>
+                </field>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="wizard_details_form_view">
+            <field name="name">wizard.details.form</field>
+            <field name="model">wizard.details</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group>
+                        <field name="is_lot" invisible="1"/>
+                        <field name="is_product" invisible="1"/>
+                        <field name="name"
+                               attrs="{'invisible': [('is_product', '=', False)]}"/>
+                        <field name="lot_name"
+                               attrs="{'invisible': [('is_lot', '=', False)]}"/>
+                        <field name="reference" invisible="1"/>
+                    </group>
+                    <footer>
+                        <button name="action_save_product_and_lot" string="Save" type="object" class="oe_highlight"/>
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+    </data>
+</odoo>
