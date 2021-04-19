@@ -14,4 +14,11 @@
 	<natures>
 		<nature>org.python.pydev.pythonNature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>v11_barcode_module</name>
+			<type>2</type>
+			<location>C:/Users/Zasm/Desktop/v11_barcode_module</location>
+		</link>
+	</linkedResources>
 </projectDescription>
