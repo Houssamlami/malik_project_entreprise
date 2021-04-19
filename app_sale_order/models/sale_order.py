@@ -238,11 +238,6 @@ class SaleOrder(models.Model):
                 record.test_bloque="Votre Client est bloqué"
             if record.partner_id.bloque_ch and record.partner_id.bloque_vo:
                 record.test_bloque="Votre Client est bloqué"
-            if record.partner_id.nbr_jours_decheance_charcuterie > record.partner_id.echeance_charcuterie_par_jour:
-                partner = self.env['res.partner'].search([('id', '=', record.partner_id.id)])
-                for part in partner:
-                    part.bloque_ch=True
-                    part.email="test@gmail.com"
             '''if record.cmd_charcuterie==True and record.cmd_volaille==False:
                 if record.partner_id.Client_Charcuterie: 
                     if record.partner_id.credit_charcuterie > record.partner_id.limite_credit_charcuterie: 
