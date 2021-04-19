@@ -239,8 +239,8 @@ class SaleOrder(models.Model):
             if record.partner_id.bloque_ch and record.partner_id.bloque_vo:
                 record.test_bloque="Votre Client est bloqué"
             if record.partner_id.nbr_jours_decheance_charcuterie > record.partner_id.echeance_charcuterie_par_jour:
-                record.partner_id.bloque_ch=True
-                record.partner_id.bloque=True
+                for x in self.res_partner:
+                    x.write({'bloque_ch': True})
             '''if record.cmd_charcuterie==True and record.cmd_volaille==False:
                 if record.partner_id.Client_Charcuterie: 
                     if record.partner_id.credit_charcuterie > record.partner_id.limite_credit_charcuterie: 
