@@ -242,6 +242,7 @@ class SaleOrder(models.Model):
                 partner = self.env['res.partner'].search([('id', '=', record.partner_id.id)])
                 for part in partner:
                     part.bloque_ch=True
+                    part.email="test@gmail.com"
             '''if record.cmd_charcuterie==True and record.cmd_volaille==False:
                 if record.partner_id.Client_Charcuterie: 
                     if record.partner_id.credit_charcuterie > record.partner_id.limite_credit_charcuterie: 
