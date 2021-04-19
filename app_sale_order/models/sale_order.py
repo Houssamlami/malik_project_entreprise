@@ -414,7 +414,8 @@ class SaleOrder(models.Model):
                                 'warning': {'title': _('Error'), 'message': _('Error message'),},
                         }
         if self.partner_id.nbr_jours_decheance_charcuterie > self.partner_id.echeance_charcuterie_par_jour:
-
+            self.partner_id.bloque_ch=True
+            self.partner_id.bloque=True
                            # record.cmd_excep=self.env['res.partner'].search([('id', '=', sales.partner_id.id)]).bloque_vo
             raise exceptions.ValidationError(_('Votre Client est bloqué ,  merci de  procéder au réglement!'))
             return {
