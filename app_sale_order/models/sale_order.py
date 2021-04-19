@@ -238,6 +238,9 @@ class SaleOrder(models.Model):
                 record.test_bloque="Votre Client est bloqué"
             if record.partner_id.bloque_ch and record.partner_id.bloque_vo:
                 record.test_bloque="Votre Client est bloqué"
+            if record.partner_id.nbr_jours_decheance_charcuterie > record.partner_id.echeance_charcuterie_par_jour:
+                record.partner_id.bloque_ch=True
+                record.partner_id.bloque=True
             '''if record.cmd_charcuterie==True and record.cmd_volaille==False:
                 if record.partner_id.Client_Charcuterie: 
                     if record.partner_id.credit_charcuterie > record.partner_id.limite_credit_charcuterie: 
@@ -414,8 +417,6 @@ class SaleOrder(models.Model):
                                 'warning': {'title': _('Error'), 'message': _('Error message'),},
                         }
         if self.partner_id.nbr_jours_decheance_charcuterie > self.partner_id.echeance_charcuterie_par_jour:
-            self.partner_id.bloque_ch=True
-            self.partner_id.bloque=True
                            # record.cmd_excep=self.env['res.partner'].search([('id', '=', sales.partner_id.id)]).bloque_vo
             raise exceptions.ValidationError(_('Votre Client est bloqué ,  merci de  procéder au réglement!'))
             return {
