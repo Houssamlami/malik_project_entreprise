@@ -413,13 +413,13 @@ class SaleOrder(models.Model):
                         return {
                                 'warning': {'title': _('Error'), 'message': _('Error message'),},
                         }
-        if self.partner_id.nbr_jours_decheance_charcuterie > self.partner_id.echeance_charcuterie_par_jour:
-
+        if self.partner_id.blocagex_echeance_facture_charcuterie==True:                
+            if self.partner_id.nbr_jours_decheance_charcuterie > self.partner_id.echeance_charcuterie_par_jour:
                            # record.cmd_excep=self.env['res.partner'].search([('id', '=', sales.partner_id.id)]).bloque_vo
-            raise exceptions.ValidationError(_('Votre Client est bloqué ,  merci de  procéder au réglement!'))
-            return {
+                raise exceptions.ValidationError(_('Votre Client est bloqué ,  merci de  procéder au réglement!'))
+                return {
                                 'warning': {'title': _('Error'), 'message': _('Error message'),},
-            }
+                }
             
         if self._get_forbidden_state_confirm() & set(self.mapped('state')):
             raise UserError(_(
