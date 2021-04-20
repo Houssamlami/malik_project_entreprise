@@ -206,6 +206,14 @@ class SaleOrder(models.Model):
                 sale.etat_fac1_copy = "Annulée"
             if sale.refused_command:
                 sale.etat_fac1_copy = "A ne pas facturer"
+                
+    @api.onchange('order_line','partner_id','cmd_charcuterie','cmd_volaille','test_bloque')                
+    def _compute_bloque_ch(self):
+        for sale in self:
+            if sale.partner_id.blocagex_echeance_facture_charcuterie==True:                
+                if sale.partner_id.nbr_jours_decheance_charcuterie > sale.partner_id.echeance_charcuterie_par_jour:
+                    partner_id=self.env['res.partner'].search([('id', '=', sale.partner_id.id)],limit=1)
+                    partner_id.write({'bloque_ch': True})
 
 #@api.onchange('partner_id')
 # def on_change_statecr(self):
