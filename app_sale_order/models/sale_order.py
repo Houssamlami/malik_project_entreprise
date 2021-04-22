@@ -301,7 +301,7 @@ class SaleOrder(models.Model):
                         if record.partner_id.bloque_vo and record.partner_id.debloque_exce_vo==True:
                             record.test_bloque=""'''
                 
-    @api.onchange('order_line','cmd_charcuterie','cmd_volaille','test_bloque')                
+    @api.onchange('order_line','test_bloque')                
     def _compute_bloque_ch(self):
         for sale in self:
             if sale.partner_id:
