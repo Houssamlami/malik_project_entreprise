@@ -207,13 +207,6 @@ class SaleOrder(models.Model):
             if sale.refused_command:
                 sale.etat_fac1_copy = "A ne pas facturer"
                 
-    @api.onchange('order_line','partner_id','cmd_charcuterie','cmd_volaille','test_bloque')                
-    def _compute_bloque_ch(self):
-        for sale in self:
-            if sale.partner_id.blocagex_echeance_facture_charcuterie==True:                
-                if sale.partner_id.nbr_jours_decheance_charcuterie > sale.partner_id.echeance_charcuterie_par_jour:
-                    partner_id=self.env['res.partner'].search([('id', '=', sale.partner_id.id)],limit=1)
-                    partner_id.write({'bloque_ch': True})
 
 #@api.onchange('partner_id')
 # def on_change_statecr(self):
@@ -307,6 +300,17 @@ class SaleOrder(models.Model):
                     if record.partner_id.nbr_fac_ouverte >= record.partner_id.limite_nbr_fac: 
                         if record.partner_id.bloque_vo and record.partner_id.debloque_exce_vo==True:
                             record.test_bloque=""'''
+                
+    @api.onchange('order_line','cmd_charcuterie','cmd_volaille','test_bloque')                
+    def _compute_bloque_ch(self):
+        for sale in self:
+            if sale.partner_id:
+                if sale.partner_id.blocagex_echeance_facture_charcuterie==True:                
+                    if sale.partner_id.nbr_jours_decheance_charcuterie > sale.partner_id.echeance_charcuterie_par_jour:
+                        partner_id=self.env['res.partner'].search([('id', '=', sale.partner_id.id)],limit=1)
+                        partner_id.write({'bloque_ch': True})
+                
+                
     
 
     @api.onchange('product_id')
