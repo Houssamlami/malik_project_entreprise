@@ -308,7 +308,7 @@ class SaleOrder(models.Model):
                 if sale.partner_id.blocagex_echeance_facture_charcuterie==True:                
                     if sale.partner_id.nbr_jours_decheance_charcuterie > sale.partner_id.echeance_charcuterie_par_jour:
                         partner_id=self.env['res.partner'].search([('id', '=', sale.partner_id.id)],limit=1)
-                        partner_id.write({'bloque_ch': True})
+                        partner_id.write({'bloque_ch': True,'bloque': True})
                 
                 
     
