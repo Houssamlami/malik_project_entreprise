@@ -218,27 +218,32 @@ class SaleOrder(models.Model):
 
                 
 
-    @api.onchange('cmd_charcuterie','cmd_volaille')
+    @api.onchange('partner_id','cmd_charcuterie','cmd_volaille')
     def on_change_statecr(self):
         for record in self:
-            if record.cmd_charcuterie==True:
-                if record.partner_id.Client_Charcuterie==False:
-                    raise exceptions.ValidationError(_('Votre Client ne peux pas passer une commande charcuterie veuillez modifier le type de votre client sur sa fiche ! ')) 
-                    return {
-                        'warning': {'title': _('Error'), 'message': _('Error message'),},
-                        }
-            if record.cmd_volaille==True:
-                if record.partner_id.Client_Volaille==False:
-                    raise exceptions.ValidationError(_('Votre Client ne peux pas passer une commande volaille veuillez modifier le type de votre client sur sa fiche ! ')) 
-                    return {
-                        'warning': {'title': _('Error'), 'message': _('Error message'),},
-                        }
-            if record.partner_id.bloque_ch:
-                record.test_bloque="Votre Client est bloqué"
-            if record.partner_id.bloque_vo:
-                record.test_bloque="Votre Client est bloqué"
-            if record.partner_id.bloque_ch and record.partner_id.bloque_vo:
-                record.test_bloque="Votre Client est bloqué"
+            if record.partner_id:
+                if record.cmd_charcuterie==True:
+                    if record.partner_id.Client_Charcuterie==False:
+                        raise exceptions.ValidationError(_('Votre Client ne peux pas passer une commande charcuterie veuillez modifier le type de votre client sur sa fiche ! ')) 
+                        return {
+                            'warning': {'title': _('Error'), 'message': _('Error message'),},
+                            }
+                if record.cmd_volaille==True:
+                    if record.partner_id.Client_Volaille==False:
+                        raise exceptions.ValidationError(_('Votre Client ne peux pas passer une commande volaille veuillez modifier le type de votre client sur sa fiche ! ')) 
+                        return {
+                            'warning': {'title': _('Error'), 'message': _('Error message'),},
+                            }
+                if record.partner_id.bloque_ch:
+                    record.test_bloque="Votre Client est bloqué"
+                if record.partner_id.bloque_vo:
+                    record.test_bloque="Votre Client est bloqué"
+                if record.partner_id.bloque_ch and record.partner_id.bloque_vo:
+                    record.test_bloque="Votre Client est bloqué"
+                
+                
+                
+                
             '''if record.cmd_charcuterie==True and record.cmd_volaille==False:
                 if record.partner_id.Client_Charcuterie: 
                     if record.partner_id.credit_charcuterie > record.partner_id.limite_credit_charcuterie: 
