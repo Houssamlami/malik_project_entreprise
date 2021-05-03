@@ -306,14 +306,13 @@ class SaleOrder(models.Model):
                         if record.partner_id.bloque_vo and record.partner_id.debloque_exce_vo==True:
                             record.test_bloque=""'''
                 
-    '''@api.onchange('order_line')                 
-    def _compute_bloque_ch(self):
+    @api.onchange('order_line.product_id')                 
+    def on_change_for_bloque_ch(self):
         for sale in self:
-            if sale.partner_id:
             if sale.partner_id.blocagex_echeance_facture_charcuterie==True:                
                 if sale.partner_id.nbr_jours_decheance_charcuterie > sale.partner_id.echeance_charcuterie_par_jour:
                     partner=self.env['res.partner'].search([('id', '=', sale.partner_id.id)],limit=1)
-                    partner.write({'bloque_ch': True,'bloque': True})'''
+                    partner.write({'bloque_ch': True,'bloque': True})
                 
                 
     
