@@ -206,6 +206,7 @@ class SaleOrder(models.Model):
                 sale.etat_fac1_copy = "Annulée"
             if sale.refused_command:
                 sale.etat_fac1_copy = "A ne pas facturer"
+                
 
 #@api.onchange('partner_id')
 # def on_change_statecr(self):
@@ -220,24 +221,29 @@ class SaleOrder(models.Model):
     @api.onchange('partner_id','cmd_charcuterie','cmd_volaille')
     def on_change_statecr(self):
         for record in self:
-            if record.cmd_charcuterie==True:
-                if record.partner_id.Client_Charcuterie==False:
-                    raise exceptions.ValidationError(_('Votre Client ne peux pas passer une commande charcuterie veuillez modifier le type de votre client sur sa fiche ! ')) 
-                    return {
-                        'warning': {'title': _('Error'), 'message': _('Error message'),},
-                        }
-            if record.cmd_volaille==True:
-                if record.partner_id.Client_Volaille==False:
-                    raise exceptions.ValidationError(_('Votre Client ne peux pas passer une commande volaille veuillez modifier le type de votre client sur sa fiche ! ')) 
-                    return {
-                        'warning': {'title': _('Error'), 'message': _('Error message'),},
-                        }
-            if record.partner_id.bloque_ch:
-                record.test_bloque="Votre Client est bloqué"
-            if record.partner_id.bloque_vo:
-                record.test_bloque="Votre Client est bloqué"
-            if record.partner_id.bloque_ch and record.partner_id.bloque_vo:
-                record.test_bloque="Votre Client est bloqué"
+            if record.partner_id:
+                if record.cmd_charcuterie==True:
+                    if record.partner_id.Client_Charcuterie==False:
+                        raise exceptions.ValidationError(_('Votre Client ne peux pas passer une commande charcuterie veuillez modifier le type de votre client sur sa fiche ! ')) 
+                        return {
+                            'warning': {'title': _('Error'), 'message': _('Error message'),},
+                            }
+                if record.cmd_volaille==True:
+                    if record.partner_id.Client_Volaille==False:
+                        raise exceptions.ValidationError(_('Votre Client ne peux pas passer une commande volaille veuillez modifier le type de votre client sur sa fiche ! ')) 
+                        return {
+                            'warning': {'title': _('Error'), 'message': _('Error message'),},
+                            }
+                if record.partner_id.bloque_ch:
+                    record.test_bloque="Votre Client est bloqué"
+                if record.partner_id.bloque_vo:
+                    record.test_bloque="Votre Client est bloqué"
+                if record.partner_id.bloque_ch and record.partner_id.bloque_vo:
+                    record.test_bloque="Votre Client est bloqué"
+                
+                
+                
+                
             '''if record.cmd_charcuterie==True and record.cmd_volaille==False:
                 if record.partner_id.Client_Charcuterie: 
                     if record.partner_id.credit_charcuterie > record.partner_id.limite_credit_charcuterie: 
@@ -299,6 +305,16 @@ class SaleOrder(models.Model):
                     if record.partner_id.nbr_fac_ouverte >= record.partner_id.limite_nbr_fac: 
                         if record.partner_id.bloque_vo and record.partner_id.debloque_exce_vo==True:
                             record.test_bloque=""'''
+                
+    '''@api.onchange('order_line','order_line.product_id','order_line.product_uom_qty')                 
+    def on_change_for_bloque_ch(self):
+        for sale in self:
+            if sale.partner_id.blocagex_echeance_facture_charcuterie==True:                
+                if sale.partner_id.nbr_jours_decheance_charcuterie > sale.partner_id.echeance_charcuterie_par_jour:
+                    partner=self.env['res.partner'].search([('id', '=', sale.partner_id.id)],limit=1)
+                    partner.write({'bloque_ch': True,'bloque': True})'''
+                
+                
     
 
     @api.onchange('product_id')
@@ -537,7 +553,7 @@ class SaleOrder(models.Model):
             weight_stock_char = 0
             for line in sales.order_line:
 #                if line.product_id.categ_id.complete_name in ("Chips","Saucissons","Chapelet","Mortadelle","Blocs","Panes","Tranches","Charcuterie Promo"):
-                if "Chips" in line.product_id.categ_id.complete_name or "Saucissons" in line.product_id.categ_id.complete_name or "Chapelet" in line.product_id.categ_id.complete_name or "Mortadelle" in line.product_id.categ_id.complete_name or "Blocs" in line.product_id.categ_id.complete_name or "Panes Charcuterie" in line.product_id.categ_id.complete_name or "Tranches" in line.product_id.categ_id.complete_name or "Tranches Promo" in line.product_id.categ_id.complete_name or "Saucissons Promo" in line.product_id.categ_id.complete_name or "Panes Charcuterie Promo" in line.product_id.categ_id.complete_name:
+                if "Chips" in line.product_id.categ_id.complete_name or "Saucissons" in line.product_id.categ_id.complete_name or "Chapelet" in line.product_id.categ_id.complete_name or "Mortadelle" in line.product_id.categ_id.complete_name or "Tartinable" in line.product_id.categ_id.complete_name or "Blocs" in line.product_id.categ_id.complete_name or "Panes Charcuterie" in line.product_id.categ_id.complete_name or "Tranches" in line.product_id.categ_id.complete_name or "Tranches Promo" in line.product_id.categ_id.complete_name or "Saucissons Promo" in line.product_id.categ_id.complete_name or "Panes Charcuterie Promo" in line.product_id.categ_id.complete_name:
                     weight_stock_char += line.secondary_uom_qty  or 0.0
             sales.total_weight_stock_char = weight_stock_char
             
@@ -560,6 +576,9 @@ class SaleOrder(models.Model):
     @api.onchange('order_line','order_line.product_id','order_line.product_uom_qty')
     def onchange_order_line_livre(self):
         for record in self:
+            '''if sale.partner_id.nbr_jours_decheance_charcuterie > sale.partner_id.echeance_charcuterie_par_jour:
+                partner=self.env['res.partner'].search([('id', '=', sale.partner_id.id)],limit=1)
+                partner.write({'bloque_ch': True,'bloque': True})'''
             record._compute_weight_total_stock_vv()
             record._compute_weight_total_stock_srg()
             record._compute_weight_total_stock_char()
