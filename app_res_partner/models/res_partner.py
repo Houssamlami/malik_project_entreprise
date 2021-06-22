@@ -223,9 +223,7 @@ class ResPartner(models.Model):
                 if record.nbr_jours_decheance_charcuterie > record.echeance_charcuterie_par_jour:
                     record.bloque_ch=True
                     record.bloque=True
-                if record.nbr_jours_decheance_charcuterie < record.echeance_charcuterie_par_jour:
-                    record.bloque_ch=False
-                    record.bloque=False
+
             else:
                 record.bloque_ch=False
                 record.bloque=False
