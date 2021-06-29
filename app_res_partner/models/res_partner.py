@@ -211,10 +211,7 @@ class ResPartner(models.Model):
             if record.blocagex_limite_credit_charcuterie:
                 # if record.credit_charcuterie > record.limite_credit_charcuterie:
                 record.bloque_ch=True
-                raise exceptions.ValidationError(_('mafhmtch !'))
-                return {
-                    'warning': {'title': _('Error'), 'message': _('Error message'),},
-                }    
+                   
                 #     record.bloque=True
             # else:
             #     record.bloque_ch=False
