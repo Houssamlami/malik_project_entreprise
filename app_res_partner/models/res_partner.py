@@ -209,7 +209,7 @@ class ResPartner(models.Model):
                 record.bloque=False
                 
             if record.blocagex_limite_credit_charcuterie:
-                if record.credit_charcuterie > record.limite_credit_charcuterie:
+                if record.credit_charcuterie==101.28:
                     record.bloque_ch=True
                     record.bloque=True
             else:
