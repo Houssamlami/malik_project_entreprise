@@ -64,6 +64,7 @@ class SaleOrder(models.Model):
     confirm_accounting = fields.Boolean(string='Confirmation Comptabilité', default=False, track_visibility='onchange')
     bl_conform = fields.Boolean(string='BL Conforme', default=False, track_visibility='onchange')
     bl_emarge = fields.Boolean(string='BL Emargé', default=False, track_visibility='onchange')  
+    total_dis = fields.Float(string='Total Distribution')
     
     def _compute_weight_total_stock_agn(self):
         for sales in self:
@@ -171,6 +172,16 @@ class SaleOrder(models.Model):
                 if line.product_id:
                     total_qty_ordred1 += line.product_uom_qty or 0.0
             sale.total_qty_ordred1 = total_qty_ordred1
+            
+ 
+    @api.onchange('sale.order_line.product_uom_qty')         
+    def onchange_cout_dis(self):
+        for sale in self:
+            total_dis = 0
+            for line in sale.order_line:
+                if line.product_id:
+                    total_dis1 += (line.product_uom_qty*(line.price_unit-(line.product_id.number_unit*line.product_id.prix_achat)))-sale.coutdis or 0.0
+            sale.total_dis = total_dis1
 
     def _compute_colis_total_delivred(self):
         for sale in self:
