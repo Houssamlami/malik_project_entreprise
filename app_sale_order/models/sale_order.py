@@ -181,7 +181,7 @@ class SaleOrder(models.Model):
             for line in sale.order_line:
                 if line.product_id:
                     # total_dis1 += (line.product_uom_qty*(line.price_unit-(line.product_id.number_unit*line.product_id.prix_achat)))-sale.partner_id.coutdis or 0.0
-                    total_dis += line.product_uom_qty or 0.0            
+                    total_dis += (line.product_uom_qty*(line.price_unit-(line.product_id.number_unit*line.product_id.prix_achat)))-sale.partner_id.coutdis or 0.0            
             sale.total_dis = total_dis
 
     def _compute_colis_total_delivred(self):
