@@ -100,6 +100,7 @@ class ResPartner(models.Model):
     date_reblockage = fields.Date(string='Date de reblocage')
     date_actualy2 = fields.Date(string='today actualy2', compute='get_date')
     client_avs = fields.Boolean(string=u"Client AVS")
+    coutdis = fields.Float(string="Coût distribution")
  
     _sql_constraints = [
         ('ref_unique_part', 'unique(ref)', 'La reference client doit etre unique!'),
@@ -209,20 +210,12 @@ class ResPartner(models.Model):
                 record.bloque=False
                 
             if record.blocagex_limite_credit_charcuterie:
-                if record.credit_charcuterie==101.28:
+                if record.credit_charcuterie > record.limite_credit_charcuterie:
                     record.bloque_ch=True
                     record.bloque=True
             else:
-                record.bloque_ch=True
-                record.bloque=True            #if record.blocagex_limite_credit_charcuterie:
-                # if record.credit_charcuterie > record.limite_credit_charcuterie:
-            #    record.bloque_ch=False
-            #    record.bloque=False
-                   
-                #     record.bloque=True
-            #else:
-            #     record.bloque_ch=False
-            #    record.blocagex_echeance_facture_charcuterie=True
+                record.bloque_ch=False
+                record.bloque=False
                 
             if record.blocagex_echeance_facture_charcuterie:
                 if record.nbr_jours_decheance_charcuterie > record.echeance_charcuterie_par_jour:
@@ -260,4 +253,4 @@ class ResPartner(models.Model):
                     raise exceptions.ValidationError(_('Vous avez déjà saisi un Client avec le meme code de TVA, merci de changer le code TVA !'))
                     return {
                         'warning': {'title': _('Error'), 'message': _('Error message'),},
-                    }		
+                    }        
