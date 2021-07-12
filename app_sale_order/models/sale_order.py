@@ -64,7 +64,7 @@ class SaleOrder(models.Model):
     confirm_accounting = fields.Boolean(string='Confirmation Comptabilité', default=False, track_visibility='onchange')
     bl_conform = fields.Boolean(string='BL Conforme', default=False, track_visibility='onchange')
     bl_emarge = fields.Boolean(string='BL Emargé', default=False, track_visibility='onchange')  
-    total_dis = fields.Float(string='Total Distribution')
+    total_dis = fields.Float(string='Total Distribution', comute='_compute__cout_dis')
     
     def _compute_weight_total_stock_agn(self):
         for sales in self:
@@ -174,8 +174,8 @@ class SaleOrder(models.Model):
             sale.total_qty_ordred1 = total_qty_ordred1
             
  
-    @api.onchange('sale.order_line.product_uom_qty')         
-    def onchange_cout_dis(self):
+        
+    def _compute__cout_dis(self):
         for sale in self:
             total_dis = 0
             for line in sale.order_line:
