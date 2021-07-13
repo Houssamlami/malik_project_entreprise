@@ -73,11 +73,10 @@
 						<label for="total_colis" name="total_colis" string="Total Colis: " class="oe_inline"/>
 	                    <field name="total_colis" class="oe_inline"/><span> Colis</span>
 	                </div>
+	                <div>
 	                 	<label for="total_dis" name="total_dis" string="Total Distribution: " class="oe_inline"/>
-	                    <field name="total_dis" class="oe_inline" attrs="{'invisible': [('total_dis', '&lt;', '0,00')]}" style="color: green"/>
-	                
-	 	                <field name="total_dis" class="oe_inline" attrs="{'invisible': [('total_dis', '&gt;', '0.00')]}" style="color: red"/>
-	              
+	                    <field name="total_dis" class="oe_inline" />
+	                </div>
 	                <newline/>
              	</xpath>
             	<xpath expr="//field[@name='order_line']/tree/field[@name='price_subtotal']" position="after">
