@@ -98,8 +98,8 @@
 
             string="Votre marge Brute est en PERTE !"
 
-            attrs="{'invisible': [('total_dis','&gt;=', 0)]}" style="color:red;font-size: 20px;font-weight:bold;"/>
-            <field name="total_dis" class="oe_inline" attrs="{'invisible': [('total_dis','&gt;=', 0)]}" style="color:red;font-size: 20px;font-weight:bold;" />
+            attrs="{'invisible': [('total_dis','&gt;', 0)]}" style="color:red;font-size: 20px;font-weight:bold;"/>
+            <field name="total_dis" class="oe_inline" attrs="{'invisible': [('total_dis','&gt;', 0)]}" style="color:red;font-size: 20px;font-weight:bold;" />
 	           </div>     
 	                <newline/>
              	</xpath>
