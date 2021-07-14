@@ -77,22 +77,30 @@
 	                 	<label for="total_dis" name="total_dis" string="Marge brute: " class="oe_inline"/>
 	                    <field name="total_dis" class="oe_inline" />
 	                </div-->
-	                
+	               <div> 
+	               <label colspan="2"
+
+            string="Votre marge Brute est a 0 "
+
+            attrs="{'invisible': [('total_dis','==', 0)]}" style="color:yellow;font-size: 20px;font-weight:bold;"/>
+
+					<field name="total_dis" class="oe_inline" attrs="{'invisible': [('total_dis','==', 0)]}" style="color:yellow;font-size: 20px;font-weight:bold;" />
+				
 	                <label colspan="2"
 
             string="Votre marge Brute est en BENIFICE "
 
-            attrs="{'invisible': [('total_dis','&lt;', 0)]}" style="background-color:palegreen;"/>
+            attrs="{'invisible': [('total_dis','&lt;', 0)]}" style="color:palegreen;font-size: 20px;font-weight:bold;"/>
 
-					<field name="total_dis" class="oe_inline" attrs="{'invisible': [('total_dis','&lt;', 0)]}" style="background-color:palegreen;" />
+					<field name="total_dis" class="oe_inline" attrs="{'invisible': [('total_dis','&lt;', 0)]}" style="color:palegreen;font-size: 20px;font-weight:bold;" />
 					
 					<label colspan="2"
 
             string="Votre marge Brute est en PERTE !"
 
-            attrs="{'invisible': [('total_dis','&gt;=', 0)]}" style="background-color:red;"/>
-            <field name="total_dis" class="oe_inline" attrs="{'invisible': [('total_dis','&gt;=', 0)]}" style="background-color:red;" />
-	                
+            attrs="{'invisible': [('total_dis','&gt;=', 0)]}" style="color:red;font-size: 20px;font-weight:bold;"/>
+            <field name="total_dis" class="oe_inline" attrs="{'invisible': [('total_dis','&gt;=', 0)]}" style="color:red;font-size: 20px;font-weight:bold;" />
+	           </div>     
 	                <newline/>
              	</xpath>
             	<xpath expr="//field[@name='order_line']/tree/field[@name='price_subtotal']" position="after">
