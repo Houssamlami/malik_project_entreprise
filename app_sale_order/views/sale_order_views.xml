@@ -80,19 +80,18 @@
 	               <div> 
 	              
            
-					<field name="total_dis" class="oe_inline" attrs="{'invisible': [('total_dis','=', 0.00)]}" style="color:yellow;font-size: 20px;font-weight:bold;" />
-				
+					
 	                <label colspan="2"
 
-            string="Votre marge Brute est en BENIFICE "
+            string="Marge Brute en BENIFICE "
 
-            attrs="{'invisible': [('total_dis','&lt;=', 0)]}" style="color:palegreen;font-size: 20px;font-weight:bold;"/>
+            attrs="{'invisible': [('total_dis','&lt;=', 0)]}" style="color:green;font-size: 20px;font-weight:bold;"/>
 
-					<field name="total_dis" class="oe_inline" attrs="{'invisible': [('total_dis','&lt;=', 0)]}" style="color:palegreen;font-size: 20px;font-weight:bold;" />
+					<field name="total_dis" class="oe_inline" attrs="{'invisible': [('total_dis','&lt;=', 0)]}" style="color:green;font-size: 20px;font-weight:bold;" />
 					
 					<label colspan="2"
 
-            string="Votre marge Brute est en PERTE !"
+            string="Marge Brute en PERTE !"
 
             attrs="{'invisible': [('total_dis','&gt;', 0)]}" style="color:red;font-size: 20px;font-weight:bold;"/>
             <field name="total_dis" class="oe_inline" attrs="{'invisible': [('total_dis','&gt;', 0)]}" style="color:red;font-size: 20px;font-weight:bold;" />
