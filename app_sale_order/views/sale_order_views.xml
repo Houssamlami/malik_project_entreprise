@@ -90,7 +90,7 @@
 
             string="Votre marge Brute est en PERTE !"
 
-            attrs="{'invisible': [('total_dis','&gt;', 0)]}" style="background-color:red;"/>
+            attrs="{'invisible': [('total_dis','&gt;=', 0)]}" style="background-color:red;"/>
             <field name="total_dis" class="oe_inline" attrs="{'invisible': [('total_dis','&gt;=', 0)]}" style="background-color:red;" />
 	                
 	                <newline/>
