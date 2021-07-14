@@ -77,6 +77,19 @@
 	                 	<label for="total_dis" name="total_dis" string="Total Distribution: " class="oe_inline"/>
 	                    <field name="total_dis" class="oe_inline" />
 	                </div>
+	                
+	                <label colspan="2"
+
+            string="YOU ARE FIRED IF YOU SELL AT THESE PRICES"
+
+            attrs="{'invisible': [('total_dis','&lt;', 0)]}" style="background-color:yellow;"/>
+
+					<label colspan="2"
+
+            string="HEALTHY COMMISSION CHECK COMING YOUR WAY!"
+
+            attrs="{'invisible': [('total_dis','&gt;=', 0)]}" style="background-color:palegreen;"/>
+	                
 	                <newline/>
              	</xpath>
             	<xpath expr="//field[@name='order_line']/tree/field[@name='price_subtotal']" position="after">
