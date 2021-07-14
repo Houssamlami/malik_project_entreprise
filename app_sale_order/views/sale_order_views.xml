@@ -74,21 +74,30 @@
 	                    <field name="total_colis" class="oe_inline"/><span> Colis</span>
 	                </div>
 	                <div style="font-size: 20px;font-weight:bold;">
-	                 	<label for="total_dis" name="total_dis" string="Total Distribution: " class="oe_inline"/>
+	                 	<label for="total_dis" name="total_dis" string="Marge brute: " class="oe_inline"/>
 	                    <field name="total_dis" class="oe_inline" />
 	                </div>
+	                <label colspan="2"
+
+            string="Votre marge Brute est en NULL"
+
+            attrs="{'invisible': [('total_dis','=', 0)]}" style="background-color:yellow;"/>
+	           <field name="total_dis" class="oe_inline"  attrs="{'invisible': [('total_dis','=', 0)]}" style="background-color:yellow;" />     
 	                
 	                <label colspan="2"
 
-            string="YOU ARE FIRED IF YOU SELL AT THESE PRICES"
+            string="Votre marge Brute est en BENIFICE "
 
-            attrs="{'invisible': [('total_dis','&lt;', 0)]}" style="background-color:yellow;"/>
+            attrs="{'invisible': [('total_dis','&lt;', 0)]}" style="background-color:palegreen;"/>
 
+					<field name="total_dis" class="oe_inline" attrs="{'invisible': [('total_dis','&lt;', 0)]}" style="background-color:palegreen;" />
+					
 					<label colspan="2"
 
-            string="HEALTHY COMMISSION CHECK COMING YOUR WAY!"
+            string="Votre marge Brute est en PERTE !"
 
-            attrs="{'invisible': [('total_dis','&gt;=', 0)]}" style="background-color:palegreen;"/>
+            attrs="{'invisible': [('total_dis','&gt;=', 0)]}" style="background-color:red;"/>
+            <field name="total_dis" class="oe_inline" attrs="{'invisible': [('total_dis','&gt;=', 0)]}" style="background-color:red;" />
 	                
 	                <newline/>
              	</xpath>
