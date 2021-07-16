@@ -83,7 +83,7 @@
 					
 	                <label colspan="2"
 
-            string="Marge Brute en BENIFICE "
+            string="Marge Brute en BENEFICE :"
 
             attrs="{'invisible': [('total_dis','&lt;=', 0)]}" style="color:green;font-size: 20px;font-weight:bold;"/>
 
@@ -91,10 +91,22 @@
 					
 					<label colspan="2"
 
-            string="Marge Brute en PERTE !"
+            string="€"
+
+            attrs="{'invisible': [('total_dis','&lt;=', 0)]}" style="color:green;font-size: 20px;font-weight:bold;"/>
+					
+					<label colspan="2"
+
+            string="Marge Brute en PERTE :"
 
             attrs="{'invisible': [('total_dis','&gt;', 0)]}" style="color:red;font-size: 20px;font-weight:bold;"/>
             <field name="total_dis" class="oe_inline" attrs="{'invisible': [('total_dis','&gt;', 0)]}" style="color:red;font-size: 20px;font-weight:bold;" />
+	          <label colspan="2"
+
+            string="€"
+
+            attrs="{'invisible': [('total_dis','&gt;', 0)]}" style="color:red;font-size: 20px;font-weight:bold;"/> 
+	           
 	           </div>     
 	                <newline/>
              	</xpath>
