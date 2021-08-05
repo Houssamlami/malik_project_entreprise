@@ -99,6 +99,7 @@
 					<div attrs="{'invisible': [('supplier','=', True)]}">
 					<group string="Etat Client" name="Etat Client">
              	    <field name="client_avs" string="Client AVS" attrs="{'invisible': [('supplier','=', True)]}"/>
+             	    <field name="coutdis" string="Coût distribution" attrs="{'invisible': [('supplier','=', True)]}"/>
                                      <field name="Etat"/>
                                    <field name="Inactive"/>
                                    <field name="date_last_commande"/>

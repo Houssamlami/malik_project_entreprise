@@ -73,6 +73,41 @@
 						<label for="total_colis" name="total_colis" string="Total Colis: " class="oe_inline"/>
 	                    <field name="total_colis" class="oe_inline"/><span> Colis</span>
 	                </div>
+	                <!--div style="font-size: 20px;font-weight:bold;">
+	                 	<label for="total_dis" name="total_dis" string="Marge brute: " class="oe_inline"/>
+	                    <field name="total_dis" class="oe_inline" />
+	                </div-->
+	               <div> 
+	              
+           
+					
+	                <label colspan="2"
+
+            string="Marge Brute en BENEFICE :"
+
+            attrs="{'invisible': [('total_dis','&lt;=', 0)]}" style="color:green;font-size: 20px;font-weight:bold;"/>
+
+					<field name="total_dis" class="oe_inline" attrs="{'invisible': [('total_dis','&lt;=', 0)]}" style="color:green;font-size: 20px;font-weight:bold;" />
+					
+					<label colspan="2"
+
+            string="€"
+
+            attrs="{'invisible': [('total_dis','&lt;=', 0)]}" style="color:green;font-size: 20px;font-weight:bold;"/>
+					
+					<label colspan="2"
+
+            string="Marge Brute en PERTE :"
+
+            attrs="{'invisible': [('total_dis','&gt;', 0)]}" style="color:red;font-size: 20px;font-weight:bold;"/>
+            <field name="total_dis" class="oe_inline" attrs="{'invisible': [('total_dis','&gt;', 0)]}" style="color:red;font-size: 20px;font-weight:bold;" />
+	          <label colspan="2"
+
+            string="€"
+
+            attrs="{'invisible': [('total_dis','&gt;', 0)]}" style="color:red;font-size: 20px;font-weight:bold;"/> 
+	           
+	           </div>     
 	                <newline/>
              	</xpath>
             	<xpath expr="//field[@name='order_line']/tree/field[@name='price_subtotal']" position="after">

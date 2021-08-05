@@ -100,6 +100,7 @@ class ResPartner(models.Model):
     date_reblockage = fields.Date(string='Date de reblocage')
     date_actualy2 = fields.Date(string='today actualy2', compute='get_date')
     client_avs = fields.Boolean(string=u"Client AVS")
+    coutdis = fields.Float(string="Coût distribution")
  
     _sql_constraints = [
         ('ref_unique_part', 'unique(ref)', 'La reference client doit etre unique!'),
@@ -252,4 +253,4 @@ class ResPartner(models.Model):
                     raise exceptions.ValidationError(_('Vous avez déjà saisi un Client avec le meme code de TVA, merci de changer le code TVA !'))
                     return {
                         'warning': {'title': _('Error'), 'message': _('Error message'),},
-                    }		
+                    }        
