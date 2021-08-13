@@ -80,7 +80,7 @@
 	                
 	               <div> 
 	              
-                 <field name="total_dis_prime"/>
+                 <!--field name="total_dis_prime"/-->
 					
 	                <label colspan="2"
 
