@@ -65,6 +65,7 @@ class SaleOrder(models.Model):
     bl_conform = fields.Boolean(string='BL Conforme', default=False, track_visibility='onchange')
     bl_emarge = fields.Boolean(string='BL Emargé', default=False, track_visibility='onchange')  
     total_dis = fields.Float(string='Marge brute', compute='_compute_cout_dis')
+    total_dis_prime = fields.Float(string='somme des Marge ', compute='_compute_cout_dis')
     
     def _compute_weight_total_stock_agn(self):
         for sales in self:
@@ -183,7 +184,9 @@ class SaleOrder(models.Model):
                     # total_dis1 += (line.product_uom_qty*(line.price_unit-(line.product_id.number_unit*line.product_id.prix_achat)))-sale.partner_id.coutdis or 0.0
                     total_dis += (line.product_uom_qty*(line.price_unit-(line.product_id.number_unit*line.product_id.prix_achat))) or 0.0            
             sale.total_dis = total_dis-sale.partner_id.coutdis or 0.0
-
+            sale.total_dis_prime = total_dis or 0.0
+            
+            
     def _compute_colis_total_delivred(self):
         for sale in self:
             total_qty_delivred = 0
