@@ -77,9 +77,10 @@
 	                 	<label for="total_dis" name="total_dis" string="Marge brute: " class="oe_inline"/>
 	                    <field name="total_dis" class="oe_inline" />
 	                </div-->
+	                
 	               <div> 
 	              
-           
+                 <!--field name="total_dis_prime"/-->
 					
 	                <label colspan="2"
 
